@@ -297,8 +297,11 @@ static void keyboard_callback(size_t window_id, bool state, const char *value,
 {
 
     ctx.current_event->type = state ? GOOEY_EVENT_KEY_PRESS : GOOEY_EVENT_KEY_RELEASE;
-    ctx.current_event->key_press.keycode = state;
+    ctx.current_event->key_press.state = state;
+    LOG_INFO("%s",value);
+    strncpy(ctx.current_event->key_press.value, value, sizeof(ctx.current_event->key_press.value));
     ctx.current_event->attached_window = window_id;
+    glps_wm_window_update(ctx.wm, window_id);
 }
 
 static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
@@ -596,8 +599,7 @@ void glps_make_window_visible(int window_id, bool visibility)
 
 void glps_set_window_resizable(bool value, int window_id)
 {
-    /*   int FLAG = value ? glps_TRUE : glps_FALSE;
-    glpsSetWindowAttrib(window_id == 0 ? ctx.window : ctx.child_windows[window_id - 1], glps_RESIZABLE, FLAG);*/
+   // glps_wm_window(value, window_id);
 }
 
 GooeyWindow glps_spawn_window(const char *title, int width, int height, bool visibility)
@@ -780,7 +782,7 @@ float glps_get_text_height(const char *text, int length)
 
 const char *glps_get_key_from_code(GooeyEvent *gooey_event)
 {
-    return LookupString(gooey_event->key_press.keycode);
+    return gooey_event->key_press.value;
 }
 
 void glps_set_cursor(GOOEY_CURSOR cursor)

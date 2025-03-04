@@ -24,7 +24,7 @@ int main()
     Gooey_Init(GLPS);
 
     win = GooeyWindow_Create("To-Do List", 400, 300, true);
-    //GooeyWindow_MakeResizable(&win, 0);
+    GooeyWindow_MakeResizable(&win, 0);
     layout = GooeyLayout_Create(&win, LAYOUT_VERTICAL, 10, 20, 380, 280);
     GooeyLayout *input_layout = GooeyLayout_Create(&win, LAYOUT_HORIZONTAL, 0, 0, 0, 0);
 

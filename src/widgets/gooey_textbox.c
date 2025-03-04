@@ -150,7 +150,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, GooeyEvent *key_event)
         {
             win->textboxes[i].focused = false;
         }
-        else if (strcmp(buf, "CapsLock") == 0)
+        else if (strcmp(buf, "Caps_Lock") == 0)
         {
             is_capslock_on = !is_capslock_on;
         }

@@ -40,7 +40,7 @@ typedef struct
 typedef struct
 {
     unsigned int state;
-    int keycode;
+    char value[20];
 
 } GooeyKeyPressData;
 

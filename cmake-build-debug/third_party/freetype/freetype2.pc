@@ -1,0 +1,14 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: FreeType 2
+URL: https://freetype.org
+Description: A free, high-quality, and portable font engine.
+Version: 26.2.20
+Requires:  zlib, libpng, harfbuzz >= 2.0.0, libbrotlidec
+Requires.private: 
+Libs: -L${libdir} -lfreetype -lbz2
+Libs.private: 
+Cflags: -I${includedir}/freetype2

@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 36a6cb5..1d5352a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -153,7 +153,7 @@ install(TARGETS "${CJSON_LIB}"
+ )
+ if (BUILD_SHARED_AND_STATIC_LIBS)
+     install(TARGETS "${CJSON_LIB}-static"
+-    EXPORT "${CJSON_LIB}" 
++    EXPORT "${CJSON_LIB}"
+     ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+     INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+ )
+@@ -201,8 +201,8 @@ if(ENABLE_CJSON_UTILS)
+         INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+     )
+     if (BUILD_SHARED_AND_STATIC_LIBS)
+-        install(TARGETS "${CJSON_UTILS_LIB}-static" 
+-        EXPORT "${CJSON_UTILS_LIB}" 
++        install(TARGETS "${CJSON_UTILS_LIB}-static"
++        EXPORT "${CJSON_UTILS_LIB}"
+         ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
+         INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+         )
+@@ -263,12 +263,13 @@ if(ENABLE_CJSON_TEST)
+ endif()
+ 
+ #Create the uninstall target
+-option(ENABLE_CJSON_UNINSTALL "Enable creating uninstall target" ON)
+-if(ENABLE_CJSON_UNINSTALL)
+-  add_custom_target(uninstall "${CMAKE_COMMAND}" -P
+-    "${PROJECT_SOURCE_DIR}/library_config/uninstall.cmake")
++if (NOT TARGET uninstall)
++    option(ENABLE_CJSON_UNINSTALL "Enable creating uninstall target" ON)
++    if(ENABLE_CJSON_UNINSTALL)
++      add_custom_target(uninstall "${CMAKE_COMMAND}" -P
++        "${PROJECT_SOURCE_DIR}/library_config/uninstall.cmake")
++    endif()
+ endif()
+-
+ # Enable the use of locales
+ option(ENABLE_LOCALES "Enable the use of locales" ON)
+ if(ENABLE_LOCALES)

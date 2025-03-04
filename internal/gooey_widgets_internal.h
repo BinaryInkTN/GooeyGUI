@@ -104,6 +104,7 @@ typedef struct
   bool clicked;       /**< State of the button (clicked or not) */
   bool hover;         /**< State of the button (hovered or not) */
   bool is_highlighted;
+  int click_timer; /**< Timer for click effect */ 
 } GooeyButton;
 
 typedef enum

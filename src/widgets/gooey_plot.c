@@ -23,8 +23,8 @@
 #include <string.h>
 #include "core/gooey_backend_internal.h"
 
-#define POINT_SIZE  10
-#define PLOT_MARGIN  40
+#define POINT_SIZE 10
+#define PLOT_MARGIN 40
 
 typedef struct
 {
@@ -121,8 +121,6 @@ static void add_placeholder_point(GooeyPlotData *data)
 
         memcpy(&new_x_data[1], data->x_data, data->data_count * sizeof(float));
         memcpy(&new_y_data[1], data->y_data, data->data_count * sizeof(float));
-
-
 
         data->x_data = new_x_data;
         data->y_data = new_y_data;
@@ -275,7 +273,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
 
         float normalized_x = (float)(plot->data->x_data[j] - min_x_value) / x_axis_length;
         float normalized_y = (float)(plot->data->y_data[j] - min_y_value) / y_axis_length;
-        plot_x_coords[j] =  plot->core.x + PLOT_MARGIN + normalized_x * (plot->core.width - 2 * PLOT_MARGIN);
+        plot_x_coords[j] = plot->core.x + PLOT_MARGIN + normalized_x * (plot->core.width - 2 * PLOT_MARGIN);
         plot_y_coords[j] = plot->core.y + plot->core.height - PLOT_MARGIN - normalized_y * (plot->core.height - 2 * PLOT_MARGIN);
     }
 
@@ -287,24 +285,22 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
         {
 
             active_backend->FillRectangle(
-                (int) plot_x_coords[j+1] - POINT_SIZE/2,
-                (int) plot_y_coords[j+1] - POINT_SIZE/2,
+                (int)plot_x_coords[j + 1] - POINT_SIZE / 2,
+                (int)plot_y_coords[j + 1] - POINT_SIZE / 2,
                 POINT_SIZE,
                 POINT_SIZE,
                 active_theme->primary,
-                win->creation_id
-            );
+                win->creation_id);
 
             if (j < plot->data->data_count - 2)
             {
                 active_backend->DrawLine(
-                    (int)plot_x_coords[j+1],
-                    (int)plot_y_coords[j+1],
+                    (int)plot_x_coords[j + 1],
+                    (int)plot_y_coords[j + 1],
                     (int)plot_x_coords[j + 2],
                     (int)plot_y_coords[j + 2],
                     active_theme->primary,
-                    win->creation_id
-                );
+                    win->creation_id);
             }
         }
         break;
@@ -321,21 +317,21 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
             if (j != 0)
             {
                 float bar_x = plot_x_coords[j] - ((float)bar_width / 2);
-                float bar_height = (float) (plot->core.y + plot->core.height - PLOT_MARGIN) - plot_y_coords[j];
+                float bar_height = (float)(plot->core.y + plot->core.height - PLOT_MARGIN) - plot_y_coords[j];
                 float bar_y = plot_y_coords[j];
 
                 active_backend->FillRectangle(
-                    (int) bar_x,
-                    (int) bar_y,
+                    (int)bar_x,
+                    (int)bar_y,
                     bar_width,
-                    (int) bar_height,
+                    (int)bar_height,
                     active_theme->primary,
                     win->creation_id);
 
                 const char *label = plot->data->bar_labels[j - 1];
                 const uint8_t LABEL_SPACING = 10;
-                float label_x = plot_x_coords[j] - active_backend->GetTextWidth(label, strlen(label))/2;
-                float label_y =  (plot->core.y + plot->core.height - PLOT_MARGIN) + LABEL_SPACING;
+                float label_x = plot_x_coords[j] - active_backend->GetTextWidth(label, strlen(label)) / 2;
+                float label_y = (plot->core.y + plot->core.height - PLOT_MARGIN) + LABEL_SPACING;
 
                 active_backend->DrawText(
                     label_x,
@@ -348,19 +344,18 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
         }
         break;
     }
-        case GOOEY_PLOT_SCATTER:
+    case GOOEY_PLOT_SCATTER:
     {
-        for (size_t j = 0; j < plot->data->data_count-1; ++j)
+        for (size_t j = 0; j < plot->data->data_count - 1; ++j)
         {
             const uint8_t SCATTER_POINT_SIZE = 10;
             active_backend->FillRectangle(
-                (int)plot_x_coords[j+1],
-                (int)plot_y_coords[j+1],
+                (int)plot_x_coords[j + 1],
+                (int)plot_y_coords[j + 1],
                 (int)SCATTER_POINT_SIZE,
                 (int)SCATTER_POINT_SIZE,
                 active_theme->primary,
-                win->creation_id
-            );
+                win->creation_id);
         }
         break;
     }

@@ -55,5 +55,4 @@ void GooeyButton_Draw(GooeyWindow *win);
  */
 void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted);
 
-
 #endif

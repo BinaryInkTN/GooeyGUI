@@ -303,7 +303,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         GooeyTextbox_HandleKeyPress(win, event);
 
         break;
-
     case GOOEY_EVENT_CLICK_PRESS:
         // Handle mouse click press event
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;

@@ -285,8 +285,11 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bo
 
 void GooeyWindow_DrawUIElements(GooeyWindow *win)
 {
-    active_backend->Clear(win->creation_id);
 
+    if(win == NULL) return;
+
+
+    active_backend->Clear(win->creation_id);
     // Draw all UI components
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
@@ -300,11 +303,12 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyPlot_Draw(win);
     GooeyMenu_Draw(win);
     active_backend->Render(win->creation_id);
+    usleep(16667); // Simulate 60 FPS
+
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
-
     if (!data || !active_backend)
     {
         LOG_CRITICAL("Invalid data or backend in Redraw callback");
@@ -312,13 +316,11 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 
     GooeyWindow **windows = (GooeyWindow **)data;
-    if (window_id >= active_backend->GetWindowCount() || !windows[window_id])
+    if (window_id > active_backend->GetTotalWindowCount() || !windows[window_id])
     {
         LOG_CRITICAL("Invalid window ID or window is NULL");
         return;
     }
-
-    LOG_CRITICAL("Redraw callback");
 
     GooeyEvent *event = active_backend->HandleEvents();
 
@@ -327,19 +329,14 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         LOG_CRITICAL("Failed to handle events");
         return;
     }
-
+    LOG_INFO("%d", window_id == event->attached_window);
     if (window_id == event->attached_window)
     {
         GooeySlider_HandleDrag(windows[window_id], event);
 
         switch (event->type)
         {
-        case GOOEY_EVENT_WINDOW_CLOSE:
-            // Handle window close event
-            LOG_INFO("Window close event");
-            active_backend->DestroyWindowFromId(window_id);
-            return;
-            break;
+     
 
         case GOOEY_EVENT_KEY_PRESS:
             // Handle key press event
@@ -363,10 +360,10 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
             LOG_INFO("Click release event at pos: %d %d", event->mouse_move.x, event->mouse_move.y);
             break;
 
-        case -1:
-            // Handle custom or default event
-            LOG_INFO("Default event");
-            break;
+        case GOOEY_EVENT_WINDOW_CLOSE:
+            active_backend->DestroyWindowFromId(window_id);
+            windows[window_id] = NULL;
+        break;
 
         default:
             // Handle any other unhandled events
@@ -374,9 +371,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
             break;
         }
         GooeyWindow_DrawUIElements(windows[window_id]);
+
     }
 
-    usleep(16667); // Simulate 60 FPS
 }
 
 void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)

@@ -1,7 +1,3 @@
-[submodule "third_party/glfw"]
-	path = third_party/glfw
-	url = https://github.com/glfw/glfw.git
-  	branch = master
 [submodule "third_party/freetype"]
 	path = third_party/freetype
 	url = https://github.com/freetype/freetype.git
@@ -14,9 +10,6 @@
 	path = website
 	url = https://github.com/YASSINE-AA/GooeyWebsite.git
   	branch = main 
-[submodule "third_party/GLPS"]
-	path = third_party/GLPS
-	url = https://github.com/YASSINE-AA/GLPS.git
 [submodule "third_party/glps"]
 	path = third_party/glps
-	url = git@github.com:GooeyUI/GLPS.git
+	url = https://github.com/GooeyUI/GLPS.git

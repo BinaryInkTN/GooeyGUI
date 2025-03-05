@@ -32,7 +32,7 @@ typedef struct
     GLuint text_vertex_shader;
     Character characters[128];
     char font_path[256];
-    int window_count;
+    size_t active_window_count;
     bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
     unsigned int selected_color;
 } GooeyBackendContext;
@@ -281,7 +281,6 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
 void glps_set_projection(int window_id, int width, int height)
 {
     mat4x4 projection;
-
     mat4x4_ortho(projection, 0.0f, width, height, 0.0f, -1.0f, 1.0f);
     glUseProgram(ctx.text_programs[window_id]);
     glUniformMatrix4fv(glGetUniformLocation(ctx.text_programs[window_id], "projection"), 1, GL_FALSE, (const GLfloat *)projection);
@@ -298,7 +297,7 @@ static void keyboard_callback(size_t window_id, bool state, const char *value,
 
     ctx.current_event->type = state ? GOOEY_EVENT_KEY_PRESS : GOOEY_EVENT_KEY_RELEASE;
     ctx.current_event->key_press.state = state;
-    LOG_INFO("%s",value);
+    LOG_INFO("%s", value);
     strncpy(ctx.current_event->key_press.value, value, sizeof(ctx.current_event->key_press.value));
     ctx.current_event->attached_window = window_id;
     glps_wm_window_update(ctx.wm, window_id);
@@ -338,8 +337,9 @@ static void mouse_move_callback(size_t window_id, double posX, double posY)
     ctx.current_event->mouse_move.y = posY;
 }
 
-void window_resize_callback(size_t window_id, int width, int height, void *data) {
-    LOG_INFO("resize %ld", window_id);
+void window_resize_callback(size_t window_id, int width, int height, void *data)
+{
+    LOG_INFO("resize %ld %d %d", window_id, width, height);
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     glps_set_projection(window_id, width, height); // Update projection matrix
     glViewport(0, 0, width, height);
@@ -350,7 +350,7 @@ void window_resize_callback(size_t window_id, int width, int height, void *data)
 void window_close_callback(size_t window_id, void *data)
 {
     ctx.current_event->attached_window = window_id;
-    ctx.current_event->type= GOOEY_EVENT_WINDOW_CLOSE;
+    ctx.current_event->type = GOOEY_EVENT_WINDOW_CLOSE;
     glps_wm_window_update(ctx.wm, window_id);
 }
 
@@ -423,7 +423,7 @@ int glps_init()
 
     ctx.inhibit_reset = 0;
     ctx.selected_color = 0x000000;
-    ctx.window_count = 0;
+    ctx.active_window_count = 0;
     ctx.current_event = (GooeyEvent *)malloc(sizeof(GooeyEvent));
     ctx.text_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
     ctx.shape_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
@@ -558,12 +558,11 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
 {
 
-    size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
     //    glpsSetWindowSizeLimits(ctx.window, width, height, glps_DONT_CARE, glps_DONT_CARE);
     GooeyWindow window = (GooeyWindow){0};
 
-    window.creation_id = ctx.window_count;
-
+    size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
+    window.creation_id = window_id;
     // glps_wm_swap_interval(ctx.wm, 1);
 
     if (!gladLoadGL())
@@ -574,13 +573,15 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
     glps_init_ft();
 
-    if(window.creation_id == 0) glps_setup_shared();
+    if (window.creation_id == 0)
+        glps_setup_shared();
 
     glps_setup_seperate_vao(window.creation_id);
+    //glps_set_projection(window.creation_id, width, height);
 
-    glps_set_projection(window.creation_id,width, height);
 
-    ctx.window_count++;
+    ctx.active_window_count++;
+
     return window;
 }
 
@@ -590,7 +591,7 @@ void glps_make_window_visible(int window_id, bool visibility)
 
 void glps_set_window_resizable(bool value, int window_id)
 {
-   // glps_wm_window(value, window_id);
+    // glps_wm_window(value, window_id);
 }
 
 GooeyWindow glps_spawn_window(const char *title, int width, int height, bool visibility)
@@ -603,9 +604,9 @@ GooeyWindow glps_spawn_window(const char *title, int width, int height, bool vis
     glpswindow *glps_window = glpsCreateWindow(width, height, title, NULL, ctx.window);
     //  glpsSetWindowSizeLimits(glps_window, width, height, glps_DONT_CARE, glps_DONT_CARE);
 
-    // c/tx.child_windows[ctx.window_count] = glps_window;
-    // window.creation_id = ctx.window_count + 1;
-    // ctx.window_count++;
+    // c/tx.child_windows[ctx.active_window_count] = glps_window;
+    // window.creation_id = ctx.active_window_count + 1;
+    // ctx.active_window_count++;
     glpsMakeContextCurrent(window_id);
     glViewport(0, 0, width, height);
     setup_seperate_vao(window.creation_id);
@@ -660,7 +661,7 @@ void glps_destroy_windows()
     if (ctx.child_windows)
     {
 
-        for (int i = 0; i < ctx.window_count; ++i)
+        for (int i = 0; i < ctx.active_window_count; ++i)
         {
             glpsDestroyWindow(ctx.child_windows[i]);
             ctx.child_windows[i] = NULL;
@@ -731,7 +732,7 @@ void glps_cleanup()
 void glps_update_background()
 {
 
-    for (int i = 0; i < ctx.window_count; ++i)
+    for (int i = 0; i < ctx.wm->window_count; ++i)
     {
         glps_wm_set_window_ctx_curr(ctx.wm, i);
 
@@ -783,8 +784,7 @@ void glps_set_cursor(GOOEY_CURSOR cursor)
 void glps_destroy_window_from_id(int window_id)
 {
     glps_wm_window_destroy(ctx.wm, window_id);
-    ctx.window_count--;
-    ctx.wm->window_count--;
+    ctx.active_window_count--;
 }
 
 void test(size_t window_id, void *data)
@@ -815,16 +815,22 @@ void glps_run()
     }
 }
 
-size_t glps_get_window_count()
+size_t glps_get_active_window_count()
 {
-    return ctx.window_count;
+    return ctx.active_window_count;
+}
+
+size_t glps_get_total_window_count()
+{
+    return glps_wm_get_window_count(ctx.wm);
 }
 
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
     .CreateWindow = glps_create_window,
-    .GetWindowCount = glps_get_window_count,
+    .GetActiveWindowCount = glps_get_active_window_count,
+    .GetTotalWindowCount = glps_get_total_window_count,
     .SetupCallbacks = glps_setup_callbacks,
     .SpawnWindow = glps_spawn_window,
     .RequestRedraw = glps_request_redraw,

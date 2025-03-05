@@ -33,7 +33,7 @@ int main()
 
     GooeyWindow_Run(2, &win, &msgBox);
 
-    GooeyWindow_Cleanup(2, &win, &msgBox);
+    //GooeyWindow_Cleanup(2, &win, &msgBox);
 
     return 0;
 }

@@ -20,7 +20,8 @@ typedef struct GooeyBackend
     void (*Cleanup)();
     void (*SetupCallbacks)(void (*callback)(size_t window_id, void*data), void* data);
     void (*RequestRedraw)(size_t window_id);
-    size_t (*GetWindowCount)(void);
+    size_t (*GetActiveWindowCount)(void);
+    size_t (*GetTotalWindowCount)(void);
     GooeyWindow (*CreateWindow)(const char *title, int width, int height);
     GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);
     void (*MakeWindowVisible)(int window_id, bool visibility);

@@ -16,9 +16,11 @@ typedef enum GooeyBackends
 typedef struct GooeyBackend
 {
     int (*Init)();
+    void (*Run)();
     void (*Cleanup)();
-    void (*SetRenderCallback)(void (*callback)(size_t window_id, void*data), GooeyWindow *win);
+    void (*SetupCallbacks)(void (*callback)(size_t window_id, void*data), void* data);
     void (*RequestRedraw)(size_t window_id);
+    size_t (*GetWindowCount)(void);
     GooeyWindow (*CreateWindow)(const char *title, int width, int height);
     GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);
     void (*MakeWindowVisible)(int window_id, bool visibility);

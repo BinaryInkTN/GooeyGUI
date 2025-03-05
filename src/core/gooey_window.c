@@ -32,6 +32,7 @@
 #include "widgets/gooey_textbox.h"
 #include "widgets/gooey_plot.h"
 #include "signals/gooey_signals.h"
+#include <stdarg.h>
 
 GooeyBackend *active_backend = NULL;
 GooeyTheme *active_theme;
@@ -282,55 +283,11 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bo
     return win;
 }
 
-void GooeyWindow_Redraw(size_t window_id, void *data)
+void GooeyWindow_DrawUIElements(GooeyWindow *win)
 {
-    GooeyWindow *win = (GooeyWindow *)data;
-    LOG_CRITICAL("Redraw callback");
-    active_backend->Clear(window_id);
-    GooeyEvent *event = active_backend->HandleEvents();
-    GooeySlider_HandleDrag(win, event);
+    active_backend->Clear(win->creation_id);
 
-    switch (event->type)
-    {
-
-    case GOOEY_EVENT_WINDOW_CLOSE:
-        // active_backend->DestroyWindows();
-        exit(0);
-        break;
-
-    case GOOEY_EVENT_KEY_PRESS:
-        // Handle key press event
-        GooeyTextbox_HandleKeyPress(win, event);
-
-        break;
-    case GOOEY_EVENT_CLICK_PRESS:
-        // Handle mouse click press event
-        int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
-        GooeyList_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyButton_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyDropdown_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyCheckbox_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyRadioButtonGroup_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyTextbox_HandleClick(win, mouse_click_x, mouse_click_y);
-        GooeyMenu_HandleClick(win, mouse_click_x, mouse_click_y);
-        break;
-
-    case GOOEY_EVENT_CLICK_RELEASE:
-        // Handle mouse click release event
-        LOG_INFO("Click release event at pos: %d %d", event->mouse_move.x, event->mouse_move.y);
-        break;
-
-    case -1:
-        // Handle custom or default event
-        LOG_INFO("Default event");
-        break;
-
-    default:
-        // Handle any other unhandled events
-        LOG_INFO("Unhandled event type: %d", event->type);
-        break;
-    }
-
+    // Draw all UI components
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
     GooeyCanvas_Draw(win);
@@ -342,144 +299,151 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     GooeySlider_Draw(win);
     GooeyPlot_Draw(win);
     GooeyMenu_Draw(win);
-    active_backend->Render(window_id);
-    usleep(16667);
+    active_backend->Render(win->creation_id);
+}
+
+void GooeyWindow_Redraw(size_t window_id, void *data)
+{
+
+    if (!data || !active_backend)
+    {
+        LOG_CRITICAL("Invalid data or backend in Redraw callback");
+        return;
+    }
+
+    GooeyWindow **windows = (GooeyWindow **)data;
+    if (window_id >= active_backend->GetWindowCount() || !windows[window_id])
+    {
+        LOG_CRITICAL("Invalid window ID or window is NULL");
+        return;
+    }
+
+    LOG_CRITICAL("Redraw callback");
+
+    GooeyEvent *event = active_backend->HandleEvents();
+
+    if (!event)
+    {
+        LOG_CRITICAL("Failed to handle events");
+        return;
+    }
+
+    if (window_id == event->attached_window)
+    {
+        GooeySlider_HandleDrag(windows[window_id], event);
+
+        switch (event->type)
+        {
+        case GOOEY_EVENT_WINDOW_CLOSE:
+            // Handle window close event
+            LOG_INFO("Window close event");
+            active_backend->DestroyWindowFromId(window_id);
+            return;
+            break;
+
+        case GOOEY_EVENT_KEY_PRESS:
+            // Handle key press event
+            GooeyTextbox_HandleKeyPress(windows[window_id], event);
+            break;
+
+        case GOOEY_EVENT_CLICK_PRESS:
+            // Handle mouse click press event
+            int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
+            GooeyList_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyButton_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyDropdown_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyCheckbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyRadioButtonGroup_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyTextbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            GooeyMenu_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+            break;
+
+        case GOOEY_EVENT_CLICK_RELEASE:
+            // Handle mouse click release event
+            LOG_INFO("Click release event at pos: %d %d", event->mouse_move.x, event->mouse_move.y);
+            break;
+
+        case -1:
+            // Handle custom or default event
+            LOG_INFO("Default event");
+            break;
+
+        default:
+            // Handle any other unhandled events
+            LOG_INFO("Unhandled event type: %d", event->type);
+            break;
+        }
+        GooeyWindow_DrawUIElements(windows[window_id]);
+    }
+
+    usleep(16667); // Simulate 60 FPS
 }
 
 void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
 {
+    if (!active_backend)
+    {
+        LOG_CRITICAL("Backend is not initialized");
+        return;
+    }
 
     va_list args;
     GooeyWindow *windows[num_windows];
 
     va_start(args, first_win);
     windows[0] = first_win;
-    GooeyWindow *win = NULL;
 
     for (int i = 1; i < num_windows; ++i)
     {
-        win = va_arg(args, GooeyWindow *);
+        GooeyWindow *win = va_arg(args, GooeyWindow *);
         windows[i] = win;
     }
     va_end(args);
+
     for (int i = 0; i < num_windows; ++i)
     {
-        win = windows[i];
-        GooeyWindow_FreeResources(win);
+        if (windows[i])
+        {
+            GooeyWindow_FreeResources(windows[i]);
+        }
     }
+
     active_backend->DestroyWindows();
     active_backend->Cleanup();
 
-    LOG_INFO("Cleanup.");
+    LOG_INFO("Cleanup completed.");
 }
 
 void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
 {
+    if (!active_backend)
+    {
+        LOG_CRITICAL("Backend is not initialized");
+        return;
+    }
 
-    // GooeyEvent *event;
-    // bool running = true;
+    va_list args;
+    GooeyWindow *windows[num_windows];
+    va_start(args, first_win);
 
-    //  va_list args;
-    // GooeyWindow *windows[num_windows];
+    LOG_INFO("Starting application");
 
-    // va_start(args, first_win);
-    LOG_INFO("Run");
-    GooeyWindow_Redraw(first_win->creation_id, first_win);
-    active_backend->SetRenderCallback(GooeyWindow_Redraw, first_win);
+    windows[0] = first_win;
+    GooeyWindow_DrawUIElements(first_win);
 
-    /*
-     windows[0] = first_win;
+    for (int i = 1; i < num_windows; ++i)
+    {
+        GooeyWindow *win = va_arg(args, GooeyWindow *);
+        windows[i] = win;
+        GooeyWindow_DrawUIElements(win);
+    }
+    va_end(args);
 
-        GooeyWindow *win = NULL;
+    active_backend->SetupCallbacks(GooeyWindow_Redraw, windows);
+    active_backend->Run();
+}
 
-        for (int i = 1; i < num_windows; ++i)
-        {
-            win = va_arg(args, GooeyWindow *);
-
-            windows[i] = win;
-        }
-        va_end(args);
-        int i = 0;
-
-        while (running)
-        {
-
-            event = active_backend->HandleEvents();
-            for (int i = 0; i < num_windows; ++i)
-            {
-                win = windows[i];
-
-                int x = event->mouse_move.x;
-                int y = event->mouse_move.y;
-
-                switch (event->type)
-                {
-                case GOOEY_EVENT_EXPOSE:
-                    //
-                    break;
-
-                case GOOEY_EVENT_KEY_PRESS:
-                    if (win->creation_id == event->attached_window)
-                    {
-                        GooeyTextbox_HandleKeyPress(win, event);
-                        if (GooeyList_HandleScroll(win, event) || GooeySlider_HandleDrag(win, event))
-                        {
-                        //
-                        }
-                    }
-
-                    break;
-
-                case GOOEY_EVENT_CLICK_PRESS:
-                    if (win->creation_id == event->attached_window)
-                    {
-
-                        GooeyMenu_HandleClick(win, x, y);
-                        if (GooeySlider_HandleDrag(win, event) || GooeyButton_HandleClick(win, x, y) ||
-                            GooeyRadioButtonGroup_HandleClick(win, x, y) ||
-                            GooeyCheckbox_HandleClick(win, x, y) ||
-                            GooeyRadioButton_HandleClick(win, x, y) ||
-                            GooeyDropdown_HandleClick(win, x, y) ||
-                            GooeyTextbox_HandleClick(win, x, y) || GooeyList_HandleThumbScroll(win, event) || GooeyList_HandleClick(win, x, y))
-                        {
-                          //
-                        }
-
-                    }
-                    break;
-
-                case GOOEY_EVENT_CLICK_RELEASE:
-                    if (win->creation_id == event->attached_window)
-                    {
-
-                        if (GooeySlider_HandleDrag(win, event) || GooeyList_HandleThumbScroll(win, event))
-                        {
-                            //
-                        }
-                    }
-                    break;
-
-                case GOOEY_EVENT_MOUSE_SCROLL:
-                    if (win->creation_id == event->attached_window)
-                    {
-
-                        if (GooeyList_HandleScroll(win, event))
-                        {
-                            //
-                        }
-                    }
-                    break;
-
-                case GOOEY_EVENT_WINDOW_CLOSE:
-                    running = false;
-                    break;
-
-                default:
-
-                    break;
-                }
-            }
-        }
-
-    */
+void GooeyWindow_RequestRedraw(GooeyWindow *win)
+{
+    active_backend->RequestRedraw(win->creation_id);
 }

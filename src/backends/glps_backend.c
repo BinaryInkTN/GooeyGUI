@@ -338,11 +338,10 @@ static void mouse_move_callback(size_t window_id, double posX, double posY)
     ctx.current_event->mouse_move.y = posY;
 }
 
-void window_resize_callback(size_t window_id, int width, int height,
-                            void *data)
-{
+void window_resize_callback(size_t window_id, int width, int height, void *data) {
+    LOG_INFO("resize %ld", window_id);
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    glps_set_projection(window_id, width, height);
+    glps_set_projection(window_id, width, height); // Update projection matrix
     glViewport(0, 0, width, height);
     ctx.current_event->attached_window = window_id;
     ctx.current_event->type = GOOEY_EVENT_EXPOSE;
@@ -434,6 +433,7 @@ int glps_init()
     ctx.current_event->click.x = -1;
     ctx.current_event->click.y = -1;
     // glpsSetErrorCallback(error_callback);
+    ctx.wm = glps_wm_init();
 
     return 0;
 }
@@ -558,20 +558,11 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
 {
 
-    ctx.wm = glps_wm_init();
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
     //    glpsSetWindowSizeLimits(ctx.window, width, height, glps_DONT_CARE, glps_DONT_CARE);
     GooeyWindow window = (GooeyWindow){0};
 
     window.creation_id = ctx.window_count;
-
-    glps_wm_set_keyboard_callback(ctx.wm, keyboard_callback, (void *)ctx.wm);
-    glps_wm_set_mouse_move_callback(ctx.wm, mouse_move_callback, (void *)ctx.wm);
-    glps_wm_set_mouse_click_callback(ctx.wm, mouse_click_callback, (void *)ctx.wm);
-    glps_wm_set_scroll_callback(ctx.wm, mouse_scroll_callback, (void *)ctx.wm);
-    glps_wm_window_set_resize_callback(ctx.wm, window_resize_callback,
-                                       (void *)ctx.wm);
-    glps_wm_window_set_close_callback(ctx.wm, window_close_callback, (void *)ctx.wm);
 
     // glps_wm_swap_interval(ctx.wm, 1);
 
@@ -583,7 +574,7 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
     glps_init_ft();
 
-    glps_setup_shared();
+    if(window.creation_id == 0) glps_setup_shared();
 
     glps_setup_seperate_vao(window.creation_id);
 
@@ -791,7 +782,9 @@ void glps_set_cursor(GOOEY_CURSOR cursor)
 
 void glps_destroy_window_from_id(int window_id)
 {
-    // glpsDestroyWindow(ctx.child_windows[window_id]);
+    glps_wm_window_destroy(ctx.wm, window_id);
+    ctx.window_count--;
+    ctx.wm->window_count--;
 }
 
 void test(size_t window_id, void *data)
@@ -799,21 +792,40 @@ void test(size_t window_id, void *data)
     LOG_ERROR("RENDER CALLBACK CALLED");
 }
 
-void glps_set_render_callback(void (*callback)(size_t window_id, void *data), GooeyWindow *win)
+void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
 {
 
-    glps_wm_window_set_frame_update_callback(ctx.wm, callback, win);
+    glps_wm_set_keyboard_callback(ctx.wm, keyboard_callback, data);
+    glps_wm_set_mouse_move_callback(ctx.wm, mouse_move_callback, data);
+    glps_wm_set_mouse_click_callback(ctx.wm, mouse_click_callback, data);
+    glps_wm_set_scroll_callback(ctx.wm, mouse_scroll_callback, data);
+    glps_wm_window_set_resize_callback(ctx.wm, window_resize_callback,
+                                       data);
+    glps_wm_window_set_close_callback(ctx.wm, window_close_callback, data);
+
+    glps_wm_window_set_frame_update_callback(ctx.wm, callback, data);
     LOG_INFO("Set render callback GLPS");
+}
+
+void glps_run()
+{
     while (!glps_wm_should_close(ctx.wm))
     {
         // glps_wm_window_update(ctx.wm, win->creation_id);
     }
 }
 
+size_t glps_get_window_count()
+{
+    return ctx.window_count;
+}
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
+    .Run = glps_run,
     .CreateWindow = glps_create_window,
-    .SetRenderCallback = glps_set_render_callback,
+    .GetWindowCount = glps_get_window_count,
+    .SetupCallbacks = glps_setup_callbacks,
     .SpawnWindow = glps_spawn_window,
     .RequestRedraw = glps_request_redraw,
     .GetWinDim = glps_window_dim,

@@ -10,7 +10,7 @@ void updateColor()
     LOG_INFO("r=%d g=%d b=%d", red, green, blue);
     unsigned long color = (red << 16) | (green  << 8) | blue;
     GooeyCanvas_DrawRectangle(canvas, 0, 0, 200, 200, color, true);
-   // GooeyWindow_Redraw(&childWindow);
+    GooeyWindow_RequestRedraw(&childWindow);
 }
 
 void onRedChange(long value)
@@ -31,7 +31,7 @@ void onBlueChange(long value)
 
 int main()
 {
-    Gooey_Init(GLFW);
+    Gooey_Init(GLPS);
 
     GooeyWindow win = GooeyWindow_Create("RGB Mixer", 420, 130, true);
     GooeyLayout *layout = GooeyLayout_Create(&win, LAYOUT_VERTICAL, 10, 30, 380, 380);
@@ -47,8 +47,8 @@ int main()
 
     GooeyLayout_Build(layout);
 
-   // childWindow = GooeyWindow_CreateChild("Color Preview", 220, 220, true);
-   // canvas = GooeyCanvas_Add(&childWindow, 10, 10, 200, 200);
+    childWindow = GooeyWindow_Create("Color Preview", 220, 220, true);
+    canvas = GooeyCanvas_Add(&childWindow, 10, 10, 200, 200);
 
     GooeyWindow_Run(2, &win, &childWindow);
     GooeyWindow_Cleanup(2, &win, &childWindow);

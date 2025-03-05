@@ -57,7 +57,7 @@ void* data_receiver_thread(void* arg) {
 
 int main()
 {
-    srand(time(NULL));  // Seed the random number generator
+   // srand(time(NULL));  // Seed the random number generator
 
     // Initialize the Gooey library
     Gooey_Init(GLPS);

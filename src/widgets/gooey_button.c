@@ -57,7 +57,7 @@ void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
 
 void GooeyButton_Draw(GooeyWindow *win)
 {
-    for (int i = 0; i < win->button_count; ++i)
+    for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = &win->buttons[i];
         active_backend->FillRectangle(button->core.x,
@@ -86,7 +86,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 {
     bool clicked_any_button = false;
 
-    for (int i = 0; i < win->button_count; ++i)
+    for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = &win->buttons[i];
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&

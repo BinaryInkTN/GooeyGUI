@@ -587,7 +587,7 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
     glps_setup_seperate_vao(window.creation_id);
 
-    glps_set_projection(width, height, window.creation_id);
+    glps_set_projection(window.creation_id,width, height);
 
     ctx.window_count++;
     return window;

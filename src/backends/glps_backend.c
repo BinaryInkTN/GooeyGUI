@@ -279,11 +279,13 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
 
 void glps_set_projection(int window_id, int width, int height)
 {
+
     mat4x4 projection;
     mat4x4_ortho(projection, 0.0f, width, height, 0.0f, -1.0f, 1.0f);
     glUseProgram(ctx.text_programs[window_id]);
     glUniformMatrix4fv(glGetUniformLocation(ctx.text_programs[window_id], "projection"), 1, GL_FALSE, (const GLfloat *)projection);
     glBindVertexArray(ctx.text_vaos[window_id]);
+    glViewport(0, 0, width, height);
 }
 static void error_callback(int error, const char *description)
 {
@@ -294,13 +296,12 @@ static void keyboard_callback(size_t window_id, bool state, const char *value,
                               void *data)
 {
 
-    GooeyWindow **windows = (GooeyWindow**)data;
+    GooeyWindow **windows = (GooeyWindow **)data;
 
     windows[window_id]->current_event->type = state ? GOOEY_EVENT_KEY_PRESS : GOOEY_EVENT_KEY_RELEASE;
     windows[window_id]->current_event->key_press.state = state;
     LOG_INFO("%s", value);
     strncpy(windows[window_id]->current_event->key_press.value, value, sizeof(windows[window_id]->current_event->key_press.value));
-    windows[window_id]->current_event->attached_window = window_id;
     glps_wm_window_update(ctx.wm, window_id);
 }
 
@@ -308,9 +309,8 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
                                   GLPS_SCROLL_SOURCE source, double value,
                                   int discrete, bool is_stopped, void *data)
 {
-    GooeyWindow **windows = (GooeyWindow**)data;
+    GooeyWindow **windows = (GooeyWindow **)data;
 
-    windows[window_id]->current_event->attached_window = window_id;
     windows[window_id]->current_event->type = GOOEY_EVENT_MOUSE_SCROLL;
     if (axe == GLPS_SCROLL_H_AXIS)
         windows[window_id]->current_event->mouse_scroll.x = value;
@@ -320,15 +320,14 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
 
 void mouse_click_callback(size_t window_id, bool state, void *data)
 {
-    GooeyWindow **windows = (GooeyWindow**)data;
+    GooeyWindow **windows = (GooeyWindow **)data;
     windows[window_id]->current_event->type = state ? GOOEY_EVENT_CLICK_PRESS : GOOEY_EVENT_CLICK_RELEASE;
     windows[window_id]->current_event->click.x = windows[window_id]->current_event->mouse_move.x;
     windows[window_id]->current_event->click.y = windows[window_id]->current_event->mouse_move.y;
-    windows[window_id]->current_event->attached_window = window_id;
     glps_wm_window_update(ctx.wm, window_id);
 }
 
-void glps_request_redraw(GooeyWindow* win)
+void glps_request_redraw(GooeyWindow *win)
 {
     win->current_event->type = GOOEY_EVENT_REDRAWREQ;
     glps_wm_window_update(ctx.wm, win->creation_id);
@@ -336,31 +335,22 @@ void glps_request_redraw(GooeyWindow* win)
 
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
 {
-    GooeyWindow **windows = (GooeyWindow**)data;
+    GooeyWindow **windows = (GooeyWindow **)data;
 
-    windows[window_id]->current_event->attached_window = window_id;
     windows[window_id]->current_event->mouse_move.x = posX;
     windows[window_id]->current_event->mouse_move.y = posY;
 }
-
 void window_resize_callback(size_t window_id, int width, int height, void *data)
 {
-    GooeyWindow **windows = (GooeyWindow**)data;
-    LOG_INFO("%d %d %ld", width, height, window_id);
-    LOG_INFO("resize %ld %d %d", window_id, width, height);
-    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    glps_set_projection(window_id, width, height); // Update projection matrix
-    glViewport(0, 0, width, height);
-    windows[window_id]->current_event->attached_window = window_id;
+
+    GooeyWindow **windows = (GooeyWindow **)data;
     windows[window_id]->current_event->type = GOOEY_EVENT_RESIZE;
     glps_wm_window_update(ctx.wm, window_id);
 }
-
 void window_close_callback(size_t window_id, void *data)
 {
-    GooeyWindow **windows = (GooeyWindow**)data;
+    GooeyWindow **windows = (GooeyWindow **)data;
 
-    windows[window_id]->current_event->attached_window = window_id;
     windows[window_id]->current_event->type = GOOEY_EVENT_WINDOW_CLOSE;
     glps_wm_window_update(ctx.wm, window_id);
 }
@@ -438,8 +428,6 @@ int glps_init()
     ctx.text_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
     ctx.shape_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
     ctx.text_programs = (GLuint *)malloc(sizeof(GLuint) * 100);
-  
-    // glpsSetErrorCallback(error_callback);
     ctx.wm = glps_wm_init();
 
     return 0;
@@ -578,8 +566,7 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
         glps_setup_shared();
 
     glps_setup_seperate_vao(window.creation_id);
-    glps_set_projection(window.creation_id, width, height);
-
+   // glps_set_projection(window.creation_id, width, height);
     ctx.active_window_count++;
 
     return window;
@@ -631,12 +618,10 @@ GooeyWindow glps_spawn_window(const char *title, int width, int height, bool vis
 
 GooeyEvent *glps_handle_events()
 {
- 
 }
 
 void glps_hide_current_child(void)
 {
-
 }
 
 void glps_destroy_windows()
@@ -811,10 +796,16 @@ size_t glps_get_total_window_count()
     return glps_wm_get_window_count(ctx.wm);
 }
 
-void glps_reset_events(GooeyWindow* win)
+void glps_reset_events(GooeyWindow *win)
 {
     // Allow only one event at a time, so it doesn't cause redraws.
     win->current_event->type = -1;
+}
+
+void glps_set_viewport(size_t window_id, int width, int height)
+{
+    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
+    glps_set_projection(window_id, width, height);
 }
 
 GooeyBackend glps_backend = {
@@ -826,6 +817,7 @@ GooeyBackend glps_backend = {
     .SetupCallbacks = glps_setup_callbacks,
     .SpawnWindow = glps_spawn_window,
     .RequestRedraw = glps_request_redraw,
+    .SetViewport = glps_set_viewport,
     .GetWinDim = glps_window_dim,
     .DestroyWindows = glps_destroy_windows,
     .DestroyWindowFromId = glps_destroy_window_from_id,

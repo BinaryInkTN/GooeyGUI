@@ -132,9 +132,7 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
         }
 
         active_slider = NULL;
-       // active_backend->InhibitResetEvents(0);
-
-        return true;
+        return false;
     }
 
     for (size_t i = 0; i < win->slider_count; ++i)
@@ -153,7 +151,6 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
 
     if (active_slider)
     {
-       // active_backend->InhibitResetEvents(1);
         active_slider->value =
             active_slider->min_value +
             ((mouse_x - active_slider->core.x) * (active_slider->max_value - active_slider->min_value)) /
@@ -166,8 +163,6 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
 
         return true;
     }
-
-    //active_backend->InhibitResetEvents(0);
 
     return false;
 }

@@ -48,13 +48,10 @@ typedef struct
 typedef struct
 {
     GooeyEventType type;
-    int attached_window;
-
     GooeyMouseData click;
     GooeyMouseData mouse_move;
     GooeyMouseData mouse_scroll;
     GooeyKeyPressData key_press;
-
 } GooeyEvent;
 
 

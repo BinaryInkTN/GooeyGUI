@@ -44,7 +44,6 @@ set(HEADERS
     internal/utils/theme/gooey_theme_internal.h
     internal/gooey_event_internal.h
     internal/gooey_widgets_internal.h
-    include/gooey.h
     internal/widgets/gooey_button.h
     internal/widgets/gooey_canvas.h
     internal/widgets/gooey_checkbox.h
@@ -59,6 +58,7 @@ set(HEADERS
     internal/widgets/gooey_textbox.h
     internal/widgets/gooey_plot.h
     internal/signals/gooey_signals.h
+    include/gooey.h
 )
 
 # Set compiler flags
@@ -106,10 +106,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Install all public headers under include/Gooey
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include/Gooey)
 
-# Install internal headers under include/Gooey/internal
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/ DESTINATION include/Gooey/internal)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/core/ DESTINATION include/Gooey/internal/core)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/utils/ DESTINATION include/Gooey/internal/utils)
 
 # Install the shared library
 install(TARGETS ${PROJECT_NAME}

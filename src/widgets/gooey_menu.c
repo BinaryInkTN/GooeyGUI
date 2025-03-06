@@ -57,14 +57,13 @@ void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title,
 
 void GooeyMenu_Draw(GooeyWindow *win)
 {
-    const GooeyTheme *active_theme = win->active_theme;
 
     if (win->menu)
     {
         int window_width, window_height;
 
         active_backend->GetWinDim(&window_width, &window_height, win->creation_id);
-        active_backend->FillRectangle(0, 0, window_width, 20, active_theme->widget_base, win->creation_id);
+        active_backend->FillRectangle(0, 0, window_width, 20, win->active_theme->widget_base, win->creation_id);
 
         int x_offset = 10;
         for (int i = 0; i < win->menu->children_count; i++)
@@ -72,7 +71,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
             GooeyMenuChild *child = &win->menu->children[i];
             int text_width = active_backend->GetTextWidth(child->title, strlen(child->title));
             active_backend->DrawText(x_offset, 15,
-                                     child->title, active_theme->neutral, 0.25f, win->creation_id);
+                                     child->title, win->active_theme->neutral, 0.25f, win->creation_id);
 
             if (child->is_open && child->menu_elements_count > 0)
             {
@@ -82,19 +81,19 @@ void GooeyMenu_Draw(GooeyWindow *win)
                 int submenu_height = 25 * child->menu_elements_count;
 
                 active_backend->FillRectangle(submenu_x, submenu_y,
-                                              submenu_width, submenu_height, active_theme->widget_base, win->creation_id);
+                                              submenu_width, submenu_height, win->active_theme->widget_base, win->creation_id);
 
                 for (int j = 0; j < child->menu_elements_count; j++)
                 {
                     int element_y = submenu_y + (j * 25);
                     active_backend->DrawText(submenu_x + 5,
-                                             element_y + 18, child->menu_elements[j], active_theme->neutral, 0.25f, win->creation_id);
+                                             element_y + 18, child->menu_elements[j], win->active_theme->neutral, 0.25f, win->creation_id);
                     if (j < child->menu_elements_count - 1)
                     {
 
                         active_backend->DrawLine(submenu_x,
                                                  element_y + 25 - 1, submenu_x + submenu_width,
-                                                 element_y + 25 - 1, active_theme->neutral, win->creation_id);
+                                                 element_y + 25 - 1, win->active_theme->neutral, win->creation_id);
                     }
                 }
             }

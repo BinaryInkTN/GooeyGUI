@@ -43,7 +43,6 @@ GooeyDropdown *GooeyDropdown_Add(GooeyWindow *win, int x, int y, int width,
 }
 
 void GooeyDropdown_Draw(GooeyWindow *win) {
-    const GooeyTheme *active_theme = win->active_theme;
 
        for (size_t i = 0; i < win->dropdown_count; i++)
     {
@@ -53,14 +52,14 @@ void GooeyDropdown_Draw(GooeyWindow *win) {
 
         active_backend->FillRectangle(dropdown->core.x,
                                       dropdown->core.y, dropdown->core.width,
-                                      dropdown->core.height, active_theme->widget_base, win->creation_id);
+                                      dropdown->core.height, win->active_theme->widget_base, win->creation_id);
         active_backend->DrawText(dropdown->core.x + 5,
                                  dropdown->core.y + 20,
                                  dropdown->options[dropdown->selected_index],
-                                 active_theme->neutral, 0.25f, win->creation_id);
+                                 win->active_theme->neutral, 0.25f, win->creation_id);
         int text_width = active_backend->GetTextWidth(dropdown->options[dropdown->selected_index], strlen(dropdown->options[dropdown->selected_index]));
         active_backend->DrawText(x_offset, 15,
-                                 dropdown->options[dropdown->selected_index], active_theme->neutral, 0.25f, win->creation_id);
+                                 dropdown->options[dropdown->selected_index], win->active_theme->neutral, 0.25f, win->creation_id);
         if (dropdown->is_open && dropdown->num_options > 0)
         {
             int submenu_x = x_offset;
@@ -68,17 +67,17 @@ void GooeyDropdown_Draw(GooeyWindow *win) {
             int submenu_width = win->dropdowns[i].core.width;
             int submenu_height = 25 * dropdown->num_options;
             active_backend->FillRectangle(submenu_x, submenu_y,
-                                          submenu_width, submenu_height, active_theme->widget_base, win->creation_id);
+                                          submenu_width, submenu_height, win->active_theme->widget_base, win->creation_id);
             for (int j = 0; j < dropdown->num_options; j++)
             {
                 int element_y = submenu_y + (j * 25);
                 active_backend->DrawText(submenu_x + 5,
-                                         element_y + 18, dropdown->options[j], active_theme->neutral, 0.25f, win->creation_id);
+                                         element_y + 18, dropdown->options[j], win->active_theme->neutral, 0.25f, win->creation_id);
                 if (j < dropdown->num_options - 1)
                 {
                     active_backend->DrawLine(submenu_x,
                                              element_y + 25 - 1, submenu_x + submenu_width,
-                                             element_y + 25 - 1, active_theme->neutral, win->creation_id);
+                                             element_y + 25 - 1, win->active_theme->neutral, win->creation_id);
                 }
             }
         }

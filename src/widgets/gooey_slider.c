@@ -75,21 +75,20 @@ void GooeySlider_setValue(GooeySlider *slider, long value)
 
 void GooeySlider_Draw(GooeyWindow *win)
 {
-    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t i = 0; i < win->slider_count; ++i)
     {
         GooeySlider *slider = &win->sliders[i];
 
         active_backend->FillRectangle(slider->core.x,
-                                      slider->core.y, slider->core.width, slider->core.height, active_theme->widget_base, win->creation_id);
+                                      slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id);
 
         int thumb_x = slider->core.x + (slider->value - slider->min_value) *
                                            slider->core.width /
                                            (slider->max_value - slider->min_value);
 
         active_backend->FillRectangle(thumb_x - 5,
-                                      slider->core.y - 5, 10, slider->core.height + 10, active_theme->primary, win->creation_id);
+                                      slider->core.y - 5, 10, slider->core.height + 10, win->active_theme->primary, win->creation_id);
 
         if (slider->show_hints)
         {
@@ -106,21 +105,21 @@ void GooeySlider_Draw(GooeyWindow *win)
 
             active_backend->DrawText(
                 slider->core.x - min_value_width - 5, slider->core.y + 5,
-                min_value, active_theme->neutral, 0.25f, win->creation_id);
+                min_value, win->active_theme->neutral, 0.25f, win->creation_id);
             active_backend->DrawText(
                 slider->core.x + slider->core.width + 5, slider->core.y + 5,
-                max_value, active_theme->neutral, 0.25f, win->creation_id);
+                max_value, win->active_theme->neutral, 0.25f, win->creation_id);
             if (slider->value != 0)
                 active_backend->DrawText(thumb_x - 5,
-                                         slider->core.y + 25, value, active_theme->neutral, 0.25f, win->creation_id);
+                                         slider->core.y + 25, value, win->active_theme->neutral, 0.25f, win->creation_id);
         }
-        active_backend->SetForeground(active_theme->neutral);
+        active_backend->SetForeground(win->active_theme->neutral);
     }
 }
 bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
 {
     static GooeySlider *active_slider = NULL;
-    const int comfort_margin = 20;
+     const int comfort_margin = 20;
 
     int mouse_x = event->mouse_move.x;
     int mouse_y = event->mouse_move.y;

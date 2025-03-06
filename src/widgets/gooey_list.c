@@ -62,7 +62,6 @@ void GooeyList_ClearItems(GooeyList *list)
 void GooeyList_Draw(GooeyWindow *win)
 {
     const int title_description_spacing = 15;
-    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t i = 0; i < win->list_count; ++i)
     {
@@ -71,22 +70,22 @@ void GooeyList_Draw(GooeyWindow *win)
         active_backend->FillRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            active_theme->widget_base, win->creation_id);
+            win->active_theme->widget_base, win->creation_id);
 
         active_backend->DrawRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            active_theme->neutral, win->creation_id);
+            win->active_theme->neutral, win->creation_id);
 
         active_backend->FillRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            active_theme->widget_base, win->creation_id);
+            win->active_theme->widget_base, win->creation_id);
 
         active_backend->DrawRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            active_theme->neutral, win->creation_id);
+            win->active_theme->neutral, win->creation_id);
 
         int total_content_height = list->item_count * list->item_spacing;
         int visible_height = list->core.height;
@@ -110,7 +109,7 @@ void GooeyList_Draw(GooeyWindow *win)
             active_backend->FillRectangle(
                 list->core.x + list->core.width, list->thumb_y,
                 list->thumb_width, list->thumb_height,
-                active_theme->primary, win->creation_id);
+                win->active_theme->primary, win->creation_id);
         }
 
         for (size_t j = 0; j < list->item_count; ++j)
@@ -124,7 +123,7 @@ void GooeyList_Draw(GooeyWindow *win)
             {
                 active_backend->DrawText(
                     list->core.x + 10, title_y,
-                    item.title, active_theme->neutral,
+                    item.title, win->active_theme->neutral,
                     0.25f, win->creation_id);
             }
 
@@ -132,7 +131,7 @@ void GooeyList_Draw(GooeyWindow *win)
             {
                 active_backend->DrawText(
                     list->core.x + 10, description_y,
-                    item.description, active_theme->neutral,
+                    item.description, win->active_theme->neutral,
                     0.25f, win->creation_id);
             }
 
@@ -145,7 +144,7 @@ void GooeyList_Draw(GooeyWindow *win)
                     active_backend->DrawLine(
                         list->core.x, line_separator_y,
                         list->core.x + list->core.width,
-                        line_separator_y, active_theme->neutral,
+                        line_separator_y, win->active_theme->neutral,
                         win->creation_id);
             }
 

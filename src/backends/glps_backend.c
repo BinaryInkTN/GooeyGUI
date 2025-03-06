@@ -545,14 +545,14 @@ void glps_draw_text(int x, int y, const char *text, unsigned long color, float f
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-GooeyWindow glps_create_window(const char *title, int width, int height)
+GooeyWindow *glps_create_window(const char *title, int width, int height)
 
 {
 
-    GooeyWindow window = (GooeyWindow){0};
+    GooeyWindow *window = malloc(sizeof(GooeyWindow));
 
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
-    window.creation_id = window_id;
+    window->creation_id = window_id;
 
     if (!gladLoadGL())
     {
@@ -562,10 +562,10 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
 
     glps_init_ft();
 
-    if (window.creation_id == 0)
+    if (window->creation_id == 0)
         glps_setup_shared();
 
-    glps_setup_seperate_vao(window.creation_id);
+    glps_setup_seperate_vao(window->creation_id);
     // glps_set_projection(window.creation_id, width, height);
     ctx.active_window_count++;
 

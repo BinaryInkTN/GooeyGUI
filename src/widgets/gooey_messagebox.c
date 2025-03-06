@@ -46,27 +46,26 @@ void __msgbox_cancel(void)
     }
     active_backend->HideCurrentChild();
 }
-GooeyWindow GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void (*callback)(int option))
+GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void (*callback)(int option))
 {
 
-    GooeyWindow window = GooeyWindow_Create(title, 500, 195, 0);
-    const GooeyTheme *active_theme = window.active_theme;
+    GooeyWindow *window = GooeyWindow_Create(title, 500, 195, 0);
 
     GooeyWindow_MakeResizable(&window, 0);
-    MessageBoxCallback[window.creation_id] = callback;
-    window.type = WINDOW_MSGBOX;
+    MessageBoxCallback[window->creation_id] = callback;
+    window->type = WINDOW_MSGBOX;
     unsigned long msgbox_title_color;
 
     switch (type)
     {
     case MSGBOX_INFO:
-        msgbox_title_color = active_theme->info;
+        msgbox_title_color = window->active_theme->info;
         break;
     case MSGBOX_FAIL:
-        msgbox_title_color = active_theme->danger;
+        msgbox_title_color = window->active_theme->danger;
         break;
     case MSGBOX_SUCCES:
-        msgbox_title_color = active_theme->success;
+        msgbox_title_color = window->active_theme->success;
         break;
     default:
         break;

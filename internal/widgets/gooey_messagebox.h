@@ -14,9 +14,9 @@
  * @param type The type of the message box (e.g., INFO, WARNING, ERROR, QUESTION).
  * @param callback A function pointer to handle user input (e.g., button click).
  *                 The callback receives an integer representing the selected option.
- * @return GooeyWindow The created message box window.
+ * @return GooeyWindow The created message box window pointer.
  */
-GooeyWindow GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void (*callback)(int option));
+GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void (*callback)(int option));
 
 /**
  * @brief Displays the specified message box window.

@@ -58,12 +58,11 @@ void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
 
 void GooeyButton_Draw(GooeyWindow *win)
 {
-    const GooeyTheme *active_theme = win->active_theme;
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = &win->buttons[i];
         active_backend->FillRectangle(button->core.x,
-                                      button->core.y, button->core.width, button->core.height, button->clicked ? active_theme->primary : active_theme->widget_base, win->creation_id);
+                                      button->core.y, button->core.width, button->core.height, button->clicked ? win->active_theme->primary : win->active_theme->widget_base, win->creation_id);
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));
         float text_height = active_backend->GetTextHeight(button->label, strlen(button->label));
 
@@ -71,14 +70,14 @@ void GooeyButton_Draw(GooeyWindow *win)
         float text_y = button->core.y + (button->core.height + text_height) / 2;
 
         active_backend->DrawText(text_x,
-                                 text_y, button->label, button->clicked ? active_theme->base : active_theme->neutral, 0.25f, win->creation_id);
-        active_backend->SetForeground(active_theme->neutral);
+                                 text_y, button->label, button->clicked ? win->active_theme->base : win->active_theme->neutral, 0.25f, win->creation_id);
+        active_backend->SetForeground(win->active_theme->neutral);
 
         if (button->is_highlighted)
         {
 
             active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, active_theme->primary, win->creation_id);
+                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, win->creation_id);
         }
     }
 }

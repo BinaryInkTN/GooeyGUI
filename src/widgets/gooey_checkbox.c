@@ -45,7 +45,6 @@ GooeyCheckbox *GooeyCheckbox_Add(GooeyWindow *win, int x, int y, char *label,
 
 void GooeyCheckbox_Draw(GooeyWindow *win)
 {
-    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {
@@ -54,17 +53,17 @@ void GooeyCheckbox_Draw(GooeyWindow *win)
         int label_width = active_backend->GetTextWidth(checkbox->label, strlen(checkbox->label));
         int label_x = checkbox->core.x + CHECKBOX_SIZE + 10;
         int label_y = checkbox->core.y + (CHECKBOX_SIZE / 2) + 5;
-        active_backend->DrawText(label_x, label_y, checkbox->label, active_theme->neutral, 0.25f, win->creation_id);
+        active_backend->DrawText(label_x, label_y, checkbox->label, win->active_theme->neutral, 0.25f, win->creation_id);
 
         active_backend->DrawRectangle(checkbox->core.x, checkbox->core.y,
-                                      checkbox->core.width, checkbox->core.height, active_theme->neutral, win->creation_id);
+                                      checkbox->core.width, checkbox->core.height, win->active_theme->neutral, win->creation_id);
         active_backend->FillRectangle(checkbox->core.x + 1, checkbox->core.y + 1,
-                                      checkbox->core.width - 2, checkbox->core.height - 2, active_theme->base, win->creation_id);
+                                      checkbox->core.width - 2, checkbox->core.height - 2, win->active_theme->base, win->creation_id);
 
         if (checkbox->checked)
         {
             active_backend->FillRectangle(checkbox->core.x + 5, checkbox->core.y + 5,
-                                          checkbox->core.width - 10, checkbox->core.height - 10, active_theme->primary, win->creation_id);
+                                          checkbox->core.width - 10, checkbox->core.height - 10, win->active_theme->primary, win->creation_id);
         }
     }
 }

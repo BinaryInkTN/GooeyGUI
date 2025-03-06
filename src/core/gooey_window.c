@@ -34,6 +34,9 @@
 #include "signals/gooey_signals.h"
 #include <stdarg.h>
 
+#include <sys/resource.h>
+
+
 GooeyBackend *active_backend = NULL;
 GooeyBackends ACTIVE_BACKEND = -1;
 
@@ -151,6 +154,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->current_event = NULL;
     }
 
+    if(win->active_theme)
+    {
+        free(win->active_theme);
+        win->active_theme = NULL;
+    }
+
     if (win->canvas)
     {
         free(win->canvas);
@@ -223,7 +232,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->lists = NULL;
     }
 
-    if (win->plots)
+     if (win->plots)
     {
         for (size_t i = 0; i < win->plot_count; ++i)
         {
@@ -245,6 +254,8 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->plots = NULL;
     }
 
+   
+
     if (win->widgets)
     {
         free(win->widgets);
@@ -252,13 +263,13 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     }
 }
 
-GooeyWindow GooeyWindow_Create(const char *title, int width, int height, bool visibilty)
+GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibilty)
 {
-    GooeyWindow win = active_backend->CreateWindow(title, width, height);
-    win.type = WINDOW_REGULAR;
-    if (!GooeyWindow_AllocateResources(&win))
+    GooeyWindow* win = active_backend->CreateWindow(title, width, height);
+    win->type = WINDOW_REGULAR;
+    if (!GooeyWindow_AllocateResources(win))
     {
-        GooeyWindow_Cleanup(1, &win);
+        GooeyWindow_Cleanup(1, win);
         LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
         exit(EXIT_FAILURE);
     }
@@ -271,23 +282,23 @@ GooeyWindow GooeyWindow_Create(const char *title, int width, int height, bool vi
     const unsigned long infoColor = 0x2196F3;
     const unsigned long successColor = 0x00A152;
 
-    win.menu = NULL;
+    win->menu = NULL;
 
-    *win.active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
-    win.visibility = visibilty;
-    win.canvas_count = 0;
-    win.button_count = 0;
-    win.label_count = 0;
-    win.plot_count = 0;
-    win.checkbox_count = 0;
-    win.radio_button_count = 0;
-    win.radio_button_group_count = 0;
-    win.slider_count = 0;
-    win.dropdown_count = 0;
-    win.textboxes_count = 0;
-    win.layout_count = 0;
-    win.list_count = 0;
-    win.widget_count = 0;
+    *win->active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
+    win->visibility = visibilty;
+    win->canvas_count = 0;
+    win->button_count = 0;
+    win->label_count = 0;
+    win->plot_count = 0;
+    win->checkbox_count = 0;
+    win->radio_button_count = 0;
+    win->radio_button_group_count = 0;
+    win->slider_count = 0;
+    win->dropdown_count = 0;
+    win->textboxes_count = 0;
+    win->layout_count = 0;
+    win->list_count = 0;
+    win->widget_count = 0;
     LOG_INFO("Window created with dimensions (%d, %d).", width, height);
     return win;
 }
@@ -329,7 +340,10 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     if (win == NULL)
         return;
 
-    active_backend->ResetEvents(win);
+        struct rlimit limit;
+        getrlimit (RLIMIT_STACK, &limit);
+        LOG_ERROR ("\nStack Limit = %ld and %ld max\n", limit.rlim_cur, limit.rlim_max);
+        active_backend->ResetEvents(win);
     active_backend->Clear(win);
     // Draw all UI components
     GooeyList_Draw(win);
@@ -450,6 +464,11 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
         if (windows[i])
         {
             GooeyWindow_FreeResources(windows[i]);
+        }
+        if(windows[i])
+        {
+            free(windows[i]);
+            windows[i] = NULL;
         }
     }
 

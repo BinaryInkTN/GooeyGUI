@@ -25,9 +25,9 @@ void GooeyWindow_SetTheme(GooeyWindow* win, GooeyTheme* theme);
  * @param title The title of the window.
  * @param width The width of the window.
  * @param height The height of the window.
- * @return A new GooeyWindow object.
+ * @return A new GooeyWindow object pointer.
  */
-GooeyWindow GooeyWindow_Create(const char *title, int width, int height, bool visibility);
+GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibility);
 
 GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bool visibility);
 void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility);

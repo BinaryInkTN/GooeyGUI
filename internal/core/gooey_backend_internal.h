@@ -23,7 +23,7 @@ typedef struct GooeyBackend
     void (*SetViewport)(size_t window_id, int width, int height);
     size_t (*GetActiveWindowCount)(void);
     size_t (*GetTotalWindowCount)(void);
-    GooeyWindow (*CreateWindow)(const char *title, int width, int height);
+    GooeyWindow* (*CreateWindow)(const char *title, int width, int height);
     GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);
     void (*MakeWindowVisible)(int window_id, bool visibility);
     void (*MakeWindowResizable)(bool value, int window_id);

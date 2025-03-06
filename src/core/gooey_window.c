@@ -36,7 +36,6 @@
 
 #include <sys/resource.h>
 
-
 GooeyBackend *active_backend = NULL;
 GooeyBackends ACTIVE_BACKEND = -1;
 
@@ -100,7 +99,6 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
     }
 
     win->active_theme = theme;
-    active_backend->UpdateBackground(win);
 }
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
@@ -154,7 +152,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->current_event = NULL;
     }
 
-    if(win->active_theme)
+    if (win->active_theme)
     {
         free(win->active_theme);
         win->active_theme = NULL;
@@ -232,7 +230,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->lists = NULL;
     }
 
-     if (win->plots)
+    if (win->plots)
     {
         for (size_t i = 0; i < win->plot_count; ++i)
         {
@@ -254,8 +252,6 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->plots = NULL;
     }
 
-   
-
     if (win->widgets)
     {
         free(win->widgets);
@@ -265,7 +261,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 
 GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibilty)
 {
-    GooeyWindow* win = active_backend->CreateWindow(title, width, height);
+    GooeyWindow *win = active_backend->CreateWindow(title, width, height);
     win->type = WINDOW_REGULAR;
     if (!GooeyWindow_AllocateResources(win))
     {
@@ -340,10 +336,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     if (win == NULL)
         return;
 
-        struct rlimit limit;
-        getrlimit (RLIMIT_STACK, &limit);
-        LOG_ERROR ("\nStack Limit = %ld and %ld max\n", limit.rlim_cur, limit.rlim_max);
-        active_backend->ResetEvents(win);
+    active_backend->ResetEvents(win);
     active_backend->Clear(win);
     // Draw all UI components
     GooeyList_Draw(win);
@@ -382,6 +375,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     int width, height;
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
+    active_backend->UpdateBackground(window);
 
     needs_redraw |= GooeySlider_HandleDrag(window, window->current_event);
     needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
@@ -465,7 +459,7 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
         {
             GooeyWindow_FreeResources(windows[i]);
         }
-        if(windows[i])
+        if (windows[i])
         {
             free(windows[i]);
             windows[i] = NULL;

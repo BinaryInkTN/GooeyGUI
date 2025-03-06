@@ -88,7 +88,7 @@ target_link_libraries(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include/Gooey>
     PRIVATE
     ${PROJECT_SOURCE_DIR}/internal
     ${PROJECT_SOURCE_DIR}/third_party/freetype/include
@@ -106,6 +106,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Install all public headers under include/Gooey
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include/Gooey)
 
+# Install internal headers under include/Gooey/internal
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/ DESTINATION include/Gooey)
 
 # Install the shared library
 install(TARGETS ${PROJECT_NAME}

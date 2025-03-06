@@ -80,8 +80,8 @@ int main()
     Gooey_Init(GLPS);
 
     GooeyWindow *win = GooeyWindow_Create("Gooey Showcase", 400, 700, 1);
-   // GooeyTheme *theme = GooeyWindow_LoadTheme("dark.json");
-   //GooeyWindow_SetTheme(win, theme);
+    GooeyTheme *theme = GooeyWindow_LoadTheme("dark.json");
+    GooeyWindow_SetTheme(win, theme);
 
    msgBox = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_FAIL, messageBoxCallback);
  msgBox2 = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_SUCCES, messageBox2Callback);
@@ -126,7 +126,7 @@ int main()
 
     LOG_PERFORMANCE(NULL);
     
-    GooeyWindow_Run(1, win);
+    GooeyWindow_Run(3, win, msgBox, msgBox2);
     LOG_PERFORMANCE("GooeyWindow_Run");
 
     save_log_file("logs.txt");

@@ -61,7 +61,7 @@ int main()
 
     // Initialize the Gooey library
     Gooey_Init(GLPS);
-    GooeyWindow win = GooeyWindow_Create("Scattered Data Plot", 800, 600, true);
+    GooeyWindow* win = GooeyWindow_Create("Scattered Data Plot", 800, 600, true);
 
     // Initialize the mutex
     pthread_mutex_init(&data_mutex, NULL);
@@ -84,7 +84,7 @@ int main()
     data.y_data = y_partial;
 
     // Add the plot to the window
-    GooeyPlot *plot = GooeyPlot_Add(&win, GOOEY_PLOT_LINE, &data, 20, 20, 800, 400);
+    GooeyPlot *plot = GooeyPlot_Add(win, GOOEY_PLOT_LINE, &data, 20, 20, 800, 400);
 
     // Create a thread to simulate receiving data
     pthread_t thread_id;
@@ -92,14 +92,14 @@ int main()
     //pthread_create(&thread_id, NULL, data_receiver_thread, &args);
 
     // Run the window
-    GooeyWindow_Run(1, &win);
+    GooeyWindow_Run(1, win);
 
     // Wait for the thread to finish
    // pthread_join(thread_id, NULL);
 
     // Clean up
     //pthread_mutex_destroy(&data_mutex);
-    GooeyWindow_Cleanup(1, &win);
+    GooeyWindow_Cleanup(1, win);
 
     return 0;
 }

@@ -15,13 +15,11 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 #include "widgets/gooey_messagebox.h"
 #include "widgets/gooey_layout.h"
 #include "widgets/gooey_label.h"
 #include "widgets/gooey_button.h"
 #include "core/gooey_backend_internal.h"
-
 
 void (*MessageBoxCallback[100])(int option);
 GooeyWindow *CurrentMessageBox = NULL;
@@ -70,26 +68,26 @@ GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGB
     default:
         break;
     }
-    GooeyLayout *layout = GooeyLayout_Create(&window, LAYOUT_VERTICAL, 20, 40, 400, 200);
-    GooeyLayout *button_layout = GooeyLayout_Create(&window, LAYOUT_HORIZONTAL, 0, 0, 200, 110);
+
+    GooeyLayout *layout = GooeyLayout_Create(window, LAYOUT_VERTICAL, 20, 40, 400, 200);
+    GooeyLayout *button_layout = GooeyLayout_Create(window, LAYOUT_HORIZONTAL, 0, 0, 200, 110);
     char color_buffer[20];
     snprintf(color_buffer, sizeof(color_buffer), "0x%lx", msgbox_title_color);
-    GooeyLabel *title_label = GooeyLabel_Add(&window, title, 0.5f, 50, 50);
+    GooeyLabel *title_label = GooeyLabel_Add(window, title, 0.5f, 50, 50);
     GooeyLabel_SetColor(title_label, color_buffer);
     GooeyLayout_AddChild(layout, title_label);
 
-    GooeyLayout_AddChild(layout, GooeyLabel_Add(&window, message, 0.3f, 0, 0));
+    GooeyLayout_AddChild(layout, GooeyLabel_Add(window, message, 0.3f, 0, 0));
     GooeyLayout_AddChild(layout, button_layout);
-    GooeyButton *ok_button = GooeyButton_Add(&window, "Ok", 0, 0, 20, 40, __msgbox_ok);
+    GooeyButton *ok_button = GooeyButton_Add(window, "Ok", 0, 0, 20, 40, __msgbox_ok);
     GooeyButton_SetHighlight(ok_button, 1);
     GooeyLayout_AddChild(button_layout, ok_button);
-    GooeyLayout_AddChild(button_layout, GooeyButton_Add(&window, "Cancel", 0, 0, 20, 40, __msgbox_cancel));
+    GooeyLayout_AddChild(button_layout, GooeyButton_Add(window, "Cancel", 0, 0, 20, 40, __msgbox_cancel));
 
     GooeyLayout_Build(layout);
+
     return window;
 }
-
-
 
 void GooeyMessageBox_Show(GooeyWindow *msgBoxWindow)
 {

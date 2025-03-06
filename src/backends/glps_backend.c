@@ -691,13 +691,10 @@ void glps_cleanup()
 void glps_update_background(GooeyWindow *win)
 {
     if(!win || !win->active_theme) return;
-    LOG_INFO("%x", win->active_theme->base);
     vec3 color;
-    win->current_event->type = GOOEY_EVENT_REDRAWREQ;
     glps_wm_set_window_ctx_curr(ctx.wm, win->creation_id);
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 void glps_render(GooeyWindow* win)

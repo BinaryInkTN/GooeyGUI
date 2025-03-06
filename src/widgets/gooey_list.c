@@ -260,7 +260,7 @@ bool GooeyList_HandleThumbScroll(GooeyWindow *window, GooeyEvent *scroll_event)
 
         if (is_dragging)
         {
-            active_backend->InhibitResetEvents(1);
+          //  active_backend->InhibitResetEvents(1);
             if (scroll_event->type != GOOEY_EVENT_CLICK_RELEASE)
             {
                 if (mouse_prev != -1)
@@ -271,12 +271,12 @@ bool GooeyList_HandleThumbScroll(GooeyWindow *window, GooeyEvent *scroll_event)
             else
             {
                 is_dragging = false;
-                active_backend->InhibitResetEvents(0);
+             //   active_backend->InhibitResetEvents(0);
                 mouse_prev = -1;
             }
         }
     }
 
-    active_backend->InhibitResetEvents(0);
+   // active_backend->InhibitResetEvents(0);
     return false;
 }

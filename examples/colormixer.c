@@ -10,6 +10,7 @@ void updateColor()
     LOG_INFO("r=%d g=%d b=%d", red, green, blue);
     unsigned long color = (red << 16) | (green  << 8) | blue;
     GooeyCanvas_DrawRectangle(canvas, 0, 0, 200, 200, color, true);
+    LOG_WARNING("%ld", childWindow.creation_id);
     GooeyWindow_RequestRedraw(&childWindow);
 }
 

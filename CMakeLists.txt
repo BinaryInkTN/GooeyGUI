@@ -4,11 +4,14 @@ project(GooeyGUI VERSION 1.0 LANGUAGES C)
 
 # Set output directories for libraries and executables
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 
 # Source files
 set(SOURCES
     src/core/gooey.c
-        src/core/gooey_window.c
+    src/core/gooey_window.c
     src/utils/logger/gooey_logger.c
     src/utils/theme/gooey_theme.c
     src/utils/glad/glad.c
@@ -32,7 +35,7 @@ set(SOURCES
 
 # Header files
 set(HEADERS
-        internal/core/gooey_window.h
+    internal/core/gooey_window.h
     internal/core/gooey_backend_internal.h
     internal/utils/backends/backend_utils.h
     internal/utils/glad/glad.h
@@ -60,18 +63,20 @@ set(HEADERS
 
 # Set compiler flags
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -g3 -fPIC -fsanitize=address,undefined")
-# enable debugging 
+
+# Enable debugging
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
 
 # Add third-party dependencies
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/cjson)
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/glps)
 add_subdirectory(${PROJECT_SOURCE_DIR}/third_party/freetype)
 
-# Define the library
+# Define the library as SHARED
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${HEADERS})
 
+# Link libraries
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
     cjson
@@ -79,6 +84,7 @@ target_link_libraries(${PROJECT_NAME}
     freetype
 )
 
+# Include directories
 target_include_directories(${PROJECT_NAME}
     PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
@@ -90,9 +96,9 @@ target_include_directories(${PROJECT_NAME}
     ${PROJECT_SOURCE_DIR}/third_party/cjson/include
 )
 
-set_target_properties(freetype PROPERTIES POSITION_INDEPENDENT_CODE ON)
-
+# Ensure position-independent code (PIC) is enabled for shared libraries
 set_target_properties(${PROJECT_NAME} PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
     VERSION ${PROJECT_VERSION}
     SOVERSION 1
 )
@@ -101,12 +107,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include/Gooey)
 
 # Install internal headers under include/Gooey/internal
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/ DESTINATION include/Gooey)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/core/ DESTINATION include/Gooey/core)
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/utils/ DESTINATION include/Gooey/utils)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/ DESTINATION include/Gooey/internal)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/core/ DESTINATION include/Gooey/internal/core)
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/utils/ DESTINATION include/Gooey/internal/utils)
 
-
-# Install the library
+# Install the shared library
 install(TARGETS ${PROJECT_NAME}
     EXPORT GooeyGUIConfig
     LIBRARY DESTINATION lib

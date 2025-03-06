@@ -19,7 +19,7 @@ typedef struct GooeyBackend
     void (*Run)();
     void (*Cleanup)();
     void (*SetupCallbacks)(void (*callback)(size_t window_id, void*data), void* data);
-    void (*RequestRedraw)(size_t window_id);
+    void (*RequestRedraw)(GooeyWindow* win);
     size_t (*GetActiveWindowCount)(void);
     size_t (*GetTotalWindowCount)(void);
     GooeyWindow (*CreateWindow)(const char *title, int width, int height);
@@ -41,7 +41,7 @@ typedef struct GooeyBackend
     void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id);
     const char *(*GetKeyFromCode)(GooeyEvent *gooey_event);
     GooeyEvent *(*HandleEvents)(void);
-    void (*InhibitResetEvents)(bool state);
+    void (*ResetEvents)(GooeyWindow* win);
     void (*GetWinDim)(int *width, int *height, int window_id);
     void (*DrawLine)(int x1, int y1, int x2, int y2, unsigned long color, int window_id);
     float (*GetTextWidth)(const char *text, int length);

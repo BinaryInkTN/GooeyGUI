@@ -18,23 +18,15 @@
 #include "gooey.h"
 #include <ctype.h>
 
-GooeyTheme default_theme;
 GOOEY_CURSOR currently_set_cursor = GOOEY_CURSOR_ARROW;
 int called = 0;
 
 int Gooey_Init(GooeyBackends backend)
 {
-    unsigned long primaryColor = 0x2196F3;
-    unsigned long baseColor = 0xFFFFFF;
-    unsigned long neutralColor = 0x000000;
-    unsigned long widgetBaseColor = 0xD3D3D3;
-    unsigned long dangerColor = 0xE91E63;
-    unsigned long infoColor = 0x2196F3;
-    unsigned long successColor = 0x00A152;
 
-    default_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
 
-    active_theme = &default_theme;
+
+ //   active_theme = &default_theme;
 
     switch (backend)
     {

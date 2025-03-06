@@ -83,6 +83,8 @@ GooeyRadioButton *GooeyRadioButton_Add(GooeyWindow *win, int x, int y,
 
 void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     for (size_t i = 0; i < win->radio_button_group_count; ++i)
     {
         GooeyRadioButtonGroup *group = &win->radio_button_groups[i];

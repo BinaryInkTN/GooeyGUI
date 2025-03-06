@@ -566,7 +566,7 @@ GooeyWindow glps_create_window(const char *title, int width, int height)
         glps_setup_shared();
 
     glps_setup_seperate_vao(window.creation_id);
-   // glps_set_projection(window.creation_id, width, height);
+    // glps_set_projection(window.creation_id, width, height);
     ctx.active_window_count++;
 
     return window;
@@ -646,14 +646,16 @@ void glps_destroy_windows()
     }*/
 }
 
-void glps_clear(int window_id)
+void glps_clear(GooeyWindow *win)
 {
+
+    size_t window_id = win->creation_id;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     glps_wm_swap_interval(ctx.wm, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     vec3 color;
-    convert_hex_to_rgb(&color, active_theme->base);
+    convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -674,36 +676,33 @@ void glps_cleanup()
         ctx.shape_vaos = NULL;
     }
 
-  
-
     if (ctx.text_programs)
     {
         free(ctx.text_programs);
         ctx.text_programs = NULL;
     }
-    
+
     glDeleteShader(ctx.text_vertex_shader);
     glDeleteShader(ctx.text_fragment_shader);
 
     glps_wm_destroy(ctx.wm);
 }
 
-void glps_update_background()
+void glps_update_background(GooeyWindow *win)
 {
-
-    for (size_t i = 0; i < ctx.wm->window_count; ++i)
-    {
-        glps_wm_set_window_ctx_curr(ctx.wm, i);
-
-        vec3 color;
-        convert_hex_to_rgb(&color, active_theme->base);
-        glClearColor(color[0], color[1], color[2], 1.0f);
-    }
+    if(!win || !win->active_theme) return;
+    LOG_INFO("%x", win->active_theme->base);
+    vec3 color;
+    win->current_event->type = GOOEY_EVENT_REDRAWREQ;
+    glps_wm_set_window_ctx_curr(ctx.wm, win->creation_id);
+    convert_hex_to_rgb(&color, win->active_theme->base);
+    glClearColor(color[0], color[1], color[2], 1.0f);
+    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
-void glps_render(int window_id)
+void glps_render(GooeyWindow* win)
 {
-    glps_wm_swap_buffers(ctx.wm, window_id);
+    glps_wm_swap_buffers(ctx.wm, win->creation_id);
 }
 
 float glps_get_text_width(const char *text, int length)

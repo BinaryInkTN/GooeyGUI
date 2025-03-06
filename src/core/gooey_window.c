@@ -35,7 +35,6 @@
 #include <stdarg.h>
 
 GooeyBackend *active_backend = NULL;
-GooeyTheme *active_theme;
 GooeyBackends ACTIVE_BACKEND = -1;
 
 void GooeyWindow_RegisterWidget(GooeyWindow *win, GooeyWidget *widget)
@@ -84,19 +83,28 @@ bool GooeyWindow_HandleCursorChange(GooeyWindow *win, GOOEY_CURSOR *cursor, int 
     return false;
 }
 
-void GooeyWindow_SetTheme(const char *fontPath)
+GooeyTheme *GooeyWindow_LoadTheme(const char *theme_path)
 {
+    return parser_load_theme_from_file(theme_path);
+}
 
-    if (active_backend)
+void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
+{
+    if (!win || !theme)
     {
-        *active_theme = parser_load_theme_from_file(fontPath);
-        active_backend->UpdateBackground();
+        LOG_CRITICAL("Couldn't load theme, falling back to default.");
+        return;
     }
+
+    win->active_theme = theme;
+    active_backend->UpdateBackground(win);
 }
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
     if (!(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
+        !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
+        !(win->current_event = malloc(sizeof(GooeyEvent))) ||
         !(win->labels = malloc(sizeof(GooeyLabel) * MAX_WIDGETS)) ||
         !(win->checkboxes = malloc(sizeof(GooeyCheckbox) * MAX_WIDGETS)) ||
         !(win->radio_buttons = malloc(sizeof(GooeyRadioButton) * MAX_WIDGETS)) ||
@@ -137,7 +145,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->canvas[i].elements = NULL;
     }
 
-    if(win->current_event)
+    if (win->current_event)
     {
         free(win->current_event);
         win->current_event = NULL;
@@ -217,6 +225,22 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 
     if (win->plots)
     {
+        for (size_t i = 0; i < win->plot_count; ++i)
+        {
+            GooeyPlotData *data = win->plots->data;
+            if (data->x_data)
+            {
+                free(data->x_data);
+                data->x_data = NULL;
+            }
+
+            if (data->y_data)
+            {
+                free(data->y_data);
+                data->y_data = NULL;
+            }
+        }
+
         free(win->plots);
         win->plots = NULL;
     }
@@ -239,8 +263,17 @@ GooeyWindow GooeyWindow_Create(const char *title, int width, int height, bool vi
         exit(EXIT_FAILURE);
     }
 
-    win.current_event = malloc(sizeof(GooeyEvent));
+    const unsigned long primaryColor = 0x2196F3;
+    const unsigned long baseColor = 0xFFFFFF;
+    const unsigned long neutralColor = 0x000000;
+    const unsigned long widgetBaseColor = 0xD3D3D3;
+    const unsigned long dangerColor = 0xE91E63;
+    const unsigned long infoColor = 0x2196F3;
+    const unsigned long successColor = 0x00A152;
+
     win.menu = NULL;
+
+    *win.active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
     win.visibility = visibilty;
     win.canvas_count = 0;
     win.button_count = 0;
@@ -297,7 +330,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
         return;
 
     active_backend->ResetEvents(win);
-    active_backend->Clear(win->creation_id);
+    active_backend->Clear(win);
     // Draw all UI components
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
@@ -310,13 +343,13 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeySlider_Draw(win);
     GooeyPlot_Draw(win);
     GooeyMenu_Draw(win);
-    active_backend->Render(win->creation_id);
+    active_backend->Render(win);
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
     bool needs_redraw = false;
-    
+
     if (!data || !active_backend)
     {
         LOG_CRITICAL("Invalid data or backend in Redraw callback");
@@ -357,12 +390,11 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     case GOOEY_EVENT_CLICK_PRESS:
         // Handle mouse click press event
-
         int mouse_click_x = window->current_event->click.x, mouse_click_y = window->current_event->click.y;
         needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |=GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
@@ -388,7 +420,8 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
     }
 
-    if(needs_redraw) GooeyWindow_DrawUIElements(window);
+    if (needs_redraw)
+        GooeyWindow_DrawUIElements(window);
 }
 
 void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)

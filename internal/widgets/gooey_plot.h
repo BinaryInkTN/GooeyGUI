@@ -47,6 +47,7 @@
   * @param new_data Pointer to the new plot data.
   */
  void GooeyPlot_Update(GooeyPlot *plot, GooeyPlotData *new_data);
+
  
  #endif /* GOOEY_PLOT_H */
  

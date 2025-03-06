@@ -62,6 +62,7 @@ void GooeyList_ClearItems(GooeyList *list)
 void GooeyList_Draw(GooeyWindow *win)
 {
     const int title_description_spacing = 15;
+    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t i = 0; i < win->list_count; ++i)
     {

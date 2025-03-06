@@ -6,7 +6,6 @@ var gooey_8h =
     [ "GooeyWindow_CreateChild", "gooey_8h.html#a6aa3a5374a44c29e6c34dadf26eb2cec", null ],
     [ "GooeyWindow_MakeResizable", "gooey_8h.html#a551d17ed9cb4c98336280b42984f5fe7", null ],
     [ "GooeyWindow_MakeVisible", "gooey_8h.html#a2b25347d47ee668cefe2ccee05a4fba8", null ],
-    [ "GooeyWindow_Redraw", "gooey_8h.html#ae5030980075ccfceb3e805c5b6f5ff8a", null ],
     [ "GooeyWindow_RegisterWidget", "gooey_8h.html#a1222b8f576e5b50125ce4a5f07762969", null ],
     [ "GooeyWindow_Run", "gooey_8h.html#acaecd56b83d3d917e644ec896623fbfc", null ],
     [ "GooeyWindow_SetTheme", "gooey_8h.html#a5992d003281d3709c977894758948be1", null ]

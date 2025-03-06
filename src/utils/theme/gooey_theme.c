@@ -1,101 +1,80 @@
-/*
- Copyright (c) 2024 Yassine Ahmed Ali
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <cjson/cJSON.h>
 #include "utils/theme/gooey_theme_internal.h"
 
-GooeyTheme parser_load_theme_from_file(const char *filePath)
+GooeyTheme *parser_load_theme_from_file(const char *filePath)
 {
     FILE *fp = fopen(filePath, "r");
     if (fp == NULL)
     {
-        printf("Error: Unable to open json theme file.\n");
-        exit(1);
+        printf("Error: Unable to open JSON theme file.\n");
+        return NULL;
     }
 
-    char buffer[1024];
-    int len = fread(buffer, 1, sizeof(buffer), fp);
+    // Get file size
+    fseek(fp, 0, SEEK_END);
+    long fileSize = ftell(fp);
+    rewind(fp);
+
+    // Allocate memory dynamically for the file content
+    char *buffer = (char *)malloc(fileSize + 1);
+    if (buffer == NULL)
+    {
+        printf("Error: Memory allocation failed.\n");
+        fclose(fp);
+        return NULL;
+    }
+
+    fread(buffer, 1, fileSize, fp);
+    buffer[fileSize] = '\0'; // Null-terminate JSON string
     fclose(fp);
 
+    // Parse JSON
     cJSON *json = cJSON_Parse(buffer);
+    free(buffer); // Free buffer after parsing
+
     if (json == NULL)
     {
-        const char *error_ptr = cJSON_GetErrorPtr();
-        if (error_ptr != NULL)
-        {
-            printf("Error: %s\n", error_ptr);
-        }
+        printf("Error: Failed to parse JSON.\n");
+        return NULL;
+    }
+
+    // Initialize theme colors with defaults
+    GooeyTheme *theme = malloc(sizeof(GooeyTheme));
+    if (!theme)
+    {
+        printf("Error: Memory allocation for theme failed.\n");
         cJSON_Delete(json);
-        exit(1);
+        return NULL;
     }
 
-    int baseColor, widgetBaseColor, neutralColor, primaryColor, dangerColor, infoColor, successColor;
-    // Neutral color
-    cJSON *neutral = cJSON_GetObjectItemCaseSensitive(json, "neutral");
-    if (cJSON_IsString(neutral) && (neutral->valuestring != NULL))
-    {
-        neutralColor = (unsigned long)strtol(neutral->valuestring, NULL, 0);
-    }
+    theme->base = 0x000000; // Default black
+    theme->neutral = 0x808080; // Default gray
+    theme->widget_base = 0xFFFFFF; // Default white
+    theme->primary = 0x0000FF; // Default blue
+    theme->danger = 0xFF0000; // Default red
+    theme->info = 0x00FFFF; // Default cyan
+    theme->success = 0x00FF00; // Default green
 
-    // Danger color
-    cJSON *danger = cJSON_GetObjectItemCaseSensitive(json, "danger");
-    if (cJSON_IsString(danger) && (danger->valuestring != NULL))
-    {
-        dangerColor = (unsigned long)strtol(danger->valuestring, NULL, 0);
-    }
+    // Read colors from JSON
+    #define READ_COLOR(key, field) \
+        do { \
+            cJSON *item = cJSON_GetObjectItemCaseSensitive(json, key); \
+            if (cJSON_IsString(item) && item->valuestring != NULL) { \
+                theme->field = (unsigned long)strtol(item->valuestring, NULL, 0); \
+            } \
+        } while (0)
 
-    // Info color
-    cJSON *info = cJSON_GetObjectItemCaseSensitive(json, "info");
-    if (cJSON_IsString(info) && (info->valuestring != NULL))
-    {
-        infoColor = (unsigned long)strtol(info->valuestring, NULL, 0);
-    }
-
-    // Success color
-    cJSON *success = cJSON_GetObjectItemCaseSensitive(json, "success");
-    if (cJSON_IsString(success) && (success->valuestring != NULL))
-    {
-        successColor = (unsigned long)strtol(success->valuestring, NULL, 0);
-    }
-
-    // Widget Base Color
-
-    cJSON *widget_base = cJSON_GetObjectItemCaseSensitive(json, "widget_base");
-    if (cJSON_IsString(widget_base) && (widget_base->valuestring != NULL))
-    {
-        widgetBaseColor = (unsigned long)strtol(widget_base->valuestring, NULL, 0);
-    }
-
-    // Base color
-    cJSON *base = cJSON_GetObjectItemCaseSensitive(json, "base");
-    if (cJSON_IsString(base) && (base->valuestring != NULL))
-    {
-        baseColor = (unsigned long)strtol(base->valuestring, NULL, 0);
-    }
-
-    // Primary color
-    cJSON *primary = cJSON_GetObjectItemCaseSensitive(json, "primary");
-    if (cJSON_IsString(primary) && (primary->valuestring != NULL))
-    {
-        primaryColor = (unsigned long)strtol(primary->valuestring, NULL, 0);
-    }
+    READ_COLOR("base", base);
+    READ_COLOR("neutral", neutral);
+    READ_COLOR("widget_base", widget_base);
+    READ_COLOR("primary", primary);
+    READ_COLOR("danger", danger);
+    READ_COLOR("info", info);
+    READ_COLOR("success", success);
 
     cJSON_Delete(json);
-
-    GooeyTheme theme = {.base = baseColor, .neutral = neutralColor, .widget_base = widgetBaseColor, .primary = primaryColor, .danger = dangerColor, .info = infoColor, .success = successColor};
-
     return theme;
 }

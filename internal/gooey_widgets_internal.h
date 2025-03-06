@@ -21,6 +21,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "gooey_event_internal.h"
+#include "utils/theme/gooey_theme_internal.h"
 
 /** Maximum number of widgets that can be added to a window. */
 #define MAX_WIDGETS 100
@@ -450,6 +451,7 @@ typedef struct
     GooeyPlot *plots;                            /**< List of all plot widgets. */
     GooeyWidget **widgets;                      /**< List containing unified definition of every widget. */
     GooeyEvent *current_event;
+    GooeyTheme *active_theme;
 
     size_t list_count;
     size_t scrollable_count;         /**< Number of scrollables in the window */

@@ -89,7 +89,7 @@ static void calculate_min_max_values(GooeyPlotData *data)
     }
 }
 
-static void add_placeholder_point(GooeyPlotData *data)
+static void add_placeholder_point(GooeyPlotData *data, bool initial)
 {
     if (!data || data->data_count == 0)
     {
@@ -122,6 +122,7 @@ static void add_placeholder_point(GooeyPlotData *data)
         memcpy(&new_x_data[1], data->x_data, data->data_count * sizeof(float));
         memcpy(&new_y_data[1], data->y_data, data->data_count * sizeof(float));
 
+
         data->x_data = new_x_data;
         data->y_data = new_y_data;
         data->data_count += 1;
@@ -134,6 +135,8 @@ static void add_placeholder_point(GooeyPlotData *data)
 }
 static void draw_plot_background(GooeyPlot *plot, GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     active_backend->FillRectangle(
         plot->core.x,
         plot->core.y,
@@ -145,6 +148,8 @@ static void draw_plot_background(GooeyPlot *plot, GooeyWindow *win)
 
 static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     // Draw the X axis
     active_backend->DrawLine(
         plot->core.x + PLOT_MARGIN,
@@ -166,6 +171,8 @@ static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
 
 static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     active_backend->DrawText(
         plot->core.x + ((plot->core.width / 2) - (active_backend->GetTextWidth(plot->data->title, strlen(plot->data->title)) / 2)),
         plot->core.y + PLOT_MARGIN / 2,
@@ -177,6 +184,8 @@ static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
 
 static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, const uint8_t VALUE_TICK_OFFSET, float min_x_value, float x_value_spacing, uint32_t x_tick_count, float *plot_x_grid_coords)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     float x_default_value = ceilf(plot->data->x_data[0]);
     for (size_t idx = 0; idx < x_tick_count; ++idx)
     {
@@ -209,6 +218,8 @@ static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, const uint8_t V
 
 static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, const uint8_t VALUE_TICK_OFFSET, float min_y_value, float y_value_spacing, uint32_t y_tick_count, float *plot_y_grid_coords)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     float y_default_value = ceil(plot->data->y_data[0]);
     for (size_t idx = 0; idx < y_tick_count; ++idx)
     {
@@ -241,6 +252,8 @@ static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, const uint8_t V
 
 static void draw_grid_lines(GooeyPlot *plot, GooeyWindow *win, uint32_t x_tick_count, uint32_t y_tick_count, float *plot_x_grid_coords, float *plot_y_grid_coords)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     for (size_t i = 0; i < x_tick_count - 1; ++i)
     {
         active_backend->DrawLine(
@@ -266,6 +279,8 @@ static void draw_grid_lines(GooeyPlot *plot, GooeyWindow *win, uint32_t x_tick_c
 
 static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_value, float min_y_value, uint32_t x_tick_count, uint32_t y_tick_count, float *plot_x_coords, float *plot_y_coords)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     for (size_t j = 0; j < plot->data->data_count; ++j)
     {
         float x_axis_length = ((x_tick_count - 1) * plot->data->x_step);
@@ -399,7 +414,7 @@ GooeyPlot *GooeyPlot_Add(GooeyWindow *win, GOOEY_PLOT_TYPE plot_type, GooeyPlotD
         plot->data->max_x_value = -FLT_MAX;
         plot->data->max_y_value = -FLT_MAX;
 
-        add_placeholder_point(plot->data);
+        add_placeholder_point(plot->data, true);
         sort_data(plot->data);
     }
 
@@ -477,6 +492,6 @@ void GooeyPlot_Update(GooeyPlot *plot, GooeyPlotData *new_data)
 
     plot->data = new_data;
 
-    add_placeholder_point(plot->data);
+    add_placeholder_point(plot->data, false);
     sort_data(plot->data);
 }

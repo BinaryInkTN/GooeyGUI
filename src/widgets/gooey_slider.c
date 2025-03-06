@@ -75,6 +75,8 @@ void GooeySlider_setValue(GooeySlider *slider, long value)
 
 void GooeySlider_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     for (size_t i = 0; i < win->slider_count; ++i)
     {
         GooeySlider *slider = &win->sliders[i];

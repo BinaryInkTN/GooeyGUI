@@ -17,6 +17,7 @@
 
 #include "widgets/gooey_button.h"
 #include "core/gooey_backend_internal.h"
+#include "utils/theme/gooey_theme_internal.h"
 
 void GooeyButton_setText(GooeyButton *button, const char *text)
 {
@@ -57,6 +58,7 @@ void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
 
 void GooeyButton_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = &win->buttons[i];

@@ -7,20 +7,16 @@
 #include <ctype.h>
 
 #include "gooey_widgets_internal.h"
-#include "utils/theme/gooey_theme_internal.h"
-#include "gooey_event_internal.h"
 #include "utils/logger/gooey_logger_internal.h"
 
-
-
+GooeyTheme *GooeyWindow_LoadTheme(const char *theme_path);
 
 /**
  * @brief Sets the theme for the Gooey window.
- *
+ * @param win The gooey window to set the theme for.
  * @param fontPath The path to the font file to use for the window's theme.
  */
-void GooeyWindow_SetTheme(const char *fontPath);
-
+void GooeyWindow_SetTheme(GooeyWindow* win, GooeyTheme* theme);
 /**
  * @brief Creates a new Gooey window.
  *
@@ -63,7 +59,7 @@ void GooeyWindow_RegisterWidget(GooeyWindow *win, GooeyWidget *widget);
  */
 void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable);
 
-void GooeyWindow_RequestRedraw(GooeyWindow* win);
-extern GooeyTheme *active_theme;
+void GooeyWindow_RequestRedraw(GooeyWindow *win);
+
 
 #endif

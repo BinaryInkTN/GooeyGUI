@@ -39,6 +39,6 @@ typedef struct
 
 } GooeyTheme;
 
-GooeyTheme parser_load_theme_from_file(const char* filePath);
+GooeyTheme* parser_load_theme_from_file(const char* filePath);
 
 #endif

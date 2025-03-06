@@ -50,6 +50,8 @@ GooeyWindow GooeyMessageBox_Create(const char *title, const char *message, MSGBO
 {
 
     GooeyWindow window = GooeyWindow_Create(title, 500, 195, 0);
+    const GooeyTheme *active_theme = window.active_theme;
+
     GooeyWindow_MakeResizable(&window, 0);
     MessageBoxCallback[window.creation_id] = callback;
     window.type = WINDOW_MSGBOX;

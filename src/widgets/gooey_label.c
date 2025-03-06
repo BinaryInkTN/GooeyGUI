@@ -49,6 +49,8 @@ void GooeyLabel_SetText(GooeyLabel *label, const char *text)
 
 void GooeyLabel_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
+
     for (size_t i = 0; i < win->label_count; ++i)
     {
 

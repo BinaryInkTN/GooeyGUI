@@ -10,6 +10,7 @@ GooeyWindow msgBox, msgBox2;
 GooeySignal signal;
 GooeyCanvas *canvas;
 
+
 void messageBoxCallback(int option)
 {
     LOG_INFO("%d", option);
@@ -64,12 +65,12 @@ void onTextChange(char *text)
 GooeyTheme theme;
 void activateDarkTheme()
 {
-    GooeyWindow_SetTheme("dark.json");
+ //   GooeyWindow_SetTheme(&win, "dark.json");
 }
 
 void activateLightTheme()
 {
-    GooeyWindow_SetTheme("light.json");
+  //  GooeyWindow_SetTheme(&win, "light.json");
 }
 
 int main()
@@ -80,6 +81,8 @@ int main()
     Gooey_Init(GLPS);
 
     GooeyWindow win = GooeyWindow_Create("Gooey Showcase", 400, 700, 1);
+   // GooeyTheme *theme = GooeyWindow_LoadTheme("dark.json");
+   //GooeyWindow_SetTheme(&win, theme);
 
    msgBox = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_FAIL, messageBoxCallback);
  msgBox2 = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_SUCCES, messageBox2Callback);

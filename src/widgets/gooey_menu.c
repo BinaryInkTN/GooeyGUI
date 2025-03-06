@@ -57,6 +57,7 @@ void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title,
 
 void GooeyMenu_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
 
     if (win->menu)
     {

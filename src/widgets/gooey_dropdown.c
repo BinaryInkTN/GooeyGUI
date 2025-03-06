@@ -43,6 +43,8 @@ GooeyDropdown *GooeyDropdown_Add(GooeyWindow *win, int x, int y, int width,
 }
 
 void GooeyDropdown_Draw(GooeyWindow *win) {
+    const GooeyTheme *active_theme = win->active_theme;
+
        for (size_t i = 0; i < win->dropdown_count; i++)
     {
         int x_offset = win->dropdowns[i].core.x;

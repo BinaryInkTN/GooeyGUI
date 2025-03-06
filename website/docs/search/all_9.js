@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['readme_2emd_0',['readme.md',['../readme_8md.html',1,'']]]
+  ['started_0',['Getting Started',['../index.html#autotoc_md2',1,'']]]
 ];

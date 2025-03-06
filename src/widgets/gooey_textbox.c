@@ -65,6 +65,7 @@ void GooeyTextbox_setText(GooeyTextbox *textbox, const char *text)
 
 void GooeyTextbox_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t index = 0; index < win->textboxes_count; ++index)
     {

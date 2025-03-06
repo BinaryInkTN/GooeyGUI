@@ -45,6 +45,7 @@ GooeyCheckbox *GooeyCheckbox_Add(GooeyWindow *win, int x, int y, char *label,
 
 void GooeyCheckbox_Draw(GooeyWindow *win)
 {
+    const GooeyTheme *active_theme = win->active_theme;
 
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {

@@ -32,9 +32,9 @@ typedef struct GooeyBackend
     void (*DestroyWindowFromId)(int window_id);
     void (*HideCurrentChild)(void);
     void (*SetContext)(GooeyWindow *win);
-    void (*UpdateBackground)(void);
-    void (*Clear)(int window_id);
-    void (*Render)(int window_id);
+    void (*UpdateBackground)(GooeyWindow* win);
+    void (*Clear)(GooeyWindow *win);
+    void (*Render)(GooeyWindow *win);
     void (*SetForeground)(unsigned long color);
     void (*DrawText)(int x, int y, const char *text, unsigned long color, float font_size, int window_id);
     void (*FillRectangle)(int x, int y, int width, int height, unsigned long color, int window_id);

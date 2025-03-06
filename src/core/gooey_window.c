@@ -358,15 +358,12 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw |=GooeyCheckbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyRadioButtonGroup_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyTextbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        GooeyMenu_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyMenu_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
 
         break;
 
     case GOOEY_EVENT_CLICK_RELEASE:
         // Handle mouse click release event
-        LOG_INFO("Click release event at pos: %d %d", window->current_event->mouse_move.x, window->current_event->mouse_move.y);
-        // GooeyWindow_DrawUIElements(windows[window_id]);
-
         break;
 
     case GOOEY_EVENT_WINDOW_CLOSE:
@@ -375,7 +372,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case -1:
-        LOG_INFO("Default");
         break;
 
     default:

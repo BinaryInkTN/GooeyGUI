@@ -29,7 +29,7 @@ GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title);
  * @param x The x-coordinate of the click event.
  * @param y The y-coordinate of the click event.
  */
-void GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
+bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
 
 /**
  * @brief Adds a menu item to a menu child.

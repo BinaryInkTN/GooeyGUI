@@ -103,11 +103,11 @@ void GooeyMenu_Draw(GooeyWindow *win)
     }
 }
 
-void GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
+bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
 {
 
     if (!win->menu)
-        return;
+        return false;
 
     int x_offset = 10;
     for (int i = 0; i < win->menu->children_count; i++)
@@ -126,7 +126,7 @@ void GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
             win->menu->is_busy = !win->menu->is_busy;
 
             
-            return;
+            return true;
         }
 
         if (child->is_open)
@@ -153,7 +153,7 @@ void GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
                     win->menu->is_busy = 0;
 
                     
-                    return;
+                    return true;
                 } else {
                     for (int k = 0; k < win->menu->children_count; k++)
                     {
@@ -161,11 +161,12 @@ void GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
                         win->menu->is_busy = 0;
                     }
                     
-                    return;
+                    return true;
                 }
             }
         }
 
         x_offset += text_width + 20;
     }
+    return false;
 }

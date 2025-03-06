@@ -662,12 +662,6 @@ void glps_clear(int window_id)
 void glps_cleanup()
 {
 
-    /*if (ctx.cursor)
-    {
-        glpsDestroyCursor(ctx.cursor);
-        ctx.cursor = NULL;
-    }
-*/
     if (ctx.text_vaos)
     {
         free(ctx.text_vaos);
@@ -680,24 +674,18 @@ void glps_cleanup()
         ctx.shape_vaos = NULL;
     }
 
-    /*
-    if (ctx.user_ptrs)
-    {
-        free(ctx.user_ptrs);
-        ctx.user_ptrs = NULL;
-    }
-    */
+  
 
     if (ctx.text_programs)
     {
         free(ctx.text_programs);
         ctx.text_programs = NULL;
     }
-
+    
     glDeleteShader(ctx.text_vertex_shader);
     glDeleteShader(ctx.text_fragment_shader);
 
-    //   glpsTerminate();
+    glps_wm_destroy(ctx.wm);
 }
 
 void glps_update_background()
@@ -775,7 +763,6 @@ void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *
     glps_wm_window_set_close_callback(ctx.wm, window_close_callback, data);
 
     glps_wm_window_set_frame_update_callback(ctx.wm, callback, data);
-    LOG_INFO("Set render callback GLPS");
 }
 
 void glps_run()

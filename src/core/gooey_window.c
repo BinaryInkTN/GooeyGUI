@@ -137,6 +137,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->canvas[i].elements = NULL;
     }
 
+    if(win->current_event)
+    {
+        free(win->current_event);
+        win->current_event = NULL;
+    }
+
     if (win->canvas)
     {
         free(win->canvas);
@@ -412,10 +418,7 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
         }
     }
 
-    active_backend->DestroyWindows();
     active_backend->Cleanup();
-
-    LOG_INFO("Cleanup completed.");
 }
 
 void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)

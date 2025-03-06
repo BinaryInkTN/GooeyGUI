@@ -336,7 +336,8 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
 
-    needs_redraw |= GooeySlider_HandleDrag(windows[window_id], window->current_event);
+    needs_redraw |= GooeySlider_HandleDrag(window, window->current_event);
+    needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
 
     switch (window->current_event->type)
     {
@@ -350,7 +351,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     case GOOEY_EVENT_KEY_PRESS:
         // Handle key press event
-        GooeyTextbox_HandleKeyPress(windows[window_id], window->current_event);
+        GooeyTextbox_HandleKeyPress(window, window->current_event);
         needs_redraw = true;
         break;
 
@@ -358,18 +359,19 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         // Handle mouse click press event
 
         int mouse_click_x = window->current_event->click.x, mouse_click_y = window->current_event->click.y;
-        needs_redraw |= GooeyList_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyButton_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyDropdown_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |=GooeyCheckbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyRadioButtonGroup_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyTextbox_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyMenu_HandleClick(windows[window_id], mouse_click_x, mouse_click_y);
-
+        needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |=GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
         break;
 
     case GOOEY_EVENT_CLICK_RELEASE:
         // Handle mouse click release event
+
         break;
 
     case GOOEY_EVENT_WINDOW_CLOSE:
@@ -386,7 +388,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
     }
 
-    if(needs_redraw) GooeyWindow_DrawUIElements(windows[window_id]);
+    if(needs_redraw) GooeyWindow_DrawUIElements(window);
 }
 
 void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)

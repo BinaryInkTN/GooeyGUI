@@ -376,7 +376,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
     active_backend->UpdateBackground(window);
-
     needs_redraw |= GooeySlider_HandleDrag(window, window->current_event);
     needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
 

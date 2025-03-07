@@ -652,13 +652,15 @@ void glps_clear(GooeyWindow *win)
     size_t window_id = win->creation_id;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    glps_wm_swap_interval(ctx.wm, 1);
+//    glps_wm_swap_interval(ctx.wm, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     vec3 color;
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    //LOG_INFO("%lf", glps_wm_get_fps(ctx.wm, window_id));
 }
 
 void glps_cleanup()
@@ -695,7 +697,11 @@ void glps_update_background(GooeyWindow *win)
     glps_wm_set_window_ctx_curr(ctx.wm, win->creation_id);
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
-    glps_wm_window_update(ctx.wm, win->creation_id);
+   // win->current_event->type = -1;
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 }
 
 void glps_render(GooeyWindow* win)

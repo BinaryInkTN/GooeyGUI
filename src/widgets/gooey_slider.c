@@ -119,7 +119,7 @@ void GooeySlider_Draw(GooeyWindow *win)
 bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
 {
     static GooeySlider *active_slider = NULL;
-     const int comfort_margin = 20;
+    const int comfort_margin = 20;
 
     int mouse_x = event->mouse_move.x;
     int mouse_y = event->mouse_move.y;

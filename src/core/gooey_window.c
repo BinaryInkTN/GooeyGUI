@@ -99,6 +99,7 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
     }
 
     win->active_theme = theme;
+    active_backend->RequestRedraw(win);
 }
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
@@ -336,8 +337,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     if (win == NULL)
         return;
 
-    active_backend->ResetEvents(win);
-    active_backend->Clear(win);
+  active_backend->Clear(win);
     // Draw all UI components
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
@@ -351,6 +351,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyPlot_Draw(win);
     GooeyMenu_Draw(win);
     active_backend->Render(win);
+
+    active_backend->ResetEvents(win);
+
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)

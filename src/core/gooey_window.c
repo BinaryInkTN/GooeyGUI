@@ -338,7 +338,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
         return;
 
   active_backend->Clear(win);
+
     // Draw all UI components
+    active_backend->DrawImage("test.png", 100, 50, 64, 64, 0);
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
     GooeyCanvas_Draw(win);

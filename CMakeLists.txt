@@ -41,6 +41,7 @@ set(HEADERS
     include/utils/glad/glad.h
     include/utils/linmath/linmath.h
     include/utils/logger/gooey_logger.h
+    include/utils/stb_image/stb_image.h
     include/theme/gooey_theme.h
     include/event/gooey_event.h
     include/common/gooey_common.h

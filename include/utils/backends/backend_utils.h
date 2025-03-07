@@ -41,25 +41,39 @@ typedef struct Vertex
 {
     vec2 pos;
     vec3 col;
+    vec2 texCoord;   // Texture coordinates (u, v)
+
 } Vertex;
 
 static const char *rectangle_vertex_shader =
     "#version 330 core\n"
     "layout(location = 0) in vec2 pos;\n"
     "layout(location = 1) in vec3 col;\n"
+    "layout(location = 2) in vec2 texCoord;\n"
     "out vec3 color;\n"
+    "out vec2 TexCoord;\n"
     "void main() {\n"
     "    gl_Position = vec4(pos, 0.0, 1.0);\n"
     "    color = col;\n"
+    "    TexCoord = texCoord;\n"
     "}\n";
 
-static const char *rectangle_fragment_shader =
+    static const char *rectangle_fragment_shader =
     "#version 330 core\n"
     "in vec3 color;\n"
+    "in vec2 TexCoord;\n"
     "out vec4 fragment;\n"
+    "uniform sampler2D tex;\n"
+    "uniform bool useTexture;\n"  
+
     "void main() {\n"
-    "    fragment = vec4(color, 1.0);\n"
+    "    if (useTexture) {\n"
+    "        fragment = texture(tex, TexCoord) * vec4(color, 1.0);\n"
+    "    } else {\n"
+    "        fragment = vec4(color, 1.0);\n"
+    "    }\n"
     "}\n";
+
 
 static const char *text_vertex_shader_source = "#version 330 core\n"
                                                "layout(location = 0) in vec4 vertex;\n"
@@ -86,5 +100,7 @@ void convert_coords_to_ndc(glps_WindowManager* wm, size_t window_id,float *ndc_x
 void convert_dimension_to_ndc(glps_WindowManager* wm, size_t window_id, float *ndc_w, float *ndc_h, int width, int height);
 void convert_hex_to_rgb(vec3 *rgb, unsigned int color_hex);
 const char *LookupString(int keycode);
+
+
 
 #endif // BACKEND_UTILS_H

@@ -14,6 +14,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "utils/stb_image/stb_image.h"
 #include "utils/backends/backend_utils.h"
 
 typedef struct
@@ -148,6 +151,7 @@ void glps_fill_rectangle(int x, int y, int width, int height, long unsigned int 
     vertices[5].pos[1] = ndc_y + ndc_height;
 
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -189,7 +193,9 @@ void glps_draw_rectangle(int x, int y, int width, int height, long unsigned int 
 
     vertices[3].pos[0] = ndc_x;
     vertices[3].pos[1] = ndc_y + ndc_height;
+
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -225,6 +231,7 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
     vertices[1].pos[0] = ndc_x2;
     vertices[1].pos[1] = ndc_y2;
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -270,6 +277,8 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
     }
 
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
+
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
@@ -545,6 +554,86 @@ void glps_draw_text(int x, int y, const char *text, unsigned long color, float f
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void glps_draw_image(const char *image_path, int x, int y, int width, int height, int window_id)
+{
+    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
+
+    float ndc_x, ndc_y, ndc_width, ndc_height;
+    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
+    convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
+
+    Vertex vertices[6] = {
+        {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},              // Bottom-left
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom-right
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}, // Top-left
+
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},              // Bottom-right
+        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}}, // Top-right
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}              // Top-left
+    };
+
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_set_flip_vertically_on_load(1);
+    int img_width, img_height, nrChannels;
+    unsigned char *data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
+
+    if (!data)
+    {
+        LOG_ERROR("Failed to load image: %s", image_path);
+        glDeleteTextures(1, &texture);
+        return;
+    }
+
+    GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    stbi_image_free(data);
+
+    glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+    glUseProgram(ctx.shape_program);
+
+    GLint useTextureLocation = glGetUniformLocation(ctx.shape_program, "useTexture");
+    if (useTextureLocation == -1)
+    {
+        LOG_ERROR("Failed to find useTexture uniform location");
+    }
+    glUniform1i(useTextureLocation, GL_TRUE);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    GLint textureSamplerLocation = glGetUniformLocation(ctx.shape_program, "tex");
+    if (textureSamplerLocation == -1)
+    {
+        LOG_ERROR("Failed to find tex uniform location");
+    }
+    glUniform1i(textureSamplerLocation, 1);
+
+    glBindVertexArray(ctx.shape_vaos[window_id]);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, pos));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, col));
+
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, texCoord));
+
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    glBindVertexArray(0);
+}
+
 GooeyWindow *glps_create_window(const char *title, int width, int height)
 
 {
@@ -652,7 +741,7 @@ void glps_clear(GooeyWindow *win)
     size_t window_id = win->creation_id;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-//    glps_wm_swap_interval(ctx.wm, 1);
+    //    glps_wm_swap_interval(ctx.wm, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     vec3 color;
     convert_hex_to_rgb(&color, win->active_theme->base);
@@ -660,7 +749,7 @@ void glps_clear(GooeyWindow *win)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    //LOG_INFO("%lf", glps_wm_get_fps(ctx.wm, window_id));
+    // LOG_INFO("%lf", glps_wm_get_fps(ctx.wm, window_id));
 }
 
 void glps_cleanup()
@@ -692,19 +781,19 @@ void glps_cleanup()
 
 void glps_update_background(GooeyWindow *win)
 {
-    if(!win || !win->active_theme) return;
+    if (!win || !win->active_theme)
+        return;
     vec3 color;
     glps_wm_set_window_ctx_curr(ctx.wm, win->creation_id);
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
-   // win->current_event->type = -1;
+    // win->current_event->type = -1;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
-void glps_render(GooeyWindow* win)
+void glps_render(GooeyWindow *win)
 {
     glps_wm_swap_buffers(ctx.wm, win->creation_id);
 }
@@ -820,6 +909,7 @@ GooeyBackend glps_backend = {
     .Render = glps_render,
     .HandleEvents = glps_handle_events,
     .ResetEvents = glps_reset_events,
+    .DrawImage = glps_draw_image,
     .FillArc = glps_fill_arc,
     .FillRectangle = glps_fill_rectangle,
     .DrawRectangle = glps_draw_rectangle,

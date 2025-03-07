@@ -17,7 +17,7 @@
 
 
 
-#include "utils/logger/gooey_logger_internal.h"
+#include "utils/logger/gooey_logger.h"
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>

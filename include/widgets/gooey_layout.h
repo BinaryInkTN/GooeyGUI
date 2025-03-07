@@ -1,7 +1,7 @@
 #ifndef GOOEY_LAYOUT_H
 #define GOOEY_LAYOUT_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Creates a layout for the specified window.

@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_list.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 #define DEFAULT_THUMB_WIDTH 10
 #define DEFAULT_ITEM_SPACING 40

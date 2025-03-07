@@ -1,6 +1,6 @@
 #ifndef GOOEY_BUTTON_H
 #define GOOEY_BUTTON_H
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 #include <stdbool.h>
 

@@ -19,8 +19,8 @@
 #define GOOEY_H
 
 
-#include "gooey_widgets_internal.h"
-#include "core/gooey_backend_internal.h"
+#include "common/gooey_common.h"
+#include "core/gooey_backend.h"
 #include "core/gooey_window.h"
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"

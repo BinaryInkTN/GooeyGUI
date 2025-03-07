@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_menu.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeyMenu *GooeyMenu_Set(GooeyWindow *win)
 {

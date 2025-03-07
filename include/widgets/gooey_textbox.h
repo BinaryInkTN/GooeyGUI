@@ -2,8 +2,8 @@
 #define GOOEY_TEXTBOX_H
 
 
-#include "gooey_event_internal.h"
-#include "gooey_widgets_internal.h"
+#include "event/gooey_event.h"
+#include "common/gooey_common.h"
 #include <stdbool.h>
 
 /**

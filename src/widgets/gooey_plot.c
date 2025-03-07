@@ -21,7 +21,7 @@
 #include <float.h>
 #include <stdlib.h>
 #include <string.h>
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 #define POINT_SIZE 10
 #define PLOT_MARGIN 40

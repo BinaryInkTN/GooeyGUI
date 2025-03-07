@@ -1,7 +1,7 @@
 #ifndef GOOEY_CANVAS_H
 #define GOOEY_CANVAS_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 
 /**

@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_checkbox.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeyCheckbox *GooeyCheckbox_Add(GooeyWindow *win, int x, int y, char *label,
                                  void (*callback)(bool checked))

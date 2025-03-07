@@ -1,7 +1,7 @@
 #ifndef GOOEY_RADIOBUTTON_H
 #define GOOEY_RADIOBUTTON_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Adds a radio button to the window.

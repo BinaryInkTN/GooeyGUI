@@ -13,7 +13,7 @@ set(SOURCES
     src/core/gooey.c
     src/core/gooey_window.c
     src/utils/logger/gooey_logger.c
-    src/utils/theme/gooey_theme.c
+    src/theme/gooey_theme.c
     src/utils/glad/glad.c
     src/utils/backends/backend_utils.c
     src/backends/glps_backend.c
@@ -35,29 +35,29 @@ set(SOURCES
 
 # Header files
 set(HEADERS
-    internal/core/gooey_window.h
-    internal/core/gooey_backend_internal.h
-    internal/utils/backends/backend_utils.h
-    internal/utils/glad/glad.h
-    internal/utils/linmath/linmath.h
-    internal/utils/logger/gooey_logger_internal.h
-    internal/utils/theme/gooey_theme_internal.h
-    internal/gooey_event_internal.h
-    internal/gooey_widgets_internal.h
-    internal/widgets/gooey_button.h
-    internal/widgets/gooey_canvas.h
-    internal/widgets/gooey_checkbox.h
-    internal/widgets/gooey_dropdown.h
-    internal/widgets/gooey_label.h
-    internal/widgets/gooey_layout.h
-    internal/widgets/gooey_list.h
-    internal/widgets/gooey_menu.h
-    internal/widgets/gooey_messagebox.h
-    internal/widgets/gooey_radiobutton.h
-    internal/widgets/gooey_slider.h
-    internal/widgets/gooey_textbox.h
-    internal/widgets/gooey_plot.h
-    internal/signals/gooey_signals.h
+    include/core/gooey_window.h
+    include/core/gooey_backend.h
+    include/utils/backends/backend_utils.h
+    include/utils/glad/glad.h
+    include/utils/linmath/linmath.h
+    include/utils/logger/gooey_logger.h
+    include/theme/gooey_theme.h
+    include/event/gooey_event.h
+    include/common/gooey_common.h
+    include/widgets/gooey_button.h
+    include/widgets/gooey_canvas.h
+    include/widgets/gooey_checkbox.h
+    include/widgets/gooey_dropdown.h
+    include/widgets/gooey_label.h
+    include/widgets/gooey_layout.h
+    include/widgets/gooey_list.h
+    include/widgets/gooey_menu.h
+    include/widgets/gooey_messagebox.h
+    include/widgets/gooey_radiobutton.h
+    include/widgets/gooey_slider.h
+    include/widgets/gooey_textbox.h
+    include/widgets/gooey_plot.h
+    include/signals/gooey_signals.h
     include/gooey.h
 )
 
@@ -90,7 +90,6 @@ target_include_directories(${PROJECT_NAME}
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include/Gooey>
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/internal
     ${PROJECT_SOURCE_DIR}/third_party/freetype/include
     ${PROJECT_SOURCE_DIR}/third_party/glps/include
     ${PROJECT_SOURCE_DIR}/third_party/cjson/include
@@ -106,8 +105,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Install all public headers under include/Gooey
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ DESTINATION include/Gooey)
 
-# Install internal headers under include/Gooey/internal
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/internal/ DESTINATION include/Gooey)
 
 # Install the shared library
 install(TARGETS ${PROJECT_NAME}
@@ -131,7 +128,6 @@ if (BUILD_EXAMPLES)
     target_link_libraries(example_basic PRIVATE ${PROJECT_NAME})
     target_include_directories(example_basic
         PUBLIC ${PROJECT_SOURCE_DIR}/include
-        PRIVATE ${PROJECT_SOURCE_DIR}/internal
     )
 endif()
 

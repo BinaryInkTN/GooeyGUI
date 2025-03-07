@@ -1,8 +1,8 @@
 #ifndef GOOEY_LIST_H
 #define GOOEY_LIST_H
 
-#include "gooey_widgets_internal.h"
-#include "gooey_event_internal.h"
+#include "common/gooey_common.h"
+#include "event/gooey_event.h"
 
 /**
  * @brief Adds a list widget to the window specified.

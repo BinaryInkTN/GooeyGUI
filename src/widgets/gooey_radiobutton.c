@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_radiobutton.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create(GooeyWindow *win)
 {

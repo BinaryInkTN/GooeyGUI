@@ -1,7 +1,7 @@
 #ifndef GOOEY_MENU_H
 #define GOOEY_MENU_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Sets the menu for the Gooey window.

@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_label.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeyLabel *GooeyLabel_Add(GooeyWindow *win, const char *text, float font_size, int x, int y)
 {

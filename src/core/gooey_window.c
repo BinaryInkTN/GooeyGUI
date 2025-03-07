@@ -15,8 +15,8 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "core/gooey_backend_internal.h"
-#include "gooey_event_internal.h"
+#include "core/gooey_backend.h"
+#include "event/gooey_event.h"
 
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"

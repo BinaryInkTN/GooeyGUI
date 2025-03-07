@@ -16,8 +16,8 @@
  */
 
 #include "widgets/gooey_button.h"
-#include "core/gooey_backend_internal.h"
-#include "utils/theme/gooey_theme_internal.h"
+#include "core/gooey_backend.h"
+#include "theme/gooey_theme.h"
 
 void GooeyButton_setText(GooeyButton *button, const char *text)
 {

@@ -17,7 +17,7 @@
 #ifndef BACKEND_UTILS_H
 #define BACKEND_UTILS_H
 
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 #include "utils/glad/glad.h"
 #include <freetype2/ft2build.h>
 #include FT_FREETYPE_H

@@ -6,7 +6,7 @@
  #ifndef GOOEY_PLOT_H
  #define GOOEY_PLOT_H
  
- #include "gooey_widgets_internal.h"
+ #include "common/gooey_common.h"
  
  /**
   * @brief Adds a new plot to a Gooey window.

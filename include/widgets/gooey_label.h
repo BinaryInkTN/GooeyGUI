@@ -1,7 +1,7 @@
 #ifndef GOOEY_LABEL_H
 #define GOOEY_LABEL_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Adds a label to the window.

@@ -1,7 +1,7 @@
 #ifndef GOOEY_DROPDOWN_H
 #define GOOEY_DROPDOWN_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Adds a dropdown menu to the window.

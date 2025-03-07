@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_canvas.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeyCanvas *GooeyCanvas_Add(GooeyWindow *win, int x, int y, int width,
                              int height)

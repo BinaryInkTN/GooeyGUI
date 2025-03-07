@@ -20,8 +20,10 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include "gooey_event_internal.h"
-#include "utils/theme/gooey_theme_internal.h"
+
+#include "theme/gooey_theme.h"
+#include "event/gooey_event.h"
+
 
 /** Maximum number of widgets that can be added to a window. */
 #define MAX_WIDGETS 100

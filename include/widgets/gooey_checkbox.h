@@ -1,7 +1,7 @@
 #ifndef GOOEY_CHECKBOX_H
 #define GOOEY_CHECKBOX_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 
 /**

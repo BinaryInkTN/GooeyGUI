@@ -6,8 +6,8 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#include "gooey_widgets_internal.h"
-#include "utils/logger/gooey_logger_internal.h"
+#include "common/gooey_common.h"
+#include "utils/logger/gooey_logger.h"
 
 GooeyTheme *GooeyWindow_LoadTheme(const char *theme_path);
 

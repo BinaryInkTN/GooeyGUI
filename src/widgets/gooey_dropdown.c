@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_dropdown.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 
 GooeyDropdown *GooeyDropdown_Add(GooeyWindow *win, int x, int y, int width,

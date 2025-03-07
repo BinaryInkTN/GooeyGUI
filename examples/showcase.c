@@ -131,7 +131,7 @@ int main()
 
     save_log_file("logs.txt");
 
-    GooeyWindow_Cleanup(1, win);
+    GooeyWindow_Cleanup(3, win, msgBox, msgBox2);
 
     return 0;
 }

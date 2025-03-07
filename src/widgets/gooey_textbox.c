@@ -17,7 +17,7 @@
 
 #include "widgets/gooey_textbox.h"
 #include <math.h>
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 
 GooeyTextbox *GooeyTextBox_Add(GooeyWindow *win, int x, int y, int width,

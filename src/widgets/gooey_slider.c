@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_slider.h"
-#include "core/gooey_backend_internal.h"
+#include "core/gooey_backend.h"
 
 GooeySlider *GooeySlider_Add(GooeyWindow *win, int x, int y, int width,
                              long min_value, long max_value, bool show_hints,

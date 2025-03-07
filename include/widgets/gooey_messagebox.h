@@ -1,7 +1,7 @@
 #ifndef GOOEY_MESSAGEBOX_H
 #define GOOEY_MESSAGEBOX_H
 
-#include "gooey_widgets_internal.h"
+#include "common/gooey_common.h"
 
 /**
  * @brief Creates a message box window.

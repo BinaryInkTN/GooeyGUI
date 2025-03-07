@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cjson/cJSON.h>
-#include "utils/theme/gooey_theme_internal.h"
+#include "theme/gooey_theme.h"
 
 GooeyTheme *parser_load_theme_from_file(const char *filePath)
 {

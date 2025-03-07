@@ -22,6 +22,7 @@
 #include "common/gooey_common.h"
 #include "core/gooey_backend.h"
 #include "core/gooey_window.h"
+#include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"
 #include "widgets/gooey_checkbox.h"

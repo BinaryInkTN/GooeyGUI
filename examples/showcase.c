@@ -79,9 +79,10 @@ int main()
 
     Gooey_Init(GLPS);
 
-    GooeyWindow *win = GooeyWindow_Create("Gooey Showcase", 400, 700, 1);
+    GooeyWindow *win = GooeyWindow_Create("Gooey Showcase", 400, 900, 1);
     GooeyTheme *theme = GooeyWindow_LoadTheme("dark.json");
     GooeyWindow_SetTheme(win, theme);
+    GooeyImage_Add(win, "gooey.png",46, 80, 64, 64);
 
    msgBox = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_FAIL, messageBoxCallback);
  msgBox2 = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_SUCCES, messageBox2Callback);
@@ -91,19 +92,19 @@ int main()
     GooeySignal_Link(&signal, signal_callback2, "hello");
     GooeySignal_Emit(&signal, "world");
 
-    GooeyButton_Add(win, "Click here", 50, 50, 80, 30, onButtonClick);
-    GooeyCheckbox_Add(win, 50, 120, "Enable Option 1", onCheckboxToggle);
-    GooeyCheckbox_Add(win, 50, 160, "Enable Option 2", onCheckboxToggle);
-    GooeyCheckbox_Add(win, 50, 200, "Enable Option 3", onCheckboxToggle);
+    GooeyButton_Add(win, "Click here", 50, 150, 80, 30, onButtonClick);
+    GooeyCheckbox_Add(win, 50, 220, "Enable Option 1", onCheckboxToggle);
+    GooeyCheckbox_Add(win, 50, 260, "Enable Option 2", onCheckboxToggle);
+    GooeyCheckbox_Add(win, 50, 300, "Enable Option 3", onCheckboxToggle);
 
-    GooeyRadioButton_Add(win, 200, 120, "Option A", onRadioButtonSelect);
-    GooeyRadioButton_Add(win, 200, 160, "Option B", onRadioButtonSelect);
-    GooeyRadioButton_Add(win, 200, 200, "Option C", onRadioButtonSelect);
+    GooeyRadioButton_Add(win, 200, 220, "Option A", onRadioButtonSelect);
+    GooeyRadioButton_Add(win, 200, 260, "Option B", onRadioButtonSelect);
+    GooeyRadioButton_Add(win, 200, 300, "Option C", onRadioButtonSelect);
 
-    GooeySlider_Add(win, 50, 250, 200, 0, 100, true, onSliderChange);
+    GooeySlider_Add(win, 50, 250, 350, 0, 100, true, onSliderChange);
 
     const char *options[] = {"Option 1", "Option 2", "Option 3"};
-    GooeyDropdown_Add(win, 50, 350, 150, 30, options, 3, onDropdownChange);
+    GooeyDropdown_Add(win, 50, 350, 400, 30, options, 3, onDropdownChange);
 
     GooeyTextBox_Add(win, 50, 300, 200, 25, "test", onTextChange);
 

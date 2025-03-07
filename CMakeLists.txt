@@ -30,6 +30,7 @@ set(SOURCES
     src/widgets/gooey_slider.c
     src/widgets/gooey_textbox.c
     src/widgets/gooey_plot.c
+    src/widgets/gooey_image.c
     src/signals/gooey_signals.c
 )
 
@@ -58,6 +59,7 @@ set(HEADERS
     include/widgets/gooey_slider.h
     include/widgets/gooey_textbox.h
     include/widgets/gooey_plot.h
+    include/widgets/gooey_image.h
     include/signals/gooey_signals.h
     include/gooey.h
 )

@@ -18,6 +18,7 @@
 #include "core/gooey_backend.h"
 #include "event/gooey_event.h"
 
+#include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"
 #include "widgets/gooey_checkbox.h"
@@ -104,7 +105,8 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    if (!(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
+    if (!(win->images = malloc(sizeof(GooeyImage) * MAX_WIDGETS)) ||
+        !(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
         !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
         !(win->current_event = malloc(sizeof(GooeyEvent))) ||
         !(win->labels = malloc(sizeof(GooeyLabel) * MAX_WIDGETS)) ||
@@ -283,6 +285,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
 
     *win->active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
     win->visibility = visibilty;
+    win->image_count = 0;
     win->canvas_count = 0;
     win->button_count = 0;
     win->label_count = 0;
@@ -340,7 +343,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
   active_backend->Clear(win);
 
     // Draw all UI components
-    active_backend->DrawImage("test.png", 100, 50, 64, 64, 0);
+    GooeyImage_Draw(win);
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
     GooeyCanvas_Draw(win);

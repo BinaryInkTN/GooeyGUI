@@ -554,23 +554,8 @@ void glps_draw_text(int x, int y, const char *text, unsigned long color, float f
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void glps_draw_image(const char *image_path, int x, int y, int width, int height, int window_id)
+unsigned int glps_load_image(const char *image_path)
 {
-    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-
-    float ndc_x, ndc_y, ndc_width, ndc_height;
-    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
-    convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
-
-    Vertex vertices[6] = {
-        {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},              // Bottom-left
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom-right
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}, // Top-left
-
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},              // Bottom-right
-        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}}, // Top-right
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}              // Top-left
-    };
 
     unsigned int texture;
     glGenTextures(1, &texture);
@@ -589,13 +574,40 @@ void glps_draw_image(const char *image_path, int x, int y, int width, int height
     {
         LOG_ERROR("Failed to load image: %s", image_path);
         glDeleteTextures(1, &texture);
-        return;
+        return -1;
     }
 
     GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(data);
+
+    return texture; // textureID
+}
+
+void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
+{
+    if(texture_id < 0)
+    {
+        LOG_ERROR("Couldn't draw image, texture is invalid.");
+        return;
+    }
+
+    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
+
+    float ndc_x, ndc_y, ndc_width, ndc_height;
+    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
+    convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
+
+    Vertex vertices[6] = {
+        {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},              // Bottom-left
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},  // Bottom-right
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}, // Top-left
+
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},              // Bottom-right
+        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}}, // Top-right
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}              // Top-left
+    };
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -610,7 +622,7 @@ void glps_draw_image(const char *image_path, int x, int y, int width, int height
     glUniform1i(useTextureLocation, GL_TRUE);
 
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture_id);
 
     GLint textureSamplerLocation = glGetUniformLocation(ctx.shape_program, "tex");
     if (textureSamplerLocation == -1)
@@ -910,6 +922,7 @@ GooeyBackend glps_backend = {
     .HandleEvents = glps_handle_events,
     .ResetEvents = glps_reset_events,
     .DrawImage = glps_draw_image,
+    .LoadImage = glps_load_image,
     .FillArc = glps_fill_arc,
     .FillRectangle = glps_fill_rectangle,
     .DrawRectangle = glps_draw_rectangle,

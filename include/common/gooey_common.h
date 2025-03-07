@@ -421,6 +421,12 @@ typedef struct
 } GooeyPlot;
 
 
+typedef struct
+{
+  GooeyWidget core;
+  unsigned int texture_id;
+} GooeyImage;
+
 typedef enum
 {
     WINDOW_REGULAR,
@@ -454,8 +460,10 @@ typedef struct
     GooeyWidget **widgets;                      /**< List containing unified definition of every widget. */
     GooeyEvent *current_event;
     GooeyTheme *active_theme;
+    GooeyImage *images;
 
     size_t list_count;
+    size_t image_count;
     size_t scrollable_count;         /**< Number of scrollables in the window */
     size_t button_count;             /**< Number of buttons in the window */
     size_t label_count;              /**< Number of labels in the window */

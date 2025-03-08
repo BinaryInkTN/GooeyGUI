@@ -18,6 +18,7 @@
 #include "core/gooey_backend.h"
 #include "event/gooey_event.h"
 
+#include "widgets/gooey_drop_surface.h"
 #include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"
@@ -105,7 +106,8 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    if (!(win->images = malloc(sizeof(GooeyImage) * MAX_WIDGETS)) ||
+    if (!(win->drop_surface = malloc(sizeof(GooeyDropSurface) * MAX_WIDGETS)) ||
+        !(win->images = malloc(sizeof(GooeyImage) * MAX_WIDGETS)) ||
         !(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
         !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
         !(win->current_event = malloc(sizeof(GooeyEvent))) ||
@@ -149,7 +151,13 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->canvas[i].elements = NULL;
     }
 
-    if(win->images)
+    if (win->drop_surface)
+    {
+        free(win->drop_surface);
+        win->drop_surface = NULL;
+    }
+
+    if (win->images)
     {
         free(win->images);
         win->images = NULL;
@@ -292,6 +300,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     *win->active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
     win->visibility = visibilty;
     win->image_count = 0;
+    win->drop_surface_count = 0;
     win->canvas_count = 0;
     win->button_count = 0;
     win->label_count = 0;
@@ -346,9 +355,10 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     if (win == NULL)
         return;
 
-  active_backend->Clear(win);
+    active_backend->Clear(win);
 
     // Draw all UI components
+    GooeyDropSurface_Draw(win);
     GooeyImage_Draw(win);
     GooeyList_Draw(win);
     GooeyLabel_Draw(win);
@@ -364,7 +374,6 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Render(win);
 
     active_backend->ResetEvents(win);
-
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
@@ -420,11 +429,17 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
+        needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
         break;
 
     case GOOEY_EVENT_CLICK_RELEASE:
         // Handle mouse click release event
 
+        break;
+
+    case GOOEY_EVENT_DROP:
+        LOG_INFO("GOT DROP EVET %d %d", window->current_event->drop_data.drop_x, window->current_event->drop_data.drop_y);
+        needs_redraw |= GooeyDropSurface_HandleFileDrop(window, window->current_event->drop_data.drop_x, window->current_event->drop_data.drop_y);
         break;
 
     case GOOEY_EVENT_WINDOW_CLOSE:

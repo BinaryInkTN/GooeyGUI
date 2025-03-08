@@ -345,7 +345,6 @@ void glps_request_redraw(GooeyWindow *win)
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
-
     windows[window_id]->current_event->mouse_move.x = posX;
     windows[window_id]->current_event->mouse_move.y = posY;
 }
@@ -850,14 +849,30 @@ void glps_destroy_window_from_id(int window_id)
     ctx.active_window_count--;
 }
 
-void test(size_t window_id, void *data)
+
+void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff, int x, int y, void *data)
 {
-    LOG_ERROR("RENDER CALLBACK CALLED");
+    LOG_INFO("DROPPED %d %d", x, y);
+    GooeyWindow** windows = (GooeyWindow**) data;
+    GooeyWindow* window = windows[origin_window_id];
+
+    window->current_event->type = GOOEY_EVENT_DROP;
+    window->current_event->drop_data.drop_x = x;
+    window->current_event->drop_data.drop_y = y;    
+    strncpy(window->current_event->drop_data.file_path, buff, sizeof(window->current_event->drop_data.file_path) -1);
+    window->current_event->drop_data.file_path[sizeof(window->current_event->drop_data.file_path) -1] = '\0'; 
+    
+    strncpy(window->current_event->drop_data.mime, buff, sizeof(window->current_event->drop_data.mime) -1);
+    window->current_event->drop_data.mime[sizeof(window->current_event->drop_data.mime) -1] = '\0'; 
+    LOG_INFO("%ld", origin_window_id);
+    glps_wm_window_update(ctx.wm, window->creation_id);  
+
 }
 
 void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
 {
 
+    glps_wm_start_drag_n_drop(ctx.wm, 0, drag_n_drop_callback, data);
     glps_wm_set_keyboard_callback(ctx.wm, keyboard_callback, data);
     glps_wm_set_mouse_move_callback(ctx.wm, mouse_move_callback, data);
     glps_wm_set_mouse_click_callback(ctx.wm, mouse_click_callback, data);

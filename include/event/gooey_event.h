@@ -29,7 +29,8 @@ typedef enum
     GOOEY_EVENT_WINDOW_CLOSE,
     GOOEY_EVENT_EXPOSE,
     GOOEY_EVENT_RESIZE,
-    GOOEY_EVENT_REDRAWREQ
+    GOOEY_EVENT_REDRAWREQ,
+    GOOEY_EVENT_DROP
 } GooeyEventType;
 
 typedef struct
@@ -45,6 +46,17 @@ typedef struct
 
 } GooeyKeyPressData;
 
+
+typedef struct
+{
+    unsigned int state;
+    char mime[20];
+    char file_path[1024];
+    int drop_x;
+    int drop_y;
+} GooeyDropData;
+
+
 typedef struct
 {
     GooeyEventType type;
@@ -52,6 +64,7 @@ typedef struct
     GooeyMouseData mouse_move;
     GooeyMouseData mouse_scroll;
     GooeyKeyPressData key_press;
+    GooeyDropData drop_data;
 } GooeyEvent;
 
 

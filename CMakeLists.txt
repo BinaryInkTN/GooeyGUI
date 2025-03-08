@@ -17,6 +17,7 @@ set(SOURCES
     src/utils/glad/glad.c
     src/utils/backends/backend_utils.c
     src/backends/glps_backend.c
+    src/widgets/gooey_drop_surface.c
     src/widgets/gooey_button.c
     src/widgets/gooey_canvas.c
     src/widgets/gooey_checkbox.c
@@ -46,6 +47,7 @@ set(HEADERS
     include/theme/gooey_theme.h
     include/event/gooey_event.h
     include/common/gooey_common.h
+    include/widgets/gooey_drop_surface.h
     include/widgets/gooey_button.h
     include/widgets/gooey_canvas.h
     include/widgets/gooey_checkbox.h

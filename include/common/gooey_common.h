@@ -425,7 +425,17 @@ typedef struct
 {
   GooeyWidget core;
   unsigned int texture_id;
+  void (*callback)(void);
 } GooeyImage;
+
+typedef struct 
+{
+  GooeyWidget core;
+  void (*callback)(char* mime, char* file_path);
+  char default_message[64];
+  bool is_file_dropped;
+} GooeyDropSurface;
+
 
 typedef enum
 {
@@ -461,7 +471,9 @@ typedef struct
     GooeyEvent *current_event;
     GooeyTheme *active_theme;
     GooeyImage *images;
+    GooeyDropSurface *drop_surface;
 
+    size_t drop_surface_count;
     size_t list_count;
     size_t image_count;
     size_t scrollable_count;         /**< Number of scrollables in the window */

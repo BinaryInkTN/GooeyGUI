@@ -20,6 +20,7 @@
 
 
 #include "common/gooey_common.h"
+#include "widgets/gooey_drop_surface.h"
 #include "core/gooey_backend.h"
 #include "core/gooey_window.h"
 #include "widgets/gooey_image.h"

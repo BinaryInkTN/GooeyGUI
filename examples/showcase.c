@@ -72,6 +72,11 @@ void activateLightTheme()
   //  GooeyWindow_SetTheme(win, "light.json");
 }
 
+void image_click_callback()
+{
+    LOG_INFO("Clicked!");
+}
+
 int main()
 {
     set_logging_enabled(true);
@@ -82,7 +87,7 @@ int main()
     GooeyWindow *win = GooeyWindow_Create("Gooey Showcase", 400, 900, 1);
     GooeyTheme *theme = GooeyWindow_LoadTheme("dark.json");
     GooeyWindow_SetTheme(win, theme);
-    GooeyImage_Add(win, "gooey.png",46, 80, 64, 64);
+    GooeyImage_Add(win, "gooey.png",46, 80, 64, 64, image_click_callback);
 
    msgBox = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_FAIL, messageBoxCallback);
  msgBox2 = GooeyMessageBox_Create("Exception thrown!", "This is a Simple MessageBox window, it is useful for displaying error messages, warnings and informational content!", MSGBOX_SUCCES, messageBox2Callback);

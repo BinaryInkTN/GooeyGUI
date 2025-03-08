@@ -6,10 +6,10 @@ int main()
 {   
 
     Gooey_Init(GLPS);
-    GooeyWindow* win = GooeyWindow_Create("test image", 100, 100, true);
+    GooeyWindow* win = GooeyWindow_Create("test image", 200, 200, true);
 
 
-    GooeyImage_Add(win, "gooey.png", 20, 20, 64, 64);
+    GooeyImage_Add(win, "gooey.png", 20, 20, 120, 120);
 
 
     GooeyWindow_Run(1, win);

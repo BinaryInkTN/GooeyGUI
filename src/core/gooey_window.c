@@ -149,6 +149,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->canvas[i].elements = NULL;
     }
 
+    if(win->images)
+    {
+        free(win->images);
+        win->images = NULL;
+    }
+
     if (win->current_event)
     {
         free(win->current_event);

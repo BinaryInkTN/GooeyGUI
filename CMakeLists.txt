@@ -32,6 +32,7 @@ set(SOURCES
     src/widgets/gooey_textbox.c
     src/widgets/gooey_plot.c
     src/widgets/gooey_image.c
+    src/widgets/gooey_tabs.c
     src/signals/gooey_signals.c
 )
 
@@ -62,6 +63,7 @@ set(HEADERS
     include/widgets/gooey_textbox.h
     include/widgets/gooey_plot.h
     include/widgets/gooey_image.h
+    include/widgets/gooey_tabs.h
     include/signals/gooey_signals.h
     include/assets/drop_surface_image.h
     include/gooey.h

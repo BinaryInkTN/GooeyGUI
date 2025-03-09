@@ -19,6 +19,7 @@
 #define GOOEY_H
 
 #include "common/gooey_common.h"
+#include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
 #include "core/gooey_backend.h"
 #include "core/gooey_window.h"

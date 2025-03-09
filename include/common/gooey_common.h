@@ -41,6 +41,9 @@
 /** Maximum number of plots. */
 #define MAX_PLOT_COUNT 100
 
+/** Maximum number of tabs. */
+#define MAX_TABS 50
+
 /**
  * @brief Enumeration for widget types in the Gooey framework.
  */
@@ -55,7 +58,10 @@ typedef enum
     WIDGET_DROPDOWN,    /**< Dropdown widget */
     WIDGET_CANVAS,      /**< Canvas widget */
     WIDGET_LAYOUT,      /**< Layout widget */
-    WIDGET_PLOT         /**< Plot widget */
+    WIDGET_PLOT,        /**< Plot widget */
+    WIDGET_DROP_SURFACE,
+    WIDGET_IMAGE,
+    WIDGET_TABS
 } WIDGET_TYPE;
 
 /**
@@ -297,6 +303,7 @@ typedef struct
     int element_count;      /**< Number of drawing operations */
 } GooeyCanvas;
 
+
 /**
  * @brief Arguments for drawing a rectangle on a canvas.
  */
@@ -437,8 +444,18 @@ typedef struct
 
 typedef struct
 {
+    char tab_name[64];
+    size_t tab_id;
+    void **widgets;
+    size_t widget_count;
+} GooeyTab;
+
+typedef struct
+{
     GooeyWidget core;
- 
+    GooeyTab *tabs;
+    size_t tab_count;
+    size_t active_tab_id;
 } GooeyTabs;
 
 /**

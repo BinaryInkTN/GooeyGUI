@@ -394,7 +394,7 @@ GooeyPlot *GooeyPlot_Add(GooeyWindow *win, GOOEY_PLOT_TYPE plot_type, GooeyPlotD
 
     GooeyPlot *plot = &win->plots[win->plot_count++];
     *plot = (GooeyPlot){0};
-
+    
     plot->core.x = x;
     plot->core.y = y;
     plot->core.width = width;

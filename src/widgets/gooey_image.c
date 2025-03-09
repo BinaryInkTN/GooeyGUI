@@ -12,6 +12,7 @@ void GooeyImage_Add(GooeyWindow *win, const char *image_path, int x, int y, int 
     *image = (GooeyImage){0};
 
     image->texture_id = active_backend->LoadImage(image_path);
+    image->core.type = WIDGET_IMAGE;
     image->core.x = x;
     image->core.y = y;
     image->core.width = width;

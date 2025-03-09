@@ -26,6 +26,7 @@ GooeyDropSurface *GooeyDropSurface_Add(GooeyWindow *win, int x, int y, int width
     }
     GooeyDropSurface *drop_surface = &win->drop_surface[win->drop_surface_count++];
     *drop_surface = (GooeyDropSurface){0};
+    drop_surface->core.type = WIDGET_DROP_SURFACE;
     drop_surface->core.x = x;
     drop_surface->core.y = y;
     drop_surface->core.width = width;

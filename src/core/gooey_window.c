@@ -18,6 +18,7 @@
 #include "core/gooey_backend.h"
 #include "event/gooey_event.h"
 
+#include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
 #include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
@@ -366,6 +367,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
+    GooeyTabs_Draw(win);
     GooeyDropSurface_Draw(win);
     GooeyImage_Draw(win);
     GooeyList_Draw(win);

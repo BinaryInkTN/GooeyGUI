@@ -18,7 +18,6 @@
 #ifndef GOOEY_H
 #define GOOEY_H
 
-
 #include "common/gooey_common.h"
 #include "widgets/gooey_drop_surface.h"
 #include "core/gooey_backend.h"
@@ -39,11 +38,11 @@
 #include "widgets/gooey_plot.h"
 #include "signals/gooey_signals.h"
 
-
 /**
  * @brief Initializes the Gooey system with the specified backend.
  *
- * @param backend The backend to use (e.g., X11, Wayland, GLFW).
+ * This implementation only supports GLPS (OpenGL) backend for now.
+ * @param backend you want to use.
  * @return 0 on success, non-zero on failure.
  */
 int Gooey_Init(GooeyBackends backend);

@@ -95,8 +95,10 @@ $(document).ready(function(){initNavTree('gooey__button_8h.html',''); initResiza
   <div class="headertitle"><div class="title">gooey_button.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+
+<p>Button handling functions for the Gooey GUI library.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 </div>
 <p><a href="gooey__button_8h_source.html">Go to the source code of this file.</a></p>
@@ -119,7 +121,12 @@ Functions</h2></td></tr>
 <tr class="memdesc:add7d36023ae6dac476405d4cc1e2629f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Highlights or unhighlights a button.  <br /></td></tr>
 <tr class="separator:add7d36023ae6dac476405d4cc1e2629f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Button handling functions for the Gooey GUI library. </p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali </dd></dl>
+<dl class="section copyright"><dt>Copyright</dt><dd>GNU General Public License v3.0</dd></dl>
+<p>This file contains functions for adding, handling, and drawing buttons in a Gooey window. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a6ef2ab71a12568095efab0973c7b687c" name="a6ef2ab71a12568095efab0973c7b687c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6ef2ab71a12568095efab0973c7b687c">&#9670;&#160;</a></span>GooeyButton_Add()</h2>
 
@@ -177,6 +184,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a button to the window. </p>
+<p>This function creates a new button with the specified label, position, dimensions, and callback function. The button is added to the provided window.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to add the button to. </td></tr>
@@ -189,7 +197,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyButton object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyButton object. </dd></dl>
 
 </div>
 </div>
@@ -210,6 +218,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Draws the button on the window. </p>
+<p>This function renders the button on the specified window, including its label and any visual states (e.g., highlighted or clicked).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to draw the button on. </td></tr>
@@ -252,6 +261,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handles button click events. </p>
+<p>This function checks if a click event at the specified coordinates intersects with any button in the window. If a button is clicked, its callback function is triggered.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the button. </td></tr>
@@ -260,7 +270,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the button was clicked, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a button was clicked, <code>false</code> otherwise. </dd></dl>
 
 </div>
 </div>
@@ -291,7 +301,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Highlights or unhighlights a button. </p>
-<p>This function visually indicates whether a button is highlighted.</p>
+<p>This function visually indicates whether a button is highlighted, which can be used to show focus or selection.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">button</td><td>A pointer to the button to modify. </td></tr>
@@ -329,6 +339,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the text of the button. </p>
+<p>This function updates the label text displayed on the button.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">button</td><td>The button to set the text for. </td></tr>

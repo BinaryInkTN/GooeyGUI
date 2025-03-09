@@ -95,8 +95,7 @@ $(document).ready(function(){initNavTree('gooey__radiobutton_8h.html',''); initR
   <div class="headertitle"><div class="title">gooey_radiobutton.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__radiobutton_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -109,6 +108,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:aaf97de275a4a86c4f7d3dac11b4d5e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles radio button click events.  <br /></td></tr>
 <tr class="separator:aaf97de275a4a86c4f7d3dac11b4d5e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac191745c6fb64199f1a73582db1c2d82" id="r_ac191745c6fb64199f1a73582db1c2d82"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__radiobutton_8h.html#ac191745c6fb64199f1a73582db1c2d82">GooeyRadioButtonGroup_HandleClick</a> (GooeyWindow *win, int x, int y)</td></tr>
+<tr class="memdesc:ac191745c6fb64199f1a73582db1c2d82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles click events for a group of radio buttons.  <br /></td></tr>
 <tr class="separator:ac191745c6fb64199f1a73582db1c2d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9b1dfefb7db732a5eadc16d457054bb" id="r_ad9b1dfefb7db732a5eadc16d457054bb"><td class="memItemLeft" align="right" valign="top">GooeyRadioButtonGroup *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__radiobutton_8h.html#ad9b1dfefb7db732a5eadc16d457054bb">GooeyRadioButtonGroup_Create</a> (GooeyWindow *win)</td></tr>
 <tr class="memdesc:ad9b1dfefb7db732a5eadc16d457054bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a radio button group widget.  <br /></td></tr>
@@ -166,13 +166,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a radio button to the window. </p>
+<p>This function adds a radio button with a label to the specified window at a given position. A callback function is invoked when the radio button is selected.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to add the radio button to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the radio button's position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the radio button's position. </td></tr>
     <tr><td class="paramname">label</td><td>The label of the radio button. </td></tr>
-    <tr><td class="paramname">callback</td><td>The callback function to call when the radio button is selected. </td></tr>
+    <tr><td class="paramname">callback</td><td>The callback function to call when the radio button is selected.</td></tr>
   </table>
   </dd>
 </dl>
@@ -213,11 +214,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handles radio button click events. </p>
+<p>This function detects if a click event occurred on a radio button in the given window and invokes the appropriate action.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the radio button. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the click event. </td></tr>
-    <tr><td class="paramname">y</td><td>The y-coordinate of the click event. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the click event.</td></tr>
   </table>
   </dd>
 </dl>
@@ -276,17 +278,19 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a radio button to a radio button group. </p>
+<p>This function adds a new radio button to a specified radio button group within the given window. A callback is executed when the radio button is selected.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">win</td><td>The window containing the radio button group. </td></tr>
     <tr><td class="paramname">group</td><td>The radio button group to add the button to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the radio button. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the radio button. </td></tr>
     <tr><td class="paramname">label</td><td>The label for the radio button. </td></tr>
-    <tr><td class="paramname">callback</td><td>The callback to execute when the radio button is selected. </td></tr>
+    <tr><td class="paramname">callback</td><td>The callback to execute when the radio button is selected.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The GooeyRadioButton object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The newly created GooeyRadioButton object. </dd></dl>
 
 </div>
 </div>
@@ -307,13 +311,14 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a radio button group widget. </p>
+<p>This function creates a new radio button group, allowing multiple radio buttons to be grouped together, ensuring that only one button is selected at a time.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window containing the radio button group. </td></tr>
+    <tr><td class="paramname">win</td><td>The window containing the radio button group.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>GooeyRadioButtonGroup widget pointer. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the created GooeyRadioButtonGroup object. </dd></dl>
 
 </div>
 </div>
@@ -334,6 +339,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Draws the radio button group on the window. </p>
+<p>This function renders all the radio buttons within a group onto the window. It ensures that the visual representation reflects the selected state of each button.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to draw the radio button group on. </td></tr>
@@ -374,6 +380,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Handles click events for a group of radio buttons. </p>
+<p>This function allows handling click events in a group of radio buttons, ensuring that only one radio button is selected at a time.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">win</td><td>The window containing the radio button group. </td></tr>
+    <tr><td class="paramname">x</td><td>The x-coordinate of the click event. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the click event.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if a radio button in the group was clicked, false otherwise. </dd></dl>
 
 </div>
 </div>

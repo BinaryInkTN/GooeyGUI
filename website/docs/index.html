@@ -187,7 +187,7 @@ Example Usage</h3>
 <div class="line"><span class="keywordtype">void</span> onButtonClick()</div>
 <div class="line">{</div>
 <div class="line">    state = !state;</div>
-<div class="line">    <a class="code hl_function" href="gooey_8h.html#a2b25347d47ee668cefe2ccee05a4fba8">GooeyWindow_MakeVisible</a>(&amp;msgBox, state);</div>
+<div class="line">    GooeyWindow_MakeVisible(&amp;msgBox, state);</div>
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">int</span> main()</div>
@@ -197,25 +197,24 @@ Example Usage</h3>
 <div class="line"> </div>
 <div class="line">    <a class="code hl_function" href="gooey_8h.html#aa1b4ea3eac057048d12e7e077e24fbce">Gooey_Init</a>(GLFW);</div>
 <div class="line"> </div>
-<div class="line">    GooeyWindow win = <a class="code hl_function" href="gooey_8h.html#a94b78833b05484f9702a1400b1ba9407">GooeyWindow_Create</a>(<span class="stringliteral">&quot;Hello World&quot;</span>, 400, 300, 1);</div>
+<div class="line">    GooeyWindow win = GooeyWindow_Create(<span class="stringliteral">&quot;Hello World&quot;</span>, 400, 300, 1);</div>
 <div class="line"> </div>
-<div class="line">    msgBox = GooeyMessageBox_Create(<span class="stringliteral">&quot;Hello&quot;</span>, <span class="stringliteral">&quot;Welcome to Gooey!&quot;</span>, MSGBOX_INFO, messageBoxCallback);</div>
+<div class="line">    msgBox = <a class="code hl_function" href="gooey__messagebox_8h.html#a146276471851203d9409994cde7873a8">GooeyMessageBox_Create</a>(<span class="stringliteral">&quot;Hello&quot;</span>, <span class="stringliteral">&quot;Welcome to Gooey!&quot;</span>, MSGBOX_INFO, messageBoxCallback);</div>
 <div class="line"> </div>
-<div class="line">    GooeyMessageBox_Show(&amp;msgBox);</div>
+<div class="line">    <a class="code hl_function" href="gooey__messagebox_8h.html#a54f28eaf0900f9c0767f00735244ae49">GooeyMessageBox_Show</a>(&amp;msgBox);</div>
 <div class="line"> </div>
-<div class="line">    GooeyButton_Add(&amp;win, <span class="stringliteral">&quot;Click Me&quot;</span>, 150, 100, 100, 40, onButtonClick);</div>
+<div class="line">    <a class="code hl_function" href="gooey__button_8h.html#a6ef2ab71a12568095efab0973c7b687c">GooeyButton_Add</a>(&amp;win, <span class="stringliteral">&quot;Click Me&quot;</span>, 150, 100, 100, 40, onButtonClick);</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_function" href="gooey_8h.html#acaecd56b83d3d917e644ec896623fbfc">GooeyWindow_Run</a>(2, &amp;win, &amp;msgBox);</div>
+<div class="line">    GooeyWindow_Run(2, &amp;win, &amp;msgBox);</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_function" href="gooey_8h.html#a640e0f82f2a1a650e6e9734162353e79">GooeyWindow_Cleanup</a>(2, &amp;win, &amp;msgBox);</div>
+<div class="line">    GooeyWindow_Cleanup(2, &amp;win, &amp;msgBox);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="agooey_8h_html_a2b25347d47ee668cefe2ccee05a4fba8"><div class="ttname"><a href="gooey_8h.html#a2b25347d47ee668cefe2ccee05a4fba8">GooeyWindow_MakeVisible</a></div><div class="ttdeci">void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility)</div></div>
-<div class="ttc" id="agooey_8h_html_a640e0f82f2a1a650e6e9734162353e79"><div class="ttname"><a href="gooey_8h.html#a640e0f82f2a1a650e6e9734162353e79">GooeyWindow_Cleanup</a></div><div class="ttdeci">void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win,...)</div><div class="ttdoc">Cleans up the resources associated with the Gooey windows.</div></div>
-<div class="ttc" id="agooey_8h_html_a94b78833b05484f9702a1400b1ba9407"><div class="ttname"><a href="gooey_8h.html#a94b78833b05484f9702a1400b1ba9407">GooeyWindow_Create</a></div><div class="ttdeci">GooeyWindow GooeyWindow_Create(const char *title, int width, int height, bool visibility)</div><div class="ttdoc">Creates a new Gooey window.</div></div>
 <div class="ttc" id="agooey_8h_html_aa1b4ea3eac057048d12e7e077e24fbce"><div class="ttname"><a href="gooey_8h.html#aa1b4ea3eac057048d12e7e077e24fbce">Gooey_Init</a></div><div class="ttdeci">int Gooey_Init(GooeyBackends backend)</div><div class="ttdoc">Initializes the Gooey system with the specified backend.</div></div>
-<div class="ttc" id="agooey_8h_html_acaecd56b83d3d917e644ec896623fbfc"><div class="ttname"><a href="gooey_8h.html#acaecd56b83d3d917e644ec896623fbfc">GooeyWindow_Run</a></div><div class="ttdeci">void GooeyWindow_Run(int num_windows, GooeyWindow *first_win,...)</div><div class="ttdoc">Runs the Gooey window.</div></div>
+<div class="ttc" id="agooey__button_8h_html_a6ef2ab71a12568095efab0973c7b687c"><div class="ttname"><a href="gooey__button_8h.html#a6ef2ab71a12568095efab0973c7b687c">GooeyButton_Add</a></div><div class="ttdeci">GooeyButton * GooeyButton_Add(GooeyWindow *win, const char *label, int x, int y, int width, int height, void(*callback)())</div><div class="ttdoc">Adds a button to the window.</div></div>
+<div class="ttc" id="agooey__messagebox_8h_html_a146276471851203d9409994cde7873a8"><div class="ttname"><a href="gooey__messagebox_8h.html#a146276471851203d9409994cde7873a8">GooeyMessageBox_Create</a></div><div class="ttdeci">GooeyWindow * GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void(*callback)(int option))</div><div class="ttdoc">Creates a message box window.</div></div>
+<div class="ttc" id="agooey__messagebox_8h_html_a54f28eaf0900f9c0767f00735244ae49"><div class="ttname"><a href="gooey__messagebox_8h.html#a54f28eaf0900f9c0767f00735244ae49">GooeyMessageBox_Show</a></div><div class="ttdeci">void GooeyMessageBox_Show(GooeyWindow *msgBoxWindow)</div><div class="ttdoc">Displays the specified message box window.</div></div>
 </div><!-- fragment --><ul>
 <li>to compile and run follow these steps <br  />
  <div class="fragment"><div class="line">gcc example.c -o example -I/usr/local/include/Gooey -L/usr/local/lib/ -lGooeyGUI -Wno-deprecated-declarations</div>

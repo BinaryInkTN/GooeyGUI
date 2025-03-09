@@ -63,6 +63,7 @@ set(HEADERS
     include/widgets/gooey_plot.h
     include/widgets/gooey_image.h
     include/signals/gooey_signals.h
+    include/assets/drop_surface_image.h
     include/gooey.h
 )
 

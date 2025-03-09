@@ -1,47 +1,67 @@
+/**
+ * @file gooey_menu.h
+ * @brief Header file for the Gooey menu system.
+ *
+ * Provides functions to create and manage menus and menu items within a Gooey window.
+ *
+ * @author Yassine Ahmed Ali
+ * @license GPL-3.0
+ */
+
 #ifndef GOOEY_MENU_H
 #define GOOEY_MENU_H
 
 #include "common/gooey_common.h"
 
 /**
- * @brief Sets the menu for the Gooey window.
+ * @brief Sets the menu for the specified Gooey window.
  *
- * Initializes and sets the menu for the given window.
+ * Initializes and attaches a menu to the given window.
  *
  * @param win The window to set the menu for.
- * @return A new GooeyMenu object.
+ * @return A pointer to the newly created GooeyMenu object.
  */
 GooeyMenu *GooeyMenu_Set(GooeyWindow *win);
 
 /**
  * @brief Adds a child menu item to the window's menu.
  *
- * @param win The window to add the menu item to.
- * @param title The title of the menu item.
- * @return A new GooeyMenuChild object.
+ * Creates a submenu or a category inside the main menu.
+ *
+ * @param win The window to which the menu child will be added.
+ * @param title The title of the menu child.
+ * @return A pointer to the newly created GooeyMenuChild object.
  */
 GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title);
 
 /**
  * @brief Handles menu item click events.
  *
+ * Processes user interactions with menu items.
+ *
  * @param win The window containing the menu.
  * @param x The x-coordinate of the click event.
  * @param y The y-coordinate of the click event.
+ * @return `true` if the menu item was clicked, otherwise `false`.
  */
 bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
 
 /**
- * @brief Adds a menu item to a menu child.
+ * @brief Adds an element (option) to a menu child.
  *
- * @param child The menu child to add the item to.
+ * @param child The menu child to which the item will be added.
  * @param title The title of the menu item.
- * @param callback The callback function to call when the item is selected.
+ * @param callback The function to be called when the menu item is selected.
  */
 void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title, void (*callback)());
 
-
+/**
+ * @brief Draws the menu and its items on the window.
+ *
+ * Renders the menu visually within the specified window.
+ *
+ * @param win The window where the menu will be drawn.
+ */
 void GooeyMenu_Draw(GooeyWindow *win);
 
-
-#endif
+#endif // GOOEY_MENU_H

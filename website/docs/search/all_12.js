@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['r_0',['r',['../glad_8h.html#abe08814c2f72843fde4d8df41440d5a0',1,'glad.h']]],
+  ['radio_5fbutton_5fcount_1',['radio_button_count',['../structGooeyWindow.html#a65b57453b3f68af542214c46e0941450',1,'GooeyWindow']]],
+  ['radio_5fbutton_5fgroup_5fcount_2',['radio_button_group_count',['../structGooeyWindow.html#a3e421ff3bedc4a250710517498b61046',1,'GooeyWindow']]],
+  ['radio_5fbutton_5fgroups_3',['radio_button_groups',['../structGooeyWindow.html#ad4bceefc95a367170105583e3b9543ba',1,'GooeyWindow']]],
+  ['radio_5fbutton_5fradius_4',['RADIO_BUTTON_RADIUS',['../gooey__common_8h.html#a61b14d0e3ddc2b89e0322c7132f3d3c9',1,'gooey_common.h']]],
+  ['radio_5fbuttons_5',['radio_buttons',['../structGooeyWindow.html#a936353b9fc0e4be5abbd8640e640c331',1,'GooeyWindow']]],
+  ['radius_6',['radius',['../structGooeyRadioButton.html#a0c69a38c7f30e54e7e7d730caecbb6cb',1,'GooeyRadioButton']]],
+  ['range_7',['range',['../glad_8h.html#a73b00379db2c7ac5e30a3aa2954a50ee',1,'glad.h']]],
+  ['read_8',['read',['../structstbi__io__callbacks.html#a623e46b3a2a019611601409926283a88',1,'stbi_io_callbacks']]],
+  ['readme_2emd_9',['readme.md',['../readme_8md.html',1,'']]],
+  ['readoffset_10',['readOffset',['../glad_8h.html#a11d94888acbeffbdc587155c0576417d',1,'glad.h']]],
+  ['ref_11',['ref',['../glad_8h.html#a083de4c8e32ad3d9059245f26be721de',1,'glad.h']]],
+  ['render_12',['Render',['../structGooeyBackend.html#a7694518ea856e801c5a1a49c11067d70',1,'GooeyBackend']]],
+  ['renderbuffer_13',['renderbuffer',['../glad_8h.html#a065ecbf0bfaaefcafcc191ff33481bec',1,'glad.h']]],
+  ['renderbuffers_14',['renderbuffers',['../glad_8h.html#aa17b802a0d8dde64cb30f5d887be5a22',1,'glad.h']]],
+  ['renderbuffertarget_15',['renderbuffertarget',['../glad_8h.html#ad4ca76f1378b4a8be4243761c8df68e6',1,'glad.h']]],
+  ['requestredraw_16',['RequestRedraw',['../structGooeyBackend.html#a32aba1686f863c18036abb19c0e81364',1,'GooeyBackend']]],
+  ['resetevents_17',['ResetEvents',['../structGooeyBackend.html#a83bc26f47f387faf275bc823686ac9df',1,'GooeyBackend']]],
+  ['residences_18',['residences',['../glad_8h.html#a0058cff9dc7ae56534241571ecd631b3',1,'glad.h']]],
+  ['right_19',['right',['../glad_8h.html#ab412e67df941b4600c352b0b9e76d2ee',1,'glad.h']]],
+  ['rows_20',['rows',['../structGooeyLayout.html#abe7e6f05b107347913182716c2b02689',1,'GooeyLayout']]],
+  ['run_21',['Run',['../structGooeyBackend.html#a51242b064ce8c69548e2474ad1f6d5e0',1,'GooeyBackend']]]
+];

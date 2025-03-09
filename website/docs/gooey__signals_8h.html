@@ -97,22 +97,26 @@ $(document).ready(function(){initNavTree('gooey__signals_8h.html',''); initResiz
   <div class="headertitle"><div class="title">gooey_signals.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;utils/logger/gooey_logger_internal.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;utils/logger/gooey_logger.h&quot;</code><br />
 </div>
 <p><a href="gooey__signals_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGooeySignal__Slot.html">GooeySignal_Slot</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A slot representing a linked callback in the signal system.  <a href="structGooeySignal__Slot.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGooeySignal.html">GooeySignal</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A signal that can emit events to all linked slots.  <a href="structGooeySignal.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a060394d38f97caf023fce68ee9cf805f" id="r_a060394d38f97caf023fce68ee9cf805f"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__signals_8h.html#a060394d38f97caf023fce68ee9cf805f">GooeySignal_CallbackFunction</a>) (void *context, void *data)</td></tr>
+<tr class="memdesc:a060394d38f97caf023fce68ee9cf805f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function type for signal events.  <br /></td></tr>
 <tr class="separator:a060394d38f97caf023fce68ee9cf805f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfe4acc20f30a34b7a43a97db6f48161" id="r_abfe4acc20f30a34b7a43a97db6f48161"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGooeySignal__Slot.html">GooeySignal_Slot</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__signals_8h.html#abfe4acc20f30a34b7a43a97db6f48161">GooeySignal_Slot</a></td></tr>
+<tr class="memdesc:abfe4acc20f30a34b7a43a97db6f48161"><td class="mdescLeft">&#160;</td><td class="mdescRight">A slot representing a linked callback in the signal system.  <br /></td></tr>
 <tr class="separator:abfe4acc20f30a34b7a43a97db6f48161"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
@@ -143,6 +147,16 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Callback function type for signal events. </p>
+<p>This function type is used for the callback that is executed when a signal is emitted. The callback receives a context and data passed from the emitter.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">context</td><td>The user-defined context passed when linking the callback. </td></tr>
+    <tr><td class="paramname">data</td><td>The data passed when emitting the signal. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
 <a id="abfe4acc20f30a34b7a43a97db6f48161" name="abfe4acc20f30a34b7a43a97db6f48161"></a>
@@ -156,6 +170,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>A slot representing a linked callback in the signal system. </p>
+<p>A slot contains a callback function, its associated context, and a link to the next slot in a potentially linked list of callbacks. </p>
 
 </div>
 </div>
@@ -177,8 +194,8 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a new signal object. </p>
-<p>Signals are used to manage event handling and callbacks. This function initializes a new signal object.</p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structGooeySignal.html">GooeySignal</a> The created signal object. </dd></dl>
+<p>Signals are used to manage event handling and callbacks. This function initializes a new signal object with no slots.</p>
+<dl class="section return"><dt>Returns</dt><dd><a class="el" href="structGooeySignal.html" title="A signal that can emit events to all linked slots.">GooeySignal</a> The created signal object with no linked callbacks. </dd></dl>
 
 </div>
 </div>
@@ -209,11 +226,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Emits a signal. </p>
-<p>This function triggers the signal, invoking all linked callbacks in the order they were added.</p>
+<p>This function triggers the signal, invoking all linked callbacks in the order they were added. Each callback receives the specified data.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">signal</td><td>A pointer to the signal to emit. </td></tr>
-    <tr><td class="paramname">data</td><td>A void pointer to the data. </td></tr>
+    <tr><td class="paramname">data</td><td>A void pointer to the data passed to all linked callbacks. </td></tr>
   </table>
   </dd>
 </dl>
@@ -253,7 +270,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Links a callback function to a signal. </p>
-<p>This function connects a signal to a specific callback function. When the signal is emitted, the callback function will be executed.</p>
+<p>This function connects a signal to a specific callback function. When the signal is emitted, the callback function will be executed. The callback is linked to the signal and can be triggered when the signal is emitted.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">signal</td><td>A pointer to the signal to which the callback is linked. </td></tr>
@@ -285,7 +302,7 @@ Functions</h2></td></tr>
 <p>Removes all callback functions linked to the specified signal, effectively clearing its event listeners.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">signal</td><td>A pointer to the signal to modify. </td></tr>
+    <tr><td class="paramname">signal</td><td>A pointer to the signal from which callbacks should be unlinked. </td></tr>
   </table>
   </dd>
 </dl>

@@ -39,7 +39,7 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
         LOG_ERROR("Cannot add more radio buttons to the group. Maximum limit reached.\n");
         return NULL;
     }
-    group->buttons[group->button_count] = (GooeyRadioButton) {0};
+    group->buttons[group->button_count] = (GooeyRadioButton){0};
     GooeyRadioButton *button = &group->buttons[group->button_count++];
     button->core.x = x;
     button->core.y = y;
@@ -95,21 +95,21 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
 
             int label_width = active_backend->GetTextWidth(button->label, strlen(button->label));
 
-            int label_x = ACTIVE_BACKEND == X11 ? button->core.x + RADIO_BUTTON_RADIUS * 2 + 10 : button->core.x + RADIO_BUTTON_RADIUS * 2;
-            int label_y = ACTIVE_BACKEND == X11 ? button->core.y + RADIO_BUTTON_RADIUS + 5 : button->core.y + RADIO_BUTTON_RADIUS / 2;
+            int label_x = button->core.x + RADIO_BUTTON_RADIUS * 2;
+            int label_y = button->core.y + RADIO_BUTTON_RADIUS / 2;
             active_backend->DrawText(label_x, label_y, button->label, win->active_theme->neutral, 0.25f, win->creation_id);
             active_backend->SetForeground(win->active_theme->neutral);
             active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 2, RADIO_BUTTON_RADIUS * 2, 0, 360 * 64, win->creation_id);
             if (button->selected)
             {
                 active_backend->SetForeground(win->active_theme->primary);
-                active_backend->FillArc(ACTIVE_BACKEND == X11 ? button->core.x + 2 : button->core.x, ACTIVE_BACKEND == X11 ? button->core.y + 2 : button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
+                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
             }
             else
             {
                 active_backend->SetForeground(win->active_theme->base);
 
-                active_backend->FillArc(ACTIVE_BACKEND == X11 ? button->core.x + 2 : button->core.x, ACTIVE_BACKEND == X11 ? button->core.y + 2 : button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
+                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
             }
         }
     }

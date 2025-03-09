@@ -327,7 +327,7 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
         windows[window_id]->current_event->mouse_scroll.y = value;
 }
 
-void mouse_click_callback(size_t window_id, bool state, void *data)
+static void mouse_click_callback(size_t window_id, bool state, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     windows[window_id]->current_event->type = state ? GOOEY_EVENT_CLICK_PRESS : GOOEY_EVENT_CLICK_RELEASE;
@@ -348,14 +348,14 @@ static void mouse_move_callback(size_t window_id, double posX, double posY, void
     windows[window_id]->current_event->mouse_move.x = posX;
     windows[window_id]->current_event->mouse_move.y = posY;
 }
-void window_resize_callback(size_t window_id, int width, int height, void *data)
+static void window_resize_callback(size_t window_id, int width, int height, void *data)
 {
 
     GooeyWindow **windows = (GooeyWindow **)data;
     windows[window_id]->current_event->type = GOOEY_EVENT_RESIZE;
     glps_wm_window_update(ctx.wm, window_id);
 }
-void window_close_callback(size_t window_id, void *data)
+static void window_close_callback(size_t window_id, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
 
@@ -584,9 +584,39 @@ unsigned int glps_load_image(const char *image_path)
     return texture; // textureID
 }
 
+unsigned int glps_load_image_from_bin(unsigned char *data, unsigned int binary_len)
+{
+
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    stbi_set_flip_vertically_on_load(1);
+    int width, height, channels;
+    unsigned char *img_data = stbi_load_from_memory(data, binary_len, &width, &height, &channels, 0);
+    if (!img_data)
+    {
+        LOG_ERROR("Failed to load image");
+        glDeleteTextures(1, &texture);
+        return -1;
+    }
+
+    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, img_data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    stbi_image_free(img_data);
+
+    return texture; // textureID
+}
+
 void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
 {
-    if(texture_id < 0)
+    if (texture_id < 0)
     {
         LOG_ERROR("Couldn't draw image, texture is invalid.");
         return;
@@ -849,24 +879,21 @@ void glps_destroy_window_from_id(int window_id)
     ctx.active_window_count--;
 }
 
-
-void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff, int x, int y, void *data)
+static void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff, int x, int y, void *data)
 {
-    LOG_INFO("DROPPED %d %d", x, y);
-    GooeyWindow** windows = (GooeyWindow**) data;
-    GooeyWindow* window = windows[origin_window_id];
+    GooeyWindow **windows = (GooeyWindow **)data;
+    GooeyWindow *window = windows[origin_window_id];
 
     window->current_event->type = GOOEY_EVENT_DROP;
     window->current_event->drop_data.drop_x = x;
-    window->current_event->drop_data.drop_y = y;    
-    strncpy(window->current_event->drop_data.file_path, buff, sizeof(window->current_event->drop_data.file_path) -1);
-    window->current_event->drop_data.file_path[sizeof(window->current_event->drop_data.file_path) -1] = '\0'; 
-    
-    strncpy(window->current_event->drop_data.mime, buff, sizeof(window->current_event->drop_data.mime) -1);
-    window->current_event->drop_data.mime[sizeof(window->current_event->drop_data.mime) -1] = '\0'; 
-    LOG_INFO("%ld", origin_window_id);
-    glps_wm_window_update(ctx.wm, window->creation_id);  
+    window->current_event->drop_data.drop_y = y;
+    strncpy(window->current_event->drop_data.file_path, buff, sizeof(window->current_event->drop_data.file_path) - 1);
+    window->current_event->drop_data.file_path[sizeof(window->current_event->drop_data.file_path) - 1] = '\0';
 
+    strncpy(window->current_event->drop_data.mime, buff, sizeof(window->current_event->drop_data.mime) - 1);
+    window->current_event->drop_data.mime[sizeof(window->current_event->drop_data.mime) - 1] = '\0';
+    LOG_INFO("%ld", origin_window_id);
+    glps_wm_window_update(ctx.wm, window->creation_id);
 }
 
 void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
@@ -937,6 +964,7 @@ GooeyBackend glps_backend = {
     .HandleEvents = glps_handle_events,
     .ResetEvents = glps_reset_events,
     .DrawImage = glps_draw_image,
+    .LoadImageFromBin = glps_load_image_from_bin,
     .LoadImage = glps_load_image,
     .FillArc = glps_fill_arc,
     .FillRectangle = glps_fill_rectangle,

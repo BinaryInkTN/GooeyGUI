@@ -106,7 +106,8 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    if (!(win->drop_surface = malloc(sizeof(GooeyDropSurface) * MAX_WIDGETS)) ||
+    if (!(win->tabs = malloc(sizeof(GooeyTabs) * MAX_WIDGETS)) ||
+        !(win->drop_surface = malloc(sizeof(GooeyDropSurface) * MAX_WIDGETS)) ||
         !(win->images = malloc(sizeof(GooeyImage) * MAX_WIDGETS)) ||
         !(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
         !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
@@ -149,6 +150,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 
         free(win->canvas[i].elements);
         win->canvas[i].elements = NULL;
+    }
+
+    if(win->tabs)
+    {
+        free(win->tabs);
+        win->tabs = NULL;
     }
 
     if (win->drop_surface)
@@ -298,6 +305,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->menu = NULL;
 
     *win->active_theme = (GooeyTheme){.base = baseColor, .neutral = neutralColor, .primary = primaryColor, .widget_base = widgetBaseColor, .danger = dangerColor, .info = infoColor, .success = successColor};
+    win->tab_count = 0;
     win->visibility = visibilty;
     win->image_count = 0;
     win->drop_surface_count = 0;
@@ -438,7 +446,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_DROP:
-        LOG_INFO("GOT DROP EVET %d %d", window->current_event->drop_data.drop_x, window->current_event->drop_data.drop_y);
         needs_redraw |= GooeyDropSurface_HandleFileDrop(window, window->current_event->drop_data.drop_x, window->current_event->drop_data.drop_y);
         break;
 

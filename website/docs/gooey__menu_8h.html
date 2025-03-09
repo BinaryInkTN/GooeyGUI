@@ -95,31 +95,38 @@ $(document).ready(function(){initNavTree('gooey__menu_8h.html',''); initResizabl
   <div class="headertitle"><div class="title">gooey_menu.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+
+<p>Header file for the Gooey menu system.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__menu_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:abaa0a8fc4c8b4b4304e401ffaece7e65" id="r_abaa0a8fc4c8b4b4304e401ffaece7e65"><td class="memItemLeft" align="right" valign="top">GooeyMenu *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#abaa0a8fc4c8b4b4304e401ffaece7e65">GooeyMenu_Set</a> (GooeyWindow *win)</td></tr>
-<tr class="memdesc:abaa0a8fc4c8b4b4304e401ffaece7e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the menu for the Gooey window.  <br /></td></tr>
+<tr class="memdesc:abaa0a8fc4c8b4b4304e401ffaece7e65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the menu for the specified Gooey window.  <br /></td></tr>
 <tr class="separator:abaa0a8fc4c8b4b4304e401ffaece7e65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b6434d579642d4e70bd5f29ea52c2ec" id="r_a0b6434d579642d4e70bd5f29ea52c2ec"><td class="memItemLeft" align="right" valign="top">GooeyMenuChild *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#a0b6434d579642d4e70bd5f29ea52c2ec">GooeyMenu_AddChild</a> (GooeyWindow *win, char *title)</td></tr>
-<tr class="memdesc:a0b6434d579642d4e70bd5f29ea52c2ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a child menu item to the window's menu.  <br /></td></tr>
-<tr class="separator:a0b6434d579642d4e70bd5f29ea52c2ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9b7cccbb25edd99a7f4b3ef105c5572" id="r_ab9b7cccbb25edd99a7f4b3ef105c5572"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#ab9b7cccbb25edd99a7f4b3ef105c5572">GooeyMenu_HandleClick</a> (GooeyWindow *win, int x, int y)</td></tr>
-<tr class="memdesc:ab9b7cccbb25edd99a7f4b3ef105c5572"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles menu item click events.  <br /></td></tr>
-<tr class="separator:ab9b7cccbb25edd99a7f4b3ef105c5572"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e5d95abccd358771562c49b6521d6e4" id="r_a9e5d95abccd358771562c49b6521d6e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#a9e5d95abccd358771562c49b6521d6e4">GooeyMenuChild_AddElement</a> (GooeyMenuChild *child, char *title, void(*callback)())</td></tr>
-<tr class="memdesc:a9e5d95abccd358771562c49b6521d6e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a menu item to a menu child.  <br /></td></tr>
-<tr class="separator:a9e5d95abccd358771562c49b6521d6e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a607ed1c4126263e6dacc150ecb65d238" id="r_a607ed1c4126263e6dacc150ecb65d238"><td class="memItemLeft" align="right" valign="top">GooeyMenuChild *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#a607ed1c4126263e6dacc150ecb65d238">GooeyMenu_AddChild</a> (GooeyWindow *win, const char *title)</td></tr>
+<tr class="memdesc:a607ed1c4126263e6dacc150ecb65d238"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a child menu item to the window's menu.  <br /></td></tr>
+<tr class="separator:a607ed1c4126263e6dacc150ecb65d238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6796f32e59f5b2f09bddab2c785ebffd" id="r_a6796f32e59f5b2f09bddab2c785ebffd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#a6796f32e59f5b2f09bddab2c785ebffd">GooeyMenu_HandleClick</a> (GooeyWindow *win, int x, int y)</td></tr>
+<tr class="memdesc:a6796f32e59f5b2f09bddab2c785ebffd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles menu item click events.  <br /></td></tr>
+<tr class="separator:a6796f32e59f5b2f09bddab2c785ebffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b9a5ad0bee082bf46357916182ae584" id="r_a8b9a5ad0bee082bf46357916182ae584"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#a8b9a5ad0bee082bf46357916182ae584">GooeyMenuChild_AddElement</a> (GooeyMenuChild *child, const char *title, void(*callback)())</td></tr>
+<tr class="memdesc:a8b9a5ad0bee082bf46357916182ae584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an element (option) to a menu child.  <br /></td></tr>
+<tr class="separator:a8b9a5ad0bee082bf46357916182ae584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af687b31ad3bd659dd2804dbda0d017b8" id="r_af687b31ad3bd659dd2804dbda0d017b8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__menu_8h.html#af687b31ad3bd659dd2804dbda0d017b8">GooeyMenu_Draw</a> (GooeyWindow *win)</td></tr>
+<tr class="memdesc:af687b31ad3bd659dd2804dbda0d017b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the menu and its items on the window.  <br /></td></tr>
 <tr class="separator:af687b31ad3bd659dd2804dbda0d017b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a0b6434d579642d4e70bd5f29ea52c2ec" name="a0b6434d579642d4e70bd5f29ea52c2ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b6434d579642d4e70bd5f29ea52c2ec">&#9670;&#160;</a></span>GooeyMenu_AddChild()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header file for the Gooey menu system. </p>
+<p>Provides functions to create and manage menus and menu items within a Gooey window.</p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali @license GPL-3.0 </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a607ed1c4126263e6dacc150ecb65d238" name="a607ed1c4126263e6dacc150ecb65d238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a607ed1c4126263e6dacc150ecb65d238">&#9670;&#160;</a></span>GooeyMenu_AddChild()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -133,7 +140,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>title</em>&#160;</td>
         </tr>
         <tr>
@@ -145,14 +152,15 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a child menu item to the window's menu. </p>
+<p>Creates a submenu or a category inside the main menu.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to add the menu item to. </td></tr>
-    <tr><td class="paramname">title</td><td>The title of the menu item. </td></tr>
+    <tr><td class="paramname">win</td><td>The window to which the menu child will be added. </td></tr>
+    <tr><td class="paramname">title</td><td>The title of the menu child. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyMenuChild object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyMenuChild object. </dd></dl>
 
 </div>
 </div>
@@ -172,16 +180,25 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Draws the menu and its items on the window. </p>
+<p>Renders the menu visually within the specified window.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">win</td><td>The window where the menu will be drawn. </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="ab9b7cccbb25edd99a7f4b3ef105c5572" name="ab9b7cccbb25edd99a7f4b3ef105c5572"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab9b7cccbb25edd99a7f4b3ef105c5572">&#9670;&#160;</a></span>GooeyMenu_HandleClick()</h2>
+<a id="a6796f32e59f5b2f09bddab2c785ebffd" name="a6796f32e59f5b2f09bddab2c785ebffd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6796f32e59f5b2f09bddab2c785ebffd">&#9670;&#160;</a></span>GooeyMenu_HandleClick()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void GooeyMenu_HandleClick </td>
+          <td class="memname">bool GooeyMenu_HandleClick </td>
           <td>(</td>
           <td class="paramtype">GooeyWindow *&#160;</td>
           <td class="paramname"><em>win</em>, </td>
@@ -207,6 +224,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handles menu item click events. </p>
+<p>Processes user interactions with menu items.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the menu. </td></tr>
@@ -215,6 +233,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the menu item was clicked, otherwise <code>false</code>. </dd></dl>
 
 </div>
 </div>
@@ -234,20 +253,20 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the menu for the Gooey window. </p>
-<p>Initializes and sets the menu for the given window.</p>
+<p>Sets the menu for the specified Gooey window. </p>
+<p>Initializes and attaches a menu to the given window.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to set the menu for. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyMenu object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyMenu object. </dd></dl>
 
 </div>
 </div>
-<a id="a9e5d95abccd358771562c49b6521d6e4" name="a9e5d95abccd358771562c49b6521d6e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e5d95abccd358771562c49b6521d6e4">&#9670;&#160;</a></span>GooeyMenuChild_AddElement()</h2>
+<a id="a8b9a5ad0bee082bf46357916182ae584" name="a8b9a5ad0bee082bf46357916182ae584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b9a5ad0bee082bf46357916182ae584">&#9670;&#160;</a></span>GooeyMenuChild_AddElement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -261,7 +280,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">char *&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>title</em>, </td>
         </tr>
         <tr>
@@ -278,12 +297,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a menu item to a menu child. </p>
+<p>Adds an element (option) to a menu child. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">child</td><td>The menu child to add the item to. </td></tr>
+    <tr><td class="paramname">child</td><td>The menu child to which the item will be added. </td></tr>
     <tr><td class="paramname">title</td><td>The title of the menu item. </td></tr>
-    <tr><td class="paramname">callback</td><td>The callback function to call when the item is selected. </td></tr>
+    <tr><td class="paramname">callback</td><td>The function to be called when the menu item is selected. </td></tr>
   </table>
   </dd>
 </dl>

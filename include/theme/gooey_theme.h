@@ -14,31 +14,41 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef GOOEY_THEME_INTERNAL_H
-#define GOOEY_THEME_INTERNAL_H
 
-#include <cjson/cJSON.h>
-#include <stdio.h> 
-#include <stdlib.h>
-
-typedef struct
-{
-    unsigned long base; /* Base window background color */
-
-    unsigned long neutral; /* Neutral color for text */
-
-    unsigned long widget_base; /* Base widget color */
-
-    unsigned long primary; /* Primary color */
-
-    unsigned long danger; /* Danger color */
-
-    unsigned long info; /* Info color */
-
-    unsigned long success; /* Success color */
-
-} GooeyTheme;
-
-GooeyTheme* parser_load_theme_from_file(const char* filePath);
-
-#endif
+ #ifndef GOOEY_THEME_INTERNAL_H
+ #define GOOEY_THEME_INTERNAL_H
+ 
+ #include <cjson/cJSON.h>
+ #include <stdio.h> 
+ #include <stdlib.h>
+ 
+ /**
+  * @brief Structure representing a theme for the Gooey UI.
+  * 
+  * The colors in the theme are stored as unsigned long values representing 
+  * the color codes (typically in hexadecimal format).
+  */
+ typedef struct
+ {
+     unsigned long base;      /**< Base window background color */
+     unsigned long neutral;   /**< Neutral color for text */
+     unsigned long widget_base; /**< Base widget color */
+     unsigned long primary;    /**< Primary color */
+     unsigned long danger;     /**< Danger color */
+     unsigned long info;       /**< Info color */
+     unsigned long success;    /**< Success color */
+ } GooeyTheme;
+ 
+ /**
+  * @brief Loads a theme from a JSON file.
+  *
+  * This function reads a JSON file, parses the colors, and returns a GooeyTheme object.
+  * The file should contain color values under appropriate keys for each theme attribute.
+  * 
+  * @param filePath The path to the theme JSON file.
+  * @return A pointer to the parsed GooeyTheme object.
+  */
+ GooeyTheme* parser_load_theme_from_file(const char* filePath);
+ 
+ #endif /* GOOEY_THEME_INTERNAL_H */
+ 

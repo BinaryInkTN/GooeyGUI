@@ -95,24 +95,30 @@ $(document).ready(function(){initNavTree('gooey__dropdown_8h.html',''); initResi
   <div class="headertitle"><div class="title">gooey_dropdown.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+
+<p>Header file for the GooeyDropdown module.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__dropdown_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:ac88c3eb373206811e02e639af630674e" id="r_ac88c3eb373206811e02e639af630674e"><td class="memItemLeft" align="right" valign="top">GooeyDropdown *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__dropdown_8h.html#ac88c3eb373206811e02e639af630674e">GooeyDropdown_Add</a> (GooeyWindow *win, int x, int y, int width, int height, const char **options, int num_options, void(*callback)(int selected_index))</td></tr>
-<tr class="memdesc:ac88c3eb373206811e02e639af630674e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dropdown menu to the window.  <br /></td></tr>
+<tr class="memdesc:ac88c3eb373206811e02e639af630674e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a dropdown menu to the specified window.  <br /></td></tr>
 <tr class="separator:ac88c3eb373206811e02e639af630674e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac25f887efd42f10ccc2fa5de639567a4" id="r_ac25f887efd42f10ccc2fa5de639567a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__dropdown_8h.html#ac25f887efd42f10ccc2fa5de639567a4">GooeyDropdown_HandleClick</a> (GooeyWindow *win, int x, int y)</td></tr>
-<tr class="memdesc:ac25f887efd42f10ccc2fa5de639567a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles dropdown menu click events.  <br /></td></tr>
+<tr class="memdesc:ac25f887efd42f10ccc2fa5de639567a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles click events for dropdown menus within the specified window.  <br /></td></tr>
 <tr class="separator:ac25f887efd42f10ccc2fa5de639567a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5f1b05cdd31756a4216c17110b656cf" id="r_ae5f1b05cdd31756a4216c17110b656cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__dropdown_8h.html#ae5f1b05cdd31756a4216c17110b656cf">GooeyDropdown_Draw</a> (GooeyWindow *win)</td></tr>
-<tr class="memdesc:ae5f1b05cdd31756a4216c17110b656cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the drop down menu on the window.  <br /></td></tr>
+<tr class="memdesc:ae5f1b05cdd31756a4216c17110b656cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws all dropdown menus within the specified window.  <br /></td></tr>
 <tr class="separator:ae5f1b05cdd31756a4216c17110b656cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header file for the GooeyDropdown module. </p>
+<p>Provides functions to create, handle, and render dropdown menus within a GooeyWindow.</p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali @license GPL-3.0 </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="ac88c3eb373206811e02e639af630674e" name="ac88c3eb373206811e02e639af630674e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac88c3eb373206811e02e639af630674e">&#9670;&#160;</a></span>GooeyDropdown_Add()</h2>
 
@@ -175,7 +181,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a dropdown menu to the window. </p>
+<p>Adds a dropdown menu to the specified window. </p>
+<p>This function creates a new dropdown menu with the given list of options and attaches it to the specified GooeyWindow.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to add the dropdown menu to. </td></tr>
@@ -183,13 +190,13 @@ Functions</h2></td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the dropdown's position. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the dropdown menu. </td></tr>
     <tr><td class="paramname">height</td><td>The height of the dropdown menu. </td></tr>
-    <tr><td class="paramname">options</td><td>The list of options for the dropdown menu. </td></tr>
-    <tr><td class="paramname">num_options</td><td>The number of options. </td></tr>
-    <tr><td class="paramname">callback</td><td>The callback function to call when an option is selected. </td></tr>
+    <tr><td class="paramname">options</td><td>The array of strings representing the dropdown menu options. </td></tr>
+    <tr><td class="paramname">num_options</td><td>The total number of options in the dropdown. </td></tr>
+    <tr><td class="paramname">callback</td><td>The function to call when an option is selected. It receives the index of the selected option. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyDropdown object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyDropdown object. </dd></dl>
 
 </div>
 </div>
@@ -209,10 +216,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Draws the drop down menu on the window. </p>
+<p>Draws all dropdown menus within the specified window. </p>
+<p>This function renders all GooeyDropdown elements that belong to the given window, ensuring they are displayed with the correct selection state.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to draw the drop down menu. </td></tr>
+    <tr><td class="paramname">win</td><td>The window containing the dropdown menu. </td></tr>
   </table>
   </dd>
 </dl>
@@ -251,10 +259,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handles dropdown menu click events. </p>
+<p>Handles click events for dropdown menus within the specified window. </p>
+<p>This function detects whether a dropdown menu has been clicked and updates its state accordingly.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The wi&gt;ndow containing the dropdown menu. </td></tr>
+    <tr><td class="paramname">win</td><td>The window containing the dropdown menu. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the click event. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the click event. </td></tr>
   </table>

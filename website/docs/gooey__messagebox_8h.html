@@ -95,29 +95,35 @@ $(document).ready(function(){initNavTree('gooey__messagebox_8h.html',''); initRe
   <div class="headertitle"><div class="title">gooey_messagebox.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+
+<p>Header file for creating and managing message boxes in Gooey.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__messagebox_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae94a86f3fd4646ddb2284ae70842166f" id="r_ae94a86f3fd4646ddb2284ae70842166f"><td class="memItemLeft" align="right" valign="top">GooeyWindow&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__messagebox_8h.html#ae94a86f3fd4646ddb2284ae70842166f">GooeyMessageBox_Create</a> (const char *title, const char *message, MSGBOX_TYPE type, void(*callback)(int option))</td></tr>
-<tr class="memdesc:ae94a86f3fd4646ddb2284ae70842166f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a message box window.  <br /></td></tr>
-<tr class="separator:ae94a86f3fd4646ddb2284ae70842166f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a146276471851203d9409994cde7873a8" id="r_a146276471851203d9409994cde7873a8"><td class="memItemLeft" align="right" valign="top">GooeyWindow *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__messagebox_8h.html#a146276471851203d9409994cde7873a8">GooeyMessageBox_Create</a> (const char *title, const char *message, MSGBOX_TYPE type, void(*callback)(int option))</td></tr>
+<tr class="memdesc:a146276471851203d9409994cde7873a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a message box window.  <br /></td></tr>
+<tr class="separator:a146276471851203d9409994cde7873a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54f28eaf0900f9c0767f00735244ae49" id="r_a54f28eaf0900f9c0767f00735244ae49"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__messagebox_8h.html#a54f28eaf0900f9c0767f00735244ae49">GooeyMessageBox_Show</a> (GooeyWindow *msgBoxWindow)</td></tr>
 <tr class="memdesc:a54f28eaf0900f9c0767f00735244ae49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Displays the specified message box window.  <br /></td></tr>
 <tr class="separator:a54f28eaf0900f9c0767f00735244ae49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="ae94a86f3fd4646ddb2284ae70842166f" name="ae94a86f3fd4646ddb2284ae70842166f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae94a86f3fd4646ddb2284ae70842166f">&#9670;&#160;</a></span>GooeyMessageBox_Create()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header file for creating and managing message boxes in Gooey. </p>
+<p>Provides functions to create, configure, and display modal message boxes with various types of alerts and a callback to handle user input.</p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali @license GPL-3.0 </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a146276471851203d9409994cde7873a8" name="a146276471851203d9409994cde7873a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a146276471851203d9409994cde7873a8">&#9670;&#160;</a></span>GooeyMessageBox_Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GooeyWindow GooeyMessageBox_Create </td>
+          <td class="memname">GooeyWindow * GooeyMessageBox_Create </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>title</em>, </td>
@@ -159,7 +165,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>GooeyWindow The created message box window. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the created message box window. </dd></dl>
 
 </div>
 </div>

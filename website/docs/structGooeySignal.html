@@ -97,6 +97,9 @@ $(document).ready(function(){initNavTree('structGooeySignal.html',''); initResiz
 </div><!--header-->
 <div class="contents">
 
+<p>A signal that can emit events to all linked slots.  
+ <a href="structGooeySignal.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="gooey__signals_8h_source.html">gooey_signals.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -104,7 +107,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a6156f8273f8a3124d075003657e86c63" id="r_a6156f8273f8a3124d075003657e86c63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGooeySignal__Slot.html">GooeySignal_Slot</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGooeySignal.html#a6156f8273f8a3124d075003657e86c63">slots</a></td></tr>
 <tr class="separator:a6156f8273f8a3124d075003657e86c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A signal that can emit events to all linked slots. </p>
+<p>A signal contains a list of slots. Each slot corresponds to a callback function that will be executed when the signal is emitted. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a6156f8273f8a3124d075003657e86c63" name="a6156f8273f8a3124d075003657e86c63"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6156f8273f8a3124d075003657e86c63">&#9670;&#160;</a></span>slots</h2>
 
@@ -116,6 +122,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>List of slots (callbacks) associated with the signal </p>
 
 </div>
 </div>

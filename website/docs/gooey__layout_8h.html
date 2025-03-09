@@ -95,8 +95,10 @@ $(document).ready(function(){initNavTree('gooey__layout_8h.html',''); initResiza
   <div class="headertitle"><div class="title">gooey_layout.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_widgets_internal.h&quot;</code><br />
+
+<p>Header file for the GooeyLayout module.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__layout_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -106,13 +108,17 @@ Functions</h2></td></tr>
 <tr class="memdesc:ab5af4df4ef87544dea82a3aeaaa391ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a layout for the specified window.  <br /></td></tr>
 <tr class="separator:ab5af4df4ef87544dea82a3aeaaa391ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19fb3cdea95724dc67b48440c0239604" id="r_a19fb3cdea95724dc67b48440c0239604"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__layout_8h.html#a19fb3cdea95724dc67b48440c0239604">GooeyLayout_AddChild</a> (GooeyLayout *layout, void *widget)</td></tr>
-<tr class="memdesc:a19fb3cdea95724dc67b48440c0239604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a child widget to a layout.  <br /></td></tr>
+<tr class="memdesc:a19fb3cdea95724dc67b48440c0239604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a child widget to the specified layout.  <br /></td></tr>
 <tr class="separator:a19fb3cdea95724dc67b48440c0239604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec826acf24f712fbde2031fe4fab0bb9" id="r_aec826acf24f712fbde2031fe4fab0bb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__layout_8h.html#aec826acf24f712fbde2031fe4fab0bb9">GooeyLayout_Build</a> (GooeyLayout *layout)</td></tr>
-<tr class="memdesc:aec826acf24f712fbde2031fe4fab0bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds the layout, arranging all child widgets according to the layout type.  <br /></td></tr>
+<tr class="memdesc:aec826acf24f712fbde2031fe4fab0bb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arranges all child widgets within the layout.  <br /></td></tr>
 <tr class="separator:aec826acf24f712fbde2031fe4fab0bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header file for the GooeyLayout module. </p>
+<p>Provides functionality for managing and arranging widgets within a structured layout inside a GooeyWindow.</p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali @license GPL-3.0 </dd></dl>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a19fb3cdea95724dc67b48440c0239604" name="a19fb3cdea95724dc67b48440c0239604"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a19fb3cdea95724dc67b48440c0239604">&#9670;&#160;</a></span>GooeyLayout_AddChild()</h2>
 
@@ -139,11 +145,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a child widget to a layout. </p>
+<p>Adds a child widget to the specified layout. </p>
+<p>Registers a widget as a child of the given layout, allowing it to be positioned according to the layout's rules.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">layout</td><td>The layout to which the widget will be added. </td></tr>
-    <tr><td class="paramname">widget</td><td>The widget to add to the layout. </td></tr>
+    <tr><td class="paramname">widget</td><td>A pointer to the widget to add. </td></tr>
   </table>
   </dd>
 </dl>
@@ -166,7 +173,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Builds the layout, arranging all child widgets according to the layout type. </p>
+<p>Arranges all child widgets within the layout. </p>
+<p>This function organizes all registered child widgets based on the layout type (e.g., grid, box), ensuring proper alignment and spacing.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">layout</td><td>The layout to build. </td></tr>
@@ -227,7 +235,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Creates a layout for the specified window. </p>
-<p>Initializes a new layout with a specified layout type, position, and size within the window.</p>
+<p>Initializes a new layout with a specified type, position, and size within the window.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to attach the layout to. </td></tr>
@@ -239,7 +247,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyLayout object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyLayout object. </dd></dl>
 
 </div>
 </div>

@@ -95,22 +95,31 @@ $(document).ready(function(){initNavTree('gooey__checkbox_8h.html',''); initResi
   <div class="headertitle"><div class="title">gooey_checkbox.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
+
+<p>Header file for the GooeyCheckbox module.  
+<a href="#details">More...</a></p>
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 </div>
 <p><a href="gooey__checkbox_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a4bb807a94ca251447a265d773e0c81bc" id="r_a4bb807a94ca251447a265d773e0c81bc"><td class="memItemLeft" align="right" valign="top">GooeyCheckbox *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__checkbox_8h.html#a4bb807a94ca251447a265d773e0c81bc">GooeyCheckbox_Add</a> (GooeyWindow *win, int x, int y, char *label, void(*callback)(bool checked))</td></tr>
-<tr class="memdesc:a4bb807a94ca251447a265d773e0c81bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a checkbox to the window.  <br /></td></tr>
+<tr class="memdesc:a4bb807a94ca251447a265d773e0c81bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a checkbox to the specified window.  <br /></td></tr>
 <tr class="separator:a4bb807a94ca251447a265d773e0c81bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5d76b9b2e053b8d9c43aef50ac55693" id="r_ab5d76b9b2e053b8d9c43aef50ac55693"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__checkbox_8h.html#ab5d76b9b2e053b8d9c43aef50ac55693">GooeyCheckbox_HandleClick</a> (GooeyWindow *win, int x, int y)</td></tr>
-<tr class="memdesc:ab5d76b9b2e053b8d9c43aef50ac55693"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles checkbox click events.  <br /></td></tr>
+<tr class="memdesc:ab5d76b9b2e053b8d9c43aef50ac55693"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles click events for checkboxes within the specified window.  <br /></td></tr>
 <tr class="separator:ab5d76b9b2e053b8d9c43aef50ac55693"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6f56ab9c31b99c23e0578b9936f6586" id="r_ae6f56ab9c31b99c23e0578b9936f6586"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__checkbox_8h.html#ae6f56ab9c31b99c23e0578b9936f6586">GooeyCheckbox_Draw</a> (GooeyWindow *win)</td></tr>
+<tr class="memdesc:ae6f56ab9c31b99c23e0578b9936f6586"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws all checkboxes within the specified window.  <br /></td></tr>
 <tr class="separator:ae6f56ab9c31b99c23e0578b9936f6586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Header file for the GooeyCheckbox module. </p>
+<dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali </dd></dl>
+<dl class="section copyright"><dt>Copyright</dt><dd>GNU General Public License v3.0</dd></dl>
+<p>Provides functions to create, handle, and draw checkboxes within a GooeyWindow. </p>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a4bb807a94ca251447a265d773e0c81bc" name="a4bb807a94ca251447a265d773e0c81bc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4bb807a94ca251447a265d773e0c81bc">&#9670;&#160;</a></span>GooeyCheckbox_Add()</h2>
 
@@ -155,18 +164,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a checkbox to the window. </p>
+<p>Adds a checkbox to the specified window. </p>
+<p>This function creates a new GooeyCheckbox with the given label and attaches it to the specified GooeyWindow.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to add the checkbox to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the checkbox's position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the checkbox's position. </td></tr>
-    <tr><td class="paramname">label</td><td>The label for the checkbox. </td></tr>
-    <tr><td class="paramname">callback</td><td>The callback function to call when the checkbox is clicked. </td></tr>
+    <tr><td class="paramname">label</td><td>The label text displayed next to the checkbox. </td></tr>
+    <tr><td class="paramname">callback</td><td>The function to call when the checkbox is clicked. The callback receives a boolean indicating whether the checkbox is checked (<code>true</code>) or unchecked (<code>false</code>). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A new GooeyCheckbox object. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyCheckbox. </dd></dl>
 
 </div>
 </div>
@@ -185,6 +195,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Draws all checkboxes within the specified window. </p>
+<p>This function renders all checkboxes that belong to the given window, ensuring they are displayed with their correct state (checked/unchecked).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">win</td><td>The window containing the checkboxes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -220,7 +239,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handles checkbox click events. </p>
+<p>Handles click events for checkboxes within the specified window. </p>
+<p>This function checks whether a click event occurred on a checkbox and updates its state accordingly.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the checkbox. </td></tr>
@@ -229,7 +249,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the checkbox was clicked, false otherwise. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if a checkbox was clicked and its state changed, false otherwise. </dd></dl>
 
 </div>
 </div>

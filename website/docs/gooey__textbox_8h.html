@@ -95,8 +95,9 @@ $(document).ready(function(){initNavTree('gooey__textbox_8h.html',''); initResiz
   <div class="headertitle"><div class="title">gooey_textbox.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;core/gooey_backend_internal.h&quot;</code><br />
-<code>#include &quot;gooey_event_internal.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;event/gooey_event.h&quot;</code><br />
+<code>#include &quot;common/gooey_common.h&quot;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
 </div>
 <p><a href="gooey__textbox_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -179,6 +180,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Adds a textbox to the window. </p>
+<p>This function creates and adds a textbox to the specified window at the given position with a defined size. The textbox can display placeholder text, and a callback function is triggered whenever the text inside the textbox changes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to add the textbox to. </td></tr>
@@ -187,7 +189,7 @@ Functions</h2></td></tr>
     <tr><td class="paramname">width</td><td>The width of the textbox. </td></tr>
     <tr><td class="paramname">height</td><td>The height of the textbox. </td></tr>
     <tr><td class="paramname">placeholder</td><td>The placeholder text for the textbox. </td></tr>
-    <tr><td class="paramname">onTextChanged</td><td>The callback function to call when the text changes. </td></tr>
+    <tr><td class="paramname">onTextChanged</td><td>The callback function to call when the text changes.</td></tr>
   </table>
   </dd>
 </dl>
@@ -212,6 +214,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Draws the textbox on the window. </p>
+<p>This function renders the textbox on the specified window. It should be called after the textbox's state has been updated to reflect the changes visually.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window to draw the textbox on. </td></tr>
@@ -238,9 +241,10 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Gets the text of the textbox. </p>
+<p>This function retrieves the current content of the textbox.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">textbox</td><td>The textbox to retrieve text from. </td></tr>
+    <tr><td class="paramname">textbox</td><td>The textbox to retrieve text from.</td></tr>
   </table>
   </dd>
 </dl>
@@ -281,11 +285,12 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handles textbox click events. </p>
+<p>This function is responsible for detecting and processing click events on the textbox. If the textbox is clicked, it will enter an active state.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the textbox. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the click event. </td></tr>
-    <tr><td class="paramname">y</td><td>The y-coordinate of the click event. </td></tr>
+    <tr><td class="paramname">y</td><td>The y-coordinate of the click event.</td></tr>
   </table>
   </dd>
 </dl>
@@ -320,10 +325,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handles key press events for the textbox. </p>
+<p>This function processes key events, allowing the user to type text inside the textbox. The textbox's content is updated in real-time as the user types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">win</td><td>The window containing the textbox. </td></tr>
-    <tr><td class="paramname">key_event</td><td>The key event to handle. </td></tr>
+    <tr><td class="paramname">event</td><td>The key event to handle. </td></tr>
   </table>
   </dd>
 </dl>
@@ -357,6 +363,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the text of the textbox. </p>
+<p>This function sets the textbox's content to the specified text.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">textbox</td><td>The textbox to set the text for. </td></tr>

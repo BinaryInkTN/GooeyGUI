@@ -97,6 +97,9 @@ $(document).ready(function(){initNavTree('structGooeySignal__Slot.html',''); ini
 </div><!--header-->
 <div class="contents">
 
+<p>A slot representing a linked callback in the signal system.  
+ <a href="structGooeySignal__Slot.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="gooey__signals_8h_source.html">gooey_signals.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -108,7 +111,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ace06a6e4d013c36202b5f2e2f0fa24ae" id="r_ace06a6e4d013c36202b5f2e2f0fa24ae"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structGooeySignal__Slot.html">GooeySignal_Slot</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGooeySignal__Slot.html#ace06a6e4d013c36202b5f2e2f0fa24ae">next</a></td></tr>
 <tr class="separator:ace06a6e4d013c36202b5f2e2f0fa24ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Data Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A slot representing a linked callback in the signal system. </p>
+<p>A slot contains a callback function, its associated context, and a link to the next slot in a potentially linked list of callbacks. </p>
+</div><h2 class="groupheader">Member Data Documentation</h2>
 <a id="a0368ec17361f2d7f17d81a743255e917" name="a0368ec17361f2d7f17d81a743255e917"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0368ec17361f2d7f17d81a743255e917">&#9670;&#160;</a></span>callback</h2>
 
@@ -120,6 +126,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The callback function to be executed </p>
 
 </div>
 </div>
@@ -134,6 +141,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>The user-defined context to be passed to the callback </p>
 
 </div>
 </div>
@@ -148,6 +156,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pointer to the next slot in the list </p>
 
 </div>
 </div>

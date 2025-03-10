@@ -18,15 +18,15 @@
 #include "widgets/gooey_tabs.h"
 #include "core/gooey_backend.h"
 
-GooeyTabs *GooeyTabs_Add(GooeyWindow *win, int x, int y, int width, int height)
+GooeyTabs *GooeyTabs_Add( int x, int y, int width, int height)
 {
-    if (!win)
-    {
-        LOG_ERROR("Couldn't add tabs widget, window is invalid.");
-        return NULL;
-    }
+  
 
-    GooeyTabs *tabs_widget = &win->tabs[win->tab_count++];
+    GooeyTabs *tabs_widget = malloc(sizeof(GooeyTabs));
+    if (tabs_widget == NULL ){
+        LOG_ERROR("Unable to allocate memory to tabs widget");
+        return NULL ; 
+    }
     *tabs_widget = (GooeyTabs){0};
     tabs_widget->core.type = WIDGET_TABS;
     tabs_widget->core.x = x;
@@ -97,7 +97,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->tab_count; ++i)
     {
-        GooeyTabs *tabs = &win->tabs[i];
+        GooeyTabs *tabs = win->tabs[i];
 
         const int visible_area_y = tabs->core.y + tab_height;
         const int visible_area_x = tabs->core.x;

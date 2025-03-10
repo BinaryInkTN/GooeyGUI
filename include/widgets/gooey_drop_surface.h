@@ -14,13 +14,12 @@
 #include "common/gooey_common.h"
 
 /**
- * @brief Adds a file drop surface to the specified window.
+ * @brief Adds a file drop surface.
  *
  * Creates a new GooeyDropSurface that allows users to drop files onto it.
  * When a file is dropped, the provided callback function is triggered with
  * the MIME type and file path.
  *
- * @param win The window to add the drop surface to.
  * @param x The x-coordinate of the drop surface's position.
  * @param y The y-coordinate of the drop surface's position.
  * @param width The width of the drop surface.
@@ -30,7 +29,7 @@
  *                 It receives the file's MIME type and path.
  * @return A pointer to the newly created GooeyDropSurface.
  */
-GooeyDropSurface *GooeyDropSurface_Add(GooeyWindow *win, int x, int y, int width,
+GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width,
                                        int height, char *default_message,
                                        void (*callback)(char *mime, char *file_path));
 

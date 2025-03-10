@@ -22,9 +22,14 @@
 #define DEFAULT_ITEM_SPACING 40
 #define DEFAULT_SCROLL_OFFSET 1
 
-GooeyList *GooeyList_Add(GooeyWindow *win, int x, int y, int width, int height, void (*callback)(int index))
+GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index))
 {
-    GooeyList *list = &win->lists[win->list_count++];
+    GooeyList *list = (GooeyList*) malloc(sizeof(GooeyList));
+    if(!list)
+    {
+        LOG_ERROR("Couldn't allocate memory for list.");
+        return NULL;
+    }
     *list = (GooeyList){0};
 
     list->core.x = x;
@@ -41,7 +46,6 @@ GooeyList *GooeyList_Add(GooeyWindow *win, int x, int y, int width, int height, 
     list->callback = callback;
     list->show_separator = true;
 
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&list->core);
     return list;
 }
 
@@ -65,7 +69,7 @@ void GooeyList_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->list_count; ++i)
     {
-        GooeyList *list = &win->lists[i];
+        GooeyList *list = win->lists[i];
 
         active_backend->FillRectangle(
             list->core.x, list->core.y,
@@ -164,7 +168,7 @@ bool GooeyList_HandleScroll(GooeyWindow *window, GooeyEvent *scroll_event)
 
     for (size_t i = 0; i < window->list_count; ++i)
     {
-        GooeyList *list = &window->lists[i];
+        GooeyList *list = window->lists[i];
 
         int mouse_x = scroll_event->mouse_move.x;
         int mouse_y = scroll_event->mouse_move.y;
@@ -203,7 +207,7 @@ bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
 {
     for (size_t i = 0; i < window->list_count; ++i)
     {
-        GooeyList *list = &window->lists[i];
+        GooeyList *list = window->lists[i];
 
         if (mouse_x >= list->core.x && mouse_x <= list->core.x + list->core.width &&
             mouse_y >= list->core.y && mouse_y <= list->core.y + list->core.height)
@@ -239,7 +243,7 @@ bool GooeyList_HandleThumbScroll(GooeyWindow *window, GooeyEvent *scroll_event)
 
     for (size_t i = 0; i < window->list_count; ++i)
     {
-        GooeyList *list = &window->lists[i];
+        GooeyList *list = window->lists[i];
 
         int mouse_x = scroll_event->mouse_move.x;
         int mouse_y = scroll_event->mouse_move.y;

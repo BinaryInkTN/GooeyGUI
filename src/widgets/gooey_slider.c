@@ -18,15 +18,11 @@
 #include "widgets/gooey_slider.h"
 #include "core/gooey_backend.h"
 
-GooeySlider *GooeySlider_Add(GooeyWindow *win, int x, int y, int width,
+GooeySlider *GooeySlider_Add( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
                              void (*callback)(long value))
 {
-    if (!win)
-    {
-        LOG_ERROR("Window cannot be NULL. \n");
-        return NULL;
-    }
+ 
 
     if (max_value <= min_value)
     {
@@ -34,8 +30,9 @@ GooeySlider *GooeySlider_Add(GooeyWindow *win, int x, int y, int width,
         return NULL;
     }
 
-    win->sliders[win->slider_count] = (GooeySlider){0};
-    GooeySlider *slider = &win->sliders[win->slider_count++];
+    GooeySlider *slider = malloc(sizeof(GooeySlider));
+
+    *slider = (GooeySlider){0};
     slider->core.type = WIDGET_SLIDER;
     slider->core.x = x;
     slider->core.y = y;
@@ -46,7 +43,6 @@ GooeySlider *GooeySlider_Add(GooeyWindow *win, int x, int y, int width,
     slider->value = min_value;
     slider->show_hints = show_hints;
     slider->callback = callback;
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&slider->core);
 
     return slider;
 }
@@ -78,7 +74,7 @@ void GooeySlider_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->slider_count; ++i)
     {
-        GooeySlider *slider = &win->sliders[i];
+        GooeySlider *slider = win->sliders[i];
 
         active_backend->FillRectangle(slider->core.x,
                                       slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id);
@@ -138,7 +134,7 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, GooeyEvent *event)
 
     for (size_t i = 0; i < win->slider_count; ++i)
     {
-        GooeySlider *slider = &win->sliders[i];
+        GooeySlider *slider = win->sliders[i];
 
         bool within_bounds =
             (mouse_y >= slider->core.y - comfort_margin && mouse_y <= slider->core.y + slider->core.height + comfort_margin) &&

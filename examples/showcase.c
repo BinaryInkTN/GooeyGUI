@@ -79,7 +79,7 @@ void image_click_callback()
 
 int main()
 {
-    set_logging_enabled(true);
+    /*set_logging_enabled(true);
     set_minimum_log_level(DEBUG_LEVEL_INFO);
 
     Gooey_Init(GLPS);
@@ -137,7 +137,8 @@ int main()
 
     save_log_file("logs.txt");
 
-    GooeyWindow_Cleanup(3, win, msgBox, msgBox2);
+    GooeyWindow_Cleanup(3, win, msgBox, msgBox2);*/
+    
 
     return 0;
 }

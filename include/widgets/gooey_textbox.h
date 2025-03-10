@@ -12,7 +12,6 @@
  * with a defined size. The textbox can display placeholder text, and a callback function
  * is triggered whenever the text inside the textbox changes.
  *
- * @param win The window to add the textbox to.
  * @param x The x-coordinate of the textbox's position.
  * @param y The y-coordinate of the textbox's position.
  * @param width The width of the textbox.
@@ -22,7 +21,7 @@
  * 
  * @return A new GooeyTextbox object.
  */
-GooeyTextbox *GooeyTextBox_Add(GooeyWindow *win, int x, int y, int width,
+GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
                                int height, char *placeholder, void (*onTextChanged)(char *text));
 
 /**

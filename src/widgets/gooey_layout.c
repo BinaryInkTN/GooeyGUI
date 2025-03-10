@@ -18,17 +18,18 @@
 #include "widgets/gooey_layout.h"
 #include "core/gooey_backend.h"
 
-GooeyLayout *GooeyLayout_Create(GooeyWindow *win, GooeyLayoutType layout_type,
+GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
                                 int x, int y, int width, int height)
 {
-    if (!win || win->layout_count >= MAX_WIDGETS)
+    GooeyLayout *layout = (GooeyLayout *) malloc(sizeof(GooeyLayout));
+
+    if(!layout)
     {
-        fprintf(stderr,
-                "Window not initialized or unable to add more layouts (full).\n");
+        LOG_ERROR("Couldn't allocate memory for layout.");
         return NULL;
     }
-    win->layouts[win->layout_count] = (GooeyLayout) {0}; 
-    GooeyLayout *layout = &win->layouts[win->layout_count++];
+
+    *layout = (GooeyLayout) {0};
 
     layout->core.type = WIDGET_LAYOUT;
     layout->core.x = x;

@@ -15,12 +15,10 @@
  #include "common/gooey_common.h"
  
  /**
-  * @brief Creates a layout for the specified window.
+  * @brief Creates a layout.
   *
-  * Initializes a new layout with a specified type, position, and size
-  * within the window.
+  * Initializes a new layout with a specified type, position, and size.
   *
-  * @param win The window to attach the layout to.
   * @param layout_type The type of layout (e.g., grid, box).
   * @param x The x-coordinate of the layout's position.
   * @param y The y-coordinate of the layout's position.
@@ -28,7 +26,7 @@
   * @param height The height of the layout.
   * @return A pointer to the newly created GooeyLayout object.
   */
- GooeyLayout *GooeyLayout_Create(GooeyWindow *win, GooeyLayoutType layout_type,
+ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
                                  int x, int y, int width, int height);
  
  /**

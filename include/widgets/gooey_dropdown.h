@@ -18,9 +18,7 @@
   * @brief Adds a dropdown menu to the specified window.
   *
   * This function creates a new dropdown menu with the given list of options 
-  * and attaches it to the specified GooeyWindow.
   *
-  * @param win The window to add the dropdown menu to.
   * @param x The x-coordinate of the dropdown's position.
   * @param y The y-coordinate of the dropdown's position.
   * @param width The width of the dropdown menu.
@@ -31,7 +29,7 @@
   *                 It receives the index of the selected option.
   * @return A pointer to the newly created GooeyDropdown object.
   */
- GooeyDropdown *GooeyDropdown_Add(GooeyWindow *win, int x, int y, int width,
+ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
                                   int height, const char **options,
                                   int num_options,
                                   void (*callback)(int selected_index));

@@ -47,7 +47,9 @@ void __msgbox_cancel(void)
 GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void (*callback)(int option))
 {
 
-    GooeyWindow *window = GooeyWindow_Create(title, 500, 195, 0);
+    /*
+    
+       GooeyWindow *window = GooeyWindow_Create(title, 500, 195, 0);
 
     GooeyWindow_MakeResizable(&window, 0);
     MessageBoxCallback[window->creation_id] = callback;
@@ -87,6 +89,10 @@ GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGB
     GooeyLayout_Build(layout);
 
     return window;
+    */
+
+    return NULL;
+ 
 }
 
 void GooeyMessageBox_Show(GooeyWindow *msgBoxWindow)

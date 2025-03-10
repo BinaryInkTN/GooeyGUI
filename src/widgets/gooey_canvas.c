@@ -18,11 +18,18 @@
 #include "widgets/gooey_canvas.h"
 #include "core/gooey_backend.h"
 
-GooeyCanvas *GooeyCanvas_Add(GooeyWindow *win, int x, int y, int width,
+GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
                              int height)
 {
-    win->canvas[win->canvas_count] = (GooeyCanvas) {0};
-    GooeyCanvas *canvas = &win->canvas[win->canvas_count++];
+    GooeyCanvas *canvas = (GooeyCanvas *) malloc(sizeof(GooeyButton));
+
+    if(!canvas) 
+    {
+        LOG_ERROR("Couldn't allocated memory for canvas");
+        return NULL;
+    }
+
+    *canvas = (GooeyCanvas) {0};
     canvas->core.type = WIDGET_CANVAS;
     canvas->core.x = x;
     canvas->core.y = y;
@@ -30,9 +37,7 @@ GooeyCanvas *GooeyCanvas_Add(GooeyWindow *win, int x, int y, int width,
     canvas->core.height = height;
     canvas->elements = malloc(sizeof(CanvaElement) * 100);
     canvas->element_count = 0;
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&canvas->core);
     LOG_INFO("Canvas added to window with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
-
     return canvas;
 }
 
@@ -111,9 +116,9 @@ void GooeyCanvas_Draw(GooeyWindow* win) {
 
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
-        for (int j = 0; j < win->canvas[i].element_count; ++j)
+        for (int j = 0; j < win->canvas[i]->element_count; ++j)
         {
-            CanvaElement *element = &win->canvas[i].elements[j];
+            CanvaElement *element = &win->canvas[i]->elements[j];
             switch (element->operation)
             {
             case CANVA_DRAW_RECT:

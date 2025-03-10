@@ -3,7 +3,7 @@
 
 #include "common/gooey_common.h"
 
-GooeyTabs *GooeyTabs_Add(GooeyWindow *win, int x, int y, int width, int height);
+GooeyTabs *GooeyTabs_Add( int x, int y, int width, int height);
 
 GooeyTab *GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name);
 

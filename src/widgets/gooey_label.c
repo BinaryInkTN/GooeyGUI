@@ -18,17 +18,24 @@
 #include "widgets/gooey_label.h"
 #include "core/gooey_backend.h"
 
-GooeyLabel *GooeyLabel_Add(GooeyWindow *win, const char *text, float font_size, int x, int y)
+GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y)
 {
-    win->labels[win->label_count] = (GooeyLabel) {0};
-    GooeyLabel *label = &win->labels[win->label_count++];
+    GooeyLabel *label = (GooeyLabel*) malloc(sizeof(GooeyLabel));
+    if(!label)
+    {
+        LOG_ERROR("Couldn't allocate memory for label.");
+        return NULL;
+    }
+
+    *label = (GooeyLabel) {0};
+
     label->core.type = WIDGET_LABEL;
     label->core.x = x;
     label->core.y = y;
     label->font_size = font_size;
     label->color = -1; // DEFAULTS TO NEUTRAL
     strcpy(label->text, text);
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&label->core);
+    
     LOG_INFO("Label added with dimensions x=%d, y=%d", x, y);
 
     return label;
@@ -52,6 +59,6 @@ void GooeyLabel_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->label_count; ++i)
     {
-        active_backend->DrawText(win->labels[i].core.x, win->labels[i].core.y, win->labels[i].text, win->labels[i].color != (unsigned long) -1 ? win->labels[i].color : win->active_theme->neutral, win->labels[i].font_size, win->creation_id);
+        active_backend->DrawText(win->labels[i]->core.x, win->labels[i]->core.y, win->labels[i]->text, win->labels[i]->color != (unsigned long) -1 ? win->labels[i]->color : win->active_theme->neutral, win->labels[i]->font_size, win->creation_id);
     }
 }

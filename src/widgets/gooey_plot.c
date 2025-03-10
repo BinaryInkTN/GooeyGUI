@@ -378,21 +378,22 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
         break;
     }
 }
-GooeyPlot *GooeyPlot_Add(GooeyWindow *win, GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height)
+GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height)
 {
-    if (!win || !data)
+    if (!data)
     {
-        LOG_ERROR("Invalid window or data provided.");
+        LOG_ERROR("Invalid data provided.");
         return NULL;
     }
 
-    if (win->plot_count >= MAX_PLOT_COUNT)
+    GooeyPlot *plot = (GooeyPlot *) malloc(sizeof(GooeyPlot));
+    
+    if(!plot)
     {
-        LOG_ERROR("Couldn't add plot, exceeded max plot count.");
+        LOG_ERROR("Couldn't allocate memory for plot.");
         return NULL;
     }
-
-    GooeyPlot *plot = &win->plots[win->plot_count++];
+    
     *plot = (GooeyPlot){0};
     
     plot->core.x = x;
@@ -433,7 +434,7 @@ void GooeyPlot_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->plot_count; ++i)
     {
-        GooeyPlot *plot = &win->plots[i];
+        GooeyPlot *plot = win->plots[i];
         if (!plot->data || !plot->data->x_data || !plot->data->y_data)
         {
             continue;

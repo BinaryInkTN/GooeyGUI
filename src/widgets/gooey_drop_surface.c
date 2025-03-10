@@ -17,14 +17,16 @@ static void __get_filename_from_path(char *file_path, char *filename, size_t fil
         filename[filename_size - 1] = '\0';
     }
 }
-GooeyDropSurface *GooeyDropSurface_Add(GooeyWindow *win, int x, int y, int width, int height, char *default_message, void (*callback)(char *mime, char *file_path))
+GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width, int height, char *default_message, void (*callback)(char *mime, char *file_path))
 {
-    if (!win)
+    GooeyDropSurface *drop_surface = (GooeyDropSurface *) malloc(sizeof(GooeyDropSurface));
+    
+    if(!drop_surface)
     {
-        LOG_ERROR("Couldn't add drop surface, window is invalid");
-        return;
+        LOG_ERROR("Couldn't allocate memory for drop surface.");
+        return NULL;
     }
-    GooeyDropSurface *drop_surface = &win->drop_surface[win->drop_surface_count++];
+    
     *drop_surface = (GooeyDropSurface){0};
     drop_surface->core.type = WIDGET_DROP_SURFACE;
     drop_surface->core.x = x;
@@ -49,7 +51,7 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY)
 {
     for (size_t i = 0; i < win->drop_surface_count; ++i)
     {
-        GooeyDropSurface *drop_surface = &win->drop_surface[i];
+        GooeyDropSurface *drop_surface = win->drop_surface[i];
 
         if (mouseX > drop_surface->core.x && mouseX < drop_surface->core.x + drop_surface->core.width && mouseY > drop_surface->core.y && mouseY < drop_surface->core.y + drop_surface->core.height)
         {
@@ -70,7 +72,7 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
 {
     for (size_t i = 0; i < win->drop_surface_count; ++i)
     {
-        GooeyDropSurface *drop_surface = &win->drop_surface[i];
+        GooeyDropSurface *drop_surface = win->drop_surface[i];
         unsigned long surface_color = win->active_theme->widget_base;
         bool show_image = true;
         char filename[64];

@@ -30,11 +30,18 @@ void GooeyButton_setText(GooeyButton *button, const char *text)
     strcpy(button->label, text);
 }
 
-GooeyButton *GooeyButton_Add(GooeyWindow *win, const char *label, int x, int y,
-                             int width, int height, void (*callback)())
+GooeyButton *GooeyButton_Create(const char *label, int x, int y,
+                                int width, int height, void (*callback)())
 {
-    win->buttons[win->button_count] = (GooeyButton) {0};
-    GooeyButton *button = &win->buttons[win->button_count++];
+    GooeyButton *button = (GooeyButton*) malloc(sizeof(GooeyButton));
+    
+    if(!button) 
+    {
+        LOG_ERROR("Couldn't allocated memory for button");
+        return NULL;
+    }
+
+    *button = (GooeyButton) {0};
     button->core.type = WIDGET_BUTTON;
     button->core.x = x;
     button->core.y = y;
@@ -45,9 +52,7 @@ GooeyButton *GooeyButton_Add(GooeyWindow *win, const char *label, int x, int y,
     button->hover = false;
     button->clicked = false;
     button->is_highlighted = false;
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&button->core);
     LOG_INFO("Button added with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
-
     return button;
 }
 
@@ -60,7 +65,7 @@ void GooeyButton_Draw(GooeyWindow *win)
 {
     for (size_t i = 0; i < win->button_count; ++i)
     {
-        GooeyButton *button = &win->buttons[i];
+        GooeyButton *button = win->buttons[i];
         active_backend->FillRectangle(button->core.x,
                                       button->core.y, button->core.width, button->core.height, button->clicked ? win->active_theme->primary : win->active_theme->widget_base, win->creation_id);
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));
@@ -82,14 +87,13 @@ void GooeyButton_Draw(GooeyWindow *win)
     }
 }
 
-
 bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 {
     bool clicked_any_button = false;
 
     for (size_t i = 0; i < win->button_count; ++i)
     {
-        GooeyButton *button = &win->buttons[i];
+        GooeyButton *button = win->buttons[i];
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
 

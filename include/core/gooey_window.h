@@ -104,7 +104,7 @@
   * @param win The window to register the widget with.
   * @param widget The widget to register.
   */
- void GooeyWindow_RegisterWidget(GooeyWindow *win, GooeyWidget *widget);
+ void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget);
  
  /**
   * @brief Sets the resizable property of a window.

@@ -17,7 +17,7 @@
  *
  * @return A new GooeyRadioButton object.
  */
-GooeyRadioButton *GooeyRadioButton_Add(GooeyWindow *win, int x, int y,
+GooeyRadioButton *GooeyRadioButton_Add( int x, int y,
                                        char *label,
                                        void (*callback)(bool selected));
 
@@ -55,11 +55,10 @@ bool GooeyRadioButtonGroup_HandleClick(GooeyWindow *win, int x, int y);
  * This function creates a new radio button group, allowing multiple radio buttons
  * to be grouped together, ensuring that only one button is selected at a time.
  *
- * @param win The window containing the radio button group.
  *
  * @return A pointer to the created GooeyRadioButtonGroup object.
  */
-GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create(GooeyWindow *win);
+GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create();
 
 /**
  * @brief Adds a radio button to a radio button group.

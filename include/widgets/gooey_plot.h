@@ -16,13 +16,12 @@
  #include "common/gooey_common.h"
  
  /**
-  * @brief Adds a new plot to a Gooey window.
+  * @brief Creates a plot widget.
   *
   * This function allows adding various types of plots to a given Gooey window.
   * The plot type is specified by the user, and the plot data is provided through
   * a GooeyPlotData structure.
   *
-  * @param win Pointer to the Gooey window where the plot will be added.
   * @param plot_type The type of plot to be added (e.g., LINE, BAR).
   * @param data Pointer to the structure containing the plot data.
   * @param x The x-coordinate of the plot's position.
@@ -32,7 +31,7 @@
   * 
   * @return A pointer to the newly created GooeyPlot.
   */
- GooeyPlot *GooeyPlot_Add(GooeyWindow *win, GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height); 
+ GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height); 
  
  /**
   * @brief Draws the plot in the specified Gooey window.

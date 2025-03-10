@@ -12,7 +12,6 @@
  * with a defined width and range. The slider's value changes when dragged, and a callback
  * function is invoked to notify when the slider value changes.
  *
- * @param win The window to add the slider to.
  * @param x The x-coordinate of the slider's position.
  * @param y The y-coordinate of the slider's position.
  * @param width The width of the slider.
@@ -23,7 +22,7 @@
  * 
  * @return A new GooeySlider object.
  */
-GooeySlider *GooeySlider_Add(GooeyWindow *win, int x, int y, int width,
+GooeySlider *GooeySlider_Add( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
                              void (*callback)(long value));
 

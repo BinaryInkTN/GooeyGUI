@@ -42,10 +42,83 @@
 GooeyBackend *active_backend = NULL;
 GooeyBackends ACTIVE_BACKEND = -1;
 
-void GooeyWindow_RegisterWidget(GooeyWindow *win, GooeyWidget *widget)
+void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
 {
-    //  if (win && win->widgets)
-    //        win->widgets[win->widget_count++] = widget;
+    GooeyWidget *core = (GooeyWidget *)widget;
+    WIDGET_TYPE type = core->type;
+
+    switch (type)
+    {
+    case WIDGET_LABEL:
+    {
+        win->labels[win->label_count++] = (GooeyLabel *)widget;
+        break;
+    }
+    case WIDGET_SLIDER:
+    {
+        win->sliders[win->slider_count++] = (GooeySlider *)widget;
+        break;
+    }
+    case WIDGET_RADIOBUTTON:
+    {
+        win->radio_button_groups[win->radio_button_count++] = (GooeyRadioButton *)widget;
+        break;
+    }
+    case WIDGET_CHECKBOX:
+    {
+        win->checkboxes[win->checkbox_count++] = (GooeyCheckbox *)widget;
+        break;
+    }
+    case WIDGET_BUTTON:
+    {
+        win->buttons[win->button_count++] = (GooeyButton *)widget;
+        break;
+    }
+    case WIDGET_TEXTBOX:
+    {
+        win->textboxes[win->textboxes_count++] = (GooeyTextbox *)widget;
+        break;
+    }
+    case WIDGET_DROPDOWN:
+    {
+        win->dropdowns[win->dropdown_count++] = (GooeyDropData *)widget;
+        break;
+    }
+    case WIDGET_CANVAS:
+    {
+        win->canvas[win->canvas_count++] = (GooeyCanvas *)widget;
+        break;
+    }
+    case WIDGET_LAYOUT:
+    {
+        win->layouts[win->label_count++] = (GooeyLayout *)widget;
+        break;
+    }
+    case WIDGET_PLOT:
+    {
+        win->plots[win->plot_count++] = (GooeyPlot *)widget;
+        break;
+    }
+    case WIDGET_DROP_SURFACE:
+    {
+        win->drop_surface[win->drop_surface_count++] = (GooeyDropSurface *)widget;
+        break;
+    }
+    case WIDGET_IMAGE:
+    {
+        win->images[win->image_count++] = (GooeyImage *)widget;
+        break;
+    }
+    case WIDGET_TABS:
+    {
+        win->tabs[win->tab_count++] = (GooeyTabs *)widget;
+        break;
+    }
+
+    default:
+        LOG_ERROR("Invalid widget type.");
+        break;
+    }
 }
 
 void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility)
@@ -107,24 +180,24 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    if (!(win->tabs = malloc(sizeof(GooeyTabs) * MAX_WIDGETS)) ||
-        !(win->drop_surface = malloc(sizeof(GooeyDropSurface) * MAX_WIDGETS)) ||
-        !(win->images = malloc(sizeof(GooeyImage) * MAX_WIDGETS)) ||
-        !(win->buttons = malloc(sizeof(GooeyButton) * MAX_WIDGETS)) ||
+    if (!(win->tabs = malloc(sizeof(GooeyTabs *) * MAX_WIDGETS)) ||
+        !(win->drop_surface = malloc(sizeof(GooeyDropSurface *) * MAX_WIDGETS)) ||
+        !(win->images = malloc(sizeof(GooeyImage *) * MAX_WIDGETS)) ||
+        !(win->buttons = malloc(sizeof(GooeyButton *) * MAX_WIDGETS)) ||
         !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
         !(win->current_event = malloc(sizeof(GooeyEvent))) ||
-        !(win->labels = malloc(sizeof(GooeyLabel) * MAX_WIDGETS)) ||
-        !(win->checkboxes = malloc(sizeof(GooeyCheckbox) * MAX_WIDGETS)) ||
-        !(win->radio_buttons = malloc(sizeof(GooeyRadioButton) * MAX_WIDGETS)) ||
-        !(win->radio_button_groups = malloc(sizeof(GooeyRadioButtonGroup) * MAX_WIDGETS)) ||
-        !(win->sliders = malloc(sizeof(GooeySlider) * MAX_WIDGETS)) ||
-        !(win->dropdowns = malloc(sizeof(GooeyDropdown) * MAX_WIDGETS)) ||
-        !(win->textboxes = malloc(sizeof(GooeyTextbox) * MAX_WIDGETS)) ||
-        !(win->layouts = malloc(sizeof(GooeyLayout) * MAX_WIDGETS)) ||
-        !(win->lists = malloc(sizeof(GooeyList) * MAX_WIDGETS)) ||
-        !(win->canvas = malloc(sizeof(GooeyCanvas) * MAX_WIDGETS)) ||
+        !(win->labels = malloc(sizeof(GooeyLabel *) * MAX_WIDGETS)) ||
+        !(win->checkboxes = malloc(sizeof(GooeyCheckbox *) * MAX_WIDGETS)) ||
+        !(win->radio_buttons = malloc(sizeof(GooeyRadioButton *) * MAX_WIDGETS)) ||
+        !(win->radio_button_groups = malloc(sizeof(GooeyRadioButtonGroup *) * MAX_WIDGETS)) ||
+        !(win->sliders = malloc(sizeof(GooeySlider *) * MAX_WIDGETS)) ||
+        !(win->dropdowns = malloc(sizeof(GooeyDropdown *) * MAX_WIDGETS)) ||
+        !(win->textboxes = malloc(sizeof(GooeyTextbox *) * MAX_WIDGETS)) ||
+        !(win->layouts = malloc(sizeof(GooeyLayout *) * MAX_WIDGETS)) ||
+        !(win->lists = malloc(sizeof(GooeyList *) * MAX_WIDGETS)) ||
+        !(win->canvas = malloc(sizeof(GooeyCanvas *) * MAX_WIDGETS)) ||
         !(win->widgets = malloc(sizeof(GooeyWidget *) * MAX_WIDGETS)) ||
-        !(win->plots = malloc(sizeof(GooeyPlot) * MAX_PLOT_COUNT)))
+        !(win->plots = malloc(sizeof(GooeyPlot *) * MAX_PLOT_COUNT)))
     {
         return false;
     }
@@ -136,12 +209,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 {
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
-        if (!win->canvas[i].elements)
+        if (!win->canvas[i]->elements)
             continue;
 
-        for (int j = 0; j < win->canvas[i].element_count; ++j)
+        for (int j = 0; j < win->canvas[i]->element_count; ++j)
         {
-            CanvaElement *element = &win->canvas[i].elements[j];
+            CanvaElement *element = &win->canvas[i]->elements[j];
             if (element->args)
             {
                 free(element->args);
@@ -149,24 +222,55 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
             }
         }
 
-        free(win->canvas[i].elements);
-        win->canvas[i].elements = NULL;
+        free(win->canvas[i]->elements);
+        win->canvas[i]->elements = NULL;
+
+        if (win->canvas[i])
+        {
+            free(win->canvas[i]);
+            win->canvas[i] = NULL;
+        }
     }
 
-    if(win->tabs)
+    if (win->tabs)
     {
+        for (size_t i = 0; i < win->tab_count; ++i)
+        {
+            if (win->tabs[i])
+            {
+                free(win->tabs[i]);
+                win->tabs[i] = NULL;
+            }
+        }
         free(win->tabs);
         win->tabs = NULL;
     }
 
     if (win->drop_surface)
     {
+
+        for (size_t i = 0; i < win->drop_surface_count; ++i)
+        {
+            if (win->drop_surface[i])
+            {
+                free(win->drop_surface[i]);
+                win->drop_surface[i] = NULL;
+            }
+        }
         free(win->drop_surface);
         win->drop_surface = NULL;
     }
 
     if (win->images)
     {
+        for (size_t i = 0; i < win->image_count; ++i)
+        {
+            if (win->images[i])
+            {
+                free(win->images[i]);
+                win->images[i] = NULL;
+            }
+        }
         free(win->images);
         win->images = NULL;
     }
@@ -183,35 +287,68 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->active_theme = NULL;
     }
 
-    if (win->canvas)
-    {
-        free(win->canvas);
-        win->canvas = NULL;
-        win->canvas_count = 0;
-    }
-
     if (win->buttons)
     {
+        for (size_t i = 0; i < win->button_count; ++i)
+        {
+            if (win->buttons[i])
+            {
+                free(win->buttons[i]);
+                win->buttons[i] = NULL;
+            }
+        }
         free(win->buttons);
         win->buttons = NULL;
     }
     if (win->labels)
     {
+        for (size_t i = 0; i < win->label_count; ++i)
+        {
+            if (win->labels[i])
+            {
+                free(win->labels[i]);
+                win->labels[i] = NULL;
+            }
+        }
         free(win->labels);
         win->labels = NULL;
     }
     if (win->checkboxes)
     {
+        for (size_t i = 0; i < win->checkbox_count; ++i)
+        {
+            if (win->checkboxes[i])
+            {
+                free(win->checkboxes[i]);
+                win->checkboxes[i] = NULL;
+            }
+        }
         free(win->checkboxes);
         win->checkboxes = NULL;
     }
     if (win->radio_buttons)
     {
+        for (size_t i = 0; i < win->radio_button_count; ++i)
+        {
+            if (win->radio_buttons[i])
+            {
+                free(win->radio_buttons[i]);
+                win->radio_buttons[i] = NULL;
+            }
+        }
         free(win->radio_buttons);
         win->radio_buttons = NULL;
     }
     if (win->radio_button_groups)
     {
+        for (size_t i = 0; i < win->radio_button_group_count; ++i)
+        {
+            if (win->radio_button_groups[i])
+            {
+                free(win->radio_button_groups[i]);
+                win->radio_button_groups[i] = NULL;
+            }
+        }
         free(win->radio_button_groups);
         win->radio_button_groups = NULL;
     }
@@ -222,35 +359,71 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     }
     if (win->sliders)
     {
+        for (size_t i = 0; i < win->slider_count; ++i)
+        {
+            if (win->sliders[i])
+            {
+                free(win->sliders[i]);
+                win->sliders[i] = NULL;
+            }
+        }
         free(win->sliders);
         win->sliders = NULL;
     }
     if (win->dropdowns)
     {
+        for (size_t i = 0; i < win->dropdown_count; ++i)
+        {
+            if (win->dropdowns[i])
+            {
+                free(win->dropdowns[i]);
+                win->dropdowns[i] = NULL;
+            }
+        }
         free(win->dropdowns);
         win->dropdowns = NULL;
     }
     if (win->textboxes)
     {
+        for (size_t i = 0; i < win->textboxes_count; ++i)
+        {
+            if (win->textboxes[i])
+            {
+                free(win->textboxes[i]);
+                win->textboxes[i] = NULL;
+            }
+        }
         free(win->textboxes);
         win->textboxes = NULL;
     }
     if (win->layouts)
     {
+        for (size_t i = 0; i < win->layout_count; ++i)
+        {
+            if (win->layouts[i])
+            {
+                free(win->layouts[i]);
+                win->layouts[i] = NULL;
+            }
+        }
         free(win->layouts);
         win->layouts = NULL;
     }
 
     if (win->lists)
     {
-        for (size_t i = 0; i < win->list_count; ++i)
+        for (size_t j = 0; j < win->list_count; j++)
         {
-            if (win->lists[i].items)
+            if (win->lists[j])
             {
-                free(win->lists[i].items);
-                win->lists[i].items = NULL;
+                if (win->lists[j]->items)
+                {
+                    free(win->lists[j]->items);
+                    win->lists[j]->items = NULL;
+                }
             }
         }
+
         free(win->lists);
         win->lists = NULL;
     }
@@ -259,7 +432,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     {
         for (size_t i = 0; i < win->plot_count; ++i)
         {
-            GooeyPlotData *data = win->plots->data;
+            GooeyPlotData *data = win->plots[i]->data;
             if (data->x_data)
             {
                 free(data->x_data);

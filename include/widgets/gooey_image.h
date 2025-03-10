@@ -19,7 +19,6 @@
   * at the specified position and dimensions. A callback function can be provided to handle
   * interactions with the image.
   *
-  * @param win The Gooey window to which the image will be added.
   * @param image_path The file path of the image to load.
   * @param x The x-coordinate of the image's position.
   * @param y The y-coordinate of the image's position.
@@ -27,7 +26,7 @@
   * @param height The height of the image.
   * @param callback A callback function to handle interactions with the image (e.g., clicks).
   */
- void GooeyImage_Add(GooeyWindow* win, const char *image_path, int x, int y, int width, int height, void(*callback)(void));
+ void GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void(*callback)(void));
  
 
  bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY);

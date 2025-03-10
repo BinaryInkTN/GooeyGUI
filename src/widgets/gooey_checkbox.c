@@ -18,26 +18,33 @@
 #include "widgets/gooey_checkbox.h"
 #include "core/gooey_backend.h"
 
-GooeyCheckbox *GooeyCheckbox_Add(GooeyWindow *win, int x, int y, char *label,
-                                 void (*callback)(bool checked))
+GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
+                                    void (*callback)(bool checked))
 {
-    win->checkboxes[win->checkbox_count] = (GooeyCheckbox) {0};
-    GooeyCheckbox *checkbox = &win->checkboxes[win->checkbox_count++];
+    GooeyCheckbox *checkbox = (GooeyCheckbox *) malloc(sizeof(GooeyCheckbox));
+    *checkbox = (GooeyCheckbox) {0};
+
+    if (!checkbox)
+    {
+        LOG_ERROR("Couldn't allocated memory for checkbox.");
+        return NULL;
+    }
+
     checkbox->core.type = WIDGET_CHECKBOX, checkbox->core.x = x;
     checkbox->core.y = y;
     checkbox->core.width = CHECKBOX_SIZE;
     checkbox->core.height = CHECKBOX_SIZE;
+
     if (label)
     {
         strcpy(checkbox->label, label);
     }
     else
     {
-        sprintf(checkbox->label, "Checkbox %d", win->checkbox_count);
+        strncpy(checkbox->label, "Checkbox", sizeof(checkbox->label));
     }
     checkbox->checked = false;
     checkbox->callback = callback;
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&checkbox->core);
     LOG_INFO("Checkbox added with dimensions x=%d, y=%d", x, y);
 
     return checkbox;
@@ -48,7 +55,7 @@ void GooeyCheckbox_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {
-        GooeyCheckbox *checkbox = &win->checkboxes[i];
+        GooeyCheckbox *checkbox = win->checkboxes[i];
 
         int label_width = active_backend->GetTextWidth(checkbox->label, strlen(checkbox->label));
         int label_x = checkbox->core.x + CHECKBOX_SIZE + 10;
@@ -72,7 +79,7 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y)
 {
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {
-        GooeyCheckbox *checkbox = &win->checkboxes[i];
+        GooeyCheckbox *checkbox = win->checkboxes[i];
         if (x >= checkbox->core.x && x <= checkbox->core.x + checkbox->core.width &&
             y >= checkbox->core.y &&
             y <= checkbox->core.y + checkbox->core.height)

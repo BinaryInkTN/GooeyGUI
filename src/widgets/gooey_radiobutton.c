@@ -18,14 +18,18 @@
 #include "widgets/gooey_radiobutton.h"
 #include "core/gooey_backend.h"
 
-GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create(GooeyWindow *win)
+GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create()
 {
-    if (win->radio_button_group_count >= MAX_WIDGETS)
+
+    //     LOG_ERROR("Cannot create more radio button groups. Maximum limit reached.\n");
+    //     return NULL;
+    // }
+    GooeyRadioButtonGroup *group = malloc(sizeof(GooeyRadioButtonGroup));
+    if (group == NULL)
     {
-        LOG_ERROR("Cannot create more radio button groups. Maximum limit reached.\n");
+        LOG_ERROR("Error allocating memory for radio button group");
         return NULL;
     }
-    GooeyRadioButtonGroup *group = &win->radio_button_groups[win->radio_button_group_count++];
     group->button_count = 0;
     LOG_INFO("Radio button group created and added to window.");
 
@@ -56,27 +60,38 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
     return button;
 }
 
-GooeyRadioButton *GooeyRadioButton_Add(GooeyWindow *win, int x, int y,
-                                       char *label,
-                                       void (*callback)(bool selected))
+GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
+                                          char *label,
+                                          void (*callback)(bool selected))
 {
-    GooeyRadioButton *radio_button =
-        &win->radio_buttons[win->radio_button_count++];
+    GooeyRadioButton *radio_button = (GooeyRadioButton *)malloc(sizeof(GooeyRadioButton));
+
+    if (!radio_button)
+    {
+        LOG_ERROR("Couldn't allocate memory for radio button.");
+        return NULL;
+    }
+
+    *radio_button = (GooeyRadioButton){0};
 
     radio_button->core.type = WIDGET_RADIOBUTTON;
     radio_button->core.x = x;
     radio_button->core.y = y;
     if (label)
-        strcpy(radio_button->label, label);
+    {
+        strncpy(radio_button->label, label, sizeof(radio_button->label) - 1);
+        radio_button->label[sizeof(radio_button->label) - 1] = '\0';
+    }
+
     else
     {
-        sprintf(radio_button->label, "Radio button %d", win->radio_button_count);
+        strncpy(radio_button->label, "Radio button", sizeof(radio_button->label) - 1);
+        radio_button->label[sizeof(radio_button->label) - 1] = '\0';
     }
 
     radio_button->radius = RADIO_BUTTON_RADIUS;
     radio_button->selected = false;
     radio_button->callback = callback;
-    GooeyWindow_RegisterWidget(win, (GooeyWidget *)&radio_button->core);
 
     return radio_button;
 }
@@ -86,7 +101,7 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
 
     for (size_t i = 0; i < win->radio_button_group_count; ++i)
     {
-        GooeyRadioButtonGroup *group = &win->radio_button_groups[i];
+        GooeyRadioButtonGroup *group = win->radio_button_groups[i];
         for (int j = 0; j < group->button_count; ++j)
         {
             GooeyRadioButton *button = &group->buttons[j];

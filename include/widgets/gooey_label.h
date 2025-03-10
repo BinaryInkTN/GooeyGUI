@@ -15,18 +15,17 @@
  #include "common/gooey_common.h"
  
  /**
-  * @brief Adds a label to the specified window.
+  * @brief Creates a Label.
   *
   * Creates a new GooeyLabel with the given text, font size, and position.
   *
-  * @param win The window to add the label to.
   * @param text The text to display on the label.
   * @param font_size The font size of the label's text.
   * @param x The x-coordinate of the label's position.
   * @param y The y-coordinate of the label's position.
   * @return A pointer to the newly created GooeyLabel object.
   */
- GooeyLabel *GooeyLabel_Add(GooeyWindow *win, const char *text, float font_size, int x, int y);
+ GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y);
  
  /**
   * @brief Sets the text of an existing label.

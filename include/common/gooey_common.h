@@ -476,25 +476,25 @@ typedef struct
     bool visibility;  /**< Whether the window is visible */
     WINDOW_TYPE type; /**< Type of the window */
 
-    GooeyButton *buttons;                       /**< List of buttons in the window */
-    GooeyLabel *labels;                         /**< List of labels in the window */
-    GooeyCheckbox *checkboxes;                  /**< List of checkboxes in the window */
-    GooeyRadioButton *radio_buttons;            /**< List of radio buttons in the window */
-    GooeySlider *sliders;                       /**< List of sliders in the window */
-    GooeyDropdown *dropdowns;                   /**< List of dropdown menus in the window */
-    GooeyRadioButtonGroup *radio_button_groups; /**< List of radio button groups in the window */
-    GooeyTextbox *textboxes;                    /**< List of textboxes in the window */
-    GooeyLayout *layouts;                       /**< List of layouts in the window */
+    GooeyButton **buttons;                       /**< List of buttons in the window */
+    GooeyLabel **labels;                         /**< List of labels in the window */
+    GooeyCheckbox **checkboxes;                  /**< List of checkboxes in the window */
+    GooeyRadioButton **radio_buttons;            /**< List of radio buttons in the window */
+    GooeySlider **sliders;                       /**< List of sliders in the window */
+    GooeyDropdown **dropdowns;                   /**< List of dropdown menus in the window */
+    GooeyRadioButtonGroup **radio_button_groups; /**< List of radio button groups in the window */
+    GooeyTextbox **textboxes;                    /**< List of textboxes in the window */
+    GooeyLayout **layouts;                       /**< List of layouts in the window */
     GooeyMenu *menu;                            /**< Menu in the window */
-    GooeyList *lists;                           /**< List of list widgets in the window */
-    GooeyCanvas *canvas;                        /**< List of canvas widgets in the window */
-    GooeyPlot *plots;                           /**< List of plot widgets in the window */
+    GooeyList **lists;                           /**< List of list widgets in the window */
+    GooeyCanvas **canvas;                        /**< List of canvas widgets in the window */
+    GooeyPlot **plots;                           /**< List of plot widgets in the window */
     GooeyWidget **widgets;                      /**< Unified list of all widgets in the window */
     GooeyEvent *current_event;                  /**< Current event being processed */
     GooeyTheme *active_theme;                   /**< Active theme for the window */
-    GooeyImage *images;                         /**< List of image widgets in the window */
-    GooeyDropSurface *drop_surface;             /**< List of drop surface widgets in the window */
-    GooeyTabs *tabs;
+    GooeyImage **images;                         /**< List of image widgets in the window */
+    GooeyDropSurface **drop_surface;             /**< List of drop surface widgets in the window */
+    GooeyTabs **tabs;
 
     size_t tab_count;
     size_t drop_surface_count;       /**< Number of drop surface widgets */

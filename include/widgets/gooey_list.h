@@ -15,11 +15,10 @@
  #include "event/gooey_event.h"
  
  /**
-  * @brief Adds a list widget to the specified window.
+  * @brief Creates a widget.
   *
   * Creates a new list widget and attaches it to the given window.
   *
-  * @param window The window to which the list widget will be added.
   * @param x The x-coordinate of the list widget's position.
   * @param y The y-coordinate of the list widget's position.
   * @param width The width of the list widget.
@@ -27,7 +26,7 @@
   * @param callback The function to be called when an item is selected.
   * @return A pointer to the newly created GooeyList object.
   */
- GooeyList *GooeyList_Add(GooeyWindow *window, int x, int y, int width, int height, void (*callback)(int index));
+ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index));
  
  /**
   * @brief Adds an item to the specified list widget.

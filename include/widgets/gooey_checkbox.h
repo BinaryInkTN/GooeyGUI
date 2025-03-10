@@ -15,10 +15,8 @@
 /**
  * @brief Adds a checkbox to the specified window.
  *
- * This function creates a new GooeyCheckbox with the given label
- * and attaches it to the specified GooeyWindow.
+ * This function creates a new GooeyCheckbox with the given label.
  *
- * @param win The window to add the checkbox to.
  * @param x The x-coordinate of the checkbox's position.
  * @param y The y-coordinate of the checkbox's position.
  * @param label The label text displayed next to the checkbox.
@@ -27,7 +25,7 @@
  *                the checkbox is checked (`true`) or unchecked (`false`).
  * @return A pointer to the newly created GooeyCheckbox.
  */
-GooeyCheckbox *GooeyCheckbox_Add(GooeyWindow *win, int x, int y, char *label,
+GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
                                  void (*callback)(bool checked));
 
 /**

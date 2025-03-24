@@ -80,13 +80,5 @@ void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int wi
  */
 void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex);
 
-/**
- * @brief Draws the canvas onto the specified window.
- *
- * This function updates the window with the current contents of the canvas.
- *
- * @param window The window onto which the canvas is drawn.
- */
-void GooeyCanvas_Draw(GooeyWindow *window);
 
 #endif // GOOEY_CANVAS_H

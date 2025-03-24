@@ -29,15 +29,4 @@
  void GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void(*callback)(void));
  
 
- bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY);
- 
- /**
-  * @brief Draws all images in a Gooey window.
-  *
-  * This function renders all images that have been added to the specified window.
-  *
-  * @param win The Gooey window containing the images to draw.
-  */
- void GooeyImage_Draw(GooeyWindow* win);
- 
  #endif

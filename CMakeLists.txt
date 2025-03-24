@@ -12,11 +12,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(SOURCES
     src/core/gooey.c
     src/core/gooey_window.c
-    src/utils/logger/gooey_logger.c
     src/theme/gooey_theme.c
-    src/utils/glad/glad.c
-    src/utils/backends/backend_utils.c
-    src/backends/glps_backend.c
     src/widgets/gooey_drop_surface.c
     src/widgets/gooey_button.c
     src/widgets/gooey_canvas.c
@@ -34,19 +30,52 @@ set(SOURCES
     src/widgets/gooey_image.c
     src/widgets/gooey_tabs.c
     src/signals/gooey_signals.c
-)
+    internal/widgets/gooey_drop_surface_internal.c
+    internal/widgets/gooey_button_internal.c
+    internal/widgets/gooey_canvas_internal.c
+    internal/widgets/gooey_checkbox_internal.c
+    internal/widgets/gooey_dropdown_internal.c
+    internal/widgets/gooey_label_internal.c
+    internal/widgets/gooey_list_internal.c
+    internal/widgets/gooey_menu_internal.c
+    internal/widgets/gooey_radiobutton_internal.c
+    internal/widgets/gooey_slider_internal.c
+    internal/widgets/gooey_textbox_internal.c
+    internal/widgets/gooey_plot_internal.c
+    internal/widgets/gooey_image_internal.c
+    internal/widgets/gooey_tabs_internal.c
+    internal/widgets/gooey_debug_overlay_internal.c
+    internal/backends/utils/glad/glad.c
+    internal/backends/utils/backend_utils_internal.c
+    internal/backends/glps_backend_internal.c
+    internal/logger/pico_logger_internal.c
+    )
 
 # Header files
 set(HEADERS
+    internal/widgets/gooey_drop_surface_internal.h
+    internal/widgets/gooey_button_internal.h
+    internal/widgets/gooey_canvas_internal.h
+    internal/widgets/gooey_checkbox_internal.h
+    internal/widgets/gooey_dropdown_internal.h
+    internal/widgets/gooey_label_internal.h
+    internal/widgets/gooey_list_internal.h
+    internal/widgets/gooey_menu_internal.h
+    internal/widgets/gooey_radiobutton_internal.h
+    internal/widgets/gooey_slider_internal.h
+    internal/widgets/gooey_textbox_internal.h
+    internal/widgets/gooey_plot_internal.h
+    internal/widgets/gooey_image_internal.h
+    internal/widgets/gooey_tabs_internal.h
+    internal/widgets/gooey_debug_overlay_internal.h
     include/core/gooey_window.h
-    include/core/gooey_backend.h
-    include/utils/backends/backend_utils.h
-    include/utils/glad/glad.h
-    include/utils/linmath/linmath.h
-    include/utils/logger/gooey_logger.h
-    include/utils/stb_image/stb_image.h
+    internal/backends/gooey_backend_internal.h
+    internal/backends/utils/backend_utils_internal.h
+    internal/backends/utils/glad/glad.h
+    internal/backends/utils/linmath/linmath.h
+    internal/backends/utils/stb_image/stb_image.h
     include/theme/gooey_theme.h
-    include/event/gooey_event.h
+    internal/event/gooey_event_internal.h
     include/common/gooey_common.h
     include/widgets/gooey_drop_surface.h
     include/widgets/gooey_button.h
@@ -66,6 +95,8 @@ set(HEADERS
     include/widgets/gooey_tabs.h
     include/signals/gooey_signals.h
     include/assets/drop_surface_image.h
+    internal/logger/pico_logger_internal.h
+    include/signals/gooey_signals.h
     include/gooey.h
 )
 
@@ -98,6 +129,7 @@ target_include_directories(${PROJECT_NAME}
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include/Gooey>
     PRIVATE
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/internal>
     ${PROJECT_SOURCE_DIR}/third_party/freetype/include
     ${PROJECT_SOURCE_DIR}/third_party/glps/include
     ${PROJECT_SOURCE_DIR}/third_party/cjson/include
@@ -130,14 +162,14 @@ install(EXPORT GooeyGUIConfig
 )
 
 # Optionally build examples
-option(BUILD_EXAMPLES "Build example programs" ON)
-if (BUILD_EXAMPLES)
-    add_executable(example_basic examples/showcase.c)
-    target_link_libraries(example_basic PRIVATE ${PROJECT_NAME})
-    target_include_directories(example_basic
-        PUBLIC ${PROJECT_SOURCE_DIR}/include
-    )
-endif()
+#option(BUILD_EXAMPLES "Build example programs" ON)
+#if (BUILD_EXAMPLES)
+ #   add_executable(example_basic examples/showcase.c)
+#    target_link_libraries(example_basic PRIVATE ${PROJECT_NAME})
+ #   target_include_directories(example_basic
+ #       PUBLIC ${PROJECT_SOURCE_DIR}/include
+ #   )
+#endif()
 
 # Enable testing (if applicable)
 enable_testing()

@@ -12,29 +12,29 @@ GooeyCanvas *canvas;
 
 void messageBoxCallback(int option)
 {
-    LOG_INFO("%d", option);
+   // LOG_INFO("%d", option);
 }
 
 void messageBox2Callback(int option)
 {
-    LOG_INFO("2 %d", option);
+   // LOG_INFO("2 %d", option);
 }
 
 
 
 void signal_callback(void *context, void *data)
 {
-    LOG_INFO("Recieved signal %s %s", (char *)context, (char *)data);
+   // LOG_INFO("Recieved signal %s %s", (char *)context, (char *)data);
 }
 
 void signal_callback2(void *context, void *data)
 {
-    LOG_INFO("Recieved signal %s %s", (char *)context, (char *)data);
+  //  LOG_INFO("Recieved signal %s %s", (char *)context, (char *)data);
 }
 
 void onButtonClick()
 {
-   LOG_INFO("Button clicked!");
+ //  LOG_INFO("Button clicked!");
 }
 
 void onCheckboxToggle(bool checked)
@@ -74,7 +74,7 @@ void activateLightTheme()
 
 void image_click_callback()
 {
-    LOG_INFO("Clicked!");
+  //  LOG_INFO("Clicked!");
 }
 
 int main()

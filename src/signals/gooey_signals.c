@@ -16,6 +16,8 @@
  */
 
 #include "signals/gooey_signals.h"
+#include "logger/pico_logger_internal.h"
+
 #include <stdlib.h>
 
 GooeySignal GooeySignal_Create(void)

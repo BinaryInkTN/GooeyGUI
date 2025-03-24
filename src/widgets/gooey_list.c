@@ -16,7 +16,8 @@
  */
 
 #include "widgets/gooey_list.h"
-#include "core/gooey_backend.h"
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 #define DEFAULT_THUMB_WIDTH 10
 #define DEFAULT_ITEM_SPACING 40
@@ -160,124 +161,4 @@ void GooeyList_Draw(GooeyWindow *win)
 void GooeyList_ShowSeparator(GooeyList *list, bool state)
 {
     list->show_separator = state;
-}
-
-bool GooeyList_HandleScroll(GooeyWindow *window, GooeyEvent *scroll_event)
-{
-    const int scroll_speed_multiplier = 2;
-
-    for (size_t i = 0; i < window->list_count; ++i)
-    {
-        GooeyList *list = window->lists[i];
-
-        int mouse_x = scroll_event->mouse_move.x;
-        int mouse_y = scroll_event->mouse_move.y;
-
-        int total_content_height = list->item_count * list->item_spacing;
-        int visible_height = list->core.height;
-
-        if (mouse_x >= list->core.x && mouse_x <= list->core.x + list->core.width &&
-            mouse_y >= list->core.y && mouse_y <= list->core.y + list->core.height)
-        {
-            if (scroll_event->type == GOOEY_EVENT_MOUSE_SCROLL)
-            {
-                int scroll_offset_amount = scroll_event->mouse_scroll.y *
-                                           (total_content_height / visible_height) *
-                                           scroll_speed_multiplier;
-                list->scroll_offset += scroll_offset_amount;
-
-                return true;
-            }
-            else if (scroll_event->type == GOOEY_EVENT_KEY_PRESS)
-            {
-                const char *key = active_backend->GetKeyFromCode(scroll_event);
-                LOG_ERROR("%s", key);
-
-                if (strcmp(key, "Up") == 0)
-                    list->scroll_offset += (total_content_height / visible_height) * scroll_speed_multiplier;
-                else if (strcmp(key, "Down") == 0)
-                    list->scroll_offset -= (total_content_height / visible_height) * scroll_speed_multiplier;
-            }
-        }
-    }
-    return false;
-}
-
-bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
-{
-    for (size_t i = 0; i < window->list_count; ++i)
-    {
-        GooeyList *list = window->lists[i];
-
-        if (mouse_x >= list->core.x && mouse_x <= list->core.x + list->core.width &&
-            mouse_y >= list->core.y && mouse_y <= list->core.y + list->core.height)
-        {
-            int scroll_offset = list->scroll_offset;
-            int mouse_y_relative = mouse_y - list->core.y;
-            int adjusted_y = mouse_y_relative + scroll_offset;
-
-            if (DEFAULT_ITEM_SPACING <= 0)
-                return false;
-
-            int selected_index = adjusted_y / DEFAULT_ITEM_SPACING;
-
-            if (selected_index >= 0 && selected_index < list->item_count)
-            {
-                if (list->callback)
-                {
-                    list->callback(selected_index);
-                }
-
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-bool GooeyList_HandleThumbScroll(GooeyWindow *window, GooeyEvent *scroll_event)
-{
-    static int mouse_prev = -1;
-    static bool is_dragging = false;
-
-    for (size_t i = 0; i < window->list_count; ++i)
-    {
-        GooeyList *list = window->lists[i];
-
-        int mouse_x = scroll_event->mouse_move.x;
-        int mouse_y = scroll_event->mouse_move.y;
-
-        int thumb_width = list->thumb_width;
-        int thumb_height = list->thumb_height;
-        int thumb_x = list->core.x + list->core.width;
-        int thumb_y = list->thumb_y;
-        int total_content_height = list->item_count * list->item_spacing;
-        int visible_height = list->core.height;
-
-        if (mouse_x >= thumb_x && mouse_x <= thumb_x + thumb_width &&
-            mouse_y >= thumb_y && mouse_y <= thumb_y + thumb_height &&
-            scroll_event->type == GOOEY_EVENT_CLICK_PRESS)
-        {
-            is_dragging = true;
-        }
-
-        if (is_dragging)
-        {
-            if (scroll_event->type != GOOEY_EVENT_CLICK_RELEASE)
-            {
-                if (mouse_prev != -1)
-                    list->scroll_offset -= (mouse_y - mouse_prev) * (total_content_height / visible_height);
-                mouse_prev = mouse_y;
-            }
-            else
-            {
-                is_dragging = false;
-                mouse_prev = -1;
-            }
-
-            return true;
-        }
-    }
-    return false;
 }

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <cjson/cJSON.h>
 #include "theme/gooey_theme.h"
+#include "logger/pico_logger_internal.h"
 
 GooeyTheme *parser_load_theme_from_file(const char *filePath)
 {

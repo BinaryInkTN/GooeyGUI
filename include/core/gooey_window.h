@@ -24,7 +24,6 @@
  #include <ctype.h>
  
  #include "common/gooey_common.h"
- #include "utils/logger/gooey_logger.h"
  
  /**
   * @brief Loads a theme from the specified file path.
@@ -126,6 +125,8 @@
   * @param win The window that requires a redraw.
   */
  void GooeyWindow_RequestRedraw(GooeyWindow *win);
+
+ void GooeyWindow_SetContinuousRedraw(GooeyWindow *win);
  
  #endif /* GOOEY_COMMON_H */
  

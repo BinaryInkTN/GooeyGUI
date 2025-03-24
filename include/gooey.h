@@ -21,7 +21,6 @@
 #include "common/gooey_common.h"
 #include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
-#include "core/gooey_backend.h"
 #include "core/gooey_window.h"
 #include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
@@ -43,9 +42,8 @@
  * @brief Initializes the Gooey system with the specified backend.
  *
  * This implementation only supports GLPS (OpenGL) backend for now.
- * @param backend you want to use.
  * @return 0 on success, non-zero on failure.
  */
-int Gooey_Init(GooeyBackends backend);
+int Gooey_Init();
 
 #endif

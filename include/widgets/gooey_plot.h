@@ -34,17 +34,6 @@
  GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height); 
  
  /**
-  * @brief Draws the plot in the specified Gooey window.
-  *
-  * This function is used to render the plot within the specified window.
-  * It should be called after the plot data has been added or updated to
-  * visualize the plot on the screen.
-  *
-  * @param win Pointer to the Gooey window where the plot will be drawn.
-  */
- void GooeyPlot_Draw(GooeyWindow* win);
- 
- /**
   * @brief Updates the data of an existing plot.
   *
   * This function updates the plot with new data. It is intended to modify the

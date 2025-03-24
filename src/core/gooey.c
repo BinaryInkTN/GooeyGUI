@@ -17,37 +17,15 @@
 
 #include "gooey.h"
 #include <ctype.h>
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
-GOOEY_CURSOR currently_set_cursor = GOOEY_CURSOR_ARROW;
 int called = 0;
 
-int Gooey_Init(GooeyBackends backend)
+int Gooey_Init()
 {
 
-
-
- //   active_theme = &default_theme;
-
-    switch (backend)
-    {
-
-
-    case GLPS:
-        LOG_INFO("using GLPS backend.");
-        active_backend = &glps_backend;
-        default:
-        break;
-    }
-    
-    if (active_backend->Init() < 0)
-    {
-        LOG_CRITICAL("Backend initialization failed.");
-        return -1;
-    }
-
-    ACTIVE_BACKEND = backend;
-    LOG_INFO("Gooey initialized successfully.");
-
+    active_backend = &glps_backend;
+    active_backend->Init();
     return 0;
 }
-

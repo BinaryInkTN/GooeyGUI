@@ -16,7 +16,8 @@
  */
 
 #include "widgets/gooey_layout.h"
-#include "core/gooey_backend.h"
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
                                 int x, int y, int width, int height)

@@ -19,7 +19,8 @@
 #include "widgets/gooey_layout.h"
 #include "widgets/gooey_label.h"
 #include "widgets/gooey_button.h"
-#include "core/gooey_backend.h"
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 void (*MessageBoxCallback[100])(int option);
 GooeyWindow *CurrentMessageBox = NULL;

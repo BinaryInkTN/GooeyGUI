@@ -1,7 +1,6 @@
 #ifndef GOOEY_TEXTBOX_H
 #define GOOEY_TEXTBOX_H
 
-#include "event/gooey_event.h"
 #include "common/gooey_common.h"
 #include <stdbool.h>
 
@@ -57,7 +56,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param win The window containing the textbox.
  * @param event The key event to handle.
  */
-void GooeyTextbox_HandleKeyPress(GooeyWindow *win, GooeyEvent *event);
+void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
 
 /**
  * @brief Gets the text of the textbox.

@@ -15,7 +15,6 @@
 #include <stddef.h>
 
 #include "theme/gooey_theme.h"
-#include "event/gooey_event.h"
 
 /** Maximum number of widgets that can be added to a window. */
 #define MAX_WIDGETS 100
@@ -450,8 +449,16 @@ typedef struct
     size_t widget_count;
 } GooeyTab;
 
+typedef struct 
+{
+    void **widgets;
+    size_t widget_count;
+    
+} GooeyContainer;
+
 typedef struct
 {
+    GooeyContainer container;
     GooeyWidget core;
     GooeyTab *tabs;
     size_t tab_count;
@@ -467,13 +474,18 @@ typedef enum
     WINDOW_MSGBOX   /**< Message box window */
 } WINDOW_TYPE;
 
+
 /**
  * @brief A structure representing a window containing various widgets.
  */
 typedef struct
 {
+
+    GooeyContainer container;
+
     int creation_id;  /**< Unique window ID */
     bool visibility;  /**< Whether the window is visible */
+    bool continuous_redraw;
     WINDOW_TYPE type; /**< Type of the window */
 
     GooeyButton **buttons;                       /**< List of buttons in the window */
@@ -490,7 +502,7 @@ typedef struct
     GooeyCanvas **canvas;                        /**< List of canvas widgets in the window */
     GooeyPlot **plots;                           /**< List of plot widgets in the window */
     GooeyWidget **widgets;                      /**< Unified list of all widgets in the window */
-    GooeyEvent *current_event;                  /**< Current event being processed */
+    void *current_event;                  /**< Current event being processed */
     GooeyTheme *active_theme;                   /**< Active theme for the window */
     GooeyImage **images;                         /**< List of image widgets in the window */
     GooeyDropSurface **drop_surface;             /**< List of drop surface widgets in the window */

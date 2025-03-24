@@ -36,17 +36,7 @@
   * @param text The new text to display on the label.
   */
  void GooeyLabel_SetText(GooeyLabel *label, const char *text);
- 
- /**
-  * @brief Draws all labels within the specified window.
-  *
-  * This function renders all GooeyLabel elements associated with 
-  * the given window.
-  *
-  * @param win The window containing the labels.
-  */
- void GooeyLabel_Draw(GooeyWindow *win);
- 
+
  /**
   * @brief Sets the text color of a label.
   *

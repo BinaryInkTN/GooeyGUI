@@ -1,5 +1,6 @@
 #include "widgets/gooey_image.h"
-#include "core/gooey_backend.h"
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 void GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void))
 {
@@ -20,26 +21,4 @@ void GooeyImage_Create(const char *image_path, int x, int y, int width, int heig
     image->core.width = width;
     image->core.height = height;
     image->callback = callback;
-}
-
-bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
-{
-    for (size_t i = 0; i < win->image_count; ++i)
-    {
-        GooeyImage *image = win->images[i];
-        if (mouseX > image->core.x && mouseX < image->core.x + image->core.width && mouseY > image->core.y && mouseY < image->core.y + image->core.height)
-        {
-            if (image->callback)
-                image->callback();
-        }
-    }
-}
-
-void GooeyImage_Draw(GooeyWindow *win)
-{
-    for (size_t i = 0; i < win->image_count; ++i)
-    {
-        GooeyImage *image = win->images[i];
-        active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
-    }
 }

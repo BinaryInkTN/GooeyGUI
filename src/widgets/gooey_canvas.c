@@ -16,7 +16,8 @@
  */
 
 #include "widgets/gooey_canvas.h"
-#include "core/gooey_backend.h"
+#include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
                              int height)
@@ -109,42 +110,4 @@ void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex)
     *args = (CanvasSetFGArgs){.color = color_hex};
     canvas->elements[canvas->element_count++] = (CanvaElement){.operation = CANVA_DRAW_SET_FG, .args = args};
     LOG_INFO("Set foreground with color %lX.", color_hex);
-}
-
-
-void GooeyCanvas_Draw(GooeyWindow* win) {
-
-    for (size_t i = 0; i < win->canvas_count; ++i)
-    {
-        for (int j = 0; j < win->canvas[i]->element_count; ++j)
-        {
-            CanvaElement *element = &win->canvas[i]->elements[j];
-            switch (element->operation)
-            {
-            case CANVA_DRAW_RECT:
-                CanvasDrawRectangleArgs *args = (CanvasDrawRectangleArgs *)element->args;
-                if (args->is_filled)
-                    active_backend->FillRectangle(args->x, args->y, args->width, args->height, args->color, win->creation_id);
-                else
-                    active_backend->DrawRectangle(args->x, args->y, args->width, args->height, args->color, win->creation_id);
-                break;
-
-            case CANVA_DRAW_LINE:
-                CanvasDrawLineArgs *args_line = (CanvasDrawLineArgs *)element->args;
-                active_backend->DrawLine(args_line->x1, args_line->y1, args_line->x2, args_line->y2, args_line->color, win->creation_id);
-                break;
-            case CANVA_DRAW_ARC:
-                CanvasDrawArcArgs *args_arc = (CanvasDrawArcArgs *)element->args;
-                active_backend->FillArc(args_arc->x_center, args_arc->y_center, args_arc->width, args_arc->height, args_arc->angle1, args_arc->angle2, win->creation_id);
-                break;
-            case CANVA_DRAW_SET_FG:
-                CanvasSetFGArgs *args_fg = (CanvasSetFGArgs *)element->args;
-                active_backend->SetForeground(args_fg->color);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
 }

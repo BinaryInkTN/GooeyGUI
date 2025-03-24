@@ -11,6 +11,4 @@ void GooeyTabs_AddWidget(GooeyTab *tab, void *widget);
 
 void GooeyTabs_SetActiveTab(GooeyTabs* tabs, GooeyTab *active_tab);
 
-void GooeyTabs_Draw(GooeyWindow *win);
-
 #endif

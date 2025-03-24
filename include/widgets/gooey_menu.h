@@ -35,18 +35,6 @@ GooeyMenu *GooeyMenu_Set(GooeyWindow *win);
 GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title);
 
 /**
- * @brief Handles menu item click events.
- *
- * Processes user interactions with menu items.
- *
- * @param win The window containing the menu.
- * @param x The x-coordinate of the click event.
- * @param y The y-coordinate of the click event.
- * @return `true` if the menu item was clicked, otherwise `false`.
- */
-bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
-
-/**
  * @brief Adds an element (option) to a menu child.
  *
  * @param child The menu child to which the item will be added.
@@ -55,13 +43,5 @@ bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
  */
 void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title, void (*callback)());
 
-/**
- * @brief Draws the menu and its items on the window.
- *
- * Renders the menu visually within the specified window.
- *
- * @param win The window where the menu will be drawn.
- */
-void GooeyMenu_Draw(GooeyWindow *win);
 
 #endif // GOOEY_MENU_H

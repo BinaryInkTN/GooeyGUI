@@ -15,26 +15,29 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "core/gooey_backend.h"
-#include "event/gooey_event.h"
+#include "backends/gooey_backend_internal.h"
+#include "event/gooey_event_internal.h"
 
-#include "widgets/gooey_tabs.h"
-#include "widgets/gooey_drop_surface.h"
-#include "widgets/gooey_image.h"
-#include "widgets/gooey_button.h"
-#include "widgets/gooey_canvas.h"
-#include "widgets/gooey_checkbox.h"
-#include "widgets/gooey_dropdown.h"
-#include "widgets/gooey_label.h"
+#include "widgets/gooey_drop_surface_internal.h"
+#include "widgets/gooey_tabs_internal.h"
+#include "widgets/gooey_image_internal.h"
+#include "widgets/gooey_button_internal.h"
+#include "widgets/gooey_canvas_internal.h"
+#include "widgets/gooey_checkbox_internal.h"
+#include "widgets/gooey_dropdown_internal.h"
+#include "widgets/gooey_label_internal.h"
 #include "widgets/gooey_layout.h"
-#include "widgets/gooey_list.h"
-#include "widgets/gooey_menu.h"
+#include "widgets/gooey_list_internal.h"
+#include "widgets/gooey_menu_internal.h"
 #include "widgets/gooey_messagebox.h"
-#include "widgets/gooey_radiobutton.h"
-#include "widgets/gooey_slider.h"
-#include "widgets/gooey_textbox.h"
-#include "widgets/gooey_plot.h"
+#include "widgets/gooey_radiobutton_internal.h"
+#include "widgets/gooey_slider_internal.h"
+#include "widgets/gooey_textbox_internal.h"
+#include "widgets/gooey_plot_internal.h"
+#include "widgets/gooey_debug_overlay_internal.h"
 #include "signals/gooey_signals.h"
+#include "logger/pico_logger_internal.h"
+
 #include <stdarg.h>
 
 #include <sys/resource.h>
@@ -61,7 +64,7 @@ void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
     }
     case WIDGET_RADIOBUTTON:
     {
-        win->radio_button_groups[win->radio_button_count++] = (GooeyRadioButton *)widget;
+        win->radio_button_groups[win->radio_button_count++] = (GooeyRadioButtonGroup *)widget;
         break;
     }
     case WIDGET_CHECKBOX:
@@ -81,7 +84,7 @@ void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
     }
     case WIDGET_DROPDOWN:
     {
-        win->dropdowns[win->dropdown_count++] = (GooeyDropData *)widget;
+        win->dropdowns[win->dropdown_count++] = (GooeyDropdown *)widget;
         break;
     }
     case WIDGET_CANVAS:
@@ -230,6 +233,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
             free(win->canvas[i]);
             win->canvas[i] = NULL;
         }
+    }
+
+    if(win->canvas)
+    {
+        free(win->canvas);
+        win->canvas = NULL;
     }
 
     if (win->tabs)
@@ -463,7 +472,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->type = WINDOW_REGULAR;
     if (!GooeyWindow_AllocateResources(win))
     {
-        GooeyWindow_Cleanup(1, win);
+        GooeyWindow_FreeResources(win);
         LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
         exit(EXIT_FAILURE);
     }
@@ -496,6 +505,8 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->layout_count = 0;
     win->list_count = 0;
     win->widget_count = 0;
+    win->continuous_redraw = false;
+
     LOG_INFO("Window created with dimensions (%d, %d).", width, height);
     return win;
 }
@@ -554,6 +565,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeySlider_Draw(win);
     GooeyPlot_Draw(win);
     GooeyMenu_Draw(win);
+
+    GooeyDebugOverlay_Draw(win);
+
     active_backend->Render(win);
 
     active_backend->ResetEvents(win);
@@ -577,15 +591,15 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 
     GooeyWindow *window = windows[window_id];
+    GooeyEvent *event = (GooeyEvent*) window->current_event;
 
     int width, height;
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
     active_backend->UpdateBackground(window);
-    needs_redraw |= GooeySlider_HandleDrag(window, window->current_event);
-    needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
-
-    switch (window->current_event->type)
+    needs_redraw |= GooeySlider_HandleDrag(window, event);
+    needs_redraw |= GooeyList_HandleThumbScroll(window, event);
+    switch (event->type)
     {
     case GOOEY_EVENT_RESIZE:
         needs_redraw = true;
@@ -597,13 +611,13 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     case GOOEY_EVENT_KEY_PRESS:
         // Handle key press event
-        GooeyTextbox_HandleKeyPress(window, window->current_event);
+        GooeyTextbox_HandleKeyPress(window, event);
         needs_redraw = true;
         break;
 
     case GOOEY_EVENT_CLICK_PRESS:
         // Handle mouse click press event
-        int mouse_click_x = window->current_event->click.x, mouse_click_y = window->current_event->click.y;
+        int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
         needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
@@ -611,7 +625,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyList_HandleThumbScroll(window, window->current_event);
+        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
         needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
         break;
 
@@ -621,7 +635,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_DROP:
-        needs_redraw |= GooeyDropSurface_HandleFileDrop(window, window->current_event->drop_data.drop_x, window->current_event->drop_data.drop_y);
+        needs_redraw |= GooeyDropSurface_HandleFileDrop(window, event->drop_data.drop_x, event->drop_data.drop_y);
         break;
 
     case GOOEY_EVENT_WINDOW_CLOSE:
@@ -634,11 +648,11 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     default:
         // Handle any other unhandled events
-        LOG_INFO("Unhandled event type: %d", window->current_event->type);
+        LOG_INFO("Unhandled event type: %d", event->type);
         break;
     }
 
-    if (needs_redraw)
+    if (window->continuous_redraw  || needs_redraw)
         GooeyWindow_DrawUIElements(window);
 }
 
@@ -713,3 +727,9 @@ void GooeyWindow_RequestRedraw(GooeyWindow *win)
     LOG_CRITICAL("Window redraw req %ld", win->creation_id);
     active_backend->RequestRedraw(win);
 }
+
+void GooeyWindow_SetContinuousRedraw(GooeyWindow *win) 
+{
+    win->continuous_redraw = true;
+}
+

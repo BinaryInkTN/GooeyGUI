@@ -1,7 +1,6 @@
 #ifndef GOOEY_SIGNALS_H
 #define GOOEY_SIGNALS_H
 
-#include "utils/logger/gooey_logger.h"
 
 /* ============ Signaling system ==============*/
 

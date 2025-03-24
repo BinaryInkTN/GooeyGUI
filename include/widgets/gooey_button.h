@@ -30,18 +30,6 @@
 GooeyButton *GooeyButton_Create(const char *label, int x, int y,
                                 int width, int height, void (*callback)());
 
-/**
- * @brief Handles button click events.
- *
- * This function checks if a click event at the specified coordinates intersects with any button
- * in the window. If a button is clicked, its callback function is triggered.
- *
- * @param win The window containing the button.
- * @param x The x-coordinate of the click event.
- * @param y The y-coordinate of the click event.
- * @return `true` if a button was clicked, `false` otherwise.
- */
-bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y);
 
 /**
  * @brief Sets the text of the button.
@@ -53,15 +41,6 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y);
  */
 void GooeyButton_SetText(GooeyButton *button, const char *text);
 
-/**
- * @brief Draws the button on the window.
- *
- * This function renders the button on the specified window, including its label and any visual states
- * (e.g., highlighted or clicked).
- *
- * @param win The window to draw the button on.
- */
-void GooeyButton_Draw(GooeyWindow *win);
 
 /**
  * @brief Highlights or unhighlights a button.

@@ -449,16 +449,8 @@ typedef struct
     size_t widget_count;
 } GooeyTab;
 
-typedef struct 
-{
-    void **widgets;
-    size_t widget_count;
-    
-} GooeyContainer;
-
 typedef struct
 {
-    GooeyContainer container;
     GooeyWidget core;
     GooeyTab *tabs;
     size_t tab_count;
@@ -480,14 +472,10 @@ typedef enum
  */
 typedef struct
 {
-
-    GooeyContainer container;
-
+    WINDOW_TYPE type; /**< Type of the window */
     int creation_id;  /**< Unique window ID */
     bool visibility;  /**< Whether the window is visible */
     bool continuous_redraw;
-    WINDOW_TYPE type; /**< Type of the window */
-
     GooeyButton **buttons;                       /**< List of buttons in the window */
     GooeyLabel **labels;                         /**< List of labels in the window */
     GooeyCheckbox **checkboxes;                  /**< List of checkboxes in the window */

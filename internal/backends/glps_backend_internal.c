@@ -944,7 +944,7 @@ size_t glps_get_total_window_count()
 void glps_reset_events(GooeyWindow *win)
 {
     // Allow only one event at a time, so it doesn't cause redraws.
-    GooeyEvent *event = (GooeyEvent*) win;
+    GooeyEvent *event = (GooeyEvent*) win->current_event;
     event->type = -1;
 }
 

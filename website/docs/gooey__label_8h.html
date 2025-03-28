@@ -104,15 +104,12 @@ $(document).ready(function(){initNavTree('gooey__label_8h.html',''); initResizab
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a08b4885781f03ee40e074a11aeab46aa" id="r_a08b4885781f03ee40e074a11aeab46aa"><td class="memItemLeft" align="right" valign="top">GooeyLabel *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__label_8h.html#a08b4885781f03ee40e074a11aeab46aa">GooeyLabel_Add</a> (GooeyWindow *win, const char *text, float font_size, int x, int y)</td></tr>
-<tr class="memdesc:a08b4885781f03ee40e074a11aeab46aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a label to the specified window.  <br /></td></tr>
-<tr class="separator:a08b4885781f03ee40e074a11aeab46aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af142f996c8d97023481713bbb30984f9" id="r_af142f996c8d97023481713bbb30984f9"><td class="memItemLeft" align="right" valign="top">GooeyLabel *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__label_8h.html#af142f996c8d97023481713bbb30984f9">GooeyLabel_Create</a> (const char *text, float font_size, int x, int y)</td></tr>
+<tr class="memdesc:af142f996c8d97023481713bbb30984f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a Label.  <br /></td></tr>
+<tr class="separator:af142f996c8d97023481713bbb30984f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8dc603638e9523c7bfff3343cb06671c" id="r_a8dc603638e9523c7bfff3343cb06671c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__label_8h.html#a8dc603638e9523c7bfff3343cb06671c">GooeyLabel_SetText</a> (GooeyLabel *label, const char *text)</td></tr>
 <tr class="memdesc:a8dc603638e9523c7bfff3343cb06671c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the text of an existing label.  <br /></td></tr>
 <tr class="separator:a8dc603638e9523c7bfff3343cb06671c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70637d9cb1889ded01c8c5e1c897e277" id="r_a70637d9cb1889ded01c8c5e1c897e277"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__label_8h.html#a70637d9cb1889ded01c8c5e1c897e277">GooeyLabel_Draw</a> (GooeyWindow *win)</td></tr>
-<tr class="memdesc:a70637d9cb1889ded01c8c5e1c897e277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws all labels within the specified window.  <br /></td></tr>
-<tr class="separator:a70637d9cb1889ded01c8c5e1c897e277"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af55e1147a59015b581a845017796303c" id="r_af55e1147a59015b581a845017796303c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__label_8h.html#af55e1147a59015b581a845017796303c">GooeyLabel_SetColor</a> (GooeyLabel *label, const char *color)</td></tr>
 <tr class="memdesc:af55e1147a59015b581a845017796303c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the text color of a label.  <br /></td></tr>
 <tr class="separator:af55e1147a59015b581a845017796303c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -122,21 +119,15 @@ Functions</h2></td></tr>
 <p>Provides functions for creating, modifying, and rendering text labels within a GooeyWindow.</p>
 <dl class="section author"><dt>Author</dt><dd>Yassine Ahmed Ali @license GPL-3.0 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a08b4885781f03ee40e074a11aeab46aa" name="a08b4885781f03ee40e074a11aeab46aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08b4885781f03ee40e074a11aeab46aa">&#9670;&#160;</a></span>GooeyLabel_Add()</h2>
+<a id="af142f996c8d97023481713bbb30984f9" name="af142f996c8d97023481713bbb30984f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af142f996c8d97023481713bbb30984f9">&#9670;&#160;</a></span>GooeyLabel_Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GooeyLabel * GooeyLabel_Add </td>
+          <td class="memname">GooeyLabel * GooeyLabel_Create </td>
           <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>text</em>, </td>
         </tr>
@@ -166,11 +157,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a label to the specified window. </p>
+<p>Creates a Label. </p>
 <p>Creates a new GooeyLabel with the given text, font size, and position.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to add the label to. </td></tr>
     <tr><td class="paramname">text</td><td>The text to display on the label. </td></tr>
     <tr><td class="paramname">font_size</td><td>The font size of the label's text. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the label's position. </td></tr>
@@ -179,33 +169,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyLabel object. </dd></dl>
-
-</div>
-</div>
-<a id="a70637d9cb1889ded01c8c5e1c897e277" name="a70637d9cb1889ded01c8c5e1c897e277"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a70637d9cb1889ded01c8c5e1c897e277">&#9670;&#160;</a></span>GooeyLabel_Draw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeyLabel_Draw </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws all labels within the specified window. </p>
-<p>This function renders all GooeyLabel elements associated with the given window.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">win</td><td>The window containing the labels. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

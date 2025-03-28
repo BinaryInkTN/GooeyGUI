@@ -16,5 +16,6 @@ var searchData=
   ['gooey_5fradiobutton_2eh_13',['gooey_radiobutton.h',['../gooey__radiobutton_8h.html',1,'']]],
   ['gooey_5fsignals_2eh_14',['gooey_signals.h',['../gooey__signals_8h.html',1,'']]],
   ['gooey_5fslider_2eh_15',['gooey_slider.h',['../gooey__slider_8h.html',1,'']]],
-  ['gooey_5ftextbox_2eh_16',['gooey_textbox.h',['../gooey__textbox_8h.html',1,'']]]
+  ['gooey_5ftabs_2eh_16',['gooey_tabs.h',['../gooey__tabs_8h.html',1,'']]],
+  ['gooey_5ftextbox_2eh_17',['gooey_textbox.h',['../gooey__textbox_8h.html',1,'']]]
 ];

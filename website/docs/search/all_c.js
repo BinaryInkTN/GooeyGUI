@@ -1,31 +1,4 @@
 var searchData=
 [
-  ['label_0',['label',['../structGooeyButton.html#ab820758f3a0e1002f0adbc34076fc783',1,'GooeyButton::label'],['../structGooeyCheckbox.html#ae0e2670f4fdbd090426e1e8024ade169',1,'GooeyCheckbox::label'],['../structGooeyRadioButton.html#a6ce50064ea9dbb8803b60da6652228db',1,'GooeyRadioButton::label']]],
-  ['label_5fcount_1',['label_count',['../structGooeyWindow.html#a62b596ae5fd1e812473241ab4a9984f7',1,'GooeyWindow']]],
-  ['labels_2',['labels',['../structGooeyWindow.html#aaf217ed0c3b96e01afa9f567083b167f',1,'GooeyWindow']]],
-  ['layer_3',['layer',['../glad_8h.html#ae7bc0cdc2d90da1b600d6cc916c2772e',1,'glad.h']]],
-  ['layout_5fcount_4',['layout_count',['../structGooeyWindow.html#a4f3c9be2324027df1654283a7289b43c',1,'GooeyWindow']]],
-  ['layout_5fgrid_5',['LAYOUT_GRID',['../gooey__common_8h.html#a844da08e71ff38a8518ea30859c0d1cbac4b094ed4f8bf75f60ba2235771371c3',1,'gooey_common.h']]],
-  ['layout_5fhorizontal_6',['LAYOUT_HORIZONTAL',['../gooey__common_8h.html#a844da08e71ff38a8518ea30859c0d1cba5bcf5e92c20de058de1a84793b639c38',1,'gooey_common.h']]],
-  ['layout_5ftype_7',['layout_type',['../structGooeyLayout.html#a4c28d0a1f26ba53503a1b58ca739682c',1,'GooeyLayout']]],
-  ['layout_5fvertical_8',['LAYOUT_VERTICAL',['../gooey__common_8h.html#a844da08e71ff38a8518ea30859c0d1cba8e80399417807cf2e98f1bd3391583fd',1,'gooey_common.h']]],
-  ['layouts_9',['layouts',['../structGooeyWindow.html#a6f85af9ebfb3bbe761aa09c19738c09e',1,'GooeyWindow']]],
-  ['length_10',['length',['../glad_8h.html#ab5c3fdcd532cbae4e05eb8d1079e139e',1,'glad.h']]],
-  ['level_11',['level',['../glad_8h.html#abc60a79088789bd61297bf5f9ff500d1',1,'glad.h']]],
-  ['library_12',['library',['../index.html#autotoc_md0',1,'Gooey GUI Library'],['../index.html',1,'Gooey GUI Library']]],
-  ['license_13',['License',['../index.html#autotoc_md8',1,'']]],
-  ['linmath_2eh_14',['linmath.h',['../linmath_8h.html',1,'']]],
-  ['linmath_5fh_5fdefine_5fvec_15',['LINMATH_H_DEFINE_VEC',['../linmath_8h.html#ad7ae6ff6612bd489d7f6a5b6a9fdc775',1,'linmath.h']]],
-  ['linmath_5fh_5ffunc_16',['LINMATH_H_FUNC',['../linmath_8h.html#a4ebda4dd54615e1cac0ff1fde2725542',1,'linmath.h']]],
-  ['list_5fcount_17',['list_count',['../structGooeyWindow.html#aff5aff09ec693094bfbc9072007b9b2d',1,'GooeyWindow']]],
-  ['lists_18',['lists',['../structGooeyWindow.html#abecc502aaaa24263ad8edca51970de27',1,'GooeyWindow::lists'],['../glad_8h.html#a1f773ba62fb0187229cb240b60f45042',1,'lists:&#160;glad.h']]],
-  ['loadimage_19',['LoadImage',['../structGooeyBackend.html#acfac47988e1ba046a39a52183c9ec4f3',1,'GooeyBackend']]],
-  ['location_20',['location',['../glad_8h.html#a6f0165ed903f22b8bb600c3e0b628e73',1,'glad.h']]],
-  ['log_5fcritical_21',['LOG_CRITICAL',['../gooey__logger_8h.html#a6917ba40373e382d307e7b992fa1441f',1,'gooey_logger.h']]],
-  ['log_5ferror_22',['LOG_ERROR',['../gooey__logger_8h.html#ae6fc70e87e424e7083c63696b8fb9e78',1,'gooey_logger.h']]],
-  ['log_5finfo_23',['LOG_INFO',['../gooey__logger_8h.html#ae69d735f8291bd2aff230fe6ffb4d4b3',1,'gooey_logger.h']]],
-  ['log_5fmessage_24',['log_message',['../gooey__logger_8h.html#a329a26a1037d1776a5aa0302280efa04',1,'LOG_MESSAGE:&#160;gooey_logger.h'],['../gooey__logger_8h.html#accd42ec0f77aa937c37da191a079b499',1,'log_message(DebugLevel level, const char *file, int line, const char *func, const char *fmt,...):&#160;gooey_logger.h']]],
-  ['log_5fperformance_25',['log_performance',['../gooey__logger_8h.html#a5919cfd9b6ab5ed3fde8b07ba7bde44f',1,'LOG_PERFORMANCE:&#160;gooey_logger.h'],['../gooey__logger_8h.html#a3ddfc7487070b137df1f2eb2d5919000',1,'log_performance(char *message):&#160;gooey_logger.h']]],
-  ['log_5fwarning_26',['LOG_WARNING',['../gooey__logger_8h.html#afde44945335adc0c0ae2986fea13438f',1,'gooey_logger.h']]],
-  ['lookupstring_27',['LookupString',['../backend__utils_8h.html#a7219c67fcc8370d6d0d172d704b7726f',1,'backend_utils.h']]]
+  ['readme_2emd_0',['readme.md',['../readme_8md.html',1,'']]]
 ];

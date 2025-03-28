@@ -95,46 +95,33 @@ $(document).ready(function(){initNavTree('gooey__slider_8h.html',''); initResiza
   <div class="headertitle"><div class="title">gooey_slider.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;event/gooey_event.h&quot;</code><br />
-<code>#include &quot;common/gooey_common.h&quot;</code><br />
+<div class="textblock"><code>#include &quot;common/gooey_common.h&quot;</code><br />
 <code>#include &lt;stdbool.h&gt;</code><br />
 </div>
 <p><a href="gooey__slider_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6d20f57fb42f874e6a7a281bdfa1ed20" id="r_a6d20f57fb42f874e6a7a281bdfa1ed20"><td class="memItemLeft" align="right" valign="top">GooeySlider *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#a6d20f57fb42f874e6a7a281bdfa1ed20">GooeySlider_Add</a> (GooeyWindow *win, int x, int y, int width, long min_value, long max_value, bool show_hints, void(*callback)(long value))</td></tr>
-<tr class="memdesc:a6d20f57fb42f874e6a7a281bdfa1ed20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a slider to the window.  <br /></td></tr>
-<tr class="separator:a6d20f57fb42f874e6a7a281bdfa1ed20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75c66d951661f37d1366d53053468308" id="r_a75c66d951661f37d1366d53053468308"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#a75c66d951661f37d1366d53053468308">GooeySlider_HandleDrag</a> (GooeyWindow *win, GooeyEvent *event)</td></tr>
-<tr class="memdesc:a75c66d951661f37d1366d53053468308"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles slider drag events.  <br /></td></tr>
-<tr class="separator:a75c66d951661f37d1366d53053468308"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93f147466e1c69ead948b8b9e4e031aa" id="r_a93f147466e1c69ead948b8b9e4e031aa"><td class="memItemLeft" align="right" valign="top">GooeySlider *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#a93f147466e1c69ead948b8b9e4e031aa">GooeySlider_Create</a> (int x, int y, int width, long min_value, long max_value, bool show_hints, void(*callback)(long value))</td></tr>
+<tr class="memdesc:a93f147466e1c69ead948b8b9e4e031aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a slider to the window.  <br /></td></tr>
+<tr class="separator:a93f147466e1c69ead948b8b9e4e031aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd6d9b702d0761fe0e8e638475e9d993" id="r_abd6d9b702d0761fe0e8e638475e9d993"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#abd6d9b702d0761fe0e8e638475e9d993">GooeySlider_GetValue</a> (GooeySlider *slider)</td></tr>
 <tr class="memdesc:abd6d9b702d0761fe0e8e638475e9d993"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current value of the slider.  <br /></td></tr>
 <tr class="separator:abd6d9b702d0761fe0e8e638475e9d993"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61304725f1d1d0928cfd6b2edd34f1a0" id="r_a61304725f1d1d0928cfd6b2edd34f1a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#a61304725f1d1d0928cfd6b2edd34f1a0">GooeySlider_SetValue</a> (GooeySlider *slider, long value)</td></tr>
 <tr class="memdesc:a61304725f1d1d0928cfd6b2edd34f1a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the value of the slider.  <br /></td></tr>
 <tr class="separator:a61304725f1d1d0928cfd6b2edd34f1a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c0a137bb5f7a259408b8eda42647058" id="r_a3c0a137bb5f7a259408b8eda42647058"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__slider_8h.html#a3c0a137bb5f7a259408b8eda42647058">GooeySlider_Draw</a> (GooeyWindow *window)</td></tr>
-<tr class="memdesc:a3c0a137bb5f7a259408b8eda42647058"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the slider on the window.  <br /></td></tr>
-<tr class="separator:a3c0a137bb5f7a259408b8eda42647058"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6d20f57fb42f874e6a7a281bdfa1ed20" name="a6d20f57fb42f874e6a7a281bdfa1ed20"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6d20f57fb42f874e6a7a281bdfa1ed20">&#9670;&#160;</a></span>GooeySlider_Add()</h2>
+<a id="a93f147466e1c69ead948b8b9e4e031aa" name="a93f147466e1c69ead948b8b9e4e031aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93f147466e1c69ead948b8b9e4e031aa">&#9670;&#160;</a></span>GooeySlider_Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GooeySlider * GooeySlider_Add </td>
+          <td class="memname">GooeySlider * GooeySlider_Create </td>
           <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
@@ -186,7 +173,6 @@ Functions</h2></td></tr>
 <p>This function creates and adds a slider to the specified window at the given position with a defined width and range. The slider's value changes when dragged, and a callback function is invoked to notify when the slider value changes.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to add the slider to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the slider's position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the slider's position. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the slider. </td></tr>
@@ -198,33 +184,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A new GooeySlider object. </dd></dl>
-
-</div>
-</div>
-<a id="a3c0a137bb5f7a259408b8eda42647058" name="a3c0a137bb5f7a259408b8eda42647058"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3c0a137bb5f7a259408b8eda42647058">&#9670;&#160;</a></span>GooeySlider_Draw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeySlider_Draw </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws the slider on the window. </p>
-<p>This function renders the slider on the specified window. It should be called after the slider's state has been updated to reflect the changes visually.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>The window to draw the slider on. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
@@ -253,45 +212,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The current value of the slider. </dd></dl>
-
-</div>
-</div>
-<a id="a75c66d951661f37d1366d53053468308" name="a75c66d951661f37d1366d53053468308"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75c66d951661f37d1366d53053468308">&#9670;&#160;</a></span>GooeySlider_HandleDrag()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool GooeySlider_HandleDrag </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">GooeyEvent *&#160;</td>
-          <td class="paramname"><em>event</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Handles slider drag events. </p>
-<p>This function is responsible for processing slider drag events. It checks whether the event corresponds to dragging a slider and updates the slider's value accordingly.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">win</td><td>The window containing the slider. </td></tr>
-    <tr><td class="paramname">event</td><td>The current event.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if the slider was dragged, false otherwise. </dd></dl>
 
 </div>
 </div>

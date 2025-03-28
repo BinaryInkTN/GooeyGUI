@@ -31,10 +31,12 @@ var NAVTREE =
         [ "Prerequisites", "index.html#autotoc_md3", null ],
         [ "Installation", "index.html#autotoc_md4", null ],
         [ "Example Usage", "index.html#autotoc_md5", null ]
-      ] ],
-      [ "Documentation", "index.html#autotoc_md6", null ],
-      [ "Contributing", "index.html#autotoc_md7", null ],
-      [ "License", "index.html#autotoc_md8", null ]
+      ] ]
+    ] ],
+    [ "Currently working on a Web-based Intuitive GUI builder", "index.html#autotoc_md6", [
+      [ "Documentation", "index.html#autotoc_md7", null ],
+      [ "Contributing", "index.html#autotoc_md8", null ],
+      [ "License", "index.html#autotoc_md9", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

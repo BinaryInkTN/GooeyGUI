@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['readme_2emd_0',['readme.md',['../readme_8md.html',1,'']]]
+  ['next_0',['next',['../structGooeySignal__Slot.html#ace06a6e4d013c36202b5f2e2f0fa24ae',1,'GooeySignal_Slot']]]
 ];

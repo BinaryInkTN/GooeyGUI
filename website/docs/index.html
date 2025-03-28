@@ -111,6 +111,12 @@ Features</h2>
 <li>Dropdown Menus</li>
 <li>Textboxes</li>
 <li>Canvas</li>
+<li>List</li>
+<li>Menu</li>
+<li>Tabs</li>
+<li>MessageBoxes</li>
+<li>File Drag &amp; Drop Surface</li>
+<li>Image</li>
 </ul>
 </li>
 <li><b>Layouts</b>:<ul>
@@ -154,10 +160,8 @@ Getting Started</h2>
 <h3><a class="anchor" id="autotoc_md3"></a>
 Prerequisites</h3>
 <p>Ensure your development environment includes:</p><ul>
-<li><b>X11 Development Libraries</b>: Gooey relies on X11 (<code>&lt;X11/X.h&gt;</code>, <code>&lt;X11/Xlib.h&gt;</code>, <code>&lt;X11/Xutil.h&gt;</code>).</li>
-<li><b>GLFW Development Library</b>: Gooey relies on GLFW (<code>&lt;GLFW/glfw3.h&gt;</code>).</li>
-<li><b>OpenGL Development Library</b>: Gooey relies on GLAD (<code>&lt;GLAD/glad.h&gt;</code>).</li>
-<li><b>cJSON Development Library</b>: Gooey relies on cJSON (<code>&lt;cjson/cJSON.h&gt;</code>).</li>
+<li>** CMake</li>
+<li>** GCC</li>
 </ul>
 <h3><a class="anchor" id="autotoc_md4"></a>
 Installation</h3>
@@ -195,7 +199,7 @@ Example Usage</h3>
 <div class="line">    set_logging_enabled(<span class="keyword">true</span>);</div>
 <div class="line">    set_minimum_log_level(DEBUG_LEVEL_INFO);</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_function" href="gooey_8h.html#aa1b4ea3eac057048d12e7e077e24fbce">Gooey_Init</a>(GLFW);</div>
+<div class="line">    <a class="code hl_function" href="gooey_8h.html#a45fb2e84e7be6afa5e9c2fa39d581439">Gooey_Init</a>(GLFW);</div>
 <div class="line"> </div>
 <div class="line">    GooeyWindow win = GooeyWindow_Create(<span class="stringliteral">&quot;Hello World&quot;</span>, 400, 300, 1);</div>
 <div class="line"> </div>
@@ -203,7 +207,7 @@ Example Usage</h3>
 <div class="line"> </div>
 <div class="line">    <a class="code hl_function" href="gooey__messagebox_8h.html#a54f28eaf0900f9c0767f00735244ae49">GooeyMessageBox_Show</a>(&amp;msgBox);</div>
 <div class="line"> </div>
-<div class="line">    <a class="code hl_function" href="gooey__button_8h.html#a6ef2ab71a12568095efab0973c7b687c">GooeyButton_Add</a>(&amp;win, <span class="stringliteral">&quot;Click Me&quot;</span>, 150, 100, 100, 40, onButtonClick);</div>
+<div class="line">    GooeyButton_Add(&amp;win, <span class="stringliteral">&quot;Click Me&quot;</span>, 150, 100, 100, 40, onButtonClick);</div>
 <div class="line"> </div>
 <div class="line">    GooeyWindow_Run(2, &amp;win, &amp;msgBox);</div>
 <div class="line"> </div>
@@ -211,8 +215,7 @@ Example Usage</h3>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
-<div class="ttc" id="agooey_8h_html_aa1b4ea3eac057048d12e7e077e24fbce"><div class="ttname"><a href="gooey_8h.html#aa1b4ea3eac057048d12e7e077e24fbce">Gooey_Init</a></div><div class="ttdeci">int Gooey_Init(GooeyBackends backend)</div><div class="ttdoc">Initializes the Gooey system with the specified backend.</div></div>
-<div class="ttc" id="agooey__button_8h_html_a6ef2ab71a12568095efab0973c7b687c"><div class="ttname"><a href="gooey__button_8h.html#a6ef2ab71a12568095efab0973c7b687c">GooeyButton_Add</a></div><div class="ttdeci">GooeyButton * GooeyButton_Add(GooeyWindow *win, const char *label, int x, int y, int width, int height, void(*callback)())</div><div class="ttdoc">Adds a button to the window.</div></div>
+<div class="ttc" id="agooey_8h_html_a45fb2e84e7be6afa5e9c2fa39d581439"><div class="ttname"><a href="gooey_8h.html#a45fb2e84e7be6afa5e9c2fa39d581439">Gooey_Init</a></div><div class="ttdeci">int Gooey_Init()</div><div class="ttdoc">Initializes the Gooey system with the specified backend.</div></div>
 <div class="ttc" id="agooey__messagebox_8h_html_a146276471851203d9409994cde7873a8"><div class="ttname"><a href="gooey__messagebox_8h.html#a146276471851203d9409994cde7873a8">GooeyMessageBox_Create</a></div><div class="ttdeci">GooeyWindow * GooeyMessageBox_Create(const char *title, const char *message, MSGBOX_TYPE type, void(*callback)(int option))</div><div class="ttdoc">Creates a message box window.</div></div>
 <div class="ttc" id="agooey__messagebox_8h_html_a54f28eaf0900f9c0767f00735244ae49"><div class="ttname"><a href="gooey__messagebox_8h.html#a54f28eaf0900f9c0767f00735244ae49">GooeyMessageBox_Show</a></div><div class="ttdeci">void GooeyMessageBox_Show(GooeyWindow *msgBoxWindow)</div><div class="ttdoc">Displays the specified message box window.</div></div>
 </div><!-- fragment --><ul>
@@ -225,15 +228,18 @@ Example Usage</h3>
 </div><!-- fragment --> <br  />
  </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Currently working on a Web-based Intuitive GUI builder</h1>
+<p><img src="GooeyBuilder.png" alt="" class="inline"/> </p>
+<h2><a class="anchor" id="autotoc_md7"></a>
 Documentation</h2>
 <ul>
 <li>You can find the full API documentation <a href="https://yassine-aa.github.io/GooeyWebsite/docs/index.html">here</a>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Contributing</h2>
 <p>Contributions are welcome! If you have suggestions or encounter issues, feel free to open an issue or submit a pull request.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 License</h2>
 <p>Gooey is released under the GPL3 License.</p>
 <hr  />

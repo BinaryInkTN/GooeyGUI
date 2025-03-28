@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['next_0',['next',['../structGooeySignal__Slot.html#ace06a6e4d013c36202b5f2e2f0fa24ae',1,'GooeySignal_Slot']]]
+  ['installation_0',['Installation',['../index.html#autotoc_md4',1,'']]],
+  ['intuitive_20gui_20builder_1',['Currently working on a Web-based Intuitive GUI builder',['../index.html#autotoc_md6',1,'']]]
 ];

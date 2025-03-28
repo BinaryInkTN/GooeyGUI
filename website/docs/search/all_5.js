@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['installation_0',['Installation',['../index.html#autotoc_md4',1,'']]]
+  ['features_0',['Features',['../index.html#autotoc_md1',1,'']]]
 ];

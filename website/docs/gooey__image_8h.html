@@ -104,12 +104,9 @@ $(document).ready(function(){initNavTree('gooey__image_8h.html',''); initResizab
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ab86d648f85f5b3b9bb96622a91b13474" id="r_ab86d648f85f5b3b9bb96622a91b13474"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__image_8h.html#ab86d648f85f5b3b9bb96622a91b13474">GooeyImage_Add</a> (GooeyWindow *win, const char *image_path, int x, int y, int width, int height, void(*callback)(void))</td></tr>
-<tr class="memdesc:ab86d648f85f5b3b9bb96622a91b13474"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an image to a Gooey window.  <br /></td></tr>
-<tr class="separator:ab86d648f85f5b3b9bb96622a91b13474"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1336d7a687e4d310aa6f1506c954bfee" id="r_a1336d7a687e4d310aa6f1506c954bfee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__image_8h.html#a1336d7a687e4d310aa6f1506c954bfee">GooeyImage_Draw</a> (GooeyWindow *win)</td></tr>
-<tr class="memdesc:a1336d7a687e4d310aa6f1506c954bfee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws all images in a Gooey window.  <br /></td></tr>
-<tr class="separator:a1336d7a687e4d310aa6f1506c954bfee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3db32ac9fe3aa9093c5f5f7ab0bdfd52" id="r_a3db32ac9fe3aa9093c5f5f7ab0bdfd52"><td class="memItemLeft" align="right" valign="top">GooeyImage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__image_8h.html#a3db32ac9fe3aa9093c5f5f7ab0bdfd52">GooeyImage_Create</a> (const char *image_path, int x, int y, int width, int height, void(*callback)(void))</td></tr>
+<tr class="memdesc:a3db32ac9fe3aa9093c5f5f7ab0bdfd52"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an image to a Gooey window.  <br /></td></tr>
+<tr class="separator:a3db32ac9fe3aa9093c5f5f7ab0bdfd52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Image handling functions for the Gooey GUI library. </p>
@@ -117,21 +114,15 @@ Functions</h2></td></tr>
 <dl class="section copyright"><dt>Copyright</dt><dd>GNU General Public License v3.0</dd></dl>
 <p>This file contains functions for adding and drawing images in a Gooey window. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ab86d648f85f5b3b9bb96622a91b13474" name="ab86d648f85f5b3b9bb96622a91b13474"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab86d648f85f5b3b9bb96622a91b13474">&#9670;&#160;</a></span>GooeyImage_Add()</h2>
+<a id="a3db32ac9fe3aa9093c5f5f7ab0bdfd52" name="a3db32ac9fe3aa9093c5f5f7ab0bdfd52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3db32ac9fe3aa9093c5f5f7ab0bdfd52">&#9670;&#160;</a></span>GooeyImage_Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void GooeyImage_Add </td>
+          <td class="memname">GooeyImage * GooeyImage_Create </td>
           <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>image_path</em>, </td>
         </tr>
@@ -177,40 +168,12 @@ Functions</h2></td></tr>
 <p>This function loads an image from the specified path and adds it to the given window at the specified position and dimensions. A callback function can be provided to handle interactions with the image.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The Gooey window to which the image will be added. </td></tr>
     <tr><td class="paramname">image_path</td><td>The file path of the image to load. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the image's position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the image's position. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the image. </td></tr>
     <tr><td class="paramname">height</td><td>The height of the image. </td></tr>
     <tr><td class="paramname">callback</td><td>A callback function to handle interactions with the image (e.g., clicks). </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1336d7a687e4d310aa6f1506c954bfee" name="a1336d7a687e4d310aa6f1506c954bfee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1336d7a687e4d310aa6f1506c954bfee">&#9670;&#160;</a></span>GooeyImage_Draw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeyImage_Draw </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws all images in a Gooey window. </p>
-<p>This function renders all images that have been added to the specified window.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">win</td><td>The Gooey window containing the images to draw. </td></tr>
   </table>
   </dd>
 </dl>

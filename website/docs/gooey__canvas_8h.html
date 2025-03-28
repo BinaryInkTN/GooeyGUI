@@ -104,9 +104,9 @@ $(document).ready(function(){initNavTree('gooey__canvas_8h.html',''); initResiza
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a83f3ed9f9be4250bf796836a1ffe4eab" id="r_a83f3ed9f9be4250bf796836a1ffe4eab"><td class="memItemLeft" align="right" valign="top">GooeyCanvas *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a83f3ed9f9be4250bf796836a1ffe4eab">GooeyCanvas_Add</a> (GooeyWindow *win, int x, int y, int width, int height)</td></tr>
-<tr class="memdesc:a83f3ed9f9be4250bf796836a1ffe4eab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a canvas to the specified window.  <br /></td></tr>
-<tr class="separator:a83f3ed9f9be4250bf796836a1ffe4eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a295b5c4f364ff07130c54ee394c88f1d" id="r_a295b5c4f364ff07130c54ee394c88f1d"><td class="memItemLeft" align="right" valign="top">GooeyCanvas *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a295b5c4f364ff07130c54ee394c88f1d">GooeyCanvas_Create</a> (int x, int y, int width, int height)</td></tr>
+<tr class="memdesc:a295b5c4f364ff07130c54ee394c88f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a canvas to the specified window.  <br /></td></tr>
+<tr class="separator:a295b5c4f364ff07130c54ee394c88f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebab8a9a2a61ed662ce3cfafab32b3e9" id="r_aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#aebab8a9a2a61ed662ce3cfafab32b3e9">GooeyCanvas_DrawRectangle</a> (GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled)</td></tr>
 <tr class="memdesc:aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle onto the user-defined canvas.  <br /></td></tr>
 <tr class="separator:aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -119,9 +119,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a1e67ad00dd8a6f8e37393f4d0cab364a" id="r_a1e67ad00dd8a6f8e37393f4d0cab364a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a1e67ad00dd8a6f8e37393f4d0cab364a">GooeyCanvas_SetForeground</a> (GooeyCanvas *canvas, unsigned long color_hex)</td></tr>
 <tr class="memdesc:a1e67ad00dd8a6f8e37393f4d0cab364a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the foreground color of the user-defined canvas.  <br /></td></tr>
 <tr class="separator:a1e67ad00dd8a6f8e37393f4d0cab364a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab955bcca8a057c30d0ece13a28ece0c8" id="r_ab955bcca8a057c30d0ece13a28ece0c8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#ab955bcca8a057c30d0ece13a28ece0c8">GooeyCanvas_Draw</a> (GooeyWindow *window)</td></tr>
-<tr class="memdesc:ab955bcca8a057c30d0ece13a28ece0c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws the canvas onto the specified window.  <br /></td></tr>
-<tr class="separator:ab955bcca8a057c30d0ece13a28ece0c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file for the GooeyCanvas module. </p>
@@ -129,21 +126,15 @@ Functions</h2></td></tr>
 <dl class="section copyright"><dt>Copyright</dt><dd>GNU General Public License v3.0</dd></dl>
 <p>Provides functions to create and manipulate a user-defined canvas for drawing primitives such as rectangles, lines, and arcs. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a83f3ed9f9be4250bf796836a1ffe4eab" name="a83f3ed9f9be4250bf796836a1ffe4eab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a83f3ed9f9be4250bf796836a1ffe4eab">&#9670;&#160;</a></span>GooeyCanvas_Add()</h2>
+<a id="a295b5c4f364ff07130c54ee394c88f1d" name="a295b5c4f364ff07130c54ee394c88f1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a295b5c4f364ff07130c54ee394c88f1d">&#9670;&#160;</a></span>GooeyCanvas_Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GooeyCanvas * GooeyCanvas_Add </td>
+          <td class="memname">GooeyCanvas * GooeyCanvas_Create </td>
           <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
@@ -177,7 +168,6 @@ Functions</h2></td></tr>
 <p>This function creates a new GooeyCanvas and attaches it to the given GooeyWindow at the specified coordinates and dimensions.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to add the canvas to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the canvas position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the canvas position. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the canvas. </td></tr>
@@ -186,33 +176,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyCanvas. </dd></dl>
-
-</div>
-</div>
-<a id="ab955bcca8a057c30d0ece13a28ece0c8" name="ab955bcca8a057c30d0ece13a28ece0c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab955bcca8a057c30d0ece13a28ece0c8">&#9670;&#160;</a></span>GooeyCanvas_Draw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeyCanvas_Draw </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>window</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws the canvas onto the specified window. </p>
-<p>This function updates the window with the current contents of the canvas.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">window</td><td>The window onto which the canvas is drawn. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

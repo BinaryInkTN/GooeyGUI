@@ -104,18 +104,12 @@ $(document).ready(function(){initNavTree('gooey__drop__surface_8h.html',''); ini
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:adf446608da6e9ead3d2fc6b68254fa0c" id="r_adf446608da6e9ead3d2fc6b68254fa0c"><td class="memItemLeft" align="right" valign="top">GooeyDropSurface *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__drop__surface_8h.html#adf446608da6e9ead3d2fc6b68254fa0c">GooeyDropSurface_Add</a> (GooeyWindow *win, int x, int y, int width, int height, char *default_message, void(*callback)(char *mime, char *file_path))</td></tr>
-<tr class="memdesc:adf446608da6e9ead3d2fc6b68254fa0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a file drop surface to the specified window.  <br /></td></tr>
-<tr class="separator:adf446608da6e9ead3d2fc6b68254fa0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62abed5c47424b7d3f7e1e68bd5a93b8" id="r_a62abed5c47424b7d3f7e1e68bd5a93b8"><td class="memItemLeft" align="right" valign="top">GooeyDropSurface *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__drop__surface_8h.html#a62abed5c47424b7d3f7e1e68bd5a93b8">GooeyDropSurface_Create</a> (int x, int y, int width, int height, char *default_message, void(*callback)(char *mime, char *file_path))</td></tr>
+<tr class="memdesc:a62abed5c47424b7d3f7e1e68bd5a93b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a file drop surface.  <br /></td></tr>
+<tr class="separator:a62abed5c47424b7d3f7e1e68bd5a93b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a497dc292be03f5162ec92c5bc6f314fe" id="r_a497dc292be03f5162ec92c5bc6f314fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__drop__surface_8h.html#a497dc292be03f5162ec92c5bc6f314fe">GooeyDropSurface_Clear</a> (GooeyDropSurface *drop_surface)</td></tr>
 <tr class="memdesc:a497dc292be03f5162ec92c5bc6f314fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the content of a drop surface.  <br /></td></tr>
 <tr class="separator:a497dc292be03f5162ec92c5bc6f314fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc38659daf60af3f8cde8cf3c7477448" id="r_afc38659daf60af3f8cde8cf3c7477448"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__drop__surface_8h.html#afc38659daf60af3f8cde8cf3c7477448">GooeyDropSurface_HandleFileDrop</a> (GooeyWindow *win, int mouseX, int mouseY)</td></tr>
-<tr class="memdesc:afc38659daf60af3f8cde8cf3c7477448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles file drop events for drop surfaces within the specified window.  <br /></td></tr>
-<tr class="separator:afc38659daf60af3f8cde8cf3c7477448"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1b05e0e2f861ff1e2b760240a08c9ed" id="r_ac1b05e0e2f861ff1e2b760240a08c9ed"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__drop__surface_8h.html#ac1b05e0e2f861ff1e2b760240a08c9ed">GooeyDropSurface_Draw</a> (GooeyWindow *win)</td></tr>
-<tr class="memdesc:ac1b05e0e2f861ff1e2b760240a08c9ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws all drop surfaces within the specified window.  <br /></td></tr>
-<tr class="separator:ac1b05e0e2f861ff1e2b760240a08c9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file for the GooeyDropSurface module. </p>
@@ -123,21 +117,42 @@ Functions</h2></td></tr>
 <dl class="section copyright"><dt>Copyright</dt><dd>GNU General Public License v3.0</dd></dl>
 <p>Provides functionality for creating file drop surfaces, handling file drops, and rendering drop surfaces within a GooeyWindow. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="adf446608da6e9ead3d2fc6b68254fa0c" name="adf446608da6e9ead3d2fc6b68254fa0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf446608da6e9ead3d2fc6b68254fa0c">&#9670;&#160;</a></span>GooeyDropSurface_Add()</h2>
+<a id="a497dc292be03f5162ec92c5bc6f314fe" name="a497dc292be03f5162ec92c5bc6f314fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a497dc292be03f5162ec92c5bc6f314fe">&#9670;&#160;</a></span>GooeyDropSurface_Clear()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">GooeyDropSurface * GooeyDropSurface_Add </td>
+          <td class="memname">void GooeyDropSurface_Clear </td>
           <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">GooeyDropSurface *&#160;</td>
+          <td class="paramname"><em>drop_surface</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the content of a drop surface. </p>
+<p>Resets the drop surface, removing any dropped file information and restoring the default message.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">drop_surface</td><td>The drop surface to clear. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a62abed5c47424b7d3f7e1e68bd5a93b8" name="a62abed5c47424b7d3f7e1e68bd5a93b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62abed5c47424b7d3f7e1e68bd5a93b8">&#9670;&#160;</a></span>GooeyDropSurface_Create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GooeyDropSurface * GooeyDropSurface_Create </td>
+          <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
@@ -179,11 +194,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds a file drop surface to the specified window. </p>
+<p>Adds a file drop surface. </p>
 <p>Creates a new GooeyDropSurface that allows users to drop files onto it. When a file is dropped, the provided callback function is triggered with the MIME type and file path.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">win</td><td>The window to add the drop surface to. </td></tr>
     <tr><td class="paramname">x</td><td>The x-coordinate of the drop surface's position. </td></tr>
     <tr><td class="paramname">y</td><td>The y-coordinate of the drop surface's position. </td></tr>
     <tr><td class="paramname">width</td><td>The width of the drop surface. </td></tr>
@@ -194,106 +208,6 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pointer to the newly created GooeyDropSurface. </dd></dl>
-
-</div>
-</div>
-<a id="a497dc292be03f5162ec92c5bc6f314fe" name="a497dc292be03f5162ec92c5bc6f314fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a497dc292be03f5162ec92c5bc6f314fe">&#9670;&#160;</a></span>GooeyDropSurface_Clear()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeyDropSurface_Clear </td>
-          <td>(</td>
-          <td class="paramtype">GooeyDropSurface *&#160;</td>
-          <td class="paramname"><em>drop_surface</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Clears the content of a drop surface. </p>
-<p>Resets the drop surface, removing any dropped file information and restoring the default message.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">drop_surface</td><td>The drop surface to clear. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="ac1b05e0e2f861ff1e2b760240a08c9ed" name="ac1b05e0e2f861ff1e2b760240a08c9ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1b05e0e2f861ff1e2b760240a08c9ed">&#9670;&#160;</a></span>GooeyDropSurface_Draw()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GooeyDropSurface_Draw </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Draws all drop surfaces within the specified window. </p>
-<p>This function renders all GooeyDropSurface elements that belong to the given window, ensuring they display the correct message and state.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">win</td><td>The window containing the drop surfaces. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="afc38659daf60af3f8cde8cf3c7477448" name="afc38659daf60af3f8cde8cf3c7477448"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc38659daf60af3f8cde8cf3c7477448">&#9670;&#160;</a></span>GooeyDropSurface_HandleFileDrop()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool GooeyDropSurface_HandleFileDrop </td>
-          <td>(</td>
-          <td class="paramtype">GooeyWindow *&#160;</td>
-          <td class="paramname"><em>win</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mouseX</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mouseY</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Handles file drop events for drop surfaces within the specified window. </p>
-<p>Checks whether a file has been dropped onto a drop surface and triggers the associated callback function.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">win</td><td>The window containing the drop surface. </td></tr>
-    <tr><td class="paramname">mouseX</td><td>The x-coordinate of the mouse when the file was dropped. </td></tr>
-    <tr><td class="paramname">mouseY</td><td>The y-coordinate of the mouse when the file was dropped. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>True if a file was dropped onto a valid drop surface, false otherwise. </dd></dl>
 
 </div>
 </div>

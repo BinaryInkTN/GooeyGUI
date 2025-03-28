@@ -14,5 +14,6 @@ var dir_4bc2dda65d93844544aff2d91e34757b =
     [ "gooey_plot.h", "gooey__plot_8h.html", "gooey__plot_8h" ],
     [ "gooey_radiobutton.h", "gooey__radiobutton_8h.html", "gooey__radiobutton_8h" ],
     [ "gooey_slider.h", "gooey__slider_8h.html", "gooey__slider_8h" ],
+    [ "gooey_tabs.h", "gooey__tabs_8h.html", "gooey__tabs_8h" ],
     [ "gooey_textbox.h", "gooey__textbox_8h.html", "gooey__textbox_8h" ]
 ];

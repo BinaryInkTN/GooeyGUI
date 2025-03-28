@@ -3,6 +3,8 @@
   <img src="gooey.png" width=128>
 </p>
 
+
+
 # Gooey GUI Library
 
 Gooey is a lightweight and feature-rich GUI (Graphical User Interface) library originally designed for X11 environments but now cross-platform. It provides a range of customizable widgets and layouts for creating responsive and modern desktop applications. The library is optimized for simplicity and offers a flexible API for developers.
@@ -22,6 +24,12 @@ Gooey is a lightweight and feature-rich GUI (Graphical User Interface) library o
   - Dropdown Menus
   - Textboxes
   - Canvas
+  - List
+  - Menu
+  - Tabs
+  - MessageBoxes
+  - File Drag & Drop Surface
+  - Image
 
 - **Layouts**:
   - Horizontal
@@ -70,10 +78,8 @@ cp examples/roboto.ttf build/
 ### Prerequisites
 
 Ensure your development environment includes:
-- **X11 Development Libraries**: Gooey relies on X11 (`<X11/X.h>`, `<X11/Xlib.h>`, `<X11/Xutil.h>`).
-- **GLFW Development Library**: Gooey relies on GLFW (`<GLFW/glfw3.h>`).
-- **OpenGL Development Library**: Gooey relies on GLAD (`<GLAD/glad.h>`).
-- **cJSON Development Library**: Gooey relies on cJSON (`<cjson/cJSON.h>`).
+- ** CMake
+- ** GCC
 
 ### Installation
 
@@ -137,6 +143,13 @@ gcc example.c -o example -I/usr/local/include/Gooey -L/usr/local/lib/ -lGooeyGUI
 ```bash 
 LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.6 ./example
 ``` 
+# Currently working on a Web-based Intuitive GUI builder
+
+<p align="center">
+  <img src="GooeyBuilder.png">
+</p>
+
+
 ## Documentation
 
 - You can find the full API documentation <a href="https://yassine-aa.github.io/GooeyWebsite/docs/index.html">here</a>. 

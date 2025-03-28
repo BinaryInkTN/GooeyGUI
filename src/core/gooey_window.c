@@ -668,6 +668,7 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
 
     active_backend->SetupCallbacks(GooeyWindow_Redraw, windows);
     active_backend->Run();
+    
 }
 
 void GooeyWindow_RequestRedraw(GooeyWindow *win)

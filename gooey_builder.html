@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey Builder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Windows 10 style window */
+        .window {
+            width: 800px;
+            height: 600px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 12px 28px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            resize: both;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .title-bar {
+            background: #f3f3f3;
+            color: #000000;
+            padding: 0 10px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5e5e5;
+            user-select: none;
+            cursor: move;
+        }
+
+        .title-text {
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .window-controls {
+            display: flex;
+            height: 100%;
+        }
+
+        .window-control {
+            width: 46px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #000000;
+            cursor: default;
+        }
+
+        .window-control:hover {
+            background: #e5e5e5;
+        }
+
+        .window-control.close:hover {
+            background: #e81123;
+            color: white;
+        }
+
+        .content {
+            display: flex;
+            height: calc(100% - 32px);
+            position: relative;
+        }
+
+        /* Floating panels */
+        .panel {
+            position: absolute;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            overflow: hidden;
+            min-width: 200px;
+            min-height: 200px;
+            resize: both;
+        }
+
+        .panel-header {
+            background: #f3f3f3;
+            color: #000000;
+            padding: 8px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e5e5;
+            cursor: move;
+            user-select: none;
+        }
+
+        .panel-content {
+            padding: 20px;
+            overflow: hidden;
+
+        }
+
+        #toolbox {
+            left: 20px;
+            top: 20px;
+            width: 220px;
+            height: auto;
+        }
+
+        #settings-panel {
+            right: 20px;
+            top: 20px;
+            width: auto;
+            height: auto;
+        }
+
+        #workspace {
+            flex: 1;
+            position: relative;
+            background: #ffffff;
+            overflow: auto;
+            padding: 10px;
+        }
+
+        .widget {
+            background: #0078d7;
+            color: white;
+            text-align: center;
+            cursor: default;
+            padding: 6px 8px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            border: none;
+            font-size: 12px;
+            transition: background 0.1s;
+        }
+
+        .widget:hover {
+            background: #106ebe;
+        }
+
+        .widget:active {
+            background: #005a9e;
+        }
+
+        .draggable {
+            user-select: none;
+            padding: 6px;
+            min-width: 80px;
+            min-height: 1px;
+            box-sizing: border-box;
+        }
+
+        .free-widget {
+            position: absolute;
+            border: 1px solid #d0d0d0;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 6px 12px;
+            background: #f3f3f3;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        button:hover {
+            background: #e5e5e5;
+        }
+
+        button:active {
+            background: #d0d0d0;
+        }
+
+        /* Widget specific styles */
+        .widget-button {
+            background: #f3f3f3;
+            color: black;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            padding: 6px 12px;
+            text-align: center;
+            font-size: 12px;
+            transition: background 0.1s;
+        }
+
+        .widget-button:hover {
+            background: #e5e5e5;
+        }
+
+        .widget-button:active {
+            background: #d0d0d0;
+        }
+
+        .widget-input {
+            border: 1px solid #d0d0d0;
+            padding: 6px 8px;
+            background: white;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .widget-input:focus {
+            border-color: #0078d7;
+            outline: none;
+        }
+
+        .widget-slider {
+            width: 100px;
+            height: 4px;
+            background: #d0d0d0;
+            position: relative;
+            border-radius: 2px;
+            margin: 13px 0;
+        }
+
+        .widget-slider::after {
+            content: "";
+            position: absolute;
+            top: -2.5px;
+            left: 50%;
+            width: 15px;
+            height: 15px;
+            background: #0078d7;
+            transform: translateX(-50%);
+        }
+
+        .widget-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 1px solid #d0d0d0;
+            background: white;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        .widget-checkbox.checked::after {
+            content: "✓";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            line-height: 16px;
+            color: black;
+            font-size: 12px;
+        }
+
+        .widget-label {
+            color: black;
+            background: transparent;
+            border: none;
+            text-align: left;
+            font-size: 12px;
+            padding: 0;
+        }
+
+        .layout {
+            border: 1px dashed #0078d7;
+            padding: 10px;
+            min-height: 50px;
+            min-width: 50px;
+            position: relative;
+            background-color: rgba(0, 120, 215, 0.05);
+            box-sizing: border-box;
+        }
+
+        .layout.horizontal {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .layout.vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .layout-placeholder {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+            margin: auto;
+            font-size: 12px;
+        }
+
+        .properties-panel {
+            display: none;
+        }
+
+        .properties-panel.active {
+            display: block;
+        }
+
+        .property-item {
+            margin-bottom: 12px;
+        }
+
+        .property-item label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 4px;
+            color: #333;
+        }
+
+        .property-item input,
+        .property-item select {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #d0d0d0;
+            border-radius: 2px;
+            font-size: 12px;
+        }
+
+        .property-item input:focus,
+        .property-item select:focus {
+            border-color: #0078d7;
+            outline: none;
+        }
+
+        .selected {
+            box-shadow: 0 0 0 2px #0078d7;
+        }
+
+        .drop-hover {
+            background-color: rgba(0, 120, 215, 0.1);
+        }
+
+        .resize-handle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #0078d7;
+            right: 0;
+            bottom: 0;
+            cursor: nwse-resize;
+            z-index: 10;
+            border-radius: 2px 0 0 0;
+        }
+
+        .status-bar {
+            height: 24px;
+            background: #f3f3f3;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-text">Hello World</div>
+            <div class="window-controls">
+                <div class="window-control">—</div>
+                <div class="window-control">□</div>
+                <div class="window-control close">×</div>
+            </div>
+        </div>
+        <div class="content">
+            <div id="workspace"></div>
+        </div>
+        <div class="status-bar">
+            <span id="status-text">Ready</span>
+        </div>
+    </div>
+
+    <!-- Floating Toolbox Panel -->
+    <div class="panel" id="toolbox">
+        <div class="panel-header">Toolbox</div>
+        <div class="panel-content">
+
+            <h4 style="color: #333; font-size: 14px; margin-top: 0;">Window</h4>
+
+            <div class="widget" data-type="Menu">Menu</div>
+
+            <h4 style="color: #333; font-size: 14px; margin-top: 0;">Widgets</h4>
+            <div class="widget" data-type="Button">Button</div>
+            <div class="widget" data-type="Input">Input</div>
+            <div class="widget" data-type="Slider">Slider</div>
+            <div class="widget" data-type="Checkbox">Checkbox</div>
+            <div class="widget" data-type="Label">Label</div>
+            <div class="widget" data-type="Dropdown">Dropdown</div>
+            <div class="widget" data-type="Image">Image</div>
+            <div class="widget" data-type="Tabs">Tabview</div>
+            <div class="widget" data-type="List">List</div>
+            <div class="widget" data-type="Plot">Plot</div>
+            <div class="widget" data-type="RadioButtonGroup">RadioButtonGroup</div>
+            <div class="widget" data-type="DropSurface">File Drop Surface</div>
+
+            <h4 style="color: #333; font-size: 14px;">Debug & Dev</h4>
+            <div class="widget" data-type="Overlay">Overlay</div>
+
+            <h4 style="color: #333; font-size: 14px;">Primitive Drawing</h4>
+
+            <div class="widget" data-type="Canvas">Canvas</div>
+
+            <h4 style="color: #333; font-size: 14px;">Layouts</h4>
+            <div class="widget" data-type="VerticalLayout">Vertical Layout</div>
+            <div class="widget" data-type="HorizontalLayout">Horizontal Layout</div>
+
+            <button onclick="generateC()">Export C Code</button>
+        </div>
+    </div>
+
+    <!-- Floating Settings Panel -->
+    <div class="panel" id="settings-panel">
+        <div class="panel-header">Properties</div>
+        <div class="panel-content">
+            <h4 style="color: #333; font-size: 14px; margin-top: 0;">Window Settings</h4>
+            <div class="property-item">
+                <label>Title:</label>
+                <input id="win-title" value="Hello World">
+            </div>
+
+            <div class="property-item">
+                <label>Width:</label>
+                <input type="number" id="win-width" value="800">
+            </div>
+            <div class="property-item">
+                <label>Height:</label>
+                <input type="number" id="win-height" value="600">
+            </div>
+            <button onclick="applySettings()">Apply</button>
+
+            <div id="widget-properties" class="properties-panel">
+                <h4 style="color: #333; font-size: 14px;">Widget Properties</h4>
+                <div class="property-item">
+                    <label>Type:</label>
+                    <input type="text" id="prop-type" disabled>
+                </div>
+                <div class="property-item">
+                    <label>X:</label>
+                    <input type="number" id="prop-x">
+                </div>
+                <div class="property-item">
+                    <label>Y:</label>
+                    <input type="number" id="prop-y">
+                </div>
+                <div class="property-item">
+                    <label>Width:</label>
+                    <input type="number" id="prop-width">
+                </div>
+                <div class="property-item">
+                    <label>Height:</label>
+                    <input type="number" id="prop-height">
+                </div>
+                <div class="property-item">
+                    <label>Text:</label>
+                    <input type="text" id="prop-text">
+                </div>
+                <!-- Slider Specific Items -->
+                <div id="slider-properties">
+                    <h4 style="color: #333; font-size: 14px;">Slider Properties</h4>
+
+                    <div class="property-item">
+                        <label>Min Value:</label>
+                        <input type="text" id="slider-min-value" value="0">
+                    </div>
+
+                    <div class="property-item">
+                        <label>Max Value:</label>
+                        <input type="text" id="slider-max-value" value="100">
+                    </div>
+
+                    <div class="property-item">
+                        <label>Show Hints:</label>
+                        <select id="slider-show-hints">
+                            <option value="true">enabled</option>
+                            <option value="false">disabled</option>
+                          </select>
+                    </div>
+                </div>
+
+
+                <button onclick="applyWidgetProperties()">Apply</button>
+                <button onclick="deleteSelectedWidget()" style="background: #e81123; color: white;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedWidget = null;
+        let draggedWidget = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let resizingWidget = null;
+        let resizeStartWidth = 0;
+        let resizeStartHeight = 0;
+        let resizeStartX = 0;
+        let resizeStartY = 0;
+
+        // Make panels draggable
+        const panels = document.querySelectorAll('.panel');
+        panels.forEach(panel => {
+            const header = panel.querySelector('.panel-header');
+            let isDragging = false;
+            let offsetX = 0;
+            let offsetY = 0;
+
+            header.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - panel.getBoundingClientRect().left;
+                offsetY = e.clientY - panel.getBoundingClientRect().top;
+                panel.style.cursor = 'move';
+
+                document.addEventListener('mousemove', onPanelDragMove);
+                document.addEventListener('mouseup', onPanelDragEnd);
+            });
+
+            function onPanelDragMove(e) {
+                if (!isDragging) return;
+
+                panel.style.left = (e.clientX - offsetX) + 'px';
+                panel.style.top = (e.clientY - offsetY) + 'px';
+            }
+
+            function onPanelDragEnd() {
+                isDragging = false;
+                panel.style.cursor = '';
+                document.removeEventListener('mousemove', onPanelDragMove);
+                document.removeEventListener('mouseup', onPanelDragEnd);
+            }
+        });
+
+        document.querySelectorAll(".widget").forEach(widget => {
+            widget.addEventListener("click", function () {
+                createWidget(widget.dataset.type, 10, 10);
+            });
+        });
+
+
+        function createWidget(type, x, y, parent = null) {
+            let newWidget = document.createElement("div");
+            newWidget.classList.add("draggable");
+            if (!parent) {
+                newWidget.classList.add("free-widget");
+            }
+            newWidget.dataset.type = type;
+
+
+
+            switch (type) {
+                case "Button":
+                    newWidget.classList.add("widget-button");
+                    newWidget.textContent = "Button";
+                    break;
+                case "Input":
+                    newWidget.classList.add("widget-input");
+                    newWidget.textContent = "";
+                    break;
+                case "Slider":
+                    newWidget.classList.add("widget-slider");
+
+                    break;
+                case "Checkbox":
+                    newWidget.classList.add("widget-checkbox");
+                    newWidget.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        this.classList.toggle("checked");
+                    });
+                    break;
+                case "Label":
+                    newWidget.classList.add("widget-label");
+                    newWidget.textContent = "Label";
+                    break;
+                case "VerticalLayout":
+                    newWidget.classList.add("layout", "vertical");
+                    const placeholder = document.createElement("div");
+                    placeholder.classList.add("layout-placeholder");
+                    placeholder.textContent = "Drop widgets here";
+                    newWidget.appendChild(placeholder);
+
+                    // Add resize handle
+                    const resizeHandle = document.createElement("div");
+                    resizeHandle.classList.add("resize-handle");
+                    newWidget.appendChild(resizeHandle);
+                    setupResizeHandle(resizeHandle, newWidget);
+                    break;
+                case "HorizontalLayout":
+                    newWidget.classList.add("layout", "horizontal");
+                    const placeholderH = document.createElement("div");
+                    placeholderH.classList.add("layout-placeholder");
+                    placeholderH.textContent = "Drop widgets here";
+                    newWidget.appendChild(placeholderH);
+
+                    // Add resize handle
+                    const resizeHandleH = document.createElement("div");
+                    resizeHandleH.classList.add("resize-handle");
+                    newWidget.appendChild(resizeHandleH);
+                    setupResizeHandle(resizeHandleH, newWidget);
+                    break;
+            }
+
+            if (!parent) {
+                newWidget.style.left = x + "px";
+                newWidget.style.top = y + "px";
+                newWidget.style.width = "100px";
+
+                switch (type) {
+                    case "Label":
+                        newWidget.style.height = "20px";
+                        break;
+                    case "Slider":
+                        newWidget.style.height = "2px";
+                        break;
+                    default:
+                        newWidget.style.height = "30px";
+
+                        break;
+                }
+                document.getElementById("workspace").appendChild(newWidget);
+            } else {
+                parent.appendChild(newWidget);
+                const placeholder = parent.querySelector(".layout-placeholder");
+                if (placeholder) {
+                    parent.removeChild(placeholder);
+                }
+            }
+
+            setupWidgetDrag(newWidget);
+            setupWidgetSelection(newWidget);
+            setupWidgetDeletionByKey(newWidget);
+            return newWidget;
+        }
+
+        function setupResizeHandle(handle, widget) {
+            handle.addEventListener("mousedown", function (e) {
+                e.stopPropagation();
+                resizingWidget = widget;
+                resizeStartWidth = parseInt(widget.style.width) || widget.offsetWidth;
+                resizeStartHeight = parseInt(widget.style.height) || widget.offsetHeight;
+                resizeStartX = e.clientX;
+                resizeStartY = e.clientY;
+
+                document.addEventListener("mousemove", onResizeMove);
+                document.addEventListener("mouseup", onResizeEnd);
+            });
+        }
+
+        function onResizeMove(e) {
+            if (!resizingWidget) return;
+
+            const width = resizeStartWidth + (e.clientX - resizeStartX);
+            const height = resizeStartHeight + (e.clientY - resizeStartY);
+
+            resizingWidget.style.width = Math.max(50, width) + "px";
+            resizingWidget.style.height = Math.max(50, height) + "px";
+
+            updatePropertiesPanel();
+        }
+
+        function onResizeEnd() {
+            resizingWidget = null;
+            document.removeEventListener("mousemove", onResizeMove);
+            document.removeEventListener("mouseup", onResizeEnd);
+        }
+
+        function setupWidgetDrag(element) {
+            element.addEventListener("mousedown", function (e) {
+                if (e.button !== 0) return; // Only left mouse button
+                if (e.target.classList.contains("resize-handle")) return;
+
+                e.stopPropagation();
+
+                draggedWidget = element;
+                const rect = element.getBoundingClientRect();
+                dragOffsetX = e.clientX - rect.left;
+                dragOffsetY = e.clientY - rect.top;
+
+                // Select the widget when clicked
+                selectWidget(element);
+
+                // For layouts, we want to be able to drag widgets out
+                if (element.parentElement.classList.contains("layout")) {
+                    element.style.position = "absolute";
+                    element.style.left = rect.left + "px";
+                    element.style.top = rect.top + "px";
+                    document.getElementById("workspace").appendChild(element);
+                }
+
+                document.addEventListener("mousemove", onMouseMove);
+                document.addEventListener("mouseup", onMouseUp);
+            });
+        }
+
+        function onMouseMove(e) {
+            if (!draggedWidget) return;
+
+            e.preventDefault();
+
+            const workspace = document.getElementById("workspace");
+            const workspaceRect = workspace.getBoundingClientRect();
+
+            let newX = e.clientX - dragOffsetX - workspaceRect.left + workspace.scrollLeft;
+            let newY = e.clientY - dragOffsetY - workspaceRect.top + workspace.scrollTop;
+
+            draggedWidget.style.left = Math.max(0, newX) + "px";
+            draggedWidget.style.top = Math.max(0, newY) + "px";
+
+            // Check for layout drop targets
+            const layouts = document.querySelectorAll(".layout");
+            let hoveredLayout = null;
+
+            layouts.forEach(layout => {
+                layout.classList.remove("drop-hover");
+                const rect = layout.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    hoveredLayout = layout;
+                    layout.classList.add("drop-hover");
+                }
+            });
+
+            updatePropertiesPanel();
+        }
+
+        function onMouseUp(e) {
+            if (!draggedWidget) return;
+
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+
+            // Check if we're dropping into a layout
+            const layouts = document.querySelectorAll(".layout");
+            let droppedInLayout = null;
+
+            layouts.forEach(layout => {
+                layout.classList.remove("drop-hover");
+                const rect = layout.getBoundingClientRect();
+                if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    droppedInLayout = layout;
+                }
+            });
+
+            if (droppedInLayout) {
+                // Move the widget into the layout
+                draggedWidget.classList.remove("free-widget");
+                draggedWidget.style.position = "";
+                draggedWidget.style.left = "";
+                draggedWidget.style.top = "";
+                droppedInLayout.appendChild(draggedWidget);
+
+                // Remove placeholder if exists
+                const placeholder = droppedInLayout.querySelector(".layout-placeholder");
+                if (placeholder) {
+                    droppedInLayout.removeChild(placeholder);
+                }
+            } else {
+                // Make sure it stays as a free widget
+                draggedWidget.classList.add("free-widget");
+                draggedWidget.style.position = "absolute";
+            }
+
+            draggedWidget = null;
+        }
+
+        function setupWidgetDeletionByKey(element) {
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Delete") {
+                    deleteSelectedWidget();
+                }
+            });
+        }
+
+        function setupWidgetSelection(element) {
+            element.addEventListener("click", function (e) {
+                if (e.target.classList.contains("resize-handle")) return;
+                e.stopPropagation();
+                selectWidget(element);
+            });
+
+        }
+
+        function selectWidget(widget) {
+            // Deselect previous widget
+            if (selectedWidget) {
+                selectedWidget.classList.remove("selected");
+            }
+
+            // Select new widget
+            selectedWidget = widget;
+            widget.classList.add("selected");
+            // Show properties panel
+            document.getElementById("widget-properties").classList.add("active");
+            document.getElementById("slider-properties").style.display = "none";
+
+            if (widget.classList.contains("widget-slider")) document.getElementById("slider-properties").style.display = "block";
+
+            updatePropertiesPanel();
+
+            // Update status bar
+            document.getElementById("status-text").textContent = `Selected: ${widget.dataset.type}`;
+        }
+
+        function updatePropertiesPanel() {
+            if (!selectedWidget) return;
+
+            // Core Widget
+            const rect = selectedWidget.getBoundingClientRect();
+            const workspaceRect = document.getElementById("workspace").getBoundingClientRect();
+
+            document.getElementById("prop-type").value = selectedWidget.dataset.type;
+
+            if (selectedWidget.classList.contains("free-widget")) {
+                document.getElementById("prop-x").value = parseInt(selectedWidget.style.left) || 0;
+                document.getElementById("prop-y").value = parseInt(selectedWidget.style.top) || 0;
+            } else {
+                document.getElementById("prop-x").value = 0;
+                document.getElementById("prop-y").value = 0;
+            }
+
+            document.getElementById("prop-width").value = parseInt(selectedWidget.style.width) || rect.width;
+            document.getElementById("prop-height").value = parseInt(selectedWidget.style.height) || rect.height;
+            document.getElementById("prop-text").value = selectedWidget.textContent || "";
+
+
+
+
+        }
+
+        function applyWidgetProperties() {
+            if (!selectedWidget) return;
+
+            if (selectedWidget.classList.contains("free-widget")) {
+                selectedWidget.style.left = document.getElementById("prop-x").value + "px";
+                selectedWidget.style.top = document.getElementById("prop-y").value + "px";
+            }
+
+            selectedWidget.style.width = document.getElementById("prop-width").value + "px";
+            selectedWidget.style.height = document.getElementById("prop-height").value + "px";
+
+            if (selectedWidget.dataset.type !== "Checkbox" && selectedWidget.dataset.type !== "Slider") {
+                selectedWidget.textContent = document.getElementById("prop-text").value;
+            }
+
+            
+            
+            document.getElementById("status-text").textContent = "Properties updated";
+            setTimeout(() => {
+                document.getElementById("status-text").textContent = "Ready";
+            }, 2000);
+        }
+
+        function deleteSelectedWidget() {
+            if (selectedWidget) {
+                // If deleting a layout, move its children to the workspace
+                if (selectedWidget.classList.contains("layout")) {
+                    const children = Array.from(selectedWidget.children);
+                    children.forEach(child => {
+                        if (child.classList.contains("draggable") && !child.classList.contains("resize-handle")) {
+                            child.classList.add("free-widget");
+                            child.style.position = "absolute";
+                            const rect = child.getBoundingClientRect();
+                            const workspaceRect = document.getElementById("workspace").getBoundingClientRect();
+                            child.style.left = (rect.left - workspaceRect.left) + "px";
+                            child.style.top = (rect.top - workspaceRect.top) + "px";
+                            document.getElementById("workspace").appendChild(child);
+                        }
+                    });
+                }
+
+                selectedWidget.remove();
+                selectedWidget = null;
+                document.getElementById("widget-properties").classList.remove("active");
+                document.getElementById("status-text").textContent = "Widget deleted";
+                setTimeout(() => {
+                    document.getElementById("status-text").textContent = "Ready";
+                }, 2000);
+            }
+        }
+
+        document.getElementById("workspace").addEventListener("click", function (e) {
+            if (e.target === this) {
+                if (selectedWidget) {
+                    selectedWidget.classList.remove("selected");
+                    selectedWidget = null;
+                }
+                document.getElementById("widget-properties").classList.remove("active");
+            }
+        });
+
+
+        function generateC() {
+            let cCode = `#include <Gooey/gooey.h>\n\n`;
+
+            // Generate callback functions
+            cCode += `// Callback functions\n`;
+            cCode += `void button_callback()\n{\n    printf("Button clicked!\\n");\n}\n\n`;
+            cCode += `void slider_callback(int value)\n{\n    printf("Slider value: %d\\n", value);\n}\n\n`;
+            cCode += `void checkbox_callback(bool checked)\n{\n    printf("Checkbox %s\\n", checked ? "checked" : "unchecked");\n}\n\n`;
+            cCode += `void input_callback(const char* text)\n{\n    printf("Input changed: %s\\n", text);\n}\n\n`;
+
+            // Generate main function
+            cCode += `int main()\n{\n`;
+            cCode += `    Gooey_Init();\n`;
+            cCode += `    GooeyWindow *win = GooeyWindow_Create("${document.getElementById("win-title").value}", ${document.getElementById("win-width").value}, ${document.getElementById("win-height").value}, true);\n\n`;
+
+            // Process widgets
+            let widgetCount = 0;
+            let widgetVars = [];
+            let widgetRegistrations = [];
+
+            function processWidgetC(widget, indent) {
+                let type = widget.dataset.type;
+                let x = widget.style.left ? parseInt(widget.style.left) : 0;
+                let y = widget.style.top ? parseInt(widget.style.top) : 0;
+                let width = widget.style.width ? parseInt(widget.style.width) : 100;
+                let height = widget.style.height ? parseInt(widget.style.height) : 30;
+                let text = widget.textContent || "";
+
+                // Clean text for C string
+                text = text.replace(/"/g, '\\"');
+
+                let widgetVar = `${type.toLowerCase()}_${widgetCount++}`;
+                widgetVars.push(widgetVar);
+
+                let widgetCode = "";
+
+                switch (type) {
+                    case "Button":
+                        widgetCode = `${indent}GooeyButton *${widgetVar} = GooeyButton_Create("${text}", ${x}, ${y}, ${width}, ${height}, button_callback);\n`;
+                        break;
+                    case "Input":
+                        widgetCode = `${indent}GooeyTextbox *${widgetVar} = GooeyTextBox_Create(${x}, ${y}, ${width}, ${height}, "${text}", input_callback);\n`;
+                        break;
+                    case "Slider":
+                        widgetCode = `${indent}GooeySlider *${widgetVar} = GooeySlider_Create(${x}, ${y}, ${width}, 0, 100, true, slider_callback);\n`;
+                        break;
+                    case "Checkbox":
+                        widgetCode = `${indent}GooeyCheckbox *${widgetVar} = GooeyCheckbox_Create(${x}, ${y}, "${text}", checkbox_callback);\n`;
+                        break;
+                    case "Label":
+                        widgetCode = `${indent}GooeyLabel *${widgetVar} = GooeyLabel_Create("${text}", 0.26f, ${x}, ${y});\n`;
+                        break;
+                    case "VerticalLayout":
+                    case "HorizontalLayout":
+                        let LAYOUT_TYPE = type == "VerticalLayout" ? "LAYOUT_VERTICAL" : "LAYOUT_HORIZONTAL";
+                        widgetCode = `${indent}GooeyLayout *${widgetVar} = GooeyLayout_Create(${LAYOUT_TYPE},${x}, ${y}, ${width}, ${height});\n`;
+
+                        // Process children
+                        Array.from(widget.children).forEach(child => {
+                            if (child.classList.contains("draggable") && !child.classList.contains("resize-handle")) {
+                                widgetCode += processWidgetC(child, indent + "    ");
+                                widgetCode += `${indent}GooeyLayout_AddChild(${widgetVar}, ${widgetVars[widgetVars.length - 1]});\n`;
+                            }
+                        });
+
+                        // Build Layout
+
+                        widgetCode += `GooeyLayout_Build(${widgetVar}); \n`;
+
+                        break;
+                }
+
+                widgetRegistrations.push(`${indent}GooeyWindow_RegisterWidget(win, ${widgetVar});\n`);
+                return widgetCode;
+            }
+
+            document.querySelectorAll('#workspace > .draggable').forEach(widget => {
+                cCode += processWidgetC(widget, "    ");
+            });
+
+            // Add widget registrations
+            cCode += `\n    // Register all widgets with the window\n`;
+            widgetRegistrations.forEach(reg => {
+                cCode += reg;
+            });
+
+            // Complete main function
+            cCode += `\n    GooeyWindow_Run(1, win);\n`;
+            cCode += `    GooeyWindow_Cleanup(1, win);\n\n`;
+            cCode += `    return 0;\n}\n`;
+
+            console.log(cCode);
+
+            // Show save dialog
+            const blob = new Blob([cCode], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'gui_builder.c';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            document.getElementById("status-text").textContent = "C code exported and downloaded";
+            setTimeout(() => {
+                document.getElementById("status-text").textContent = "Ready";
+            }, 2000);
+        }
+
+        function applySettings() {
+            let win_title = document.getElementById("win-title").value;
+            let width = document.getElementById("win-width").value;
+            let height = document.getElementById("win-height").value;
+
+            document.querySelector(".title-text").textContent = win_title;
+            document.querySelector(".window").style.width = width + "px";
+            document.querySelector(".window").style.height = height + "px";
+            document.getElementById("status-text").textContent = "Window settings updated";
+            setTimeout(() => {
+                document.getElementById("status-text").textContent = "Ready";
+            }, 2000);
+        }
+
+        // Make window draggable
+        const titleBar = document.querySelector('.title-bar');
+        const windowElement = document.querySelector('.window');
+        let isDraggingWindow = false;
+        let windowDragOffsetX = 0;
+        let windowDragOffsetY = 0;
+
+        titleBar.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('window-control')) return;
+
+            isDraggingWindow = true;
+            const rect = windowElement.getBoundingClientRect();
+            windowDragOffsetX = e.clientX - rect.left;
+            windowDragOffsetY = e.clientY - rect.top;
+            windowElement.style.cursor = 'move';
+
+            document.addEventListener('mousemove', onWindowDragMove);
+            document.addEventListener('mouseup', onWindowDragEnd);
+        });
+
+        function onWindowDragMove(e) {
+            if (!isDraggingWindow) return;
+
+            windowElement.style.left = (e.clientX - windowDragOffsetX) + 'px';
+            windowElement.style.top = (e.clientY - windowDragOffsetY) + 'px';
+            windowElement.style.position = 'absolute';
+        }
+
+        function onWindowDragEnd() {
+            isDraggingWindow = false;
+            windowElement.style.cursor = '';
+            document.removeEventListener('mousemove', onWindowDragMove);
+            document.removeEventListener('mouseup', onWindowDragEnd);
+        }
+
+        // Window controls
+        document.querySelector('.window-controls div:nth-child(1)').addEventListener('click', () => {
+            windowElement.style.display = 'none';
+            setTimeout(() => {
+                windowElement.style.display = 'flex';
+            }, 1000);
+        });
+
+        document.querySelector('.window-controls div:nth-child(3)').addEventListener('click', () => {
+            if (confirm('Close the application?')) {
+                windowElement.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>

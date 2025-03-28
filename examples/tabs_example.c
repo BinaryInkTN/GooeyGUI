@@ -69,7 +69,6 @@ int main()
     GooeyTabs_AddWidget(mainTabs, 1, dropdownLabel);
     GooeyTabs_AddWidget(mainTabs, 1, qualityDropdown);
     GooeyTabs_AddWidget(mainTabs, 1, button_test);
-
     GooeyTabs_AddWidget(mainTabs, 1, colorLabel);
     GooeyTabs_AddWidget(mainTabs, 1, colorDropdown);
 

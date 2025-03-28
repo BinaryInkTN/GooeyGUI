@@ -18,8 +18,11 @@
 #include "widgets/gooey_tabs.h"
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
+#include "widgets/gooey_tabs_internal.h"
 
-GooeyTabs *GooeyTabs_Add( int x, int y, int width, int height)
+
+
+GooeyTabs *GooeyTabs_Create( int x, int y, int width, int height)
 {
   
 
@@ -41,7 +44,7 @@ GooeyTabs *GooeyTabs_Add( int x, int y, int width, int height)
     return tabs_widget;
 }
 
-GooeyTab *GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
+void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
 {
 
     if (!tab_widget)
@@ -66,28 +69,34 @@ GooeyTab *GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
         LOG_WARNING("Invalid tab name, sticking to default.");
         snprintf(tab->tab_name, sizeof(tab->tab_name), "Tab %ld", tab_id);
     }
-
-    return tab;
 }
 
-void GooeyTabs_AddWidget(GooeyTab *tab, void *widget)
+void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget)
 {
-    if (!tab || !widget)
+    GooeyTab* selected_tab = (GooeyTab*) &tabs->tabs[tab_id];
+    if (!tabs || !selected_tab || !widget)
     {
         LOG_ERROR("Couldn't add widget.");
         return;
     }
 
-    tab->widgets[tab->widget_count++] = widget;
+
+    GooeyWidget *core = (GooeyWidget*) widget;
+    core->x = core->x + tabs->core.x;
+    core->y = core->y + tabs->core.y + TAB_HEIGHT;
+
+    selected_tab->widgets[selected_tab->widget_count++] = widget;
+   
+    
 }
 
-void GooeyTabs_SetActiveTab(GooeyTabs *tabs, GooeyTab *active_tab)
+void GooeyTabs_SetActiveTab(GooeyTabs *tabs, size_t tab_id)
 {
-    if (!tabs || !active_tab)
+    if (!tabs || tab_id > tabs->tab_count)
     {
         LOG_ERROR("Couldn't set active tab.");
         return;
     }
 
-    tabs->active_tab_id = active_tab->tab_id;
+    tabs->active_tab_id = tab_id;
 }

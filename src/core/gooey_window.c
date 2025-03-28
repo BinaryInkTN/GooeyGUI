@@ -18,6 +18,7 @@
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 
+#include "widgets/gooey_tabs_internal.h"
 #include "widgets/gooey_drop_surface_internal.h"
 #include "widgets/gooey_tabs_internal.h"
 #include "widgets/gooey_image_internal.h"
@@ -37,7 +38,7 @@
 #include "widgets/gooey_debug_overlay_internal.h"
 #include "signals/gooey_signals.h"
 #include "logger/pico_logger_internal.h"
-
+#include "widgets/gooey_window_internal.h"
 #include <stdarg.h>
 
 #include <sys/resource.h>
@@ -47,81 +48,7 @@ GooeyBackends ACTIVE_BACKEND = -1;
 
 void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
 {
-    GooeyWidget *core = (GooeyWidget *)widget;
-    WIDGET_TYPE type = core->type;
-
-    switch (type)
-    {
-    case WIDGET_LABEL:
-    {
-        win->labels[win->label_count++] = (GooeyLabel *)widget;
-        break;
-    }
-    case WIDGET_SLIDER:
-    {
-        win->sliders[win->slider_count++] = (GooeySlider *)widget;
-        break;
-    }
-    case WIDGET_RADIOBUTTON:
-    {
-        win->radio_button_groups[win->radio_button_count++] = (GooeyRadioButtonGroup *)widget;
-        break;
-    }
-    case WIDGET_CHECKBOX:
-    {
-        win->checkboxes[win->checkbox_count++] = (GooeyCheckbox *)widget;
-        break;
-    }
-    case WIDGET_BUTTON:
-    {
-        win->buttons[win->button_count++] = (GooeyButton *)widget;
-        break;
-    }
-    case WIDGET_TEXTBOX:
-    {
-        win->textboxes[win->textboxes_count++] = (GooeyTextbox *)widget;
-        break;
-    }
-    case WIDGET_DROPDOWN:
-    {
-        win->dropdowns[win->dropdown_count++] = (GooeyDropdown *)widget;
-        break;
-    }
-    case WIDGET_CANVAS:
-    {
-        win->canvas[win->canvas_count++] = (GooeyCanvas *)widget;
-        break;
-    }
-    case WIDGET_LAYOUT:
-    {
-        win->layouts[win->label_count++] = (GooeyLayout *)widget;
-        break;
-    }
-    case WIDGET_PLOT:
-    {
-        win->plots[win->plot_count++] = (GooeyPlot *)widget;
-        break;
-    }
-    case WIDGET_DROP_SURFACE:
-    {
-        win->drop_surface[win->drop_surface_count++] = (GooeyDropSurface *)widget;
-        break;
-    }
-    case WIDGET_IMAGE:
-    {
-        win->images[win->image_count++] = (GooeyImage *)widget;
-        break;
-    }
-    case WIDGET_TABS:
-    {
-        win->tabs[win->tab_count++] = (GooeyTabs *)widget;
-        break;
-    }
-
-    default:
-        LOG_ERROR("Invalid widget type.");
-        break;
-    }
+    GooeyWindow_Internal_RegisterWidget(win, widget);
 }
 
 void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility)
@@ -235,7 +162,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         }
     }
 
-    if(win->canvas)
+    if (win->canvas)
     {
         free(win->canvas);
         win->canvas = NULL;
@@ -243,14 +170,35 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 
     if (win->tabs)
     {
-        for (size_t i = 0; i < win->tab_count; ++i)
+        for (size_t tab_container_index = 0; tab_container_index < win->tab_count; ++tab_container_index)
         {
-            if (win->tabs[i])
+            GooeyTabs *current_tab_container = win->tabs[tab_container_index];
+
+            if (current_tab_container)
             {
-                free(win->tabs[i]);
-                win->tabs[i] = NULL;
+
+                if (current_tab_container->tabs)
+                {
+                    for (size_t tab_index = 0; tab_index < current_tab_container->tab_count; ++tab_index)
+                    {
+                        GooeyTab *current_tab = &current_tab_container->tabs[tab_index];
+
+                        if (current_tab->widgets)
+                        {
+                            free(current_tab->widgets);
+                            current_tab->widgets = NULL;
+                        }
+                    }
+
+                    free(current_tab_container->tabs);
+                    current_tab_container->tabs = NULL;
+                }
+
+                free(win->tabs[tab_container_index]);
+                win->tabs[tab_container_index] = NULL;
             }
         }
+
         free(win->tabs);
         win->tabs = NULL;
     }
@@ -561,11 +509,10 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyTextbox_Draw(win);
     GooeyCheckbox_Draw(win);
     GooeyRadioButtonGroup_Draw(win);
-    GooeyDropdown_Draw(win);
     GooeySlider_Draw(win);
     GooeyPlot_Draw(win);
+    GooeyDropdown_Draw(win);
     GooeyMenu_Draw(win);
-
     GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);
@@ -591,7 +538,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 
     GooeyWindow *window = windows[window_id];
-    GooeyEvent *event = (GooeyEvent*) window->current_event;
+    GooeyEvent *event = (GooeyEvent *)window->current_event;
 
     int width, height;
     active_backend->GetWinDim(&width, &height, window_id);
@@ -627,6 +574,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyList_HandleThumbScroll(window, event);
         needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
+        needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
         break;
 
     case GOOEY_EVENT_CLICK_RELEASE:
@@ -652,7 +600,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
     }
 
-    if (window->continuous_redraw  || needs_redraw)
+    if (window->continuous_redraw || needs_redraw)
         GooeyWindow_DrawUIElements(window);
 }
 
@@ -728,8 +676,7 @@ void GooeyWindow_RequestRedraw(GooeyWindow *win)
     active_backend->RequestRedraw(win);
 }
 
-void GooeyWindow_SetContinuousRedraw(GooeyWindow *win) 
+void GooeyWindow_SetContinuousRedraw(GooeyWindow *win)
 {
     win->continuous_redraw = true;
 }
-

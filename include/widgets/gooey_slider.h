@@ -21,7 +21,7 @@
  * 
  * @return A new GooeySlider object.
  */
-GooeySlider *GooeySlider_Add( int x, int y, int width,
+GooeySlider *GooeySlider_Create( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
                              void (*callback)(long value));
 

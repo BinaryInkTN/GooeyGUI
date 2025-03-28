@@ -19,7 +19,7 @@
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
-GooeySlider *GooeySlider_Add( int x, int y, int width,
+GooeySlider *GooeySlider_Create( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
                              void (*callback)(long value))
 {
@@ -39,11 +39,13 @@ GooeySlider *GooeySlider_Add( int x, int y, int width,
     slider->core.y = y;
     slider->core.width = width;
     slider->core.height = SLIDER_HEIGHT;
+    slider->core.is_visible = true;
     slider->min_value = min_value;
     slider->max_value = max_value;
     slider->value = min_value;
     slider->show_hints = show_hints;
     slider->callback = callback;
+    
 
     return slider;
 }

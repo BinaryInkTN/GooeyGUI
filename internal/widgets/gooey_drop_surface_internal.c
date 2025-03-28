@@ -19,7 +19,7 @@ static void __get_filename_from_path(char *file_path, char *filename, size_t fil
 }
 bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY)
 {
-    GooeyEvent * event = (GooeyEvent*) win->current_event;
+    GooeyEvent *event = (GooeyEvent *)win->current_event;
     for (size_t i = 0; i < win->drop_surface_count; ++i)
     {
         GooeyDropSurface *drop_surface = win->drop_surface[i];
@@ -41,11 +41,13 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY)
 }
 void GooeyDropSurface_Draw(GooeyWindow *win)
 {
-    GooeyEvent * event = (GooeyEvent*) win->current_event;
+    GooeyEvent *event = (GooeyEvent *)win->current_event;
 
     for (size_t i = 0; i < win->drop_surface_count; ++i)
     {
         GooeyDropSurface *drop_surface = win->drop_surface[i];
+        if (!drop_surface->core.is_visible)
+            continue;
         unsigned long surface_color = win->active_theme->widget_base;
         bool show_image = true;
         char filename[64];
@@ -87,19 +89,21 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
             }
         }
         int img_height = 64, img_width = 64;
-    
-        if(show_image) 
+
+        if (show_image)
         {
-            int icon_x = drop_surface->core.x + (float)(drop_surface->core.width - img_width) / 2 ;
-            int icon_y = drop_surface->core.y + (float)(drop_surface->core.height -  img_width) / 2;
+            int icon_x = drop_surface->core.x + (float)(drop_surface->core.width - img_width) / 2;
+            int icon_y = drop_surface->core.y + (float)(drop_surface->core.height - img_width) / 2;
             active_backend->DrawImage(drop_surface->file_icon_texture_id, icon_x, icon_y, img_width, img_height, win->creation_id);
-        } else {
+        }
+        else
+        {
             img_height = 0;
         }
         int text_height = active_backend->GetTextHeight(filename, strlen(filename));
         int text_x = drop_surface->core.x + (float)(drop_surface->core.width - text_width) / 2;
         int text_y = drop_surface->core.y + (float)(drop_surface->core.height - text_height) / 2 + img_height;
-      
+
         active_backend->DrawText(text_x, text_y, filename, win->active_theme->neutral, 0.26f, win->creation_id);
     }
 }

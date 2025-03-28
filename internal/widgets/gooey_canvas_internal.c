@@ -1,14 +1,17 @@
 #include "gooey_canvas_internal.h"
 #include "backends/gooey_backend_internal.h"
 
-
-void GooeyCanvas_Draw(GooeyWindow* win) {
+void GooeyCanvas_Draw(GooeyWindow *win)
+{
 
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
-        for (int j = 0; j < win->canvas[i]->element_count; ++j)
+        GooeyCanvas *canvas = win->canvas[i];
+        if (!canvas->core.is_visible)
+            continue;
+        for (int j = 0; j < canvas->element_count; ++j)
         {
-            CanvaElement *element = &win->canvas[i]->elements[j];
+            CanvaElement *element = &canvas->elements[j];
             switch (element->operation)
             {
             case CANVA_DRAW_RECT:
@@ -36,5 +39,4 @@ void GooeyCanvas_Draw(GooeyWindow* win) {
             }
         }
     }
-
 }

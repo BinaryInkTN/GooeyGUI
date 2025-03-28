@@ -156,6 +156,7 @@ GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int 
     plot->core.width = width;
     plot->core.height = height;
     plot->core.type = WIDGET_PLOT;
+    plot->core.is_visible = true;
     plot->data = data;
     plot->data->plot_type = plot_type;
 

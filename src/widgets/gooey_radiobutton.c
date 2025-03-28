@@ -48,7 +48,7 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
     GooeyRadioButton *button = &group->buttons[group->button_count++];
     button->core.x = x;
     button->core.y = y;
-
+    button->core.is_visible = true;
     button->core.type = WIDGET_RADIOBUTTON;
     button->selected = false;
     if (label)
@@ -76,6 +76,7 @@ GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
     *radio_button = (GooeyRadioButton){0};
 
     radio_button->core.type = WIDGET_RADIOBUTTON;
+    
     radio_button->core.x = x;
     radio_button->core.y = y;
     if (label)

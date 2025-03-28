@@ -1,19 +1,21 @@
 #include "gooey_dropdown_internal.h"
 #include "backends/gooey_backend_internal.h"
 
-
 void GooeyDropdown_Draw(GooeyWindow *win)
 {
+    
 
     for (size_t i = 0; i < win->dropdown_count; i++)
     {
         int x_offset = win->dropdowns[i]->core.x;
 
         GooeyDropdown *dropdown = win->dropdowns[i];
-
+        if (!dropdown->core.is_visible)
+            continue;
         active_backend->FillRectangle(dropdown->core.x,
                                       dropdown->core.y, dropdown->core.width,
                                       dropdown->core.height, win->active_theme->widget_base, win->creation_id);
+
         active_backend->DrawText(dropdown->core.x + 5,
                                  dropdown->core.y + 20,
                                  dropdown->options[dropdown->selected_index],
@@ -29,6 +31,8 @@ void GooeyDropdown_Draw(GooeyWindow *win)
             int submenu_height = 25 * dropdown->num_options;
             active_backend->FillRectangle(submenu_x, submenu_y,
                                           submenu_width, submenu_height, win->active_theme->widget_base, win->creation_id);
+            active_backend->DrawRectangle(submenu_x, submenu_y,
+                                          submenu_width, submenu_height, win->active_theme->primary, win->creation_id);
             for (int j = 0; j < dropdown->num_options; j++)
             {
                 int element_y = submenu_y + (j * 25);

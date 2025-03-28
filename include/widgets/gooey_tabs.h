@@ -3,12 +3,9 @@
 
 #include "common/gooey_common.h"
 
-GooeyTabs *GooeyTabs_Add( int x, int y, int width, int height);
-
-GooeyTab *GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name);
-
-void GooeyTabs_AddWidget(GooeyTab *tab, void *widget);
-
-void GooeyTabs_SetActiveTab(GooeyTabs* tabs, GooeyTab *active_tab);
+GooeyTabs *GooeyTabs_Create( int x, int y, int width, int height);
+void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name);
+void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget);
+void GooeyTabs_SetActiveTab(GooeyTabs* tabs, size_t tab_id);
 
 #endif

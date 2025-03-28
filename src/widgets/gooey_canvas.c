@@ -36,6 +36,7 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
     canvas->core.y = y;
     canvas->core.width = width;
     canvas->core.height = height;
+    canvas->core.is_visible = true;
     canvas->elements = malloc(sizeof(CanvaElement) * 100);
     canvas->element_count = 0;
     LOG_INFO("Canvas added to window with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);

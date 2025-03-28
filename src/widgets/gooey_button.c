@@ -48,6 +48,7 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
     button->core.y = y;
     button->core.width = active_backend->GetTextWidth(label, strlen(label)) + 30;
     button->core.height = height;
+    button->core.is_visible = true;
     strcpy(button->label, label);
     button->callback = callback;
     button->hover = false;

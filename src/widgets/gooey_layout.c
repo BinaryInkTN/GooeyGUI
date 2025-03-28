@@ -39,6 +39,7 @@ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
     layout->core.height = height;
     layout->layout_type = layout_type;
     layout->widget_count = 0;
+    layout->core.is_visible = true;
 
     return layout;
 }

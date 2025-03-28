@@ -22,8 +22,8 @@
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
                                     void (*callback)(bool checked))
 {
-    GooeyCheckbox *checkbox = (GooeyCheckbox *) malloc(sizeof(GooeyCheckbox));
-    *checkbox = (GooeyCheckbox) {0};
+    GooeyCheckbox *checkbox = (GooeyCheckbox *)malloc(sizeof(GooeyCheckbox));
+    *checkbox = (GooeyCheckbox){0};
 
     if (!checkbox)
     {
@@ -35,19 +35,20 @@ GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
     checkbox->core.y = y;
     checkbox->core.width = CHECKBOX_SIZE;
     checkbox->core.height = CHECKBOX_SIZE;
-
+    checkbox->core.is_visible = true;
     if (label)
     {
-        strcpy(checkbox->label, label);
+        strncpy(checkbox->label, label, sizeof(checkbox->label) - 1);
     }
     else
     {
-        strncpy(checkbox->label, "Checkbox", sizeof(checkbox->label));
+        strncpy(checkbox->label, "Checkbox", sizeof(checkbox->label) - 1);
     }
+
+    checkbox->label[sizeof(checkbox->label) - 1] = '\0';
     checkbox->checked = false;
     checkbox->callback = callback;
     LOG_INFO("Checkbox added with dimensions x=%d, y=%d", x, y);
 
     return checkbox;
 }
-

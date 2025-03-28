@@ -37,6 +37,7 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
     list->core.y = y;
     list->core.width = width;
     list->core.height = height;
+    list->core.is_visible = true;
     list->items = (GooeyListItem *)malloc(sizeof(GooeyListItem) * 1024);
     list->item_count = 0;
     list->scroll_offset = DEFAULT_SCROLL_OFFSET;

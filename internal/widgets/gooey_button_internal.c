@@ -7,6 +7,8 @@ void GooeyButton_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = win->buttons[i];
+        if (!button->core.is_visible)
+        continue;
         active_backend->FillRectangle(button->core.x,
                                       button->core.y, button->core.width, button->core.height, button->clicked ? win->active_theme->primary : win->active_theme->widget_base, win->creation_id);
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));

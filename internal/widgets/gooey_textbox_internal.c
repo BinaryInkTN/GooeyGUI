@@ -1,50 +1,52 @@
 #include "gooey_textbox_internal.h"
 #include "backends/gooey_backend_internal.h"
 
-
-
 void GooeyTextbox_Draw(GooeyWindow *win)
 {
 
     for (size_t index = 0; index < win->textboxes_count; ++index)
     {
-        active_backend->FillRectangle(win->textboxes[index]->core.x, win->textboxes[index]->core.y,
-                                      win->textboxes[index]->core.width, win->textboxes[index]->core.height, win->active_theme->base, win->creation_id);
 
-        active_backend->DrawRectangle(win->textboxes[index]->core.x, win->textboxes[index]->core.y,
-                                      win->textboxes[index]->core.width, win->textboxes[index]->core.height,
-                                      win->textboxes[index]->focused ? win->active_theme->primary : win->active_theme->neutral, win->creation_id);
+        GooeyTextbox *textbox = (GooeyTextbox *)win->textboxes[index];
+        if (!textbox->core.is_visible)
+            continue;
+        active_backend->FillRectangle(textbox->core.x, textbox->core.y,
+                                      textbox->core.width, textbox->core.height, win->active_theme->base, win->creation_id);
 
-        int text_x = win->textboxes[index]->core.x + 5;
-        int text_y = win->textboxes[index]->core.y + (win->textboxes[index]->core.height / 2) + 5;
+        active_backend->DrawRectangle(textbox->core.x, textbox->core.y,
+                                      textbox->core.width, textbox->core.height,
+                                      textbox->focused ? win->active_theme->primary : win->active_theme->neutral, win->creation_id);
 
-        int max_text_width = win->textboxes[index]->core.width - 10;
-        size_t len = strlen(win->textboxes[index]->text);
-        size_t start_index = win->textboxes[index]->scroll_offset;
+        int text_x = textbox->core.x + 5;
+        int text_y = textbox->core.y + (textbox->core.height / 2) + 5;
+
+        int max_text_width = textbox->core.width - 10;
+        size_t len = strlen(textbox->text);
+        size_t start_index = textbox->scroll_offset;
 
         while (start_index < len &&
-               active_backend->GetTextWidth(win->textboxes[index]->text + start_index, len - start_index) > max_text_width)
+               active_backend->GetTextWidth(textbox->text + start_index, len - start_index) > max_text_width)
         {
             start_index++;
         }
 
         char display_text[256];
-        strncpy(display_text, win->textboxes[index]->text + start_index, sizeof(display_text) - 1);
+        strncpy(display_text, textbox->text + start_index, sizeof(display_text) - 1);
         display_text[sizeof(display_text) - 1] = '\0';
 
         active_backend->DrawText(text_x, text_y, display_text, win->active_theme->neutral, 0.25f, win->creation_id);
 
-        if (win->textboxes[index]->focused)
+        if (textbox->focused)
         {
             int cursor_x = text_x + active_backend->GetTextWidth(display_text, strlen(display_text));
-            active_backend->DrawLine(cursor_x, win->textboxes[index]->core.y + 5,
-                                     cursor_x, win->textboxes[index]->core.y + win->textboxes[index]->core.height - 5, win->active_theme->neutral, win->creation_id);
+            active_backend->DrawLine(cursor_x, textbox->core.y + 5,
+                                     cursor_x, textbox->core.y + textbox->core.height - 5, win->active_theme->neutral, win->creation_id);
         }
         else
         {
 
-            if (strcmp(win->textboxes[index]->placeholder, "") != 0 && strlen(win->textboxes[index]->text) == 0)
-                active_backend->DrawText(text_x, text_y, win->textboxes[index]->placeholder, win->active_theme->neutral, 0.25f, win->creation_id);
+            if (strcmp(textbox->placeholder, "") != 0 && strlen(textbox->text) == 0)
+                active_backend->DrawText(text_x, text_y, textbox->placeholder, win->active_theme->neutral, 0.25f, win->creation_id);
         }
     }
 }
@@ -133,7 +135,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
 {
     for (size_t i = 0; i < win->textboxes_count; i++)
     {
-        GooeyTextbox *textbox = &win->textboxes[i];
+        GooeyTextbox *textbox = win->textboxes[i];
         if (x >= textbox->core.x &&
             x <= textbox->core.x + textbox->core.width &&
             y >= textbox->core.y &&

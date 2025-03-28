@@ -45,6 +45,7 @@ set(SOURCES
     internal/widgets/gooey_image_internal.c
     internal/widgets/gooey_tabs_internal.c
     internal/widgets/gooey_debug_overlay_internal.c
+    internal/widgets/gooey_window_internal.c
     internal/backends/utils/glad/glad.c
     internal/backends/utils/backend_utils_internal.c
     internal/backends/glps_backend_internal.c
@@ -68,6 +69,8 @@ set(HEADERS
     internal/widgets/gooey_image_internal.h
     internal/widgets/gooey_tabs_internal.h
     internal/widgets/gooey_debug_overlay_internal.h
+    internal/widgets/gooey_window_internal.h
+
     include/core/gooey_window.h
     internal/backends/gooey_backend_internal.h
     internal/backends/utils/backend_utils_internal.h

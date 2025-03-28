@@ -1,14 +1,14 @@
 #include "gooey_checkbox_internal.h"
 #include "backends/gooey_backend_internal.h"
 
-
 void GooeyCheckbox_Draw(GooeyWindow *win)
 {
 
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {
         GooeyCheckbox *checkbox = win->checkboxes[i];
-
+        if (!checkbox->core.is_visible)
+            continue;
         int label_width = active_backend->GetTextWidth(checkbox->label, strlen(checkbox->label));
         int label_x = checkbox->core.x + CHECKBOX_SIZE + 10;
         int label_y = checkbox->core.y + (CHECKBOX_SIZE / 2) + 5;

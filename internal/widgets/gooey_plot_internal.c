@@ -266,7 +266,7 @@ void GooeyPlot_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->plot_count; ++i)
     {
         GooeyPlot *plot = win->plots[i];
-        if (!plot->data || !plot->data->x_data || !plot->data->y_data)
+        if (!plot->data || !plot->data->x_data || !plot->data->y_data || !plot->core.is_visible)
         {
             continue;
         }

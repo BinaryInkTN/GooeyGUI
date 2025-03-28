@@ -35,6 +35,7 @@ GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
     textBox->core.y = y;
     textBox->core.width = width;
     textBox->core.height = height;
+    textBox->core.is_visible = true;
     textBox->focused = false;
     textBox->callback = onTextChanged;
     textBox->scroll_offset = 0;

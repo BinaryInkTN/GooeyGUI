@@ -2,7 +2,7 @@
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
-void GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void))
+GooeyImage* GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void))
 {
     GooeyImage *image = (GooeyImage *) malloc(sizeof(GooeyImage));
 
@@ -20,5 +20,8 @@ void GooeyImage_Create(const char *image_path, int x, int y, int width, int heig
     image->core.y = y;
     image->core.width = width;
     image->core.height = height;
+    image->core.is_visible = true;
     image->callback = callback;
+
+    return image;
 }

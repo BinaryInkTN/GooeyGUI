@@ -19,6 +19,7 @@ GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width, int height, c
     drop_surface->core.y = y;
     drop_surface->core.width = width;
     drop_surface->core.height = height;
+    drop_surface->core.is_visible = true;
     drop_surface->callback = callback;
     drop_surface->is_file_dropped = false;
     drop_surface->file_icon_texture_id = active_backend->LoadImageFromBin(file_png, file_png_len);

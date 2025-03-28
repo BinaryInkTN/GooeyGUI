@@ -26,7 +26,7 @@
   * @param height The height of the image.
   * @param callback A callback function to handle interactions with the image (e.g., clicks).
   */
- void GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void(*callback)(void));
+ GooeyImage* GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void));
  
 
  #endif

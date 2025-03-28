@@ -8,7 +8,8 @@ void GooeySlider_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->slider_count; ++i)
     {
         GooeySlider *slider = win->sliders[i];
-
+        if(!slider->core.is_visible)
+        continue;
         active_backend->FillRectangle(slider->core.x,
                                       slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id);
 

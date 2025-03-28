@@ -19,6 +19,8 @@ void GooeyImage_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->image_count; ++i)
     {
         GooeyImage *image = win->images[i];
+        if (!image->core.is_visible)
+        continue;
         active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
     }
 }

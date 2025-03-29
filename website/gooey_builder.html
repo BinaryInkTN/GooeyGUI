@@ -242,6 +242,10 @@
             transform: translateX(-50%);
         }
 
+        .widget-canvas {
+            background-color: #d0d0d0;
+        }
+
         .widget-checkbox {
             width: 16px;
             height: 16px;
@@ -504,6 +508,7 @@
                 </div>
 
 
+
                 <button onclick="applyWidgetProperties()">Apply</button>
                 <button onclick="deleteSelectedWidget()" style="background: #e81123; color: white;">Delete</button>
             </div>
@@ -596,6 +601,11 @@
                 case "Label":
                     newWidget.classList.add("widget-label");
                     newWidget.textContent = "Label";
+                    break;
+                case "Canvas":
+                    newWidget.classList.add("widget-canvas");
+                    newWidget.textContent = "Canvas";
+
                     break;
                 case "VerticalLayout":
                     newWidget.classList.add("layout", "vertical");
@@ -870,7 +880,7 @@
             selectedWidget.style.width = document.getElementById("prop-width").value + "px";
             selectedWidget.style.height = document.getElementById("prop-height").value + "px";
 
-            if (selectedWidget.dataset.type !== "Checkbox" && selectedWidget.dataset.type !== "Slider") {
+            if (selectedWidget.dataset.type !== "Slider") {
                 selectedWidget.textContent = document.getElementById("prop-text").value;
             }
             if (selectedWidget.dataset.type === "Slider") {
@@ -982,6 +992,10 @@
                         break;
                     case "Label":
                         widgetCode = `${indent}GooeyLabel *${widgetVar} = GooeyLabel_Create("${text}", 0.26f, ${x}, ${y});\n`;
+                        break;
+                    case "Canvas":
+                        widgetCode = `${indent}GooeyCanvas *${widgetVar} = GooeyCanvas_Create(${x}, ${y}, ${width}, ${height});\n`;
+
                         break;
                     case "VerticalLayout":
                     case "HorizontalLayout":

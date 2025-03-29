@@ -90,9 +90,8 @@
             border-radius: 4px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
             z-index: 10;
-            overflow: hidden;
             min-width: 200px;
-            min-height: 200px;
+            height: auto;
             resize: both;
         }
 
@@ -108,9 +107,9 @@
         }
 
         .panel-content {
-            padding: 20px;
-            overflow: hidden;
-
+            padding: 25px;
+            height: 450px;
+            overflow-y: scroll;
         }
 
         #toolbox {
@@ -123,8 +122,10 @@
         #settings-panel {
             right: 20px;
             top: 20px;
+
             width: auto;
-            height: auto;
+            height: 550px;
+
         }
 
         #workspace {
@@ -372,7 +373,8 @@
 
 <body>
 
-    <div class="disclaimer" style="position: absolute; top: 0; width: 100%; height: 60px; color: white; text-align: center; background-color:#005a9e;">
+    <div class="disclaimer"
+        style="position: absolute; top: 0; width: 100%; height: 60px; color: white; text-align: center; background-color:#005a9e;">
         <h4> GooeyBuilder is still in early-development. If something doesn't work create an issue.</h4>
 
     </div>
@@ -405,7 +407,8 @@
             <h4 style="color: #333; font-size: 14px; margin-top: 0;">Widgets</h4>
             <div class="widget" data-type="Button">Button</div>
             <div class="widget" data-type="Input">Input</div>
-            <div class="widget" data-type="Slider">Slider</div>
+            <div class="widget" data-type="Slider" data-min_value="0" data-max_value="100" data-show_hints="false">
+                Slider</div>
             <div class="widget" data-type="Checkbox">Checkbox</div>
             <div class="widget" data-type="Label">Label</div>
             <div class="widget" data-type="Dropdown">Dropdown</div>
@@ -496,7 +499,7 @@
                         <select id="slider-show-hints">
                             <option value="true">enabled</option>
                             <option value="false">disabled</option>
-                          </select>
+                        </select>
                     </div>
                 </div>
 
@@ -530,8 +533,9 @@
                 isDragging = true;
                 offsetX = e.clientX - panel.getBoundingClientRect().left;
                 offsetY = e.clientY - panel.getBoundingClientRect().top;
-                panel.style.cursor = 'move';
 
+                panel.style.cursor = 'move';
+                panel.style.right = 'auto';
                 document.addEventListener('mousemove', onPanelDragMove);
                 document.addEventListener('mouseup', onPanelDragEnd);
             });
@@ -541,6 +545,7 @@
 
                 panel.style.left = (e.clientX - offsetX) + 'px';
                 panel.style.top = (e.clientY - offsetY) + 'px';
+
             }
 
             function onPanelDragEnd() {
@@ -843,8 +848,14 @@
             document.getElementById("prop-height").value = parseInt(selectedWidget.style.height) || rect.height;
             document.getElementById("prop-text").value = selectedWidget.textContent || "";
 
-
-
+            if (selectedWidget.dataset.type === "Slider") {
+                document.getElementById("slider-min-value").value =
+                    selectedWidget.dataset.min_value ? parseInt(selectedWidget.dataset.min_value) : 0;
+                document.getElementById("slider-max-value").value =
+                    selectedWidget.dataset.max_value ? parseInt(selectedWidget.dataset.max_value) : 100;
+                document.getElementById("slider-show-hints").value =
+                    selectedWidget.dataset.show_hints || "false";
+            }
 
         }
 
@@ -862,9 +873,14 @@
             if (selectedWidget.dataset.type !== "Checkbox" && selectedWidget.dataset.type !== "Slider") {
                 selectedWidget.textContent = document.getElementById("prop-text").value;
             }
+            if (selectedWidget.dataset.type === "Slider") {
+                selectedWidget.dataset.min_value = document.getElementById("slider-min-value").value;
+                selectedWidget.dataset.max_value = document.getElementById("slider-max-value").value;
+                selectedWidget.dataset.show_hints = document.getElementById("slider-show-hints").value;
+            }
 
-            
-            
+
+
             document.getElementById("status-text").textContent = "Properties updated";
             setTimeout(() => {
                 document.getElementById("status-text").textContent = "Ready";
@@ -936,6 +952,7 @@
                 let y = widget.style.top ? parseInt(widget.style.top) : 0;
                 let width = widget.style.width ? parseInt(widget.style.width) : 100;
                 let height = widget.style.height ? parseInt(widget.style.height) : 30;
+
                 let text = widget.textContent || "";
 
                 // Clean text for C string
@@ -954,7 +971,11 @@
                         widgetCode = `${indent}GooeyTextbox *${widgetVar} = GooeyTextBox_Create(${x}, ${y}, ${width}, ${height}, "${text}", input_callback);\n`;
                         break;
                     case "Slider":
-                        widgetCode = `${indent}GooeySlider *${widgetVar} = GooeySlider_Create(${x}, ${y}, ${width}, 0, 100, true, slider_callback);\n`;
+                        let slider_min_value = widget.getAttribute("data-min_value") ? parseInt(widget.getAttribute("data-min_value")) : 0;
+                        let slider_max_value = widget.getAttribute("data-max_value") ? parseInt(widget.getAttribute("data-max_value")) : 100;
+                        let show_hints = widget.getAttribute("data-show_hints");
+
+                        widgetCode = `${indent}GooeySlider *${widgetVar} = GooeySlider_Create(${x}, ${y}, ${width}, ${slider_min_value}, ${slider_max_value}, ${show_hints}, slider_callback);\n`;
                         break;
                     case "Checkbox":
                         widgetCode = `${indent}GooeyCheckbox *${widgetVar} = GooeyCheckbox_Create(${x}, ${y}, "${text}", checkbox_callback);\n`;

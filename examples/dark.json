@@ -1,0 +1,9 @@
+{
+    "base": "0x121212",
+    "widget_base": "0x1E1E1E",
+    "neutral": "0xFFFFFF",
+    "primary": "0xBB86FC",
+    "danger": "0xCF6679",
+    "info": "0x03DAC6",
+    "success": "0x4CAF50"
+}

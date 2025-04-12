@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLPS - Cross-Platform Abstraction Layer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --dark: #1a252f;
+            --light: #ecf0f1;
+            --text: #333;
+            --text-light: #7f8c8d;
+            --accent: #3498db;
+            --border: #ddd;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+        }
+
+        body {
+            background-color: white;
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0 3rem;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            color: var(--text-light);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: white;
+            padding: 0.7rem 1.3rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn:hover {
+            background-color: var(--primary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            margin-left: 0.5rem;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        section {
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin: 1.5rem 0 1rem;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        .docs-section {
+            margin: 3rem 0;
+        }
+
+        .doc-item {
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-item p {
+            margin-bottom: 1rem;
+        }
+
+        code {
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .note {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: white;
+            margin-left: 1.5rem;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 1rem;
+            }
+
+            nav ul li {
+                margin: 0 0.8rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 0.5rem;
+                display: block;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                margin-top: 1rem;
+            }
+
+            .footer-links a {
+                margin: 0 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">GLPS</div>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#docs">Documentation</a></li>
+                <li><a href="#gooeygui">GooeyGUI</a></li>
+                <li><a href="https://github.com/yourusername/glps" target="_blank">GitHub</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h1>GLPS Platform Abstraction Layer</h1>
+            <p>A lightweight, high-performance abstraction API for Windows and Linux systems, powering GooeyGUI and
+                other cross-platform applications.</p>
+            <div>
+                <a href="#docs" class="btn">Get Started</a>
+                <a href="https://github.com/yourusername/glps" class="btn btn-outline">View on GitHub</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <h2>About GLPS</h2>
+            <p>GLPS (Generic Low-level Platform Services) provides a clean, consistent interface for platform-specific
+                functionality across Windows and Linux systems. Designed for performance and minimal overhead, it serves
+                as the foundation for <a href="#gooeygui">GooeyGUI</a>.</p>
+
+            <div class="features">
+                <div class="feature-card">
+                    <h3>System Abstraction</h3>
+                    <p>Uniform interface for filesystem, threading, timers, and other OS services with native
+                        performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>No Dependencies</h3>
+                    <p>Written in pure C. No heavyweight frameworks required.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Modular Design</h3>
+                    <p>Use only the components you need - windowing, input, graphics context, etc.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="docs" class="docs-section">
+            <h2>Documentation</h2>
+
+            <div class="doc-item">
+                <h3>Initialization</h3>
+                <p>Basic setup for a GLPS application:</p>
+                <pre><code class="language-c">#include &lt;GLPS/glps_window_manager.h&gt;
+
+int main(int argc, char** argv) {
+    // Initialize the GLPS window manager component. 
+    // The window manager is responsible for window creation/destruction,
+    // user input and graphics context creation. 
+    glps_WindowManager *wm = glps_wm_init();
+
+    // Create a window
+    // This returns a unique ID for each window.
+    size_t win_id = glps_wm_window_create("My App", 800, 600);
+
+    // Main application loop
+    while (!glps_wm_should_close(window)) {
+        // Draw funcs (OpenGL, Vulkan, etc..)
+    }
+
+    // Cleanup
+    glps_wm_window_destroy(wm, win_id);
+    glps_wm_destroy(wm);
+    return 0;
+}</code></pre>
+            </div>
+
+            <div class="doc-item">
+                <h3>Platform Services</h3>
+                <p>Accessing system services through GLPS:</p>
+<pre><code class="language-c">
+// Include threads
+#include &lt;GLPS/glps_thread.h&gt;
+
+// Thread handle
+static gthread_t thread;
+
+// Thread creation
+glps_thread_create(&thread, NULL, thread_func, NULL);
+</code></pre>
+            </div>
+
+        <section id="gooeygui">
+            <h2>GooeyGUI</h2>
+            <p>GLPS is the foundation for <strong>GooeyGUI</strong>, a lightweight immediate-mode GUI library for
+                embedded and performance-sensitive applications.</p>         
+            <a href="https://github.com/yourusername/gooeygui" class="btn">GooeyGUI Project</a>
+        </section>
+
+        <section id="download">
+            <h2>Getting GLPS</h2>
+            <p>GLPS is available as a single-header library or can be built as a static library for better performance.
+            </p>
+            <pre><code class="language-bash"># Clone the repository
+git clone https://github.com/GooeyUI/GLPS.git glps
+cd glps
+
+# Build and install (optional)
+cmake -S . -B build
+make
+sudo make install</code></pre>
+            <a href="https://github.com/yourusername/glps/releases" class="btn">Download Latest Release</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="copyright">© 2023 GLPS Project</div>
+            <div class="footer-links">
+                <a href="https://github.com/yourusername/glps">GitHub</a>
+                <a href="https://github.com/yourusername/glps/issues">Issues</a>
+                <a href="https://github.com/yourusername/glps/blob/main/LICENSE">License</a>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+cd .. && cmake -S . -B build && cd build && make && sudo make install && cd .. && cd examples && gcc glad/glad.c test.c -o test -lGLPS -L/usr/local/include -fsanitize=address,undefined -lm && chmod +x test && ./test

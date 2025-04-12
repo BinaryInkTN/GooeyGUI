@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['scroll_5foffset_0',['scroll_offset',['../structGooeyList.html#af05010d596b0487b317b82fb2471fe86',1,'GooeyList::scroll_offset'],['../structGooeyTextbox.html#a9658eece4c2a866e534fc7a99aeb325d',1,'GooeyTextbox::scroll_offset']]],
+  ['scrollable_5fcount_1',['scrollable_count',['../structGooeyWindow.html#a8b206de0de77d851e820823fb9d75e1b',1,'GooeyWindow']]],
+  ['selected_2',['selected',['../structGooeyRadioButton.html#a724ac3c03b883e4066fc8e5c6cd158b4',1,'GooeyRadioButton']]],
+  ['selected_5findex_3',['selected_index',['../structGooeyDropdown.html#af9ad6b588191b012349a5066f3036da9',1,'GooeyDropdown']]],
+  ['setcontext_4',['SetContext',['../structGooeyBackend.html#aec932d195ecec07738fe4e5aad132a41',1,'GooeyBackend']]],
+  ['setcursor_5',['SetCursor',['../structGooeyBackend.html#a73898cad1f52160405f9b1acfacb450f',1,'GooeyBackend']]],
+  ['setforeground_6',['SetForeground',['../structGooeyBackend.html#a2727a7bd80e882644d062c08f3d8a5fc',1,'GooeyBackend']]],
+  ['setupcallbacks_7',['SetupCallbacks',['../structGooeyBackend.html#a24ac1c2962c4559ce614468caadf7aee',1,'GooeyBackend']]],
+  ['setviewport_8',['SetViewport',['../structGooeyBackend.html#a845d40145b35a61ba8bd57c986b41d0f',1,'GooeyBackend']]],
+  ['show_5fhints_9',['show_hints',['../structGooeySlider.html#a4f6742e85a3b0f51a6d1a40d143835a0',1,'GooeySlider']]],
+  ['show_5fseparator_10',['show_separator',['../structGooeyList.html#a444fa98820bc180bef25b017f8f8438a',1,'GooeyList']]],
+  ['skip_11',['skip',['../structstbi__io__callbacks.html#a257aac5480a90a6c4b8fbe86c1b01068',1,'stbi_io_callbacks']]],
+  ['slider_5fcount_12',['slider_count',['../structGooeyWindow.html#a28c2108a7f78eeca8f1d3fff45383949',1,'GooeyWindow']]],
+  ['sliders_13',['sliders',['../structGooeyWindow.html#aab44d8944ff3b00a0b9a80fe9cf8ced3',1,'GooeyWindow']]],
+  ['slots_14',['slots',['../structGooeySignal.html#a6156f8273f8a3124d075003657e86c63',1,'GooeySignal']]],
+  ['spawnwindow_15',['SpawnWindow',['../structGooeyBackend.html#a0c60a6ebb9698384ebf240e5a40cbd0d',1,'GooeyBackend']]],
+  ['state_16',['state',['../structGooeyKeyPressData.html#abb406ea43c6c39618cf879b2041b5979',1,'GooeyKeyPressData::state'],['../structGooeyDropData.html#aff4b9a928728583a98bfbe0f3af75a8a',1,'GooeyDropData::state']]],
+  ['success_17',['success',['../structGooeyTheme.html#a559ac22c31aad5c6db3d426dba11fa56',1,'GooeyTheme']]]
+];

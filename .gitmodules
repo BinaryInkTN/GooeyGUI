@@ -1,0 +1,9 @@
+[submodule "third_party/glps"]
+	path = third_party/glps
+	url = git@github.com:GooeyUI/GLPS.git
+[submodule "third_party/freetype"]
+	path = third_party/freetype
+	url = https://github.com/freetype/freetype.git
+[submodule "third_party/cjson"]
+	path = third_party/cjson
+	url = https://github.com/DaveGamble/cJSON.git

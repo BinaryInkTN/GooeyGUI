@@ -54,6 +54,6 @@
   * @param state `true` to show the separator, `false` to hide it.
   */
  void GooeyList_ShowSeparator(GooeyList *list, bool state);
- 
+ void GooeyList_UpdateItem(GooeyList *list, size_t item_index, const char *title, const char *description);
  #endif // GOOEY_LIST_H
  

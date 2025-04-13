@@ -528,13 +528,14 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
+    GooeyCanvas_Draw(win);
+
     GooeyMeter_Draw(win);
     GooeyProgressBar_Draw(win);
     GooeyTabs_Draw(win);
     GooeyDropSurface_Draw(win);
     GooeyImage_Draw(win);
     GooeyList_Draw(win);
-    GooeyCanvas_Draw(win);
     GooeyButton_Draw(win);
     GooeyTextbox_Draw(win);
     GooeyCheckbox_Draw(win);

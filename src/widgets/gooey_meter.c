@@ -29,7 +29,7 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
 
 void GooeyMeter_Update(GooeyMeter *meter, long new_value)
 {
-    if (!meter)
+    if (!meter || new_value < 0 || new_value > 100)
     {
         LOG_ERROR("Couldn't update meter value.");
         return;

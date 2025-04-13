@@ -25,8 +25,8 @@
 
 GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index))
 {
-    GooeyList *list = (GooeyList*) malloc(sizeof(GooeyList));
-    if(!list)
+    GooeyList *list = (GooeyList *)malloc(sizeof(GooeyList));
+    if (!list)
     {
         LOG_ERROR("Couldn't allocate memory for list.");
         return NULL;
@@ -54,10 +54,39 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
 
 void GooeyList_AddItem(GooeyList *list, const char *title, const char *description)
 {
+    if (!list || !title || !description)
+    {
+        LOG_ERROR("Couldn't add item.");
+        return;
+    }
+
     GooeyListItem item = {0};
-    strcpy(item.title, title);
-    strcpy(item.description, description);
+    strncpy(item.title, title, sizeof(item.title) - 1);
+    item.title[sizeof(item.title) - 1] = '\0';
+    strncpy(item.description, description, sizeof(item.description) - 1);
+    item.description[sizeof(item.description) - 1] = '\0';
     list->items[list->item_count++] = item;
+}
+
+void GooeyList_UpdateItem(GooeyList *list, size_t item_index, const char *title, const char *description)
+{
+    if (!list || !title || !description)
+    {
+        LOG_ERROR("Couldn't update item.");
+        return;
+    }
+
+    GooeyListItem *item = &list->items[item_index];
+
+    if (!item)
+    {
+        LOG_ERROR("Couldn't update item with index %ld", item_index);
+        return;
+    }
+    strncpy(item->title, title, sizeof(item->title) - 1);
+    item->title[sizeof(item->title) - 1] = '\0';
+    strncpy(item->description, description, sizeof(item->description) - 1);
+    item->description[sizeof(item->description) - 1] = '\0';
 }
 
 void GooeyList_ClearItems(GooeyList *list)
@@ -65,7 +94,6 @@ void GooeyList_ClearItems(GooeyList *list)
     memset(list->items, 0, sizeof(*list->items));
     list->item_count = 0;
 }
-
 
 void GooeyList_ShowSeparator(GooeyList *list, bool state)
 {

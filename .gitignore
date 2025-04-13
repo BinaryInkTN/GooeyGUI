@@ -6,5 +6,4 @@ CMakeDoxyfile.in
 CMakeDoxygenDefaults.cmake
 CMakeFiles
 bin
-*.sh
 *.cmake

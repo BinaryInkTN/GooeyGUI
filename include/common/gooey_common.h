@@ -64,6 +64,7 @@ typedef enum
     WIDGET_IMAGE,
     WIDGET_LIST,
     WIDGET_PROGRESSBAR,
+    WIDGET_METER,
     WIDGET_TABS
 } WIDGET_TYPE;
 
@@ -154,6 +155,7 @@ typedef struct
     char text[256];      /**< Text displayed on the label */
     float font_size;     /**< Font size of the label */
     unsigned long color; /**< Color of the label */
+    bool is_using_custom_color;
 } GooeyLabel;
 
 /**
@@ -469,6 +471,13 @@ typedef struct
     size_t active_tab_id;
 } GooeyTabs;
 
+typedef struct
+{
+    GooeyWidget core;
+    long value;
+    const char* label;
+} GooeyMeter;
+
 /**
  * @brief Enumeration for window types in the Gooey framework.
  */
@@ -508,7 +517,9 @@ typedef struct
     GooeyImage **images;             /**< List of image widgets in the window */
     GooeyDropSurface **drop_surface; /**< List of drop surface widgets in the window */
     GooeyTabs **tabs;
+    GooeyMeter **meters;
 
+    size_t meter_count;
     size_t tab_count;
     size_t drop_surface_count;       /**< Number of drop surface widgets */
     size_t list_count;               /**< Number of list widgets */

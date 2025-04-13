@@ -304,8 +304,11 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
 void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1, int angle2, int window_id)
 {
 
+    float angle1_to_rad = ((float) angle1/180) * M_PI;
+    float angle2_to_rad = ((float) angle2/180) * M_PI;
+
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    const int segments = 10;
+    const int segments = 200;
 
     float ndc_x_center, ndc_y_center;
     convert_coords_to_ndc(ctx.wm, window_id, &ndc_x_center, &ndc_y_center, x_center, y_center);
@@ -323,9 +326,9 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
 
     for (int i = 0; i <= segments; ++i)
     {
-        float angle = (float)i / segments * 2.0f * M_PI;
-        float x = x_center + (width * 0.5f * cosf(angle));
-        float y = y_center + (height * 0.5f * sinf(angle));
+        float angle = (float)i / segments * (angle2_to_rad - angle1_to_rad);
+        float x = x_center - (width * 0.5f * cosf(angle));
+        float y = y_center - (height * 0.5f * sinf(angle));
 
         float ndc_x, ndc_y;
         convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);

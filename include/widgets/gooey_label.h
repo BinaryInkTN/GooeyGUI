@@ -45,7 +45,7 @@
   * @param label A pointer to the label whose color is to be changed.
   * @param color A string representing the color (e.g., "red", "#FF0000").
   */
- void GooeyLabel_SetColor(GooeyLabel *label, const char *color);
+ void GooeyLabel_SetColor(GooeyLabel *label, unsigned long color);
  
  #endif // GOOEY_LABEL_H
  

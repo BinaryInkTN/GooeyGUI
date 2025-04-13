@@ -86,6 +86,11 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->progressbars[win->progressbar_count++] = (GooeyProgressBar *)widget;
         break;
     }
+    case WIDGET_METER:
+    {
+        win->meters[win->meter_count++] = (GooeyMeter *)widget;
+        break;
+    }
     case WIDGET_TABS:
     {
         win->tabs[win->tab_count++] = (GooeyTabs *)widget;

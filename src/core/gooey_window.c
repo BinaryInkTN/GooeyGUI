@@ -40,6 +40,7 @@
 #include "signals/gooey_signals.h"
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_window_internal.h"
+#include "widgets/gooey_meter_internal.h"
 #include <stdarg.h>
 
 #include <sys/resource.h>
@@ -129,7 +130,8 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
         !(win->canvas = malloc(sizeof(GooeyCanvas *) * MAX_WIDGETS)) ||
         !(win->widgets = malloc(sizeof(GooeyWidget *) * MAX_WIDGETS)) ||
         !(win->plots = malloc(sizeof(GooeyPlot *) * MAX_PLOT_COUNT)) ||
-        !(win->progressbars = malloc(sizeof(GooeyProgressBar *) * MAX_PLOT_COUNT)))
+        !(win->progressbars = malloc(sizeof(GooeyProgressBar *) * MAX_PLOT_COUNT)) ||
+        !(win->meters = malloc(sizeof(GooeyMeter *) * MAX_WIDGETS)))
     {
         return false;
     }
@@ -168,6 +170,13 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     {
         free(win->canvas);
         win->canvas = NULL;
+    }
+
+
+    if (win->meters)
+    {
+        free(win->meters);
+        win->meters = NULL;
     }
 
     if (win->tabs)
@@ -471,6 +480,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->layout_count = 0;
     win->list_count = 0;
     win->progressbar_count = 0;
+    win->meter_count = 0;
     win->widget_count = 0;
     win->continuous_redraw = false;
 
@@ -518,12 +528,12 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
+    GooeyMeter_Draw(win);
     GooeyProgressBar_Draw(win);
     GooeyTabs_Draw(win);
     GooeyDropSurface_Draw(win);
     GooeyImage_Draw(win);
     GooeyList_Draw(win);
-    GooeyLabel_Draw(win);
     GooeyCanvas_Draw(win);
     GooeyButton_Draw(win);
     GooeyTextbox_Draw(win);
@@ -533,6 +543,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyPlot_Draw(win);
     GooeyDropdown_Draw(win);
     GooeyMenu_Draw(win);
+    GooeyLabel_Draw(win);
     GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);

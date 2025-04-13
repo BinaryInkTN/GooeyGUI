@@ -34,8 +34,8 @@ GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y)
     label->core.x = x;
     label->core.y = y;
     label->core.is_visible = true;
-
     label->font_size = font_size;
+    label->is_using_custom_color = false;
     strncpy(label->text, text, sizeof(label->text) - 1);
     label->text[sizeof(label->text) - 1] = '\0';
     LOG_INFO("Label added with dimensions x=%d, y=%d", x, y);
@@ -43,10 +43,10 @@ GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y)
     return label;
 }
 
-void GooeyLabel_SetColor(GooeyLabel *label, const char *color)
+void GooeyLabel_SetColor(GooeyLabel *label, unsigned long color)
 {
-    unsigned long color_long = (unsigned long)strtol(color, NULL, 0);
-    label->color = color_long;
+    label->color = color;
+    label->is_using_custom_color = true;
 }
 
 void GooeyLabel_SetText(GooeyLabel *label, const char *text)

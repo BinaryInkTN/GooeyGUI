@@ -57,7 +57,7 @@ int main()
 
     Gooey_Init();
     win = GooeyWindow_Create("Progress Demo", 800, 600, true);
-    //GooeyWindow_SetContinuousRedraw(win);
+    GooeyWindow_SetContinuousRedraw(win);
     //GooeyWindow_EnableDebugOverlay(win, 1);
 
     GooeyMenu *menu = GooeyMenu_Set(win);

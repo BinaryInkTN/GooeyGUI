@@ -16,7 +16,7 @@ void GooeyLabel_Draw(GooeyWindow *win)
             widget->x, 
             widget->y, 
             label->text, 
-            win->active_theme->neutral, 
+            label->is_using_custom_color ? label->color : win->active_theme->neutral, 
             label->font_size, 
             win->creation_id
         );

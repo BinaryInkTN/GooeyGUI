@@ -1,9 +1,16 @@
 
 # Gooey - Cross-Platform GUI Library
 
-![Gooey Logo](gooey.png) <!-- Replace with actual logo -->
+<center>
 
+<img src="gooey.png" style="max-width:128px;"/>
+
+</center>
 The elegant way to build cross-platform applications with native performance.
+
+
+<img src="website/example_dark.png" style="max-width:600px;"/>
+
 
 ## Features
 

@@ -70,6 +70,7 @@ Explore our comprehensive documentation:
 4. Build the library:
    ```bash
    cmake -S . -B build
+   cd build && make
    ```
 
 5. Install (optional):

@@ -12,7 +12,7 @@ The elegant way to build cross-platform applications with native performance.
 - **Cross-Platform**: Build once, run anywhere (Windows, Linux)
 - **Lightweight**: Minimal footprint with maximum functionality
 - **Customizable**: Tailor every aspect of your UI
-- **No Dependencies**: Built from scratch for maximum control
+- **Minimal Dependencies**: Built with minimal dependencies
 - **Pure C**: Portable code perfect for embedded solutions
 - **Community Driven**: Open-source under GPL v2 license
 

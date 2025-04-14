@@ -98,4 +98,4 @@ To all our [contributors](https://github.com/GooeyUI/GooeyGUI/graphs/contributor
 
 ---
 
-© 2025 Gooey GUI Library | [Website](https://gooeyui.github.io) 
+© 2025 Gooey GUI Library | [Website](https://gooeyui.github.io/GooeyGUI/website/) 

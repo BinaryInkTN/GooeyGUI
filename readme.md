@@ -49,7 +49,7 @@ int main()
 
 Explore our comprehensive documentation:
 
-- [API Reference](https://gooeyui.github.io/GooeyGUI/website/docs/)
+- [API Reference](https://gooeyui.github.io/GooeyGUI/website/docs/files.html)
 - [Examples Directory](https://github.com/GooeyUI/GooeyGUI/tree/main/examples)
 - [Web Builder Tool](https://gooeyui.github.io/GooeyBuilder/)
 

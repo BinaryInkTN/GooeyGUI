@@ -7,7 +7,8 @@
     <title>Gooey - Cross-Platform GUI Library</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 
     <style>
@@ -56,7 +57,12 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-weight: 600;
             letter-spacing: -0.01em;
             color: var(--text-color);
@@ -157,9 +163,8 @@
         }
 
 
-        #releases-container
-        {
-            display:flex;
+        #releases-container {
+            display: flex;
             gap: 1rem;
             justify-content: center;
             align-items: center;
@@ -314,8 +319,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .widget-preview {
@@ -429,8 +441,7 @@
             color: var(--text-color);
             font-size: 1.2rem;
             cursor: pointer;
-            padding: 0.5rem;
-            margin-left: 1rem;
+            margin: 0.2rem;
         }
 
         /* GitHub Releases Integration Styles */
@@ -446,7 +457,7 @@
 
         .release-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .release-header {
@@ -520,8 +531,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .error-message {
@@ -554,87 +570,90 @@
         }
 
         /* Contributors Section Styles */
-.contributor-card {
-    border: 1px solid var(--section-border);
-    border-radius: 12px;
-    padding: 1.5rem;
-margin-bottom: 1.5rem;
-    background-color: var(--card-bg);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+        .contributor-card {
+            border: 1px solid var(--section-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--card-bg);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-#contributors-container {
-    display:flex;
-    gap: 1rem;
-    justify-content: center;
-    align-items:center;
-}
+        #contributors-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
 
-.contributor-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
+        .contributor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
 
-.contributor-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1rem;
-    border: 3px solid var(--apple-blue);
-}
+        .contributor-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            border: 3px solid var(--apple-blue);
+        }
 
-.contributor-name {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
+        .contributor-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
 
-.contributor-login {
-    color: var(--apple-gray-3);
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-}
+        .contributor-login {
+            color: var(--apple-gray-3);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
 
-.contributor-stats {
-    display: flex;
-    gap: 1rem;
-    margin-top: auto;
-}
+        .contributor-stats {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto;
+        }
 
-.contributor-stat {
-    background-color: var(--apple-gray-1);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-}
+        .contributor-stat {
+            background-color: var(--apple-gray-1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
 
-.contributor-links {
-    margin-top: 1rem;
-    display: flex;
-    gap: 1rem;
-}
+        .contributor-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
 
-.contributor-link {
-    color: var(--apple-blue);
-    text-decoration: none;
-    transition: opacity 0.2s;
-}
+        .contributor-link {
+            color: var(--apple-blue);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
 
-.contributor-link:hover {
-    opacity: 0.8;
-    color: var(--apple-blue);
-}
+        .contributor-link:hover {
+            opacity: 0.8;
+            color: var(--apple-blue);
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
-            <a class="navbar-brand" href="#">Gooey</a>
+            <a class="navbar-brand" href="#">Gooey </a>     <div class="release-tag" style="background-color: #FBC02D;">
+                            <i class="fas fa-star"></i>
+                            <span id="stargazer-count"></span>
+                        </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -643,8 +662,11 @@ margin-bottom: 1.5rem;
                     <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
                     <li class="nav-item"><a class="nav-link" href="#examples">Examples</a></li>
                     <li class="nav-item"><a class="nav-link" href="#download">Download</a></li>
-                    <li class="nav-item"><a class="nav-link" href="https://gooeyui.github.io/GooeyGUI/website/docs/files.html">Documentation</a></li>
-                    <li class="nav-item">
+                    <li class="nav-item"><a class="nav-link"
+                            href="https://gooeyui.github.io/GooeyGUI/website/docs/files.html">Documentation</a></li>
+                   
+    
+                            <li class="nav-item">
                         <button class="theme-toggle" id="themeToggle">
                             <i class="fas fa-moon"></i>
                         </button>
@@ -656,7 +678,7 @@ margin-bottom: 1.5rem;
 
     <header>
         <div class="header-container">
-            <h1 class="fade-in">Gooey GUI Library</h1>
+            <h1 class="fade-in">Gooey GUI Library </h1>
             <p class="fade-in delayed-1">The elegant way to build cross-platform applications.</p>
             <div class="fade-in delayed-2">
                 <a href="#download" class="btn btn-apple me-2">Download</a>
@@ -670,28 +692,32 @@ margin-bottom: 1.5rem;
     <section id="features">
         <div class="container">
             <h2 class="section-title fade-in">Designed for developers</h2>
-            <p class="section-subtitle fade-in delayed-1">Gooey provides everything you need to create beautiful, native-feeling applications across platforms.</p>
+            <p class="section-subtitle fade-in delayed-1">Gooey provides everything you need to create beautiful,
+                native-feeling applications across platforms.</p>
 
             <div class="row mt-5">
                 <div class="col-md-4 mb-4 fade-in">
                     <div class="card h-100 p-4">
                         <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
                         <h3 class="card-title">Cross-Platform</h3>
-                        <p class="card-text">Build once, run anywhere. Gooey applications work seamlessly on Windows, and Linux with native performance.</p>
+                        <p class="card-text">Build once, run anywhere. Gooey applications work seamlessly on Windows,
+                            and Linux with native performance.</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4 fade-in delayed-1">
                     <div class="card h-100 p-4">
                         <div class="card-icon"><i class="fas fa-bolt"></i></div>
                         <h3 class="card-title">Lightweight</h3>
-                        <p class="card-text">Minimal footprint with maximum functionality. Gooey is designed to be fast and efficient without bloat.</p>
+                        <p class="card-text">Minimal footprint with maximum functionality. Gooey is designed to be fast
+                            and efficient without bloat.</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4 fade-in delayed-2">
                     <div class="card h-100 p-4">
                         <div class="card-icon"><i class="fas fa-paint-brush"></i></div>
                         <h3 class="card-title">Customizable</h3>
-                        <p class="card-text">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives you complete control.</p>
+                        <p class="card-text">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives
+                            you complete control.</p>
                     </div>
                 </div>
             </div>
@@ -709,14 +735,16 @@ margin-bottom: 1.5rem;
                     <div class="card h-100 p-4">
                         <div class="card-icon"><i class="fas fa-c"></i></div>
                         <h3 class="card-title">Built in pure C</h3>
-                        <p class="card-text">Portable code. Perfect for Embedded Solutions and hardware with limited resources.</p>
+                        <p class="card-text">Portable code. Perfect for Embedded Solutions and hardware with limited
+                            resources.</p>
                     </div>
                 </div>
                 <div class="col-md-4 mb-4 fade-in delayed-2">
                     <div class="card h-100 p-4">
                         <div class="card-icon"><i class="fa-brands fa-osi"></i></div>
                         <h3 class="card-title">Community Driven</h3>
-                        <p class="card-text">Gooey is released under the GPL v2 license. If you're here to contribute, feel free to make a pull request!</p>
+                        <p class="card-text">Gooey is released under the GPL v2 license. If you're here to contribute,
+                            feel free to make a pull request!</p>
                     </div>
                 </div>
             </div>
@@ -726,7 +754,8 @@ margin-bottom: 1.5rem;
     <section id="examples">
         <div class="container text-center">
             <h2 class="section-title fade-in">Bite sized examples</h2>
-            <p class="section-subtitle fade-in delayed-1">Get started with these simple examples showing Gooey's core features.</p>
+            <p class="section-subtitle fade-in delayed-1">Get started with these simple examples showing Gooey's core
+                features.</p>
 
             <div class="fade-in delayed-2">
                 <div class="macos-window">
@@ -739,35 +768,36 @@ margin-bottom: 1.5rem;
                         <h5>IoT_Dashboard.c</h5>
                     </div>
                     <div class="macos-content">
-                        <img src="example_light.png" id="exampleImage" class="img-fluid"/>
+                        <img src="example_light.png" id="exampleImage" class="img-fluid" />
                     </div>
                 </div>
             </div>
 
-                                    <a href="https://github.com/GooeyUI/GooeyGUI/tree/main/examples" class="btn btn-apple me-2">Check them out!</a>
+            <a href="https://github.com/GooeyUI/GooeyGUI/tree/main/examples" class="btn btn-apple me-2">Check them
+                out!</a>
 
         </div>
     </section>
 
-<section id="contributors">
-    <div class="container">
-        <h2 class="section-title fade-in">Our Contributors</h2>
-        <p class="section-subtitle fade-in delayed-1">The family who helps make Gooey better</p>
+    <section id="contributors">
+        <div class="container">
+            <h2 class="section-title fade-in">Our Contributors</h2>
+            <p class="section-subtitle fade-in delayed-1">The family who helps make Gooey better</p>
 
-        <div id="contributors-loading" class="loading-spinner"></div>
-        <div id="contributors-container" class="row mt-4 fade-in delayed-2">
-            <!-- GitHub contributors will be loaded here dynamically -->
-        </div>
-        <div id="contributors-error" class="error-message" style="display: none;"></div>
+            <div id="contributors-loading" class="loading-spinner"></div>
+            <div id="contributors-container" class="row mt-4 fade-in delayed-2">
+                <!-- GitHub contributors will be loaded here dynamically -->
+            </div>
+            <div id="contributors-error" class="error-message" style="display: none;"></div>
 
-        <div class="text-center mt-5 fade-in delayed-3">
-            <p>Want to contribute to Gooey?</p>
-            <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn-apple-outline">
-                <i class="fab fa-github me-2"></i> Join us on GitHub
-            </a>
+            <div class="text-center mt-5 fade-in delayed-3">
+                <p>Want to contribute to Gooey?</p>
+                <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn-apple-outline">
+                    <i class="fab fa-github me-2"></i> Join us on GitHub
+                </a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
     <section id="download" class="download-section">
         <div class="container">
             <h2 class="section-title fade-in">Download Gooey</h2>
@@ -803,57 +833,84 @@ margin-bottom: 1.5rem;
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script>document.addEventListener('DOMContentLoaded', async function() {
-    const repoOwner = 'GooeyUI';  // Replace with your org/username
-    const repoName = 'GooeyGUI';  // Replace with your repo
-    const loadingElement = document.getElementById('contributors-loading');
-    const containerElement = document.getElementById('contributors-container');
-    const errorElement = document.getElementById('contributors-error');
+    <script>
 
-    // Reset UI states
-    loadingElement.style.display = 'block';
-    containerElement.innerHTML = '';
-    errorElement.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', async function () {
+            const repoOwner = 'GooeyUI';  // Replace with your org/username
+            const repoName = 'GooeyGUI';  // Replace with your repo
+            const loadingElement = document.getElementById('contributors-loading');
+            const containerElement = document.getElementById('contributors-container');
+            const errorElement = document.getElementById('contributors-error');
 
-    try {
-        // Fetch all contributors (paginated)
-        let contributors = [];
-        let page = 1;
-        let hasMore = true;
 
-        while (hasMore) {
-            const response = await fetch(
-                `https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=100&page=${page}`
-            );
 
-            if (!response.ok) {
-                throw new Error(`GitHub API error: ${response.status}`);
-            }
+            // Reset UI states
+            loadingElement.style.display = 'block';
+            containerElement.innerHTML = '';
+            errorElement.style.display = 'none';
 
-            const data = await response.json();
-            contributors = [...contributors, ...data];
+            try {
+                let stars_page = 1;
+                let hasMore_stars = true;
+                let stargazers = [];
+                while (hasMore_stars) {
+                    const response = await fetch(
+                        `https://api.github.com/repos/${repoOwner}/${repoName}/stargazers?per_page=100&page=${stars_page}`
+                    );
 
-            // Stop if no more pages (check Link header)
-            const linkHeader = response.headers.get('Link');
-            hasMore = linkHeader && linkHeader.includes('rel="next"');
-            page++;
-        }
+                    if (!response.ok) {
+                        throw new Error(`GitHub API error: ${response.status}`);
+                    }
 
-        loadingElement.style.display = 'none';
+                    const data = await response.json();
+                    stargazers = [...stargazers, ...data];
 
-        if (contributors.length === 0) {
-            containerElement.innerHTML = `
+                    const linkHeader = response.headers.get('Link');
+                    hasMore_stars = linkHeader && linkHeader.includes('rel="next"');
+                    stars_page++;
+                }
+
+                document.getElementById("stargazer-count").textContent=`${stargazers.length} stars`;
+
+
+                // Fetch all contributors (paginated)
+                let contributors = [];
+                let page = 1;
+                let hasMore = true;
+
+                while (hasMore) {
+                    const response = await fetch(
+                        `https://api.github.com/repos/${repoOwner}/${repoName}/contributors?per_page=100&page=${page}`
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`GitHub API error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    contributors = [...contributors, ...data];
+
+                    // Stop if no more pages (check Link header)
+                    const linkHeader = response.headers.get('Link');
+                    hasMore = linkHeader && linkHeader.includes('rel="next"');
+                    page++;
+                }
+
+                loadingElement.style.display = 'none';
+
+                if (contributors.length === 0) {
+                    containerElement.innerHTML = `
                 <div class="alert alert-info text-center">
                     No contributors yet. Be the first!
                 </div>
             `;
-            return;
-        }
+                    return;
+                }
 
-        // Display contributors (limit to 12 or show all)
-        const topContributors = contributors.slice(0, 12); // Remove if you want all
-        topContributors.forEach(contributor => {
-            const contributorHTML = `
+                // Display contributors (limit to 12 or show all)
+                const topContributors = contributors.slice(0, 12); // Remove if you want all
+                topContributors.forEach(contributor => {
+                    const contributorHTML = `
                 <div class="col-md-4 col-lg-3 mb-4">
                     <div class="contributor-card">
                         <img src="${contributor.avatar_url}"
@@ -878,13 +935,13 @@ margin-bottom: 1.5rem;
                     </div>
                 </div>
             `;
-            containerElement.innerHTML += contributorHTML;
-        });
+                    containerElement.innerHTML += contributorHTML;
+                });
 
-    } catch (error) {
-        loadingElement.style.display = 'none';
-        errorElement.style.display = 'block';
-        errorElement.innerHTML = `
+            } catch (error) {
+                loadingElement.style.display = 'none';
+                errorElement.style.display = 'block';
+                errorElement.innerHTML = `
             <div class="alert alert-warning">
                 Could not load contributors.
                 <a href="https://github.com/${repoOwner}/${repoName}/graphs/contributors"
@@ -894,9 +951,9 @@ margin-bottom: 1.5rem;
                 </a>
             </div>
         `;
-        console.error('GitHub Contributors Error:', error);
-    }
-});
+                console.error('GitHub Contributors Error:', error);
+            }
+        });
         const themeToggle = document.getElementById('themeToggle');
         const exampleImage = document.getElementById('exampleImage');
 
@@ -937,7 +994,7 @@ margin-bottom: 1.5rem;
         });
 
         // GitHub Releases Integration
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const loadingSpinner = document.getElementById('releases-loading');
             const releasesContainer = document.getElementById('releases-container');
             const errorMessage = document.getElementById('releases-error');
@@ -1033,4 +1090,5 @@ margin-bottom: 1.5rem;
         });
     </script>
 </body>
+
 </html>

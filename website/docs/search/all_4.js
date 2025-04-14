@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['example_20usage_0',['Example Usage',['../index.html#autotoc_md5',1,'']]]
+  ['features_0',['Features',['../index.html#autotoc_md1',1,'']]],
+  ['from_20source_1',['Building from Source',['../index.html#autotoc_md6',1,'']]]
 ];

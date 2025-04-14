@@ -1,167 +1,99 @@
 
-<p align="center">
-  <img src="gooey.png" width=128>
-</p>
+# Gooey - Cross-Platform GUI Library
 
+![Gooey Logo](gooey.png) <!-- Replace with actual logo -->
 
-
-# Gooey GUI Library
-
-Gooey is a lightweight and feature-rich GUI (Graphical User Interface) library originally designed for X11 environments but now cross-platform. It provides a range of customizable widgets and layouts for creating responsive and modern desktop applications. The library is optimized for simplicity and offers a flexible API for developers.
-
-<p align="center">
-  <img src="showcase_glfw_white.png" width=300>
-</p>
+The elegant way to build cross-platform applications with native performance.
 
 ## Features
 
-- **Wide Range of Widgets**:
-  - Labels
-  - Buttons
-  - Checkboxes
-  - Radio Buttons (and Groups)
-  - Sliders
-  - Dropdown Menus
-  - Textboxes
-  - Canvas
-  - List
-  - Menu
-  - Tabs
-  - MessageBoxes
-  - File Drag & Drop Surface
-  - Image
+- **Cross-Platform**: Build once, run anywhere (Windows, Linux)
+- **Lightweight**: Minimal footprint with maximum functionality
+- **Customizable**: Tailor every aspect of your UI
+- **No Dependencies**: Built from scratch for maximum control
+- **Pure C**: Portable code perfect for embedded solutions
+- **Community Driven**: Open-source under GPL v2 license
 
-- **Layouts**:
-  - Horizontal
-  - Vertical
-  - Grid-based layouts
-
-- **Customization Options**:
-  - Support for widget-specific callbacks
-  - Styling with predefined color schemes
-  - Interactive hover and click states
-
-- **Event Handling**:
-  - Mouse clicks, motion, and keypress events
-  - Dynamic updates through an efficient redraw system
-  - Simple signaling system
-
-## Getting Started
-1. Clone repo 
-```bash 
-git clone https://github.com/YASSINE-AA/GooeyGUI.git
-```
-2. Update submodules: 
-```bash 
-git submodule update --init --force --remote
-```
-3. Apply patches: 
-```bash
-./scripts/apply-cjson-submodule-patch.sh 
-```
-4. Init Cmake 
-```bash
-cmake -S . -B build
-cd build 
-make all
-```
-5. To install target in you local machine 
-```bash 
-sudo make install
-```
-6. Run example 
-```bash
-cp examples/roboto.ttf build/
-./example_basic
-```
-
-### Prerequisites
-
-Ensure your development environment includes:
-- ** CMake
-- ** GCC
+## Quick Start
 
 ### Installation
 
-To integrate Gooey into your project:
-1. Include `gooey.h` in your project directory.
-2. Add `#include "gooey.h"` to your source files.
-3. Link libraries.
+Download the latest release from our [GitHub Releases](https://github.com/GooeyUI/GooeyGUI/releases) page.
 
-### Example Usage
-- create a example.c file then copy the following code. 
+### Basic Example
 
 ```c
-    #include <Gooey/gooey.h>
-    #include <stdio.h>
-    #include <unistd.h>
-    #include <stdlib.h>
-    
-    bool state = 0;
-    GooeyWindow msgBox;
-    
-    void messageBoxCallback(int option)
-    {
-        LOG_INFO("MessageBox option: %d", option);
-    }
-    
-    void onButtonClick()
-    {
-        state = !state;
-        GooeyWindow_MakeVisible(&msgBox, state);
-    }
-    
-    int main()
-    {
-        set_logging_enabled(true);
-        set_minimum_log_level(DEBUG_LEVEL_INFO);
-    
-        Gooey_Init(GLFW);
-    
-        GooeyWindow win = GooeyWindow_Create("Hello World", 400, 300, 1);
-    
-        msgBox = GooeyMessageBox_Create("Hello", "Welcome to Gooey!", MSGBOX_INFO, messageBoxCallback);
-    
-        GooeyMessageBox_Show(&msgBox);
-    
-        GooeyButton_Add(&win, "Click Me", 150, 100, 100, 40, onButtonClick);
-    
-        GooeyWindow_Run(2, &win, &msgBox);
-    
-        GooeyWindow_Cleanup(2, &win, &msgBox);
-    
-        return 0;
-    }
- 
-    
-```
-- to compile and run follow these steps  
-```bash 
-gcc example.c -o example -I/usr/local/include/Gooey -L/usr/local/lib/ -lGooeyGUI -Wno-deprecated-declarations
-```
-> Note ignore the compilation warning, will be fiwed in the upcoming days 
-```bash 
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.6 ./example
-``` 
-# Currently working on a Web-based Intuitive GUI builder
+#include <Gooey/gooey.h>
 
-<p align="center">
-  <img src="GooeyBuilder.png">
-</p>
+int main()
+{
+    Gooey_Init();
+    GooeyWindow *win = GooeyWindow_Create("My Window", 400, 400, true);
 
+    GooeyWindow_MakeVisible(win, false);
+    GooeyWindow_MakeResizable(win, false);
+    GooeyLabel *label_0 = GooeyLabel_Create("Hello World!", 0.26f, 164, 159);
+
+    GooeyWindow_RegisterWidget(win, label_0);
+
+    GooeyWindow_Run(1, win);
+    GooeyWindow_Cleanup(1, win);
+
+    return 0;
+}
+```
 
 ## Documentation
 
-- You can find the full API documentation <a href="https://yassine-aa.github.io/GooeyWebsite/docs/index.html">here</a>. 
+Explore our comprehensive documentation:
+
+- [API Reference](https://gooeyui.github.io/GooeyGUI/website/docs/)
+- [Examples Directory](https://github.com/GooeyUI/GooeyGUI/tree/main/examples)
+- [Web Builder Tool](https://gooeyui.github.io/GooeyBuilder/)
+
+## Building from Source
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/GooeyUI/GooeyGUI.git GooeyGUI
+   cd GooeyGUI
+   ```
+
+2. Get Submodules:
+	```bash
+	git submodule init
+	git submodule update --remote --merge
+	```	
+
+4. Build the library:
+   ```bash
+   cmake -S . -B build
+   ```
+
+5. Install (optional):
+   ```bash
+   sudo make install
+   ```
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions or encounter issues, feel free to open an issue or submit a pull request.
+We welcome contributions!
 
 ## License
 
-Gooey is released under the GPL3 License.
+Gooey is released under the **GNU General Public License v2.0**.
+
+## Community
+
+Join our growing community:
+
+- [GitHub Discussions](https://github.com/GooeyUI/GooeyGUI/discussions)
+- [Report Issues](https://github.com/GooeyUI/GooeyGUI/issues)
+
+## Special Thanks
+
+To all our [contributors](https://github.com/GooeyUI/GooeyGUI/graphs/contributors) who help make Gooey better!
 
 ---
 
-Start building interactive and modern desktop applications with Gooey today!
+© 2025 Gooey GUI Library | [Website](https://gooeyui.github.io) 

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['library_0',['library',['../index.html',1,'Gooey GUI Library'],['../index.html#autotoc_md0',1,'Gooey GUI Library']]],
-  ['license_1',['License',['../index.html#autotoc_md9',1,'']]]
+  ['next_0',['next',['../structGooeySignal__Slot.html#ace06a6e4d013c36202b5f2e2f0fa24ae',1,'GooeySignal_Slot']]]
 ];

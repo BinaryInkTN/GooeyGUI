@@ -7,103 +7,235 @@
     <title>Gooey - Cross-Platform GUI Library</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <!-- Font Awesome CDN -->
-
-    <!-- Google Font for a better typography -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- Prism.js CSS for Syntax Highlighting -->
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
 
     <style>
+        :root {
+            --apple-gray-1: #f5f5f7;
+            --apple-gray-2: #d2d2d7;
+            --apple-gray-3: #86868b;
+            --apple-gray-6: #1d1d1f;
+            --apple-blue: #0071e3;
+            --apple-blue-dark: #0066cc;
+
+            --bg-color: white;
+            --text-color: var(--apple-gray-6);
+            --card-bg: white;
+            --section-border: var(--apple-gray-2);
+            --header-bg: linear-gradient(180deg, var(--apple-gray-1) 0%, white 100%);
+            --macos-content-bg: #f7f7f7;
+            --preview-bg: white;
+            --footer-bg: var(--apple-gray-6);
+            --footer-text: white;
+        }
+
+        .dark-mode {
+            --apple-gray-1: #1d1d1f;
+            --apple-gray-2: #2e2e30;
+            --apple-gray-3: #86868b;
+            --apple-gray-6: #f5f5f7;
+
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --section-border: #2e2e30;
+            --header-bg: linear-gradient(180deg, #1d1d1f 0%, #121212 100%);
+            --macos-content-bg: #1e1e1e;
+            --preview-bg: #1e1e1e;
+            --footer-bg: #000000;
+            --footer-text: var(--apple-gray-2);
+        }
+
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        nav {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
         }
 
-        .navbar-nav .nav-link {
-            font-weight: 500;
+        .navbar {
+            background-color: rgba(var(--bg-color), 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--section-border);
         }
 
-        .navbar-nav .nav-link:hover {
-            color: #f8f9fa;
-            text-decoration: underline;
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--text-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-color) !important;
+            font-weight: 400;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem !important;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+            text-decoration: none !important;
         }
 
         header {
-            background: linear-gradient(135deg, #007bff, #002451);
-            color: white;
-            padding: 80px 0;
+            padding: 120px 0 80px;
+            background: var(--header-bg);
+            text-align: center;
+            border-bottom: 1px solid var(--section-border);
         }
 
         .header-container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .btn-light {
-            background-color: rgba(255, 255, 255, 0.7);
-            border: none;
-            transition: background-color 0.3s;
+        .header-container h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
 
-        .btn-light:hover {
-            background-color: #ffffff;
+        .header-container p {
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--apple-gray-3);
+            max-width: 600px;
+            margin: 0 auto 2rem;
         }
 
-        #more-examples {
-            background: linear-gradient(135deg, #007bff, #002451);
+        .btn-apple {
+            background-color: var(--apple-blue);
             color: white;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-apple:hover {
+            background-color: var(--apple-blue-dark);
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .btn-apple-outline {
+            background-color: transparent;
+            color: var(--apple-blue);
+            border: 1px solid var(--apple-blue);
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-apple-outline:hover {
+            background-color: rgba(0, 113, 227, 0.1);
+            color: var(--apple-blue);
+            transform: scale(1.03);
         }
 
         section {
-            padding: 60px 0;
+            padding: 80px 0;
+            border-bottom: 1px solid var(--section-border);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+
+        #releases-container
+        {
+            display:flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--apple-gray-3);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
         }
 
         .card {
             border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
         }
 
         .card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--apple-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: var(--apple-gray-3);
         }
 
         .macos-window {
-            width: 100%;
-            max-width: 800px;
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            margin: 2rem auto;
+            border: 1px solid var(--section-border);
+            display: inline-block;
         }
 
         .macos-title-bar {
-            background-color: #f1f1f1;
-            padding: 10px;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
+            background-color: var(--apple-gray-1);
+            padding: 8px 12px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--section-border);
         }
 
         .macos-title-bar .macos-buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .macos-buttons .macos-button {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background-color: #d4d4d5;
+            background-color: var(--apple-gray-2);
             cursor: pointer;
         }
 
@@ -120,129 +252,472 @@
         }
 
         .macos-content {
-            padding: 20px;
-            background-color: #282c34;
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-            color: #abb2bf;
+            padding: 0;
+            background-color: var(--macos-content-bg);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            color: var(--text-color);
             overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'SF Mono', Menlo, monospace;
+            font-size: 0.9rem;
+        }
+
+        .macos-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
 
         .macos-title-bar h5 {
             margin: 0;
-            font-size: 16px;
-            font-weight: bold;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--apple-gray-3);
         }
 
-        .macos-content pre {
-            margin: 0;
-            background-color: transparent;
-            border: none;
+        .widget-selector {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .macos-content code {
-            font-size: 14px;
+        .widget-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--section-border);
+            margin-bottom: 2rem;
         }
 
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
+        .widget-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--apple-gray-3);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
         }
 
-        .btn-primary:hover {
-            background-color: #007bff;
-            border-color: #007bff;
+        .widget-tab.active {
+            color: var(--apple-blue);
+            border-bottom-color: var(--apple-blue);
+        }
+
+        .widget-tab:hover:not(.active) {
+            color: var(--text-color);
+        }
+
+        .widget-content {
+            display: none;
+        }
+
+        .widget-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .widget-preview {
+            background-color: var(--preview-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--section-border);
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-section {
+            background-color: var(--apple-gray-1);
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .download-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            padding: 2rem;
+            width: 280px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-icon {
+            font-size: 2.5rem;
+            color: var(--apple-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .download-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn {
+            margin-top: 1.5rem;
         }
 
         footer {
-            background-color: #343a40;
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 60px 0 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--apple-gray-2);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
             color: white;
-            padding: 40px 0;
+            text-decoration: none;
         }
 
-        body.dark-mode {
-            background-color: #121212;
-            color: #e0e0e0;
+        .copyright {
+            color: var(--apple-gray-3);
+            text-align: center;
+            font-size: 0.85rem;
         }
 
-        .navbar-dark.bg-dark {
-            background-color: #212121;
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
         }
 
-        header {
-            background: linear-gradient(135deg, #007bff, #002451);
+        .delayed-1 {
+            animation-delay: 0.2s;
         }
 
-        .macos-content {
-            background-color: #333;
-            color: #f1f1f1;
+        .delayed-2 {
+            animation-delay: 0.4s;
         }
 
-        .card {
-            background-color: #444;
-            color: #fff;
+        .delayed-3 {
+            animation-delay: 0.6s;
         }
 
-        footer {
-            background-color: #1f1f1f;
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-left: 1rem;
         }
+
+        /* GitHub Releases Integration Styles */
+        .release-card {
+            border: 1px solid var(--section-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: var(--card-bg);
+            transition: transform 0.2s, box-shadow 0.2s;
+            max-width: 300px;
+        }
+
+        .release-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .release-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .release-tag {
+            background-color: var(--apple-blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .release-date {
+            color: var(--apple-gray-3);
+            font-size: 0.9rem;
+        }
+
+        .release-body {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .release-assets {
+            margin-top: 1rem;
+        }
+
+        .asset-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--apple-gray-1);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .asset-name {
+            font-weight: 500;
+        }
+
+        .asset-download {
+            background-color: var(--apple-blue);
+            color: white;
+            border-radius: 6px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .asset-download:hover {
+            background-color: var(--apple-blue-dark);
+            color: white;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 2rem;
+            height: 2rem;
+            border: 0.25rem solid rgba(0, 113, 227, 0.2);
+            border-top-color: var(--apple-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            padding: 1rem;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-radius: 8px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-container h1 {
+                font-size: 2.5rem;
+            }
+
+            .header-container p {
+                font-size: 1.25rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .release-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Contributors Section Styles */
+.contributor-card {
+    border: 1px solid var(--section-border);
+    border-radius: 12px;
+    padding: 1.5rem;
+margin-bottom: 1.5rem;
+    background-color: var(--card-bg);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#contributors-container {
+    display:flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items:center;
+}
+
+.contributor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.contributor-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid var(--apple-blue);
+}
+
+.contributor-name {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.contributor-login {
+    color: var(--apple-gray-3);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.contributor-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.contributor-stat {
+    background-color: var(--apple-gray-1);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.contributor-links {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.contributor-link {
+    color: var(--apple-blue);
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.contributor-link:hover {
+    opacity: 0.8;
+    color: var(--apple-blue);
+}
     </style>
 </head>
 
-<body class="dark-mode">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
             <a class="navbar-brand" href="#">Gooey</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="https://github.com/YASSINE-AA/GooeyGUI/tree/main/examples">Examples</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#widgets">Widgets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#examples">Examples</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#download">Download</a></li>
                     <li class="nav-item"><a class="nav-link" href="docs/index.html">Documentation</a></li>
-                    <li class="nav-item"><a class="nav-link" href="https://gooeyui.github.io/GooeyBuilder/">Web builder</a></li>
-
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
                 </ul>
-
             </div>
         </div>
     </nav>
 
     <header>
-        <div class="header-container text-center">
-            <h1 class="display-4">Gooey GUI Library</h1>
-            <p class="lead">A lightweight, cross-platform library for building GUI applications with ease.</p>
-            <a href="docs/index.html" class="btn btn-light btn-lg"> <i class="fas fa-book"></i> Visit Documentation</a>
-            <a href="https://gooeyui.github.io/GooeyBuilder/" class="btn btn-light btn-lg"> <i class="fas fa-box"></i> Web Builder</a>
-
+        <div class="header-container">
+            <h1 class="fade-in">Gooey GUI Library</h1>
+            <p class="fade-in delayed-1">The elegant way to build cross-platform applications.</p>
+            <div class="fade-in delayed-2">
+                <a href="#download" class="btn btn-apple me-2">Download</a>
+                <a href="https://gooeyui.github.io/GooeyBuilder/" class="btn btn-apple-outline">Drag & Drop Builder</a>
+            </div>
         </div>
+
+
     </header>
 
     <section id="features">
-        <div class="container text-center">
-            <h2>Features</h2>
-            <div class="row mt-4">
-                <div class="col-md-4">
-                    <div class="card p-4">
-                        <i class="fas fa-laptop-code fa-3x mb-3"></i>
-                        <h4>Cross-Platform</h4>
-                        <p>Build applications that work seamlessly on Windows, macOS, and Linux.</p>
+        <div class="container">
+            <h2 class="section-title fade-in">Designed for developers</h2>
+            <p class="section-subtitle fade-in delayed-1">Gooey provides everything you need to create beautiful, native-feeling applications across platforms.</p>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
+                        <h3 class="card-title">Cross-Platform</h3>
+                        <p class="card-text">Build once, run anywhere. Gooey applications work seamlessly on Windows, and Linux with native performance.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-4">
-                        <i class="fas fa-lightbulb fa-3x mb-3"></i>
-                        <h4>Lightweight</h4>
-                        <p>Designed to be minimal and efficient without sacrificing functionality.</p>
+                <div class="col-md-4 mb-4 fade-in delayed-1">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                        <h3 class="card-title">Lightweight</h3>
+                        <p class="card-text">Minimal footprint with maximum functionality. Gooey is designed to be fast and efficient without bloat.</p>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-4">
-                        <i class="fas fa-cogs fa-3x mb-3"></i>
-                        <h4>Customizable Widgets</h4>
-                        <p>Fully customizable UI elements to match your application’s needs.</p>
+                <div class="col-md-4 mb-4 fade-in delayed-2">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-paint-brush"></i></div>
+                        <h3 class="card-title">Customizable</h3>
+                        <p class="card-text">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives you complete control.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                        <h3 class="card-title">No Dependencies</h3>
+                        <p class="card-text">Built from scratch. From platform abstraction all the way up to customizable widgets.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-1">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-c"></i></div>
+                        <h3 class="card-title">Built in pure C</h3>
+                        <p class="card-text">Portable code. Perfect for Embedded Solutions and hardware with limited resources.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-2">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fa-brands fa-osi"></i></div>
+                        <h3 class="card-title">Community Driven</h3>
+                        <p class="card-text">Gooey is released under the GPL v2 license. If you're here to contribute, feel free to make a pull request!</p>
                     </div>
                 </div>
             </div>
@@ -251,130 +726,287 @@
 
     <section id="examples">
         <div class="container text-center">
-            <h2>Get started with a hello world example</h2>
-            <br>
-            <button class="copy-btn btn btn-light" onclick="copyToClipboard()">Copy to
-                Clipboard</button>
-            <div class="row mt-4">
+            <h2 class="section-title fade-in">Bite sized examples</h2>
+            <p class="section-subtitle fade-in delayed-1">Get started with these simple examples showing Gooey's core features.</p>
 
+            <div class="fade-in delayed-2">
+                <div class="macos-window">
+                    <div class="macos-title-bar">
+                        <div class="macos-buttons">
+                            <div class="macos-button"></div>
+                            <div class="macos-button macos-button-minimize"></div>
+                            <div class="macos-button macos-button-maximize"></div>
+                        </div>
+                        <h5>IoT_Dashboard.c</h5>
+                    </div>
+                    <div class="macos-content">
+                        <img src="example_light.png" id="exampleImage" class="img-fluid"/>
+                    </div>
+                </div>
+            </div>
 
-                <img src="./hello_world.png" alt="Code Image" width="1024">
+                                    <a href="https://github.com/GooeyUI/GooeyGUI/tree/main/examples" class="btn btn-apple me-2">Check them out!</a>
 
+        </div>
+    </section>
 
+<section id="contributors">
+    <div class="container">
+        <h2 class="section-title fade-in">Our Contributors</h2>
+        <p class="section-subtitle fade-in delayed-1">The family who helps make Gooey better</p>
 
+        <div id="contributors-loading" class="loading-spinner"></div>
+        <div id="contributors-container" class="row mt-4 fade-in delayed-2">
+            <!-- GitHub contributors will be loaded here dynamically -->
+        </div>
+        <div id="contributors-error" class="error-message" style="display: none;"></div>
+
+        <div class="text-center mt-5 fade-in delayed-3">
+            <p>Want to contribute to Gooey?</p>
+            <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn-apple-outline">
+                <i class="fab fa-github me-2"></i> Join us on GitHub
+            </a>
+        </div>
+    </div>
+</section>
+    <section id="download" class="download-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Download Gooey</h2>
+            <p class="section-subtitle fade-in delayed-1">Get the latest version or browse previous releases</p>
+
+            <div id="releases-loading" class="loading-spinner"></div>
+            <div id="releases-container" class="fade-in delayed-2">
+                <!-- GitHub releases will be loaded here dynamically -->
+            </div>
+            <div id="releases-error" class="error-message" style="display: none;"></div>
+
+            <div class="mt-5 fade-in delayed-3">
+                <p>Looking for older versions or source code?</p>
+                <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="btn btn-apple-outline">
+                    <i class="fab fa-github me-2"></i> View on GitHub
+                </a>
             </div>
         </div>
     </section>
-    <script>function copyToClipboard() {
-            var codeBlock = `
-    #include "gooey.h"
-    #include <stdio.h>
-    
-    bool state = 0;
-    GooeyWindow msgBox;
-    
-    void messageBoxCallback(int option)
-    {
-        LOG_INFO("MessageBox option: %d", option);
-    }
-    
-    void onButtonClick()
-    {
-        state = !state;
-        GooeyWindow_MakeVisible(&msgBox, state);
-    }
-    
-    int main()
-    {
-        set_logging_enabled(true);
-        set_minimum_log_level(DEBUG_LEVEL_INFO);
-    
-        Gooey_Init(GLFW);
-    
-        GooeyWindow win = GooeyWindow_Create("Hello World", 400, 300, 1);
-    
-        msgBox = GooeyMessageBox_Create("Hello", "Welcome to Gooey!", MSGBOX_INFO, messageBoxCallback);
-    
-        GooeyMessageBox_Show(&msgBox);
-    
-        GooeyButton_Add(&win, "Click Me", 150, 100, 100, 40, onButtonClick);
-    
-        GooeyWindow_Run(2, &win, &msgBox);
-    
-        GooeyWindow_Cleanup(2, &win, &msgBox);
-    
-        return 0;
-    }
-    `;
 
-            var textarea = document.createElement("textarea");
-            textarea.value = codeBlock;
-            document.body.appendChild(textarea);
-
-            textarea.select();
-            document.execCommand('copy');
-
-            document.body.removeChild(textarea);
-
-            alert("Code copied.")
-        }
-
-
-    </script>
-
-    <pre style="display: none;"><code id="code-block"  class="language-c">
-    #include "gooey.h"
-    
-    bool state = 0;
-    GooeyWindow msgBox;
-    
-    void messageBoxCallback(int option)
-    {
-        LOG_INFO("MessageBox option: %d", option);
-    }
-    
-    void onButtonClick()
-    {
-        state = !state;
-        GooeyWindow_MakeVisible(&msgBox, state);
-    }
-    
-    int main()
-    {
-        set_logging_enabled(true);
-        set_minimum_log_level(DEBUG_LEVEL_INFO);
-    
-        Gooey_Init(GLFW);
-    
-        GooeyWindow win = GooeyWindow_Create("Hello World", 400, 300, 1);
-    
-        msgBox = GooeyMessageBox_Create("Hello", "Welcome to Gooey!", MSGBOX_INFO, messageBoxCallback);
-    
-        GooeyMessageBox_Show(&msgBox);
-    
-        GooeyButton_Add(&win, "Click Me", 150, 100, 100, 40, onButtonClick);
-    
-        GooeyWindow_Run(2, &win, &msgBox);
-    
-        GooeyWindow_Cleanup(&win);
-    
-        return 0;
-    }
-                                </code></pre>
-
-    <section id="more-examples">
-        <div class="container text-center">
-            <h2>Want to try more examples?</h2>
-            <p>The official Gooey Github repository contains a set of neat examples for you to use.</p>
-            <div>
-                <a href="https://github.com/YASSINE-AA/GooeyGUI" class="btn btn-light"><i class="fa-brands fa-github"></i> Github Repo</a>
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="docs/index.html" class="footer-link">Documentation</a>
+                <a href="https://github.com/GooeyUI/GooeyGUI" class="footer-link">GitHub</a>
+                <a href="https://gooeyui.github.io/GooeyBuilder/" class="footer-link">Web Builder</a>
             </div>
+            <p class="copyright">Copyright © 2025 Gooey GUI Library. All rights reserved.</p>
         </div>
-    </section>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+    <script>
+    // GitHub Contributors Integration
+document.addEventListener('DOMContentLoaded', function() {
+    const contributorsLoading = document.getElementById('contributors-loading');
+    const contributorsContainer = document.getElementById('contributors-container');
+    const contributorsError = document.getElementById('contributors-error');
+
+    // Show loading spinner
+    contributorsLoading.style.display = 'block';
+
+    fetch('https://api.github.com/repos/GooeyUI/GooeyGUI/contributors')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch contributors');
+            }
+            return response.json();
+        })
+        .then(contributors => {
+            contributorsLoading.style.display = 'none';
+
+            if (!contributors || contributors.length === 0) {
+                contributorsContainer.innerHTML = `
+                    <div class="alert alert-info text-center">
+                        No contributors found. Be the first!
+                    </div>
+                `;
+                return;
+            }
+
+            const topContributors = contributors.slice(0, 12);
+
+            topContributors.forEach(contributor => {
+                const contributorHTML = `
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="contributor-card">
+                            <img src="${contributor.avatar_url}" alt="${contributor.login}" class="contributor-avatar">
+                            <h4 class="contributor-name">${contributor.name || contributor.login}</h4>
+                            <div class="contributor-login">@${contributor.login}</div>
+                            <div class="contributor-stats">
+                                <span class="contributor-stat">
+                                    <i class="fas fa-code-commit"></i> ${contributor.contributions}
+                                </span>
+                            </div>
+                            <div class="contributor-links">
+                                <a href="${contributor.html_url}" class="contributor-link" target="_blank" title="GitHub Profile">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                ${contributor.blog ? `
+                                <a href="${contributor.blog.startsWith('http') ? contributor.blog : 'https://' + contributor.blog}"
+                                   class="contributor-link" target="_blank" title="Website">
+                                    <i class="fas fa-globe"></i>
+                                </a>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                contributorsContainer.innerHTML += contributorHTML;
+            });
+        })
+        .catch(error => {
+            contributorsLoading.style.display = 'none';
+            contributorsError.style.display = 'block';
+            contributorsError.textContent = 'Failed to load contributors. Please try again later or visit GitHub directly.';
+            console.error('Error fetching contributors:', error);
+        });
+});
+
+        const themeToggle = document.getElementById('themeToggle');
+        const exampleImage = document.getElementById('exampleImage');
+
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            exampleImage.src = "example_dark.png";
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                exampleImage.src = "example_light.png";
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                exampleImage.src = "example_dark.png";
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section-title, .section-subtitle, .card, .macos-window, .download-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // GitHub Releases Integration
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingSpinner = document.getElementById('releases-loading');
+            const releasesContainer = document.getElementById('releases-container');
+            const errorMessage = document.getElementById('releases-error');
+
+            // Show loading spinner
+            loadingSpinner.style.display = 'block';
+
+            fetch('https://api.github.com/repos/GooeyUI/GooeyGUI/releases')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch releases');
+                    }
+                    return response.json();
+                })
+                .then(releases => {
+                    loadingSpinner.style.display = 'none';
+
+                    if (!releases || releases.length === 0) {
+                        releasesContainer.innerHTML = `
+                            <div class="alert alert-info text-center">
+                                No releases found. Check back later!
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    const recentReleases = releases.slice(0, 3);
+
+                    recentReleases.forEach(release => {
+                        const releaseDate = new Date(release.published_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+
+                        // Format markdown content (basic implementation)
+                        let bodyContent = release.body || "No release notes available";
+                        // Simple markdown to HTML conversions
+                        bodyContent = bodyContent
+                            .replace(/### (.*)/g, '<h4>$1</h4>')
+                            .replace(/## (.*)/g, '<h3>$1</h3>')
+                            .replace(/# (.*)/g, '<h2>$1</h2>')
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                            .replace(/`(.*?)`/g, '<code>$1</code>')
+                            .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>')
+                            .replace(/- (.*)/g, '<li>$1</li>')
+                            .replace(/\n/g, '<br>');
+
+                        const assetsHTML = release.assets.map(asset => `
+                            <div class="asset-item">
+                                <span class="asset-name">${asset.name}</span>
+                                <a href="${asset.browser_download_url}" class="asset-download">
+                                    <i class="fas fa-download me-1"></i> Download
+                                </a>
+                            </div>
+                        `).join('');
+
+                        const releaseHTML = `
+                            <div class="release-card">
+                                <div class="release-header">
+                                    <h3 class="h4 mb-0">${release.name || release.tag_name}</h3>
+                                    <span class="release-tag">${release.tag_name}</span>
+                                </div>
+                                <div class="release-date">Published on ${releaseDate}</div>
+
+                                <div class="release-body">${bodyContent}</div>
+
+                                ${assetsHTML ? `
+                                <div class="release-assets">
+                                    <h5 class="h6 mb-3">Downloads</h5>
+                                    ${assetsHTML}
+                                </div>
+                                ` : '<p>No download assets available for this release</p>'}
+
+                                <div class="mt-3">
+                                    <a href="${release.html_url}" class="btn btn-apple-outline btn-sm" target="_blank">
+                                        <i class="fab fa-github me-1"></i> View on GitHub
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+
+                        releasesContainer.innerHTML += releaseHTML;
+                    });
+                })
+                .catch(error => {
+                    loadingSpinner.style.display = 'none';
+                    errorMessage.style.display = 'block';
+                    errorMessage.textContent = 'Failed to load releases. Please try again later or visit GitHub directly.';
+                    console.error('Error fetching releases:', error);
+                });
+        });
+    </script>
+</body>
 </html>

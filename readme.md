@@ -77,7 +77,10 @@ Explore our comprehensive documentation:
    ```bash
    sudo make install
    ```
-
+6. Building a example 
+   ```bash
+   gcc example.c  -o example -L/usr/local/lib/ -lfreetype -lGooeyGUI -lGLPS  -lm -I/usr/local/include/   -fsanitize=address,undefined && ./example
+   ```
 ## Contributing
 
 We welcome contributions!

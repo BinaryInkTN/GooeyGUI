@@ -28,7 +28,7 @@ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
         return NULL;
     }
 
-    GooeyLayout *layout = (GooeyLayout *)malloc(sizeof(GooeyLayout));
+    GooeyLayout *layout = (GooeyLayout *)calloc(1, sizeof(GooeyLayout));
     if (!layout)
     {
         LOG_ERROR("Failed to allocate memory for layout");

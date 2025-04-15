@@ -112,26 +112,26 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    if (!(win->tabs = malloc(sizeof(GooeyTabs *) * MAX_WIDGETS)) ||
-        !(win->drop_surface = malloc(sizeof(GooeyDropSurface *) * MAX_WIDGETS)) ||
-        !(win->images = malloc(sizeof(GooeyImage *) * MAX_WIDGETS)) ||
-        !(win->buttons = malloc(sizeof(GooeyButton *) * MAX_WIDGETS)) ||
-        !(win->active_theme = malloc(sizeof(GooeyTheme))) ||
-        !(win->current_event = malloc(sizeof(GooeyEvent))) ||
-        !(win->labels = malloc(sizeof(GooeyLabel *) * MAX_WIDGETS)) ||
-        !(win->checkboxes = malloc(sizeof(GooeyCheckbox *) * MAX_WIDGETS)) ||
-        !(win->radio_buttons = malloc(sizeof(GooeyRadioButton *) * MAX_WIDGETS)) ||
-        !(win->radio_button_groups = malloc(sizeof(GooeyRadioButtonGroup *) * MAX_WIDGETS)) ||
-        !(win->sliders = malloc(sizeof(GooeySlider *) * MAX_WIDGETS)) ||
-        !(win->dropdowns = malloc(sizeof(GooeyDropdown *) * MAX_WIDGETS)) ||
-        !(win->textboxes = malloc(sizeof(GooeyTextbox *) * MAX_WIDGETS)) ||
-        !(win->layouts = malloc(sizeof(GooeyLayout *) * MAX_WIDGETS)) ||
-        !(win->lists = malloc(sizeof(GooeyList *) * MAX_WIDGETS)) ||
-        !(win->canvas = malloc(sizeof(GooeyCanvas *) * MAX_WIDGETS)) ||
-        !(win->widgets = malloc(sizeof(GooeyWidget *) * MAX_WIDGETS)) ||
-        !(win->plots = malloc(sizeof(GooeyPlot *) * MAX_PLOT_COUNT)) ||
-        !(win->progressbars = malloc(sizeof(GooeyProgressBar *) * MAX_PLOT_COUNT)) ||
-        !(win->meters = malloc(sizeof(GooeyMeter *) * MAX_WIDGETS)))
+    if (!(win->tabs = calloc(MAX_WIDGETS, sizeof(GooeyTabs *))) ||
+        !(win->drop_surface = calloc(MAX_WIDGETS, sizeof(GooeyDropSurface *))) ||
+        !(win->images = calloc(MAX_WIDGETS, sizeof(GooeyImage *))) ||
+        !(win->buttons = calloc(MAX_WIDGETS, sizeof(GooeyButton *))) ||
+        !(win->active_theme = calloc(1, sizeof(GooeyTheme))) ||
+        !(win->current_event = calloc(1, sizeof(GooeyEvent))) ||
+        !(win->labels = calloc(MAX_WIDGETS, sizeof(GooeyLabel *))) ||
+        !(win->checkboxes = calloc(MAX_WIDGETS, sizeof(GooeyCheckbox *))) ||
+        !(win->radio_buttons = calloc(MAX_WIDGETS, sizeof(GooeyRadioButton *))) ||
+        !(win->radio_button_groups = calloc(MAX_WIDGETS, sizeof(GooeyRadioButtonGroup *))) ||
+        !(win->sliders = calloc(MAX_WIDGETS,sizeof(GooeySlider *))) ||
+        !(win->dropdowns = calloc(MAX_WIDGETS, sizeof(GooeyDropdown *))) ||
+        !(win->textboxes = calloc(MAX_WIDGETS, sizeof(GooeyTextbox *))) ||
+        !(win->layouts = calloc(MAX_WIDGETS, sizeof(GooeyLayout *))) ||
+        !(win->lists = calloc(MAX_WIDGETS, sizeof(GooeyList *))) ||
+        !(win->canvas = calloc(MAX_WIDGETS, sizeof(GooeyCanvas *))) ||
+        !(win->widgets = calloc(MAX_WIDGETS, sizeof(GooeyWidget *))) ||
+        !(win->plots = calloc(MAX_PLOT_COUNT, sizeof(GooeyPlot *))) ||
+        !(win->progressbars = calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
+        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))))
     {
         return false;
     }
@@ -171,7 +171,6 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         free(win->canvas);
         win->canvas = NULL;
     }
-
 
     if (win->meters)
     {
@@ -243,11 +242,11 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->images = NULL;
     }
 
-    if(win->progressbars)
+    if (win->progressbars)
     {
-        for(size_t i=0; i<win->progressbar_count; ++i)
+        for (size_t i = 0; i < win->progressbar_count; ++i)
         {
-            if(win->progressbars[i])
+            if (win->progressbars[i])
             {
                 free(win->progressbars[i]);
                 win->progressbars[i] = NULL;

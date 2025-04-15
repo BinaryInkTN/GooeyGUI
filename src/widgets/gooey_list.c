@@ -25,7 +25,7 @@
 
 GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index))
 {
-    GooeyList *list = (GooeyList *)malloc(sizeof(GooeyList));
+    GooeyList *list = (GooeyList *)calloc(1, sizeof(GooeyList));
     if (!list)
     {
         LOG_ERROR("Couldn't allocate memory for list.");
@@ -38,7 +38,7 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
     list->core.width = width;
     list->core.height = height;
     list->core.is_visible = true;
-    list->items = (GooeyListItem *)malloc(sizeof(GooeyListItem) * 1024);
+    list->items = (GooeyListItem *)calloc(1024, sizeof(GooeyListItem));
     list->item_count = 0;
     list->scroll_offset = DEFAULT_SCROLL_OFFSET;
     list->thumb_y = y;

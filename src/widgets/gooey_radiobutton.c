@@ -25,7 +25,7 @@ GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create()
     //     LOG_ERROR("Cannot create more radio button groups. Maximum limit reached.\n");
     //     return NULL;
     // }
-    GooeyRadioButtonGroup *group = malloc(sizeof(GooeyRadioButtonGroup));
+    GooeyRadioButtonGroup *group = calloc(1, sizeof(GooeyRadioButtonGroup));
     if (group == NULL)
     {
         LOG_ERROR("Error allocating memory for radio button group");
@@ -65,7 +65,7 @@ GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
                                           char *label,
                                           void (*callback)(bool selected))
 {
-    GooeyRadioButton *radio_button = (GooeyRadioButton *)malloc(sizeof(GooeyRadioButton));
+    GooeyRadioButton *radio_button = (GooeyRadioButton *)calloc(1, sizeof(GooeyRadioButton));
 
     if (!radio_button)
     {

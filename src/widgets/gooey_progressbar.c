@@ -22,7 +22,7 @@
 
 GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, long initial_value)
 {
-    GooeyProgressBar *progressbar = (GooeyProgressBar *)malloc(sizeof(GooeyProgressBar));
+    GooeyProgressBar *progressbar = (GooeyProgressBar *)calloc(1, sizeof(GooeyProgressBar));
 
     if (!progressbar)
     {

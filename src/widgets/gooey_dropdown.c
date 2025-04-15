@@ -24,7 +24,7 @@ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
                                     int num_options,
                                     void (*callback)(int selected_index))
 {
-    GooeyDropdown *dropdown = (GooeyDropdown *)malloc(sizeof(GooeyDropdown));
+    GooeyDropdown *dropdown = (GooeyDropdown *)calloc(1, sizeof(GooeyDropdown));
     
     if(!dropdown)
     {

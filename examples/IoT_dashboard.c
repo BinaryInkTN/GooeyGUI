@@ -252,9 +252,11 @@ int main()
 {
     Gooey_Init();
     initialize_dashboard();
+    
 
     if (dashboard)
     {
+        GooeyWindow_EnableDebugOverlay(dashboard, true);
         GooeyWindow_Run(1, dashboard);
     }
 

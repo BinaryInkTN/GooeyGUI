@@ -24,7 +24,7 @@
 GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
                                int height, char *placeholder, void (*onTextChanged)(char *text))
 {
-    GooeyTextbox* textBox =malloc(sizeof(GooeyTextbox)); 
+    GooeyTextbox* textBox =calloc(1, sizeof(GooeyTextbox)); 
     if ( textBox == NULL ){
         LOG_ERROR("Failed to allocate memory to textBox "); 
         return NULL; 

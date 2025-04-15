@@ -5,7 +5,7 @@
 
 GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width, int height, char *default_message, void (*callback)(char *mime, char *file_path))
 {
-    GooeyDropSurface *drop_surface = (GooeyDropSurface *) malloc(sizeof(GooeyDropSurface));
+    GooeyDropSurface *drop_surface = (GooeyDropSurface *) calloc(1, sizeof(GooeyDropSurface));
     
     if(!drop_surface)
     {

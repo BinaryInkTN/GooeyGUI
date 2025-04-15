@@ -43,7 +43,7 @@ GooeyTheme *parser_load_theme_from_file(const char *filePath)
     }
 
     // Initialize theme colors with defaults
-    GooeyTheme *theme = malloc(sizeof(GooeyTheme));
+    GooeyTheme *theme = calloc(1, sizeof(GooeyTheme));
     if (!theme)
     {
         printf("Error: Memory allocation for theme failed.\n");

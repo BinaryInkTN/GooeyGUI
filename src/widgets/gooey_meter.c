@@ -3,7 +3,7 @@
 
 GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_value, const char *label)
 {
-    GooeyMeter *meter = (GooeyMeter *)malloc(sizeof(GooeyMeter));
+    GooeyMeter *meter = (GooeyMeter *)calloc(1, sizeof(GooeyMeter));
 
     if (!meter)
     {

@@ -22,7 +22,7 @@
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
                                     void (*callback)(bool checked))
 {
-    GooeyCheckbox *checkbox = (GooeyCheckbox *)malloc(sizeof(GooeyCheckbox));
+    GooeyCheckbox *checkbox = (GooeyCheckbox *)calloc(1, sizeof(GooeyCheckbox));
     *checkbox = (GooeyCheckbox){0};
 
     if (!checkbox)

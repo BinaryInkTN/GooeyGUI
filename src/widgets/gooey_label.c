@@ -21,7 +21,7 @@
 
 GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y)
 {
-    GooeyLabel *label = (GooeyLabel *)malloc(sizeof(GooeyLabel));
+    GooeyLabel *label = (GooeyLabel *)calloc(1, sizeof(GooeyLabel));
     if (!label)
     {
         LOG_ERROR("Couldn't allocate memory for label.");

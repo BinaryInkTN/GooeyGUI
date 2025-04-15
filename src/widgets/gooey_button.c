@@ -34,7 +34,7 @@ void GooeyButton_SetText(GooeyButton *button, const char *text)
 GooeyButton *GooeyButton_Create(const char *label, int x, int y,
                                 int width, int height, void (*callback)())
 {
-    GooeyButton *button = (GooeyButton*) malloc(sizeof(GooeyButton));
+    GooeyButton *button = (GooeyButton*) calloc(1, sizeof(GooeyButton));
     
     if(!button) 
     {

@@ -26,7 +26,7 @@ GooeyTabs *GooeyTabs_Create( int x, int y, int width, int height)
 {
   
 
-    GooeyTabs *tabs_widget = malloc(sizeof(GooeyTabs));
+    GooeyTabs *tabs_widget = calloc(1, sizeof(GooeyTabs));
     if (tabs_widget == NULL ){
         LOG_ERROR("Unable to allocate memory to tabs widget");
         return NULL ; 
@@ -56,7 +56,7 @@ void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
     size_t tab_id = tab_widget->tab_count;
     GooeyTab *tab = &tab_widget->tabs[tab_widget->tab_count++];
     tab->tab_id = tab_id;
-    tab->widgets = (void **)malloc(sizeof(void *) * MAX_WIDGETS);
+    tab->widgets = (void **)calloc(MAX_WIDGETS, sizeof(void *));
     tab->widget_count = 0;
 
     if (tab_name)

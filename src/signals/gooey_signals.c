@@ -29,7 +29,7 @@ GooeySignal GooeySignal_Create(void)
 
 void GooeySignal_Link(GooeySignal *signal, GooeySignal_CallbackFunction callback, void *context)
 {
-    GooeySignal_Slot *slot = (GooeySignal_Slot *)malloc(sizeof(GooeySignal_Slot));
+    GooeySignal_Slot *slot = (GooeySignal_Slot *)calloc(1, sizeof(GooeySignal_Slot));
     if (!slot)
     {
         LOG_ERROR("Couldn't allocate memory to signal slot with context \"%s\".", context);

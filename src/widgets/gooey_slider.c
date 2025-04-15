@@ -31,7 +31,7 @@ GooeySlider *GooeySlider_Create( int x, int y, int width,
         return NULL;
     }
 
-    GooeySlider *slider = malloc(sizeof(GooeySlider));
+    GooeySlider *slider = calloc(1, sizeof(GooeySlider));
 
     *slider = (GooeySlider){0};
     slider->core.type = WIDGET_SLIDER;

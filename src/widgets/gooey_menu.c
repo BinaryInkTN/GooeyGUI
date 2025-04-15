@@ -21,7 +21,7 @@
 
 GooeyMenu *GooeyMenu_Set(GooeyWindow *win)
 {
-    win->menu = (GooeyMenu *)malloc(sizeof(GooeyMenu));
+    win->menu = (GooeyMenu *)calloc(1, sizeof(GooeyMenu));
     win->menu->children_count = 0;
     win->menu->is_busy = 0;
     LOG_INFO("Set menu for window.");

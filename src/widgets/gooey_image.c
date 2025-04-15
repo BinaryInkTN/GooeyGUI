@@ -4,7 +4,7 @@
 
 GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void))
 {
-    GooeyImage *image = (GooeyImage *)malloc(sizeof(GooeyImage));
+    GooeyImage *image = (GooeyImage *)calloc(1, sizeof(GooeyImage));
 
     if (!image)
     {

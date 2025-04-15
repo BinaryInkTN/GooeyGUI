@@ -42,7 +42,7 @@ static void sort_data(GooeyPlotData *data)
         return;
     }
 
-    DataPoint *points = malloc(data->data_count * sizeof(DataPoint));
+    DataPoint *points = calloc(data->data_count, sizeof(DataPoint));
     if (!points)
     {
         LOG_ERROR("Failed to allocate memory for sorting.");
@@ -105,8 +105,8 @@ static void add_placeholder_point(GooeyPlotData *data, bool initial)
     if (data->min_x_value < min_x_value_old || data->min_y_value < min_y_value_old ||
         data->max_x_value > max_x_value_old || data->max_y_value > max_y_value_old)
     {
-        float *new_x_data = malloc((data->data_count + 1) * sizeof(float));
-        float *new_y_data = malloc((data->data_count + 1) * sizeof(float));
+        float *new_x_data = calloc((data->data_count + 1), sizeof(float));
+        float *new_y_data = calloc((data->data_count + 1), sizeof(float));
         if (!new_x_data || !new_y_data)
         {
             LOG_ERROR("Failed to allocate memory for placeholder point.");
@@ -141,7 +141,7 @@ GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int 
         return NULL;
     }
 
-    GooeyPlot *plot = (GooeyPlot *) malloc(sizeof(GooeyPlot));
+    GooeyPlot *plot = (GooeyPlot *) calloc(1, sizeof(GooeyPlot));
     
     if(!plot)
     {

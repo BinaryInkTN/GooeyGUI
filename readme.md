@@ -9,7 +9,7 @@ The elegant way to build cross-platform applications with native performance.
 
 ## Features
 
-- **Cross-Platform**: Build once, run anywhere (Windows, Linux)
+- **Cross-Platform**: Write once, build anywhere (Windows, Linux)
 - **Lightweight**: Minimal footprint with maximum functionality
 - **Customizable**: Tailor every aspect of your UI
 - **Minimal Dependencies**: Built with minimal dependencies

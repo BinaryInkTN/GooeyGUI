@@ -626,7 +626,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         windows[window_id] = NULL;
         break;
 
-    case -1:
+    case GOOEY_EVENT_RESET:
         break;
 
     default:

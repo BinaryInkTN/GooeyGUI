@@ -37,7 +37,8 @@
      GOOEY_EVENT_EXPOSE, /**< Redraw request event (window needs to be redrawn) */
      GOOEY_EVENT_RESIZE, /**< Window resize event */
      GOOEY_EVENT_REDRAWREQ, /**< Redraw request event for widget or area */
-     GOOEY_EVENT_DROP /**< File drop event (drag and drop) */
+     GOOEY_EVENT_DROP, /**< File drop event (drag and drop) */
+     GOOEY_EVENT_RESET
  } GooeyEventType;
  
  /**

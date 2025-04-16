@@ -11,9 +11,15 @@ bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
         if (mouseX > image->core.x && mouseX < image->core.x + image->core.width && mouseY > image->core.y && mouseY < image->core.y + image->core.height)
         {
             if (image->callback)
+            {
                 image->callback();
+            }
+
+            return true;
         }
     }
+
+    return false;
 }
 
 void GooeyImage_Draw(GooeyWindow *win)

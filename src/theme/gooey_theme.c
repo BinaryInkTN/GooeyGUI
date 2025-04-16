@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <cjson/cJSON.h>
+#include "cJSON.h"
 #include "theme/gooey_theme.h"
 #include "logger/pico_logger_internal.h"
 

@@ -139,8 +139,9 @@ bool GooeyList_HandleScroll(GooeyWindow *window, void *scroll_event)
                 }
             }
         }
-        return false;
     }
+
+    return false;
 }
 
 bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
@@ -162,7 +163,7 @@ bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
 
             int selected_index = adjusted_y / list->item_spacing;
 
-            if (selected_index >= 0 && selected_index < list->item_count)
+            if (selected_index >= 0 && (unsigned long) selected_index < list->item_count)
             {
                 if (list->callback)
                 {

@@ -18,7 +18,6 @@
  #ifndef GOOEY_THEME_INTERNAL_H
  #define GOOEY_THEME_INTERNAL_H
  
- #include <cjson/cJSON.h>
  #include <stdio.h> 
  #include <stdlib.h>
  

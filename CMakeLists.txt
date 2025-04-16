@@ -80,7 +80,7 @@ target_include_directories(${PROJECT_NAME}
     ${PROJECT_SOURCE_DIR}/third_party/freetype/include
     ${PROJECT_SOURCE_DIR}/third_party/glps/include
     ${PROJECT_SOURCE_DIR}/third_party/glps/internal
-    ${PROJECT_SOURCE_DIR}/third_party/cjson/include
+    ${PROJECT_SOURCE_DIR}/third_party/cjson
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES

@@ -32,8 +32,6 @@ int main()
     Gooey_Init();
     GooeyWindow *win = GooeyWindow_Create("My Window", 400, 400, true);
 
-    GooeyWindow_MakeVisible(win, false);
-    GooeyWindow_MakeResizable(win, false);
     GooeyLabel *label_0 = GooeyLabel_Create("Hello World!", 0.26f, 164, 159);
 
     GooeyWindow_RegisterWidget(win, label_0);

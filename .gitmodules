@@ -6,4 +6,4 @@
 	url = https://github.com/DaveGamble/cJSON.git
 [submodule "third_party/glps"]
 	path = third_party/glps
-	url = https://github/GooeyUI/GLPS.git
+	url = https://github.com/GooeyUI/GLPS.git

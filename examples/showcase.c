@@ -26,7 +26,7 @@ int main()
 
   win = GooeyWindow_Create("window", 800, 600, true);
 
-  GooeyWindow_SetContinuousRedraw(win);
+  //GooeyWindow_SetContinuousRedraw(win);
   //GooeyWindow_SetTheme(win, GooeyWindow_LoadTheme("dark.json"));
 
   GooeyMenu *menu = GooeyMenu_Set(win);
@@ -49,7 +49,7 @@ int main()
 
   GooeyMenuChild_AddElement(about_child, "Enable Overlay", enable_overlay);
 
-  GooeyWindow_SetContinuousRedraw(win);
+  //GooeyWindow_SetContinuousRedraw(win);
   GooeyWindow_MakeVisible(win, false);
   GooeyWindow_MakeResizable(win, false);
   GooeyButton *button_0 = GooeyButton_Create("Button", 198, 92, 100, 30, NULL);

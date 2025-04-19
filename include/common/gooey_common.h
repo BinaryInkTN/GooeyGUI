@@ -514,6 +514,7 @@ typedef struct
     GooeyWidget **widgets;           /**< Unified list of all widgets in the window */
     void *current_event;             /**< Current event being processed */
     GooeyTheme *active_theme;        /**< Active theme for the window */
+    GooeyTheme *default_theme;       /**< Default theme for the window */
     GooeyImage **images;             /**< List of image widgets in the window */
     GooeyDropSurface **drop_surface; /**< List of drop surface widgets in the window */
     GooeyTabs **tabs;

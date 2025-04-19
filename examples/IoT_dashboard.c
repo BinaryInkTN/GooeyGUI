@@ -15,6 +15,8 @@ GooeyPlot *light_plot;
 GooeyButton *toggle_light;
 GooeyButton *theme_toggle;
 GooeyList *alert_list;
+GooeyTheme *dark_theme;
+
 bool dark_mode = false;
 bool light_on = false;
 
@@ -86,7 +88,6 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
             char garbage_level[20];
             snprintf(garbage_level, sizeof(garbage_level), "%ld%% full!", value);
             GooeyList_UpdateItem(alert_list, 1, "Garbage Status", garbage_level);
-
         }
     }
     else if (strcmp(topicName, TOPIC_LIGHT) == 0)
@@ -188,7 +189,7 @@ void mqtt_cleanup()
 void toggle_dark_mode()
 {
     dark_mode = !dark_mode;
-    GooeyWindow_SetTheme(dashboard, dark_mode ? GooeyWindow_LoadTheme("dark.json") : GooeyWindow_LoadTheme("light.json"));
+    GooeyWindow_SetTheme(dashboard, dark_mode ? dark_theme: NULL);
     GooeyButton_SetText(theme_toggle, dark_mode ? "Dark Mode ON" : "Dark Mode OFF");
 }
 
@@ -201,9 +202,9 @@ void initialize_dashboard()
         fprintf(stderr, "Failed to initialize MQTT connection\n");
         return;
     }
-
+   dark_theme = GooeyTheme_LoadFromFile("dark.json");
+   
     dashboard = GooeyWindow_Create("Smart Lighting Dashboard", 500, 450, true);
-    GooeyWindow_SetContinuousRedraw(dashboard);
 
     for (int i = 0; i < 24; i++)
     {
@@ -252,11 +253,11 @@ int main()
 {
     Gooey_Init();
     initialize_dashboard();
-    
 
     if (dashboard)
     {
         GooeyWindow_EnableDebugOverlay(dashboard, true);
+        GooeyWindow_MakeResizable(dashboard, false);
         GooeyWindow_Run(1, dashboard);
     }
 

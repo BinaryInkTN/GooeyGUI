@@ -34,8 +34,9 @@
   * @param theme_path The path to the theme file.
   * @return A pointer to the loaded `GooeyTheme` object.
   */
- GooeyTheme *GooeyWindow_LoadTheme(const char *theme_path);
- 
+ GooeyTheme* GooeyTheme_LoadFromFile(const char* theme_path);
+
+
  /**
   * @brief Sets the theme for the specified Gooey window.
   * 
@@ -84,6 +85,7 @@
   * @param ... Additional windows to handle in the event loop.
   */
  void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...);
+ void GooeyTheme_Destroy(GooeyTheme *theme);
  
  /**
   * @brief Cleans up the resources associated with Gooey windows.

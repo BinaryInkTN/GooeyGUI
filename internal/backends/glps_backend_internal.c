@@ -169,7 +169,6 @@ void glps_set_foreground(long unsigned int color)
     ctx.selected_color = color;
 }
 
-
 void glps_window_dim(int *width, int *height, int window_id)
 {
 
@@ -402,17 +401,17 @@ static void mouse_click_callback(size_t window_id, bool state, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
+    GooeyWindow *win = (GooeyWindow *)windows[window_id];
 
     event->type = state ? GOOEY_EVENT_CLICK_PRESS : GOOEY_EVENT_CLICK_RELEASE;
     event->click.x = event->mouse_move.x;
     event->click.y = event->mouse_move.y;
-    glps_wm_window_update(ctx.wm, window_id);
+    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 void glps_request_redraw(GooeyWindow *win)
 {
     GooeyEvent *event = (GooeyEvent *)win->current_event;
-
     event->type = GOOEY_EVENT_REDRAWREQ;
     glps_wm_window_update(ctx.wm, win->creation_id);
 }
@@ -421,25 +420,29 @@ static void mouse_move_callback(size_t window_id, double posX, double posY, void
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
+    GooeyWindow *win = (GooeyWindow *)windows[window_id];
+    event->type = GOOEY_EVENT_MOUSE_MOVE;
     event->mouse_move.x = posX;
     event->mouse_move.y = posY;
+    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 static void window_resize_callback(size_t window_id, int width, int height, void *data)
 {
 
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
-
+    GooeyWindow *win = (GooeyWindow *)windows[window_id];
     event->type = GOOEY_EVENT_RESIZE;
-    glps_wm_window_update(ctx.wm, window_id);
+    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 static void window_close_callback(size_t window_id, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
+    GooeyWindow *win = (GooeyWindow *)windows[window_id];
 
     event->type = GOOEY_EVENT_WINDOW_CLOSE;
-    glps_wm_window_update(ctx.wm, window_id);
+    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 int glps_init_ft()
@@ -512,9 +515,9 @@ int glps_init()
     ctx.inhibit_reset = 0;
     ctx.selected_color = 0x000000;
     ctx.active_window_count = 0;
-    ctx.text_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
-    ctx.shape_vaos = (GLuint *)malloc(sizeof(GLuint) * 100);
-    ctx.text_programs = (GLuint *)malloc(sizeof(GLuint) * 100);
+    ctx.text_vaos = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
+    ctx.shape_vaos = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
+    ctx.text_programs = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
     ctx.wm = glps_wm_init();
 
     return 0;
@@ -697,12 +700,12 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
 
     Vertex vertices[6] = {
         {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}, 1.0f},              // Bottom-left
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f},  1.0f},  // Bottom-right
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}, 1.0f},  // Bottom-right
         {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, 1.0f}, // Top-left
 
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f},  1.0f},              // Bottom-right
-        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f},  1.0f}, // Top-right
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f},  1.0f}              // Top-left
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}, 1.0f},              // Bottom-right
+        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}, 1.0f}, // Top-right
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, 1.0f}              // Top-left
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
@@ -777,7 +780,6 @@ void glps_set_window_resizable(bool value, int window_id)
 {
     // glps_wm_window(value, window_id);
 }
-
 
 void glps_hide_current_child(void)
 {
@@ -873,7 +875,7 @@ float glps_get_text_width(const char *text, int length)
     float total_width = 0.0f;
     for (int i = 0; i < length; ++i)
     {
-        total_width += (ctx.characters[(int) text[i]].advance / 64.0f) * 0.27f;
+        total_width += (ctx.characters[(int)text[i]].advance / 64.0f) * 0.27f;
     }
     return total_width;
 }
@@ -884,7 +886,7 @@ float glps_get_text_height(const char *text, int length)
 
     for (int i = 0; i < length; ++i)
     {
-        float char_height = ctx.characters[(int) text[i]].height * 0.27f;
+        float char_height = ctx.characters[(int)text[i]].height * 0.27f;
         if (char_height > max_height)
         {
             max_height = char_height;
@@ -895,13 +897,13 @@ float glps_get_text_height(const char *text, int length)
 
 const char *glps_get_key_from_code(void *gooey_event)
 {
-    if(!gooey_event)
+    if (!gooey_event)
     {
         LOG_ERROR("Invalid event.");
         return NULL;
     }
 
-    GooeyEvent* event = (GooeyEvent*) gooey_event;
+    GooeyEvent *event = (GooeyEvent *)gooey_event;
 
     return event->key_press.value;
 }
@@ -936,7 +938,7 @@ static void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff
 void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
 {
 
-    glps_wm_start_drag_n_drop(ctx.wm, 0, drag_n_drop_callback, data);
+    // glps_wm_start_drag_n_drop(ctx.wm, window_id, drag_n_drop_callback, data);
     glps_wm_set_keyboard_callback(ctx.wm, keyboard_callback, data);
     glps_wm_set_mouse_move_callback(ctx.wm, mouse_move_callback, data);
     glps_wm_set_mouse_click_callback(ctx.wm, mouse_click_callback, data);
@@ -953,8 +955,7 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
-        // glps_wm_window_update(ctx.wm, 0);
-    }
+        }
 }
 
 size_t glps_get_active_window_count()

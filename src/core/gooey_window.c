@@ -633,7 +633,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
-    bool needs_redraw = false;
+    bool needs_redraw = true;
 
     if (!data || !active_backend)
     {
@@ -657,7 +657,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->UpdateBackground(window);
 
     needs_redraw |= GooeySlider_HandleDrag(window, event);
-
+    GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+    GooeyMenu_HandleHover(window);
+    GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
     switch (event->type)
     {
     case GOOEY_EVENT_RESIZE:
@@ -673,9 +675,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw = true;
         break;
     case GOOEY_EVENT_MOUSE_MOVE:
-        GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
-        GooeyMenu_HandleHover(window);
-        GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+        
         needs_redraw = true;
         break;
     case GOOEY_EVENT_CLICK_PRESS:

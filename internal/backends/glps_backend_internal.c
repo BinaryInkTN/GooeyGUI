@@ -381,7 +381,6 @@ static void keyboard_callback(size_t window_id, bool state, const char *value,
     event->key_press.state = state;
     LOG_INFO("%s", value);
     strncpy(event->key_press.value, value, sizeof(event->key_press.value));
-    glps_wm_window_update(ctx.wm, window_id);
 }
 
 static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
@@ -396,7 +395,6 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
     else
         event->mouse_scroll.y = value;
 
-    glps_wm_window_update(ctx.wm, window_id);
 }
 
 static void mouse_click_callback(size_t window_id, bool state, void *data)
@@ -408,14 +406,12 @@ static void mouse_click_callback(size_t window_id, bool state, void *data)
     event->type = state ? GOOEY_EVENT_CLICK_PRESS : GOOEY_EVENT_CLICK_RELEASE;
     event->click.x = event->mouse_move.x;
     event->click.y = event->mouse_move.y;
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 void glps_request_redraw(GooeyWindow *win)
 {
     GooeyEvent *event = (GooeyEvent *)win->current_event;
     event->type = GOOEY_EVENT_REDRAWREQ;
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
@@ -426,7 +422,6 @@ static void mouse_move_callback(size_t window_id, double posX, double posY, void
     event->type = GOOEY_EVENT_MOUSE_MOVE;
     event->mouse_move.x = posX;
     event->mouse_move.y = posY;
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 static void window_resize_callback(size_t window_id, int width, int height, void *data)
 {
@@ -435,7 +430,6 @@ static void window_resize_callback(size_t window_id, int width, int height, void
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
     event->type = GOOEY_EVENT_RESIZE;
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 static void window_close_callback(size_t window_id, void *data)
 {
@@ -444,7 +438,6 @@ static void window_close_callback(size_t window_id, void *data)
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
 
     event->type = GOOEY_EVENT_WINDOW_CLOSE;
-    glps_wm_window_update(ctx.wm, win->creation_id);
 }
 
 int glps_init_ft()
@@ -957,6 +950,7 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
+        glps_wm_window_update(ctx.wm, 0);
     }
 }
 

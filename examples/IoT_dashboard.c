@@ -230,7 +230,10 @@ void initialize_dashboard()
     GooeyList_AddItem(alert_list, "Garbage Level", "35% full");
     GooeyList_AddItem(alert_list, "Last Check", "2 mins ago");
     GooeyList_AddItem(alert_list, "System Status", "All normal");
-
+  GooeyList_AddItem(alert_list, "Light Status", light_on ? "ON" : "OFF");
+    GooeyList_AddItem(alert_list, "Garbage Level", "35% full");
+    GooeyList_AddItem(alert_list, "Last Check", "2 mins ago");
+    GooeyList_AddItem(alert_list, "System Status", "All normal");
     GooeyCanvas *canvas = GooeyCanvas_Create(0, 0, 650, 40);
     GooeyCanvas_DrawRectangle(canvas, 0, 0, 650, 40, dashboard->active_theme->primary, true);
 

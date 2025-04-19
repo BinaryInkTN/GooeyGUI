@@ -395,6 +395,8 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
         event->mouse_scroll.x = value;
     else
         event->mouse_scroll.y = value;
+
+    glps_wm_window_update(ctx.wm, window_id);
 }
 
 static void mouse_click_callback(size_t window_id, bool state, void *data)
@@ -955,7 +957,7 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
-        }
+    }
 }
 
 size_t glps_get_active_window_count()

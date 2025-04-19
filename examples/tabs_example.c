@@ -15,7 +15,7 @@ int main()
 {
     Gooey_Init();
     GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 800, 600, true);
-    GooeyTheme *dark_mode = GooeyWindow_LoadTheme("dark.json");
+    GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
     GooeyWindow_SetTheme(win, dark_mode);
 
     // Create main tabs container

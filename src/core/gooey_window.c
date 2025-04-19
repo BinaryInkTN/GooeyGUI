@@ -694,11 +694,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
     }
 
-    case GOOEY_EVENT_MOUSE_SCROLL:
-        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
-
-        break;
-
     case GOOEY_EVENT_DROP:
         needs_redraw |= GooeyDropSurface_HandleFileDrop(window, event->drop_data.drop_x, event->drop_data.drop_y);
         break;
@@ -715,6 +710,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         LOG_INFO("Unhandled event type: %d", event->type);
         break;
     }
+
+
+        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
 
     if (needs_redraw)
     {

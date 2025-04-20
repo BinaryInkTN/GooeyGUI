@@ -10,7 +10,7 @@
  */
 
 GooeyWindow *dashboard;
-GooeyMeter *light_meter, *garbage_meter;
+GooeyMeter *light_meter, *storage_meter;
 GooeyPlot *light_plot;
 GooeyButton *toggle_light;
 GooeyButton *theme_toggle;
@@ -57,7 +57,7 @@ void toggle_light_callback()
 #define ADDRESS "tcp://localhost:1883"
 #define CLIENTID "Dashboard"
 #define TOPIC_LIGHT "topic_light"
-#define TOPIC_GARBAGE_LEVEL "topic_garbage_level"
+#define TOPIC_storage_LEVEL "topic_storage_level"
 #define QOS 1
 #define TIMEOUT 10000L
 
@@ -79,15 +79,15 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     printf("     topic: %s\n", topicName);
     printf("   message: %.*s\n", message->payloadlen, (char *)message->payload);
 
-    if (strcmp(topicName, TOPIC_GARBAGE_LEVEL) == 0)
+    if (strcmp(topicName, TOPIC_storage_LEVEL) == 0)
     {
         long value = strtol((char *)message->payload, NULL, 10);
-        if (garbage_meter)
+        if (storage_meter)
         {
-            GooeyMeter_Update(garbage_meter, value);
-            char garbage_level[20];
-            snprintf(garbage_level, sizeof(garbage_level), "%ld%% full!", value);
-            GooeyList_UpdateItem(alert_list, 1, "Garbage Status", garbage_level);
+            GooeyMeter_Update(storage_meter, value);
+            char storage_level[20];
+            snprintf(storage_level, sizeof(storage_level), "%ld%% full!", value);
+            GooeyList_UpdateItem(alert_list, 1, "storage Status", storage_level);
         }
     }
     else if (strcmp(topicName, TOPIC_LIGHT) == 0)
@@ -145,7 +145,7 @@ int setup_mqtt_connection()
 void subscribe_to_topics()
 {
     int rc;
-    char *topics[] = {TOPIC_GARBAGE_LEVEL, TOPIC_LIGHT};
+    char *topics[] = {TOPIC_storage_LEVEL, TOPIC_LIGHT};
     int qos[] = {QOS, QOS};
     int topic_count = sizeof(topics) / sizeof(topics[0]);
 
@@ -179,7 +179,7 @@ void mqtt_cleanup()
         glps_thread_join(thread_mqtt, NULL);
     }
 
-    char *topics[] = {TOPIC_GARBAGE_LEVEL, TOPIC_LIGHT};
+    char *topics[] = {TOPIC_storage_LEVEL, TOPIC_LIGHT};
     int topic_count = sizeof(topics) / sizeof(topics[0]);
     MQTTClient_unsubscribeMany(client, topic_count, topics);
     MQTTClient_disconnect(client, 10000);
@@ -189,7 +189,7 @@ void mqtt_cleanup()
 void toggle_dark_mode()
 {
     dark_mode = !dark_mode;
-    GooeyWindow_SetTheme(dashboard, dark_mode ? dark_theme: NULL);
+    GooeyWindow_SetTheme(dashboard, dark_mode ? dark_theme : NULL);
     GooeyButton_SetText(theme_toggle, dark_mode ? "Dark Mode ON" : "Dark Mode OFF");
 }
 
@@ -202,9 +202,9 @@ void initialize_dashboard()
         fprintf(stderr, "Failed to initialize MQTT connection\n");
         return;
     }
-   dark_theme = GooeyTheme_LoadFromFile("dark.json");
-   
-    dashboard = GooeyWindow_Create("Smart Lighting Dashboard", 500, 450, true);
+    dark_theme = GooeyTheme_LoadFromFile("dark.json");
+
+    dashboard = GooeyWindow_Create("Smart Lighting Dashboard", 800, 450, true);
 
     for (int i = 0; i < 24; i++)
     {
@@ -216,7 +216,7 @@ void initialize_dashboard()
 
     light_meter = GooeyMeter_Create(left_col, 60, meter_size, meter_size, 80, "light");
     toggle_light = GooeyButton_Create("Toggle Light", left_col, 160, meter_size, 30, toggle_light_callback);
-    garbage_meter = GooeyMeter_Create(left_col, 250, meter_size, meter_size, 30, "garbage");
+    storage_meter = GooeyMeter_Create(left_col, 250, meter_size, meter_size, 30, "storage");
 
     const int middle_col = 180;
     const int plot_width = 300;
@@ -227,22 +227,30 @@ void initialize_dashboard()
 
     alert_list = GooeyList_Create(middle_col, 240, plot_width, 180, NULL);
     GooeyList_AddItem(alert_list, "Light Status", light_on ? "ON" : "OFF");
-    GooeyList_AddItem(alert_list, "Garbage Level", "35% full");
+    GooeyList_AddItem(alert_list, "storage Level", "35% full");
     GooeyList_AddItem(alert_list, "Last Check", "2 mins ago");
     GooeyList_AddItem(alert_list, "System Status", "All normal");
 
-    GooeyCanvas *canvas = GooeyCanvas_Create(0, 0, 650, 40);
-    GooeyCanvas_DrawRectangle(canvas, 0, 0, 650, 40, dashboard->active_theme->primary, true);
+    GooeyCanvas *canvas = GooeyCanvas_Create(0, 0, 800, 450);
+    GooeyCanvas_DrawRectangle(canvas, 0, 0, 800, 40, dashboard->active_theme->primary, true);
 
     GooeyLabel *title = GooeyLabel_Create("Smart Lighting", 0.3f, 25, 25);
 
-    theme_toggle = GooeyButton_Create("Dark Mode OFF", 365, 5, 100, 30, toggle_dark_mode);
+    theme_toggle = GooeyButton_Create("Dark Mode OFF", 650, 5, 100, 30, toggle_dark_mode);
+
+    // Light slider
+
+    GooeyCanvas_DrawRectangle(canvas, 520, 64, 250, 350, dashboard->active_theme->widget_base, false);
+    GooeyLabel *light_slider_label = GooeyLabel_Create("Adjust light level:", 0.27f, 530, 90);
+    GooeySlider *light_slider = GooeySlider_Create(550, 120, 150, 0, 100, true, NULL);
 
     GooeyWindow_RegisterWidget(dashboard, title);
     GooeyWindow_RegisterWidget(dashboard, theme_toggle);
+    GooeyWindow_RegisterWidget(dashboard, light_slider_label);
+    GooeyWindow_RegisterWidget(dashboard, light_slider);
     GooeyWindow_RegisterWidget(dashboard, canvas);
     GooeyWindow_RegisterWidget(dashboard, light_meter);
-    GooeyWindow_RegisterWidget(dashboard, garbage_meter);
+    GooeyWindow_RegisterWidget(dashboard, storage_meter);
     GooeyWindow_RegisterWidget(dashboard, light_plot);
     GooeyWindow_RegisterWidget(dashboard, alert_list);
 
@@ -256,7 +264,7 @@ int main()
 
     if (dashboard)
     {
-      //  GooeyWindow_EnableDebugOverlay(dashboard, true);
+        //  GooeyWindow_EnableDebugOverlay(dashboard, true);
         GooeyWindow_MakeResizable(dashboard, false);
         GooeyWindow_Run(1, dashboard);
     }

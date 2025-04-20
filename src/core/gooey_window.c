@@ -127,7 +127,7 @@ void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility)
 
 void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable)
 {
-    active_backend->MakeWindowResizable(0, msgBoxWindow->creation_id);
+    active_backend->MakeWindowResizable(is_resizable, msgBoxWindow->creation_id);
 }
 
 bool GooeyWindow_HandleCursorChange(GooeyWindow *win, GOOEY_CURSOR *cursor, int x, int y)
@@ -632,7 +632,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
-    bool needs_redraw = true;
+    bool needs_redraw = true; // Keep true for now, we need to work on pending events for this to work properly.
 
     if (!data || !active_backend)
     {

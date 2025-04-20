@@ -772,7 +772,7 @@ void glps_make_window_visible(int window_id, bool visibility)
 
 void glps_set_window_resizable(bool value, int window_id)
 {
-    // glps_wm_window(value, window_id);
+    glps_wm_window_is_resizable(ctx.wm, value, window_id);
 }
 
 void glps_hide_current_child(void)
@@ -949,7 +949,8 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
-        glps_wm_window_update(ctx.wm, 0);
+        for (size_t i = 0; i < ctx.active_window_count; ++i)
+            glps_wm_window_update(ctx.wm, i);
     }
 }
 

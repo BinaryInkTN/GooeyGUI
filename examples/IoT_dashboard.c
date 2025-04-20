@@ -57,7 +57,8 @@ void toggle_light_callback()
 #define ADDRESS "tcp://localhost:1883"
 #define CLIENTID "Dashboard"
 #define TOPIC_LIGHT "topic_light"
-#define TOPIC_storage_LEVEL "topic_storage_level"
+#define TOPIC_STORAGE_LEVEL "topic_storage_level"
+#define TOPIC_LIGHT_LEVEL "topic_light_level"
 #define QOS 1
 #define TIMEOUT 10000L
 
@@ -79,7 +80,7 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     printf("     topic: %s\n", topicName);
     printf("   message: %.*s\n", message->payloadlen, (char *)message->payload);
 
-    if (strcmp(topicName, TOPIC_storage_LEVEL) == 0)
+    if (strcmp(topicName, TOPIC_STORAGE_LEVEL) == 0)
     {
         long value = strtol((char *)message->payload, NULL, 10);
         if (storage_meter)
@@ -145,7 +146,7 @@ int setup_mqtt_connection()
 void subscribe_to_topics()
 {
     int rc;
-    char *topics[] = {TOPIC_storage_LEVEL, TOPIC_LIGHT};
+    char *topics[] = {TOPIC_STORAGE_LEVEL, TOPIC_LIGHT};
     int qos[] = {QOS, QOS};
     int topic_count = sizeof(topics) / sizeof(topics[0]);
 
@@ -179,11 +180,19 @@ void mqtt_cleanup()
         glps_thread_join(thread_mqtt, NULL);
     }
 
-    char *topics[] = {TOPIC_storage_LEVEL, TOPIC_LIGHT};
+    char *topics[] = {TOPIC_STORAGE_LEVEL, TOPIC_LIGHT};
     int topic_count = sizeof(topics) / sizeof(topics[0]);
     MQTTClient_unsubscribeMany(client, topic_count, topics);
     MQTTClient_disconnect(client, 10000);
     MQTTClient_destroy(&client);
+}
+
+void light_slider_callback(long slider_value)
+{
+    char payload[64];
+    snprintf(payload, sizeof(payload), "LIGHT_LEVEL %ld", slider_value);
+    printf("slider value at %ld \n", slider_value);
+    MQTTClient_publish(client, TOPIC_LIGHT_LEVEL, strlen(payload), payload, QOS, false, NULL);
 }
 
 void toggle_dark_mode()
@@ -226,6 +235,7 @@ void initialize_dashboard()
                                   middle_col, 60, plot_width, plot_height);
 
     alert_list = GooeyList_Create(middle_col, 240, plot_width, 180, NULL);
+    
     GooeyList_AddItem(alert_list, "Light Status", light_on ? "ON" : "OFF");
     GooeyList_AddItem(alert_list, "storage Level", "35% full");
     GooeyList_AddItem(alert_list, "Last Check", "2 mins ago");
@@ -242,7 +252,7 @@ void initialize_dashboard()
 
     GooeyCanvas_DrawRectangle(canvas, 520, 64, 250, 350, dashboard->active_theme->widget_base, false);
     GooeyLabel *light_slider_label = GooeyLabel_Create("Adjust light level:", 0.27f, 530, 90);
-    GooeySlider *light_slider = GooeySlider_Create(550, 120, 150, 0, 100, true, NULL);
+    GooeySlider *light_slider = GooeySlider_Create(550, 120, 150, 0, 100, true, light_slider_callback);
 
     GooeyWindow_RegisterWidget(dashboard, title);
     GooeyWindow_RegisterWidget(dashboard, theme_toggle);

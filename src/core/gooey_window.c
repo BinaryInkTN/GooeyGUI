@@ -665,9 +665,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     {
 
     case GOOEY_EVENT_MOUSE_SCROLL:
-        LOG_INFO("HERE");
         needs_redraw |= GooeyList_HandleScroll(window, event);
-        LOG_CRITICAL("called scroll %d \n", event->mouse_scroll.y);
         break;
 
     case GOOEY_EVENT_RESIZE:

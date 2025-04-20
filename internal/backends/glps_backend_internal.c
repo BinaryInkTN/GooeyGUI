@@ -748,11 +748,6 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
     window->creation_id = window_id;
 
-    if (!gladLoadGL())
-    {
-        LOG_ERROR("Failed to initialize GLAD");
-        exit(EXIT_FAILURE);
-    }
 
     glps_init_ft();
 

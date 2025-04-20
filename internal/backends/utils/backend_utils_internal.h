@@ -18,8 +18,8 @@
 #define BACKEND_UTILS_INTERNAL_H
 
 #include "backends/gooey_backend_internal.h"
-#include "backends/utils/glad/glad.h"
 #include <freetype2/ft2build.h>
+#include <GLES3/gl32.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
 #include "backends/utils/linmath/linmath.h"

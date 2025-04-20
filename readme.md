@@ -7,6 +7,10 @@ The elegant way to build cross-platform applications with native performance.
 <img src="website/example_dark.png" style="max-width:600px;"/>
 
 
+## Warning
+
+For production code disable address sanitizer, it will cause high memory usage.
+
 ## Features
 
 - **Cross-Platform**: Write once, build anywhere (Windows, Linux)

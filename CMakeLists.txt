@@ -45,14 +45,13 @@ set(SOURCES
     internal/widgets/gooey_progressbar_internal.c
     internal/widgets/gooey_debug_overlay_internal.c
     internal/widgets/gooey_window_internal.c
-    internal/backends/utils/glad/glad.c
     internal/backends/utils/backend_utils_internal.c
     internal/backends/glps_backend_internal.c
     internal/logger/pico_logger_internal.c
     internal/widgets/gooey_meter_internal.c
 )
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -g3 -fPIC -fsanitize=address,undefined")
+# -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -g3 -fsanitize=address,undefined
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC ")
 
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
@@ -69,6 +68,7 @@ target_link_libraries(${PROJECT_NAME}
     cjson
     GLPS
     freetype
+    GLESv2
 )
 
 target_include_directories(${PROJECT_NAME}

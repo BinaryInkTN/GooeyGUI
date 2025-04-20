@@ -274,7 +274,7 @@ int main()
 
     if (dashboard)
     {
-        //  GooeyWindow_EnableDebugOverlay(dashboard, true);
+        //GooeyWindow_EnableDebugOverlay(dashboard, true);
         GooeyWindow_MakeResizable(dashboard, false);
         GooeyWindow_Run(1, dashboard);
     }

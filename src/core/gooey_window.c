@@ -628,7 +628,6 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);
-    active_backend->ResetEvents(win);
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
@@ -660,8 +659,17 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
     GooeyMenu_HandleHover(window);
     GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+    needs_redraw |= GooeyList_HandleThumbScroll(window, event);
+
     switch (event->type)
     {
+
+    case GOOEY_EVENT_MOUSE_SCROLL:
+        LOG_INFO("HERE");
+        needs_redraw |= GooeyList_HandleScroll(window, event);
+        LOG_CRITICAL("called scroll %d \n", event->mouse_scroll.y);
+        break;
+
     case GOOEY_EVENT_RESIZE:
         needs_redraw = true;
         break;
@@ -674,10 +682,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         GooeyTextbox_HandleKeyPress(window, event);
         needs_redraw = true;
         break;
-    case GOOEY_EVENT_MOUSE_MOVE:
-        
-        needs_redraw = true;
-        break;
+
     case GOOEY_EVENT_CLICK_PRESS:
     {
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
@@ -691,8 +696,13 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         needs_redraw |= GooeyList_HandleThumbScroll(window, event);
         needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
         needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
+
         break;
     }
+
+    case GOOEY_EVENT_CLICK_RELEASE:
+        
+        break;
 
     case GOOEY_EVENT_DROP:
         needs_redraw |= GooeyDropSurface_HandleFileDrop(window, event->drop_data.drop_x, event->drop_data.drop_y);
@@ -711,12 +721,10 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
     }
 
-
-        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
-
     if (needs_redraw)
     {
         GooeyWindow_DrawUIElements(window);
+        active_backend->ResetEvents(window);
     }
 }
 

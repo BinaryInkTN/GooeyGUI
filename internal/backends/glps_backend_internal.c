@@ -389,12 +389,13 @@ static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
+
     event->type = GOOEY_EVENT_MOUSE_SCROLL;
+
     if (axe == GLPS_SCROLL_H_AXIS)
         event->mouse_scroll.x = value;
     else
         event->mouse_scroll.y = value;
-
 }
 
 static void mouse_click_callback(size_t window_id, bool state, void *data)
@@ -402,7 +403,6 @@ static void mouse_click_callback(size_t window_id, bool state, void *data)
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
-
     event->type = state ? GOOEY_EVENT_CLICK_PRESS : GOOEY_EVENT_CLICK_RELEASE;
     event->click.x = event->mouse_move.x;
     event->click.y = event->mouse_move.y;
@@ -419,7 +419,6 @@ static void mouse_move_callback(size_t window_id, double posX, double posY, void
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
-    event->type = GOOEY_EVENT_MOUSE_MOVE;
     event->mouse_move.x = posX;
     event->mouse_move.y = posY;
 }

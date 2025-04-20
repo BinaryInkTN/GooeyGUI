@@ -100,7 +100,7 @@ void GooeyList_Draw(GooeyWindow *win)
 
 bool GooeyList_HandleScroll(GooeyWindow *window, void *scroll_event)
 {
-    const int scroll_speed_multiplier = 2;
+    const int scroll_speed_multiplier = 20;
     GooeyEvent *event = (GooeyEvent *)scroll_event;
 
     for (size_t i = 0; i < window->list_count; ++i)

@@ -54,7 +54,7 @@ void toggle_light_callback()
 
 #include <MQTTClient.h>
 
-#define ADDRESS "tcp://localhost:1883"
+#define ADDRESS "ssl://ee02914a2862435fa00cf922db4a7465.s1.eu.hivemq.cloud:8883"
 #define CLIENTID "Dashboard"
 #define TOPIC_LIGHT "topic_light"
 #define TOPIC_STORAGE_LEVEL "topic_storage_level"

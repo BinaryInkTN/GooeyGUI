@@ -46,7 +46,7 @@ typedef struct Vertex
 } Vertex;
 
 static const char *rectangle_vertex_shader =
-    "#version 330 core\n"
+    "#version 300 core\n"
     "layout(location = 0) in vec2 pos;\n"
     "layout(location = 1) in vec3 col;\n"
     "layout(location = 2) in vec2 texCoord;\n"
@@ -59,7 +59,7 @@ static const char *rectangle_vertex_shader =
     "}\n";
 
 static const char *rectangle_fragment_shader =
-    "#version 330 core\n"
+    "#version 300 core\n"
     "in vec3 color;\n"
     "in vec2 TexCoord;\n"
     "out vec4 fragment;\n"
@@ -74,7 +74,7 @@ static const char *rectangle_fragment_shader =
     "    }\n"
     "}\n";
 
-static const char *text_vertex_shader_source = "#version 330 core\n"
+static const char *text_vertex_shader_source = "#version 300 core\n"
                                                "layout(location = 0) in vec4 vertex;\n"
                                                "out vec2 TexCoords;\n"
                                                "uniform mat4 projection;\n"
@@ -82,7 +82,7 @@ static const char *text_vertex_shader_source = "#version 330 core\n"
                                                "    gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
                                                "    TexCoords = vec2(vertex.z, 1.0-vertex.w);\n"
                                                "}\n";
-static const char *text_fragment_shader_source = "#version 330 core\n"
+static const char *text_fragment_shader_source = "#version 300 core\n"
                                                  "in vec2 TexCoords;\n"
                                                  "out vec4 color;\n"
                                                  "uniform sampler2D text;\n"

@@ -67,14 +67,14 @@ Explore our comprehensive documentation:
 	```bash
 	git submodule init
 	git submodule update --remote --merge
-	# Install if you encounter missing packages
-   sudo apt install libdrm-dev libgbm-dev libegl-dev libgl-dev libwayland-dev libxkbcommon-dev mesa-utils
    ```	
 
 4. Build the library:
    ```bash
    cmake -S . -B build
    cd build && make
+   # Install if you encounter missing packages
+   sudo apt install libdrm-dev libgbm-dev libegl-dev libgl-dev libwayland-dev libxkbcommon-dev mesa-utils
    ```
 
 5. Install (optional):

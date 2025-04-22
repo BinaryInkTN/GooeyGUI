@@ -62,7 +62,7 @@ void *camera_feed_thread(void *data)
     {
        // GooeySignal_Emit(&frame_update_call, "camera");
        if(camera_feed) GooeyImage_Damage(camera_feed);
- 
+  
        sleep(1);
     }
     return NULL;

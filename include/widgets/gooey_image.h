@@ -29,5 +29,6 @@
 GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void));
 
 void GooeyImage_SetImage(GooeyImage *image, const char *image_path);
+void GooeyImage_Damage(GooeyImage *image);
 
 #endif

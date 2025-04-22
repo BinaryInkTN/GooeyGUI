@@ -1,5 +1,7 @@
 #include "gooey_image_internal.h"
 #include "backends/gooey_backend_internal.h"
+#include <fcntl.h>
+#include <unistd.h>
 
 bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
 {
@@ -29,6 +31,13 @@ void GooeyImage_Draw(GooeyWindow *win)
         GooeyImage *image = win->images[i];
         if (!image->core.is_visible)
             continue;
+
+        if (image->needs_refresh)
+        {
+            active_backend->UnloadImage(image->texture_id);
+            active_backend->LoadImage(image->image_path);
+            image->needs_refresh = false;
+        }
         active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
     }
 }

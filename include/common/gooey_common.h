@@ -441,6 +441,8 @@ typedef struct
     GooeyWidget core;        /**< Core widget properties */
     unsigned int texture_id; /**< Texture ID for the image */
     void (*callback)(void);  /**< Callback function for image interaction */
+    bool needs_refresh;
+    const char *image_path; /**< Path to the image file */
 } GooeyImage;
 
 /**

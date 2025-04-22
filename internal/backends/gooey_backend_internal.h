@@ -70,6 +70,7 @@ typedef struct GooeyBackend
     float (*GetTextWidth)(const char *text, int length);                                         /**< Calculates the width of a text string. */
     float (*GetTextHeight)(const char *text, int length);                                        /**< Calculates the height of a text string. */
     void (*SetCursor)(GOOEY_CURSOR cursor);                                                      /**< Sets the cursor type for the window. */
+    void (*UnloadImage)(unsigned int texture_id);
 } GooeyBackend;
 
 /**

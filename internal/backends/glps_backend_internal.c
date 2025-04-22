@@ -622,6 +622,11 @@ void glps_draw_text(int x, int y, const char *text, unsigned long color, float f
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void glps_unload_image(unsigned int texture_id)
+{
+    glDeleteTextures(1, &texture_id);
+}
+
 unsigned int glps_load_image(const char *image_path)
 {
 
@@ -642,7 +647,7 @@ unsigned int glps_load_image(const char *image_path)
     {
         LOG_ERROR("Failed to load image: %s", image_path);
         glDeleteTextures(1, &texture);
-        return -1;
+        return 0;
     }
 
     GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
@@ -747,7 +752,6 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
 
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
     window->creation_id = window_id;
-
 
     glps_init_ft();
 
@@ -1001,6 +1005,7 @@ GooeyBackend glps_backend = {
     .DrawImage = glps_draw_image,
     .LoadImageFromBin = glps_load_image_from_bin,
     .LoadImage = glps_load_image,
+    .UnloadImage = glps_unload_image,
     .FillArc = glps_fill_arc,
     .FillRectangle = glps_fill_rectangle,
     .DrawRectangle = glps_draw_rectangle,

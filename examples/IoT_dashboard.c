@@ -54,7 +54,7 @@ void toggle_light_callback()
 
 #include <MQTTClient.h>
 
-#define ADDRESS "ssl://ee02914a2862435fa00cf922db4a7465.s1.eu.hivemq.cloud:8883"
+#define ADDRESS ""
 #define CLIENTID "dashboard"
 #define TOPIC_LIGHT "topic_light"
 #define TOPIC_STORAGE_LEVEL "topic_storage_level"
@@ -150,7 +150,7 @@ int setup_mqtt_connection()
     conn_opts.cleansession = 1;
     // use your credentials that you created with the cluster
     conn_opts.username = "dashboard";
-    conn_opts.password = "YASSINE2002@**v";
+    conn_opts.password = "";
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
     if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)

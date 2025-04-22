@@ -44,9 +44,9 @@ typedef struct Vertex
     float thickness;
 
 } Vertex;
-
 static const char *rectangle_vertex_shader =
-    "#version 300 core\n"
+    "#version 300 es\n"  // Changed from "300 core" to "300 es"
+    "precision mediump float;\n"
     "layout(location = 0) in vec2 pos;\n"
     "layout(location = 1) in vec3 col;\n"
     "layout(location = 2) in vec2 texCoord;\n"
@@ -59,13 +59,13 @@ static const char *rectangle_vertex_shader =
     "}\n";
 
 static const char *rectangle_fragment_shader =
-    "#version 300 core\n"
+    "#version 300 es\n"
+    "precision mediump float;\n"
     "in vec3 color;\n"
     "in vec2 TexCoord;\n"
     "out vec4 fragment;\n"
     "uniform sampler2D tex;\n"
     "uniform bool useTexture;\n"
-
     "void main() {\n"
     "    if (useTexture) {\n"
     "        fragment = texture(tex, TexCoord) * vec4(color, 1.0);\n"
@@ -73,24 +73,28 @@ static const char *rectangle_fragment_shader =
     "        fragment = vec4(color, 1.0);\n"
     "    }\n"
     "}\n";
+    static const char *text_vertex_shader_source = 
+    "#version 300 es\n"
+    "precision mediump float;\n"
+    "layout(location = 0) in vec4 vertex;\n"
+    "out vec2 TexCoords;\n"
+    "uniform mat4 projection;\n"
+    "void main() {\n"
+    "    gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
+    "    TexCoords = vec2(vertex.z, 1.0-vertex.w);\n"
+    "}\n";
 
-static const char *text_vertex_shader_source = "#version 300 core\n"
-                                               "layout(location = 0) in vec4 vertex;\n"
-                                               "out vec2 TexCoords;\n"
-                                               "uniform mat4 projection;\n"
-                                               "void main() {\n"
-                                               "    gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);\n"
-                                               "    TexCoords = vec2(vertex.z, 1.0-vertex.w);\n"
-                                               "}\n";
-static const char *text_fragment_shader_source = "#version 300 core\n"
-                                                 "in vec2 TexCoords;\n"
-                                                 "out vec4 color;\n"
-                                                 "uniform sampler2D text;\n"
-                                                 "uniform vec3 textColor;\n"
-                                                 "void main() {\n"
-                                                 "    float alpha = texture(text, TexCoords).r;\n"
-                                                 "    color = vec4(textColor, alpha);\n"
-                                                 "}\n";
+static const char *text_fragment_shader_source = 
+    "#version 300 es\n"
+    "precision mediump float;\n"
+    "in vec2 TexCoords;\n"
+    "out vec4 color;\n"
+    "uniform sampler2D text;\n"
+    "uniform vec3 textColor;\n"
+    "void main() {\n"
+    "    float alpha = texture(text, TexCoords).r;\n"
+    "    color = vec4(textColor, alpha);\n"
+    "}\n";
 void check_shader_link(GLuint program);
 void check_shader_compile(GLuint shader);
 void get_window_size(glps_WindowManager *wm, size_t window_id, int *window_width, int *window_height);

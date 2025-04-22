@@ -19,7 +19,7 @@
 
 #include "backends/gooey_backend_internal.h"
 #include <freetype2/ft2build.h>
-#include <GLES3/gl32.h>
+#include <GLES3/gl3.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
 #include "backends/utils/linmath/linmath.h"

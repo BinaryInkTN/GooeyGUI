@@ -623,8 +623,8 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeySlider_Draw(win);
     GooeyPlot_Draw(win);
     GooeyDropdown_Draw(win);
-    GooeyMenu_Draw(win);
     GooeyLabel_Draw(win);
+    GooeyMenu_Draw(win);
     GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);
@@ -699,7 +699,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 
     case GOOEY_EVENT_CLICK_RELEASE:
-        
+
         break;
 
     case GOOEY_EVENT_DROP:

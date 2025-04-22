@@ -476,6 +476,7 @@ typedef struct
     GooeyWidget core;
     long value;
     const char* label;
+    unsigned long texture_id;
 } GooeyMeter;
 
 /**

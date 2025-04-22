@@ -49,6 +49,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
         const int arc_center_x = meter->core.x + padding + meter->core.width / 2;
         const int arc_center_y = meter->core.y + padding * 2 + meter->core.height / 2;
 
+
         active_backend->FillRectangle(
             meter->core.x,
             meter->core.y,
@@ -125,5 +126,8 @@ void GooeyMeter_Draw(GooeyWindow *win)
             win->active_theme->neutral,
             FONT_SCALE,
             win->creation_id);
-    }
+        
+        active_backend->DrawImage(meter->texture_id, meter->core.x + meter->core.width - 10, meter->core.y + meter->core.height - 10, 28, 28, win->creation_id);
+
+        }
 }

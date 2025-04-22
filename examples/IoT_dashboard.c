@@ -54,7 +54,7 @@ void toggle_light_callback()
 
 #include <MQTTClient.h>
 
-#define ADDRESS "ssl://ee02914a2862435fa00cf922db4a7465.s1.eu.hivemq.cloud:8883"
+#define ADDRESS "tcp://localhost:1883"
 #define CLIENTID "Dashboard"
 #define TOPIC_LIGHT "topic_light"
 #define TOPIC_STORAGE_LEVEL "topic_storage_level"
@@ -211,6 +211,7 @@ void initialize_dashboard()
         fprintf(stderr, "Failed to initialize MQTT connection\n");
         return;
     }
+    
     dark_theme = GooeyTheme_LoadFromFile("dark.json");
 
     dashboard = GooeyWindow_Create("Smart Lighting Dashboard", 800, 450, true);
@@ -223,9 +224,9 @@ void initialize_dashboard()
     const int left_col = 20;
     const int meter_size = 120;
 
-    light_meter = GooeyMeter_Create(left_col, 60, meter_size, meter_size, 80, "light");
+    light_meter = GooeyMeter_Create(left_col, 60, meter_size, meter_size, 80, "light", "sun.png");
     toggle_light = GooeyButton_Create("Toggle Light", left_col, 160, meter_size, 30, toggle_light_callback);
-    storage_meter = GooeyMeter_Create(left_col, 250, meter_size, meter_size, 30, "storage");
+    storage_meter = GooeyMeter_Create(left_col, 250, meter_size, meter_size, 30, "storage", "cube.png");
 
     const int middle_col = 180;
     const int plot_width = 300;

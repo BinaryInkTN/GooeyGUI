@@ -1,7 +1,8 @@
 #include "widgets/gooey_meter.h"
 #include "logger/pico_logger_internal.h"
+#include "backends/gooey_backend_internal.h"
 
-GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_value, const char *label)
+GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_value, const char *label, const char *icon_path)
 {
     GooeyMeter *meter = (GooeyMeter *)calloc(1, sizeof(GooeyMeter));
 
@@ -21,8 +22,8 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
             .height = height,
         },
         .value = initial_value,
-        .label = label
-    };
+        .label = label,
+        .texture_id = active_backend->LoadImage(icon_path)};
 
     return meter;
 }

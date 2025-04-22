@@ -54,8 +54,8 @@ void toggle_light_callback()
 
 #include <MQTTClient.h>
 
-#define ADDRESS "tcp://localhost:1883"
-#define CLIENTID "Dashboard"
+#define ADDRESS "ssl://ee02914a2862435fa00cf922db4a7465.s1.eu.hivemq.cloud:8883"
+#define CLIENTID "dashboard"
 #define TOPIC_LIGHT "topic_light"
 #define TOPIC_STORAGE_LEVEL "topic_storage_level"
 #define TOPIC_LIGHT_LEVEL "topic_light_level"
@@ -64,6 +64,8 @@ void toggle_light_callback()
 
 MQTTClient client;
 MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
+MQTTClient_SSLOptions ssl_opts = MQTTClient_SSLOptions_initializer;
+
 volatile MQTTClient_deliveryToken deliveredtoken;
 gthread_t thread_mqtt;
 bool mqtt_running = true;
@@ -85,7 +87,7 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
         long value = strtol((char *)message->payload, NULL, 10);
         if (storage_meter)
         {
-            GooeyMeter_Update(storage_meter, value);
+            GooeyMeter_Update(storage_meter, (long)  100 - ((float) value / 47) * 100);
             char storage_level[20];
             snprintf(storage_level, sizeof(storage_level), "%ld%% full!", value);
             GooeyList_UpdateItem(alert_list, 1, "storage Status", storage_level);
@@ -130,7 +132,25 @@ int setup_mqtt_connection()
         MQTTClient_destroy(&client);
         return rc;
     }
+    ssl_opts.enableServerCertAuth = 0;
 
+    // declare values for ssl options, here we use only the ones necessary for TLS, but you can optionally define a lot more
+    // look here for an example: https://github.com/eclipse/paho.mqtt.c/blob/master/src/samples/paho_c_sub.c
+    ssl_opts.verify = 1;
+    ssl_opts.CApath = NULL;
+    ssl_opts.keyStore = NULL;
+    ssl_opts.trustStore = NULL;
+    ssl_opts.privateKey = NULL;
+    ssl_opts.privateKeyPassword = NULL;
+    ssl_opts.enabledCipherSuites = NULL;
+
+    // use TLS for a secure connection, "ssl_opts" includes TLS
+    conn_opts.ssl = &ssl_opts;
+    conn_opts.keepAliveInterval = 10;
+    conn_opts.cleansession = 1;
+    // use your credentials that you created with the cluster
+    conn_opts.username = "dashboard";
+    conn_opts.password = "YASSINE2002@**v";
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
     if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
@@ -211,7 +231,6 @@ void initialize_dashboard()
         fprintf(stderr, "Failed to initialize MQTT connection\n");
         return;
     }
-    
     dark_theme = GooeyTheme_LoadFromFile("dark.json");
 
     dashboard = GooeyWindow_Create("Smart Lighting Dashboard", 800, 450, true);
@@ -236,7 +255,7 @@ void initialize_dashboard()
                                   middle_col, 60, plot_width, plot_height);
 
     alert_list = GooeyList_Create(middle_col, 240, plot_width, 180, NULL);
-    
+
     GooeyList_AddItem(alert_list, "Light Status", light_on ? "ON" : "OFF");
     GooeyList_AddItem(alert_list, "storage Level", "35% full");
     GooeyList_AddItem(alert_list, "Last Check", "2 mins ago");
@@ -275,7 +294,7 @@ int main()
 
     if (dashboard)
     {
-        //GooeyWindow_EnableDebugOverlay(dashboard, true);
+        // GooeyWindow_EnableDebugOverlay(dashboard, true);
         GooeyWindow_MakeResizable(dashboard, false);
         GooeyWindow_Run(1, dashboard);
     }

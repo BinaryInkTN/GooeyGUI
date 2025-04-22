@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey Builder - Drag & Drop GUI Designer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --apple-gray-1: #f5f5f7;
+            --apple-gray-2: #d2d2d7;
+            --apple-gray-3: #86868b;
+            --apple-gray-6: #1d1d1f;
+            --apple-blue: #0071e3;
+            --apple-blue-dark: #0066cc;
+
+            --bg-color: white;
+            --text-color: var(--apple-gray-6);
+            --card-bg: white;
+            --section-border: var(--apple-gray-2);
+            --header-bg: linear-gradient(180deg, var(--apple-gray-1) 0%, white 100%);
+            --preview-bg: white;
+            --footer-bg: var(--apple-gray-6);
+            --footer-text: white;
+        }
+
+        .dark-mode {
+            --apple-gray-1: #1d1d1f;
+            --apple-gray-2: #2e2e30;
+            --apple-gray-3: #86868b;
+            --apple-gray-6: #f5f5f7;
+
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --section-border: #2e2e30;
+            --header-bg: linear-gradient(180deg, #1d1d1f 0%, #121212 100%);
+            --preview-bg: #1e1e1e;
+            --footer-bg: #000000;
+            --footer-text: var(--apple-gray-2);
+        }
+
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: rgba(var(--bg-color), 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--section-border);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--text-color) !important;
+        }
+
+        .nav-link {
+            color: var(--text-color) !important;
+            font-weight: 400;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem !important;
+            transition: opacity 0.2s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.7;
+            text-decoration: none !important;
+        }
+
+        header {
+            padding: 100px 0 60px;
+            background: var(--header-bg);
+            text-align: center;
+            border-bottom: 1px solid var(--section-border);
+        }
+
+        .header-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-container h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .header-container p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--apple-gray-3);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn-apple {
+            background-color: var(--apple-blue);
+            color: white;
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-apple:hover {
+            background-color: var(--apple-blue-dark);
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .btn-apple-outline {
+            background-color: transparent;
+            color: var(--apple-blue);
+            border: 1px solid var(--apple-blue);
+            border-radius: 30px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .btn-apple-outline:hover {
+            background-color: rgba(0, 113, 227, 0.1);
+            color: var(--apple-blue);
+            transform: scale(1.03);
+        }
+
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--section-border);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--apple-gray-3);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .card {
+            border: none;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--apple-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            color: var(--text-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: var(--apple-gray-3);
+        }
+
+        .preview-window {
+            background-color: var(--preview-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 2rem auto;
+            border: 1px solid var(--section-border);
+            max-width: 800px;
+        }
+
+        .preview-title-bar {
+            background-color: var(--apple-gray-1);
+            padding: 8px 12px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--section-border);
+        }
+
+        .preview-title-bar .preview-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .preview-buttons .preview-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--apple-gray-2);
+        }
+
+        .preview-buttons .preview-button:hover {
+            background-color: #ff5f57;
+        }
+
+        .preview-button-minimize:hover {
+            background-color: #ffbd2e;
+        }
+
+        .preview-button-maximize:hover {
+            background-color: #27c93f;
+        }
+
+        .preview-content {
+            background-color: var(--preview-bg);
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-content img {
+            height: 100%;
+            width: 100%;
+        }
+
+        .preview-title-bar h5 {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--apple-gray-3);
+        }
+
+        .download-section {
+            background-color: var(--apple-gray-1);
+            text-align: center;
+            padding: 80px 0;
+        }
+
+        .download-options {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .download-card {
+            background-color: var(--card-bg);
+            border-radius: 18px;
+            padding: 2rem;
+            width: 280px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-icon {
+            font-size: 2.5rem;
+            color: var(--apple-blue);
+            margin-bottom: 1.5rem;
+        }
+
+        .download-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .download-btn {
+            margin-top: 1.5rem;
+        }
+
+        .coming-soon {
+            position: relative;
+        }
+
+        .coming-soon::after {
+            content: "Coming Soon";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--apple-blue);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text);
+            padding: 60px 0 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: var(--apple-gray-2);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .copyright {
+            color: var(--apple-gray-3);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .delayed-1 {
+            animation-delay: 0.2s;
+        }
+
+        .delayed-2 {
+            animation-delay: 0.4s;
+        }
+
+        .delayed-3 {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 0.2rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-container h1 {
+                font-size: 2.5rem;
+            }
+
+            .header-container p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .download-options {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Gooey Builder</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Library Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#download">Download</a></li>
+                    <li class="nav-item"><a class="nav-link" href="https://gooeyui.github.io/GooeyBuilder/">Online Version</a></li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header>
+        <div class="header-container">
+            <h1 class="fade-in">Gooey Builder</h1>
+            <p class="fade-in delayed-1">The visual designer for creating Gooey GUI applications without writing code.</p>
+            <div class="fade-in delayed-2">
+                <a href="#download" class="btn btn-apple me-2">Download</a>
+                <a href="https://gooeyui.github.io/GooeyBuilder/" class="btn btn-apple-outline">Try Online</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="features">
+        <div class="container">
+            <h2 class="section-title fade-in">Powerful Visual Design</h2>
+            <p class="section-subtitle fade-in delayed-1">Create professional interfaces quickly with these features</p>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4 fade-in">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-magic"></i></div>
+                        <h3 class="card-title">Drag & Drop</h3>
+                        <p class="card-text">Build interfaces visually by dragging components onto your canvas. No coding required for basic layouts.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-1">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-code"></i></div>
+                        <h3 class="card-title">Clean Code</h3>
+                        <p class="card-text">Generate optimized C code that integrates seamlessly with the Gooey library.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-2">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                        <h3 class="card-title">Cross-Platform</h3>
+                        <p class="card-text">Design once and generate code that works across Windows and Linux.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="preview-window fade-in delayed-3">
+                <div class="preview-title-bar">
+                    <div class="preview-buttons">
+                        <div class="preview-button"></div>
+                        <div class="preview-button preview-button-minimize"></div>
+                        <div class="preview-button preview-button-maximize"></div>
+                    </div>
+                    <h5>Gooey Builder - Hello World</h5>
+                </div>
+                <div class="preview-content">
+                    <img src="builder_preview.png" alt="Gooey Builder Interface" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download-section">
+        <div class="container">
+            <h2 class="section-title fade-in">Download Gooey Builder</h2>
+            <p class="section-subtitle fade-in delayed-1">Available for all major platforms</p>
+
+            <div class="download-options">
+                <div class="download-card fade-in coming-soon">
+                    <div class="download-icon"><i class="fab fa-windows"></i></div>
+                    <h3 class="download-title">Windows</h3>
+                    <p>Compatible with Windows 10 and 11</p>
+                    <button class="btn btn-apple download-btn" disabled>
+                        <i class="fas fa-download me-2"></i> Coming Soon
+                    </button>
+                    <p class="small mt-2">Version 1.0.0 | Coming Soon</p>
+                </div>
+
+                <div class="download-card fade-in delayed-1 coming-soon">
+                    <div class="download-icon"><i class="fab fa-linux"></i></div>
+                    <h3 class="download-title">Linux</h3>
+                    <p>.deb and .rpm packages available</p>
+                    <button class="btn btn-apple download-btn" disabled>
+                        <i class="fas fa-download me-2"></i> Coming Soon
+                    </button>
+                    <p class="small mt-2">Version 1.0.0 | Coming Soon</p>
+                </div>
+
+                <div class="download-card fade-in delayed-2">
+                    <div class="download-icon"><i class="fas fa-globe"></i></div>
+                    <h3 class="download-title">Web Version</h3>
+                    <p>Use directly in your browser</p>
+                    <a href="https://gooeyui.github.io/GooeyBuilder/" class="btn btn-apple-outline download-btn">
+                        <i class="fas fa-external-link-alt me-2"></i> Open Online
+                    </a>
+                    <p class="small mt-2">Version 1.0.0 | No installation required</p>
+                </div>
+            </div>
+
+            <div class="mt-5 fade-in delayed-3">
+                <p>Looking for older versions or source code?</p>
+                <a href="https://github.com/GooeyUI/GooeyBuilder/releases" class="btn btn-apple-outline">
+                    <i class="fab fa-github me-2"></i> View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title fade-in">Get Started Quickly</h2>
+            <p class="section-subtitle fade-in delayed-1">Resources to help you begin with Gooey Builder</p>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4 fade-in coming-soon">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-book"></i></div>
+                        <h3 class="card-title">Documentation</h3>
+                        <p class="card-text">Learn how to use all features of the builder with our comprehensive guides.</p>
+                        <button class="btn btn-apple-outline mt-auto" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-1 coming-soon">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-video"></i></div>
+                        <h3 class="card-title">Video Tutorials</h3>
+                        <p class="card-text">Watch step-by-step tutorials to build your first application.</p>
+                        <button class="btn btn-apple-outline mt-auto" disabled>Coming Soon</button>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 fade-in delayed-2 coming-soon">
+                    <div class="card h-100 p-4">
+                        <div class="card-icon"><i class="fas fa-comments"></i></div>
+                        <h3 class="card-title">Community</h3>
+                        <p class="card-text">Join our community to get help and share your creations.</p>
+                        <button class="btn btn-apple-outline mt-auto" disabled>Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="docs/index.html" class="footer-link">Documentation</a>
+                <a href="https://github.com/GooeyUI/GooeyGUI" class="footer-link">GitHub</a>
+            </div>
+            <p class="copyright">Copyright © 2025 Gooey GUI Library. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.body.classList.contains('dark-mode')) {
+                document.body.classList.remove('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.section-title, .section-subtitle, .card, .preview-window, .download-card').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

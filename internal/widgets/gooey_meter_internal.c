@@ -56,16 +56,9 @@ void GooeyMeter_Draw(GooeyWindow *win)
             card_width,
             card_height,
             win->active_theme->widget_base,
-            win->creation_id);
+            win->creation_id, true, 10.0f);
 
-        active_backend->DrawRectangle(
-            meter->core.x,
-            meter->core.y,
-            card_width,
-            card_height,
-            win->active_theme->neutral,
-            BORDER_WIDTH,
-            win->creation_id);
+       
 
         const char *label_text = meter->label;
         const int label_text_width = active_backend->GetTextWidth(

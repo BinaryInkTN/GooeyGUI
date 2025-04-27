@@ -55,10 +55,10 @@ typedef struct GooeyBackend
     unsigned int (*LoadImage)(const char *image_path);                                                     /**< Loads an image from a file. */
     unsigned int (*LoadImageFromBin)(unsigned char *data, unsigned long binary_len);                       /**< Loads an image from binary data. */
     void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id);        /**< Draws an image on a window. */
-    void (*FillRectangle)(int x, int y, int width, int height, unsigned long color, int window_id);        /**< Fills a rectangle on a window. */
+    void (*FillRectangle)(int x, int y, int width, int height, unsigned long color, int window_id, bool isRounded, float cornerRadius);        /**< Fills a rectangle on a window. */
     void (*DrawRectangle)(int x, int y, int width, int height,
                           long unsigned int color, float thickness,
-                          int window_id); /**< Draws the outline of a rectangle on a window. */
+                          int window_id, bool isRounded, float cornerRadius); /**< Draws the outline of a rectangle on a window. */
 
     void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id); /**< Fills an arc on a window. */
     const char *(*GetKeyFromCode)(void *gooey_event);                                            /**< Converts a key code to a string representation. */

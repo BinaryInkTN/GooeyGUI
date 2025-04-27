@@ -108,7 +108,7 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
 
     active_backend->FillRectangle(x_pos, y_pos,
                                   overlay_width, overlay_height,
-                                  0x3333AAAA, win->creation_id);
+                                  0x3333AAAA, win->creation_id, false, 0.0f);
 
     int current_y = y_pos + padding;
 

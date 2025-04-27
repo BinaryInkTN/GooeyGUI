@@ -116,10 +116,10 @@ void glps_setup_seperate_vao(int window_id)
     glVertexAttribPointer(col_attrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, col));
     ctx.shape_vaos[window_id] = shape_vao;
 }
-
-void glps_fill_rectangle(int x, int y, int width, int height, long unsigned int color, int window_id)
+void glps_fill_rectangle(int x, int y, int width, int height,
+                         long unsigned int color, int window_id,
+                         bool isRounded, float cornerRadius)
 {
-
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     float ndc_x, ndc_y;
     float ndc_width, ndc_height;
@@ -130,12 +130,16 @@ void glps_fill_rectangle(int x, int y, int width, int height, long unsigned int 
     convert_hex_to_rgb(&color_rgb, color);
 
     Vertex vertices[6];
+    vec2 texCoords[6] = {
+        {0.0f, 0.0f}, {1.0f, 0.0f}, {0.0f, 1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f}};
 
     for (int i = 0; i < 6; i++)
     {
         vertices[i].col[0] = color_rgb[0];
         vertices[i].col[1] = color_rgb[1];
         vertices[i].col[2] = color_rgb[2];
+        vertices[i].texCoord[0] = texCoords[i][0];
+        vertices[i].texCoord[1] = texCoords[i][1];
     }
 
     vertices[0].pos[0] = ndc_x;
@@ -153,16 +157,65 @@ void glps_fill_rectangle(int x, int y, int width, int height, long unsigned int 
     vertices[5].pos[1] = ndc_y + ndc_height;
 
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);    
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
+
+    if (isRounded)
+    {
+        glUniform2f(glGetUniformLocation(ctx.shape_program, "size"), width, height);
+        glUniform1f(glGetUniformLocation(ctx.shape_program, "radius"), cornerRadius);
+    }
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     glBindVertexArray(ctx.shape_vaos[window_id]);
     glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+}
+void glps_draw_rectangle(int x, int y, int width, int height,
+                         long unsigned int color, float thickness,
+                         int window_id, bool isRounded, float cornerRadius)
+{
+    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
+
+    int win_width, win_height;
+    get_window_size(ctx.wm, window_id, &win_width, &win_height);
+
+    float ndc_x, ndc_y;
+    float ndc_width, ndc_height;
+    vec3 color_rgb;
+
+    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
+    convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
+    convert_hex_to_rgb(&color_rgb, color);
+
+    // Create a full rectangle (not just borders)
+    Vertex vertices[6] = {
+        {{ndc_x, ndc_y}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {0.0, 0.0}},
+        {{ndc_x + ndc_width, ndc_y}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {1.0, 0.0}},
+        {{ndc_x, ndc_y + ndc_height}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {0.0, 1.0}},
+        {{ndc_x + ndc_width, ndc_y}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {1.0, 0.0}},
+        {{ndc_x + ndc_width, ndc_y + ndc_height}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {1.0, 1.0}},
+        {{ndc_x, ndc_y + ndc_height}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {0.0, 1.0}}
+    };
+
+    glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded ? GL_TRUE : GL_FALSE);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), thickness > 0 ? GL_TRUE : GL_FALSE);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
+    glUniform2f(glGetUniformLocation(ctx.shape_program, "size"), width, height);
+    glUniform1f(glGetUniformLocation(ctx.shape_program, "radius"), cornerRadius);
+    glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), thickness);
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+
+    glBindVertexArray(ctx.shape_vaos[window_id]);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 void glps_set_foreground(long unsigned int color)
 {
@@ -175,99 +228,6 @@ void glps_window_dim(int *width, int *height, int window_id)
     get_window_size(ctx.wm, window_id,
                     width, height);
 }
-void glps_draw_rectangle(int x, int y, int width, int height,
-                         long unsigned int color, float thickness,
-                         int window_id)
-{
-    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-
-    int win_width, win_height;
-    glps_window_dim(&win_width, &win_height, window_id);
-
-    float ndc_x, ndc_y;
-    float ndc_width, ndc_height;
-    vec3 color_rgb;
-
-    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
-    convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
-    convert_hex_to_rgb(&color_rgb, color);
-
-    float ndc_thickness = (thickness * 2.0f) / win_width;
-
-    Vertex vertices[24];
-
-    vertices[0].pos[0] = ndc_x;
-    vertices[0].pos[1] = ndc_y;
-    vertices[1].pos[0] = ndc_x + ndc_width;
-    vertices[1].pos[1] = ndc_y;
-    vertices[2].pos[0] = ndc_x;
-    vertices[2].pos[1] = ndc_y + ndc_thickness;
-    vertices[3].pos[0] = ndc_x + ndc_width;
-    vertices[3].pos[1] = ndc_y;
-    vertices[4].pos[0] = ndc_x + ndc_width;
-    vertices[4].pos[1] = ndc_y + ndc_thickness;
-    vertices[5].pos[0] = ndc_x;
-    vertices[5].pos[1] = ndc_y + ndc_thickness;
-
-    vertices[6].pos[0] = ndc_x + ndc_width - ndc_thickness;
-    vertices[6].pos[1] = ndc_y;
-    vertices[7].pos[0] = ndc_x + ndc_width;
-    vertices[7].pos[1] = ndc_y;
-    vertices[8].pos[0] = ndc_x + ndc_width - ndc_thickness;
-    vertices[8].pos[1] = ndc_y + ndc_height;
-    vertices[9].pos[0] = ndc_x + ndc_width;
-    vertices[9].pos[1] = ndc_y;
-    vertices[10].pos[0] = ndc_x + ndc_width;
-    vertices[10].pos[1] = ndc_y + ndc_height;
-    vertices[11].pos[0] = ndc_x + ndc_width - ndc_thickness;
-    vertices[11].pos[1] = ndc_y + ndc_height;
-
-    vertices[12].pos[0] = ndc_x;
-    vertices[12].pos[1] = ndc_y + ndc_height - ndc_thickness;
-    vertices[13].pos[0] = ndc_x + ndc_width;
-    vertices[13].pos[1] = ndc_y + ndc_height - ndc_thickness;
-    vertices[14].pos[0] = ndc_x;
-    vertices[14].pos[1] = ndc_y + ndc_height;
-    vertices[15].pos[0] = ndc_x + ndc_width;
-    vertices[15].pos[1] = ndc_y + ndc_height - ndc_thickness;
-    vertices[16].pos[0] = ndc_x + ndc_width;
-    vertices[16].pos[1] = ndc_y + ndc_height;
-    vertices[17].pos[0] = ndc_x;
-    vertices[17].pos[1] = ndc_y + ndc_height;
-
-    vertices[18].pos[0] = ndc_x;
-    vertices[18].pos[1] = ndc_y;
-    vertices[19].pos[0] = ndc_x + ndc_thickness;
-    vertices[19].pos[1] = ndc_y;
-    vertices[20].pos[0] = ndc_x;
-    vertices[20].pos[1] = ndc_y + ndc_height;
-    vertices[21].pos[0] = ndc_x + ndc_thickness;
-    vertices[21].pos[1] = ndc_y;
-    vertices[22].pos[0] = ndc_x + ndc_thickness;
-    vertices[22].pos[1] = ndc_y + ndc_height;
-    vertices[23].pos[0] = ndc_x;
-    vertices[23].pos[1] = ndc_y + ndc_height;
-
-    for (int i = 0; i < 24; i++)
-    {
-        vertices[i].col[0] = color_rgb[0];
-        vertices[i].col[1] = color_rgb[1];
-        vertices[i].col[2] = color_rgb[2];
-    }
-
-    glUseProgram(ctx.shape_program);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
-
-    glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-
-    glBindVertexArray(ctx.shape_vaos[window_id]);
-    glDrawArrays(GL_TRIANGLES, 0, 24);
-
-    glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-}
-
 void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int window_id)
 {
 
@@ -295,7 +255,12 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
     vertices[1].pos[0] = ndc_x2;
     vertices[1].pos[1] = ndc_y2;
     glUseProgram(ctx.shape_program);
+
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 1);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), GL_FALSE);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
+
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -305,16 +270,15 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+
 }
-
-void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1, int angle2, int window_id)
-{
-
-    float angle1_to_rad = ((float)angle1 / 180) * M_PI;
-    float angle2_to_rad = ((float)angle2 / 180) * M_PI;
-
+void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1, int angle2, int window_id) {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    const int segments = 200;
+    int win_width, win_height;
+    get_window_size(ctx.wm, window_id, &win_width, &win_height);
+    const int segments = 80;
 
     float ndc_x_center, ndc_y_center;
     convert_coords_to_ndc(ctx.wm, window_id, &ndc_x_center, &ndc_y_center, x_center, y_center);
@@ -324,30 +288,39 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
 
     Vertex vertices[segments + 2];
 
+    // Center point
     vertices[0].pos[0] = ndc_x_center;
     vertices[0].pos[1] = ndc_y_center;
     vertices[0].col[0] = color_rgb[0];
     vertices[0].col[1] = color_rgb[1];
     vertices[0].col[2] = color_rgb[2];
 
-    for (int i = 0; i <= segments; ++i)
-    {
-        float angle = (float)i / segments * (angle2_to_rad - angle1_to_rad);
-        float x = x_center - (width * 0.5f * cosf(angle));
-        float y = y_center - (height * 0.5f * sinf(angle));
+    float angle1_rad = ((float)angle1) * M_PI / 180.0f;
+    float angle2_rad =(float)angle2 * M_PI / 180.0f;
+    float angle_range = angle2_rad - angle1_rad;
 
-        float ndc_x, ndc_y;
-        convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
+    float aspect_ratio = (float)height / (float)width;
+    
+    for (int i = 0; i <= segments; ++i) {
+        float t = (float)i / segments;
+        float angle = angle1_rad + t * angle_range;
+        
+        float x = ndc_x_center - (cos(angle) * 2.0 / win_width) * (width / 2.0);
+        float y = ndc_y_center + (sin(angle) * 2.0 / win_height) * (height / 2.0) * aspect_ratio;
 
-        vertices[i + 1].pos[0] = ndc_x;
-        vertices[i + 1].pos[1] = ndc_y;
+        vertices[i + 1].pos[0] = x;
+        vertices[i + 1].pos[1] = y;
         vertices[i + 1].col[0] = color_rgb[0];
         vertices[i + 1].col[1] = color_rgb[1];
         vertices[i + 1].col[2] = color_rgb[2];
     }
 
     glUseProgram(ctx.shape_program);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 2);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), GL_FALSE);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
+
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -355,10 +328,9 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
     glBindVertexArray(ctx.shape_vaos[window_id]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);
 
-    glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-}
+    glBindBuffer(GL_ARRAY_BUFFER, 0);   
 
+}
 void glps_set_projection(int window_id, int width, int height)
 {
 
@@ -687,10 +659,8 @@ unsigned int glps_load_image_from_bin(unsigned char *data, long unsigned binary_
 
     return texture; // textureID
 }
-
 void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
 {
-
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
     float ndc_x, ndc_y, ndc_width, ndc_height;
@@ -711,6 +681,13 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
     glUseProgram(ctx.shape_program);
+
+    // Ensure rounded corners are disabled for images
+    GLint isRoundedLocation = glGetUniformLocation(ctx.shape_program, "isRounded");
+    if (isRoundedLocation != -1)
+    {
+        glUniform1i(isRoundedLocation, GL_FALSE);
+    }
 
     GLint useTextureLocation = glGetUniformLocation(ctx.shape_program, "useTexture");
     if (useTextureLocation == -1)

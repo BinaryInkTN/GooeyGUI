@@ -54,7 +54,7 @@ void toggle_light_callback()
 
 #include <MQTTClient.h>
 
-#define ADDRESS ""
+#define ADDRESS "ssl://ee02914a2862435fa00cf922db4a7465.s1.eu.hivemq.cloud:8883"
 #define CLIENTID "dashboard"
 #define TOPIC_LIGHT "topic_light"
 #define TOPIC_STORAGE_LEVEL "topic_storage_level"
@@ -150,7 +150,7 @@ int setup_mqtt_connection()
     conn_opts.cleansession = 1;
     // use your credentials that you created with the cluster
     conn_opts.username = "dashboard";
-    conn_opts.password = "";
+    conn_opts.password = "YASSINE2002@**v";
     conn_opts.keepAliveInterval = 20;
     conn_opts.cleansession = 1;
     if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
@@ -273,7 +273,7 @@ void initialize_dashboard()
     GooeyCanvas_DrawRectangle(canvas, 520, 64, 250, 350, dashboard->active_theme->widget_base, false);
     GooeyLabel *light_slider_label = GooeyLabel_Create("Adjust light level:", 0.27f, 530, 90);
     GooeySlider *light_slider = GooeySlider_Create(550, 120, 150, 0, 100, true, light_slider_callback);
-
+    GooeyCanvas_DrawRectangle(canvas, 550, 120, 150, 30, dashboard->active_theme->widget_base, false);
     GooeyWindow_RegisterWidget(dashboard, title);
     GooeyWindow_RegisterWidget(dashboard, theme_toggle);
     GooeyWindow_RegisterWidget(dashboard, light_slider_label);

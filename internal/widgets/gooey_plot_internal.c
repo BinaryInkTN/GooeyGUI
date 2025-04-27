@@ -17,7 +17,7 @@ static void draw_plot_background(GooeyPlot *plot, GooeyWindow *win)
         plot->core.width,
         plot->core.height,
         win->active_theme->widget_base,
-        win->creation_id);
+        win->creation_id, false, 0.0f);
 }
 
 static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
@@ -176,7 +176,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                 POINT_SIZE,
                 POINT_SIZE,
                 win->active_theme->primary,
-                win->creation_id);
+                win->creation_id, false, 0.0f);
 
             if (j < plot->data->data_count - 2)
             {
@@ -212,7 +212,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                     bar_width,
                     (int)bar_height,
                     win->active_theme->primary,
-                    win->creation_id);
+                    win->creation_id, false, 0.0f);
 
                 const char *label = plot->data->bar_labels[j - 1];
                 const uint8_t LABEL_SPACING = 10;
@@ -241,7 +241,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                 (int)SCATTER_POINT_SIZE,
                 (int)SCATTER_POINT_SIZE,
                 win->active_theme->primary,
-                win->creation_id);
+                win->creation_id, false, 0.0f);
         }
         break;
     }

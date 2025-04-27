@@ -78,7 +78,7 @@ int main()
   GooeyDropdown *dropdown_2 = GooeyDropdown_Create(69, 58, 100, 30, options_dropdown_2, 2, NULL);
   GooeySlider *slider_3 = GooeySlider_Create(231, 40, 150, 0, 100, true, NULL);
   progressbar = GooeyProgressBar_Create(40, 40, 100, 30, progress_percentage);
-
+  GooeyMeter *meter = GooeyMeter_Create( 20, 450, 100, 100, 50, "Meter", "cube.png");
   float x_data[4] = {1.0f, 2.0f, 3.0f, 4.0f};
   float y_data[4] = {-3.0f, 4.0f, 5.0f, 6.0f};
  
@@ -90,9 +90,13 @@ int main()
     .y_step = 1.0f,
   };
   GooeyPlot *plot = GooeyPlot_Create(GOOEY_PLOT_LINE, &plot_data, 300, 100, 400, 400);
+  GooeyProgressBar* progressbar = GooeyProgressBar_Create(300, 550, 200, 40, progress_percentage);
+  GooeyProgressBar_Update(progressbar, 50);
+
+  GooeyWindow_RegisterWidget(win, progressbar);
  GooeyWindow_RegisterWidget(win, plot);
  //GooeyWindow_RegisterWidget(win, progressbar);
-
+  GooeyWindow_RegisterWidget(win, meter);
   GooeyWindow_RegisterWidget(win, button_0);
   GooeyWindow_RegisterWidget(win, list_1);
   GooeyWindow_RegisterWidget(win, dropdown_2);

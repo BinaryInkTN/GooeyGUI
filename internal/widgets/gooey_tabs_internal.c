@@ -43,7 +43,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
             tabs->core.width,
             tabs->core.height,
             win->active_theme->widget_base, 1.0f,
-            win->creation_id);
+            win->creation_id, false, 0.0f);
 
         const size_t tab_count = tabs->tab_count;
         const int tab_width = (int)((float)tabs->core.width / tab_count);
@@ -59,7 +59,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                 tab_width,
                 TAB_HEIGHT,
                 tabs->active_tab_id != tab->tab_id ? win->active_theme->widget_base : win->active_theme->primary,
-                win->creation_id);
+                win->creation_id, false, 0.0f);
 
             const int tab_name_x = tab_x + ((float)tab_width / 2) - ((float)active_backend->GetTextWidth(tab->tab_name, strlen(tab->tab_name)) / 2);
 

@@ -1,6 +1,8 @@
 #include "gooey_button_internal.h"
 #include "backends/gooey_backend_internal.h"
 
+#define GOOEY_BUTTON_DEFAULT_RADIUS 2.0f
+
 void GooeyButton_Draw(GooeyWindow *win)
 {
     for (size_t i = 0; i < win->button_count; ++i)
@@ -16,11 +18,11 @@ void GooeyButton_Draw(GooeyWindow *win)
             button_color = ((button_color & 0x7E7E7E) >> 1) | (button_color & 0x808080) >> 1; // A little darker
         }
         active_backend->FillRectangle(button->core.x,
-                                      button->core.y, button->core.width, button->core.height, button_color, win->creation_id);
+                                      button->core.y, button->core.width, button->core.height, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS);
 
         if (button->clicked)
             active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 2.3f, win->creation_id);
+                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, 4.0f);
 
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));
         float text_height = active_backend->GetTextHeight(button->label, strlen(button->label));
@@ -36,7 +38,7 @@ void GooeyButton_Draw(GooeyWindow *win)
         {
 
             active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id);
+                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS);
         }
     }
 }
@@ -64,7 +66,8 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = win->buttons[i];
-        if(!button || !button->core.is_visible) continue;
+        if (!button || !button->core.is_visible)
+            continue;
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
 

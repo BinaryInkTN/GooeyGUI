@@ -53,13 +53,13 @@ void GooeyTabs_Draw(GooeyWindow *win)
             const int tab_x = tabs->core.x + tab_width * j;
             const int tab_y = tabs->core.y;
             // tabs
-            active_backend->FillRectangle(
+            active_backend->DrawLine(
                 tab_x,
-                tab_y,
-                tab_width,
-                TAB_HEIGHT,
+                tab_y +TAB_HEIGHT ,
+                tab_x + tab_width,
+                tab_y +TAB_HEIGHT ,
                 tabs->active_tab_id != tab->tab_id ? win->active_theme->widget_base : win->active_theme->primary,
-                win->creation_id, false, 0.0f);
+                win->creation_id);
 
             const int tab_name_x = tab_x + ((float)tab_width / 2) - ((float)active_backend->GetTextWidth(tab->tab_name, strlen(tab->tab_name)) / 2);
 

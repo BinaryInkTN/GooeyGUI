@@ -753,7 +753,7 @@
 
     <section id="examples">
         <div class="container text-center">
-            <h2 class="section-title fade-in">Bite sized examples</h2>
+            <h2 class="section-title fade-in">Create Lightweight Apps</h2>
             <p class="section-subtitle fade-in delayed-1">Get started with these simple examples showing Gooey's core
                 features.</p>
 
@@ -768,7 +768,7 @@
                         <h5>IoT_Dashboard.c</h5>
                     </div>
                     <div class="macos-content">
-                        <img src="example_light.png" id="exampleImage" class="img-fluid" />
+                        <img src="example.png" id="exampleImage" class="img-fluid" />
                     </div>
                 </div>
             </div>
@@ -963,19 +963,19 @@
         if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
             document.body.classList.add('dark-mode');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            exampleImage.src = "example_dark.png";
+            exampleImage.src = "example.png";
         }
 
         themeToggle.addEventListener('click', () => {
             if (document.body.classList.contains('dark-mode')) {
                 document.body.classList.remove('dark-mode');
                 themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                exampleImage.src = "example_light.png";
+                exampleImage.src = "example.png";
                 localStorage.setItem('theme', 'light');
             } else {
                 document.body.classList.add('dark-mode');
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                exampleImage.src = "example_dark.png";
+                exampleImage.src = "example.png";
                 localStorage.setItem('theme', 'dark');
             }
         });

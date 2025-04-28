@@ -11,7 +11,8 @@ void GooeyList_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->list_count; ++i)
     {
         GooeyList *list = win->lists[i];
-
+        if(!list->core.is_visible)
+            continue;
         active_backend->FillRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,

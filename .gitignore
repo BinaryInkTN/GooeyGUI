@@ -7,3 +7,6 @@ CMakeDoxygenDefaults.cmake
 CMakeFiles
 bin
 *.cmake
+*.png
+examples/IoT_dashboard.c
+examples/robot_dashboard.c

@@ -96,6 +96,13 @@ typedef enum
     GOOEY_CURSOR_NOT_ALLOWED   /**< The operation-not-allowed shape. */
 } GOOEY_CURSOR;
 
+typedef enum
+{
+    SLIDER_HORIZONTAL,
+    SLIDER_VERTICAL
+} SLIDER_ORIENTATION;
+
+
 /**
  * @brief Enumeration for message box types in the Gooey framework.
  */
@@ -228,6 +235,7 @@ typedef struct
     long max_value;               /**< Maximum value of the slider */
     bool show_hints;              /**< Whether to show hints for the slider */
     void (*callback)(long value); /**< Callback function when the slider value changes */
+    SLIDER_ORIENTATION orientation;
 } GooeySlider;
 
 typedef struct
@@ -489,6 +497,7 @@ typedef enum
     WINDOW_REGULAR, /**< Regular window */
     WINDOW_MSGBOX   /**< Message box window */
 } WINDOW_TYPE;
+
 
 /**
  * @brief A structure representing a window containing various widgets.

@@ -41,6 +41,7 @@ GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, l
         .core.type = WIDGET_PROGRESSBAR,
         .core.x = x,
         .core.y = y,
+        .core.is_visible = true,
         .core.width = width,
         .core.height = height,
         .value = initial_value};

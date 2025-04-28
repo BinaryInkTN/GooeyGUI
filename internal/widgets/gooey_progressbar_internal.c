@@ -37,22 +37,33 @@ static void DrawProgressBarFill(GooeyProgressBar *progressbar, GooeyWindow *win)
 {
     float fill_width = progressbar->core.width * ((float)progressbar->value / 100);
     fill_width = (fill_width < 0) ? 0 : fill_width;
-
+    unsigned long color = win->active_theme->primary;
+    if(progressbar->value < 50)
+    {
+        color = win->active_theme->danger;
+    }
+    else if(progressbar->value > 75)
+    {
+        color = win->active_theme->success;
+    } else {
+        color = win->active_theme->primary;
+    }
     active_backend->FillRectangle(
         progressbar->core.x,
         progressbar->core.y,
         fill_width,
         progressbar->core.height,
-        win->active_theme->primary,
+        color,
         win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS);
 
+   
 
     active_backend->DrawRectangle(
         progressbar->core.x,
         progressbar->core.y,
         progressbar->core.width,
         progressbar->core.height,
-        win->active_theme->primary, 1.0f,
+        color, 1.0f,
         win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS);
 }
 
@@ -92,9 +103,14 @@ void GooeyProgressBar_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->progressbar_count; ++i)
     {
         GooeyProgressBar *progressbar = (GooeyProgressBar *)win->progressbars[i];
-        if (!progressbar)
+        if (!progressbar )
         {
             LOG_WARNING("Skipping NULL progress bar");
+            continue;
+        }
+
+        if(!progressbar->core.is_visible)
+        {
             continue;
         }
 

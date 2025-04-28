@@ -1,9 +1,9 @@
 {
-    "base": "0xFFFFFF",
-    "neutral": "0x000000",
-    "widget_base": "0xD3D3D3",
-    "primary": "0x2196F3",
-    "danger": "0xE91E63",
-    "info": "0x2196F3",
-    "success": "0x00A152"
-  }
+  "base": "0xFAFAFA",
+  "neutral": "0x212121",
+  "widget_base": "0xE0E0E0",
+  "primary": "0x1976D2",
+  "danger": "0xD32F2F",
+  "info": "0x0288D1",
+  "success": "0x388E3C"
+}

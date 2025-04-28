@@ -5,8 +5,8 @@
 #define MIN_SIZE 80
 #define ASPECT_RATIO 1.0f
 #define PADDING_PERCENT 0.1f
-#define INNER_CIRCLE_SCALE 0.85f
-#define BORDER_WIDTH 1.0f
+#define INNER_CIRCLE_SCALE 0.93f
+#define BORDER_WIDTH 0.5f
 #define FONT_SCALE 0.27f
 #define LABEL_SPACING_PERCENT 0.08f
 #define VALUE_SPACING_PERCENT 0.15f
@@ -77,7 +77,18 @@ void GooeyMeter_Draw(GooeyWindow *win)
             180,
             win->creation_id);
 
-        active_backend->SetForeground(win->active_theme->primary);
+        unsigned long color = win->active_theme->primary;
+        if(meter->value < 50)
+        {
+            color = win->active_theme->danger;
+        }
+        else if(meter->value > 75)
+        {
+            color = win->active_theme->success;
+        } else {
+            color = win->active_theme->primary;
+        }
+        active_backend->SetForeground(color);
         active_backend->FillArc(
             arc_center_x,
             arc_center_y,

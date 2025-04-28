@@ -41,7 +41,7 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
  * @param color_hex The color of the rectangle in hexadecimal format.
  * @param is_filled If true, the rectangle is filled with a solid color; otherwise, it is hollow.
  */
-void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled);
+void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius);
 
 /**
  * @brief Draws a line onto the user-defined canvas.

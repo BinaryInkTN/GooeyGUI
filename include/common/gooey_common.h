@@ -336,6 +336,9 @@ typedef struct
     int height;          /**< Height of the rectangle */
     unsigned long color; /**< Color of the rectangle */
     bool is_filled;      /**< Whether the rectangle is filled */
+    bool is_rounded;
+    float thickness;
+    float corner_radius;
 } CanvasDrawRectangleArgs;
 
 /**

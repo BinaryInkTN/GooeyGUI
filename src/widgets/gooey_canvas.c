@@ -43,7 +43,7 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
     return canvas;
 }
 
-void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled)
+void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius)
 {
 
 
@@ -53,7 +53,7 @@ void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int
     if (x_win >= canvas->core.x && x_win <= canvas->core.x + canvas->core.width && y_win >= canvas->core.y && y_win <= canvas->core.y + canvas->core.height)
     {
         CanvasDrawRectangleArgs *args = calloc(1, sizeof(CanvasDrawRectangleArgs));
-        *args = (CanvasDrawRectangleArgs){.color = color_hex, .height = height, .width = width, .x = x_win, .y = y_win, .is_filled = is_filled};
+        *args = (CanvasDrawRectangleArgs){.color = color_hex, .height = height, .width = width, .x = x_win, .y = y_win, .is_filled = is_filled, .thickness = thickness, .is_rounded = is_rounded, .corner_radius = corner_radius};
         canvas->elements[canvas->element_count++] = (CanvaElement){.operation = CANVA_DRAW_RECT, .args = args};
         LOG_INFO("Drew %s rectangle with dimensions x=%d, y=%d, w=%d, h=%d in canvas<x=%d, y=%d, w=%d, h=%d>.", is_filled ? "filled" : "hollow", x, y, width, height, canvas->core.x, canvas->core.y, canvas->core.width, canvas->core.height);
     }

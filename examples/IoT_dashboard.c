@@ -288,7 +288,7 @@ void initialize_dashboard()
     GooeyButton *pause_btn = GooeyButton_Create("Pause", 860, 300, 100, 30, pause_audio);
 
     GooeyCanvas *canvas = GooeyCanvas_Create(0, 0, 1400, 60);
-    GooeyCanvas_DrawRectangle(canvas, 0, 0, 1400, 60, dashboard->active_theme->primary, true);
+    GooeyCanvas_DrawRectangle(canvas, 0, 0, 1400, 60, dashboard->active_theme->primary, true, 0.0f, false, 10.0f);
     GooeyCanvas_DrawLine(canvas, 0, 60, 1400, 60, dashboard->active_theme->neutral);
     // GooeyCanvas_DrawRectangle(canvas, 60, 1100, 1150, 60, dashboard->active_theme->widget_base, true);
     GooeyImage *logo_icon = GooeyImage_Create("logo_icon.png", 18, 17, 24, 24, NULL);
@@ -298,7 +298,7 @@ void initialize_dashboard()
     GooeyLabel *avatar_message = GooeyLabel_Create("Welcome back, Mouhib", 0.3f, 960, 35);
     GooeyImage *avatar = GooeyImage_Create("utilisateur.png", 1140, 15, 32, 32, NULL);
     GooeyCanvas *sidebar = GooeyCanvas_Create(0, 60, 250, 640);
-    GooeyCanvas_DrawRectangle(sidebar, 0, 0, 60, 640, dashboard->active_theme->widget_base, true);
+    GooeyCanvas_DrawRectangle(sidebar, 0, 0, 60, 640, dashboard->active_theme->widget_base, true, 0.0f, false, 10.0f);
 
     GooeyButton *sidebar_button1 = GooeyButton_Create("Option 1", 10, 80, 230, 30, nav_overview);
     GooeyButton *sidebar_button2 = GooeyButton_Create("Option 2", 10, 130, 230, 30, nav_system);

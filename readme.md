@@ -4,7 +4,7 @@
 The elegant way to build cross-platform applications with native performance.
 
 
-<img src="website/example_dark.png" style="max-width:600px;"/>
+<img src="website/example_screenshot.png" style="max-width:600px;"/>
 
 
 ## Warning

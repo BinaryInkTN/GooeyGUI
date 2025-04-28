@@ -768,7 +768,7 @@
                         <h5>IoT_Dashboard.c</h5>
                     </div>
                     <div class="macos-content">
-                        <img src="example.png" id="exampleImage" class="img-fluid" />
+                        <img src="example_screenshot.png" id="exampleImage" class="img-fluid" />
                     </div>
                 </div>
             </div>
@@ -963,19 +963,19 @@
         if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
             document.body.classList.add('dark-mode');
             themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            exampleImage.src = "example.png";
+            exampleImage.src = "example_screenshot.png";
         }
 
         themeToggle.addEventListener('click', () => {
             if (document.body.classList.contains('dark-mode')) {
                 document.body.classList.remove('dark-mode');
                 themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                exampleImage.src = "example.png";
+                exampleImage.src = "example_screenshot.png";
                 localStorage.setItem('theme', 'light');
             } else {
                 document.body.classList.add('dark-mode');
                 themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                exampleImage.src = "example.png";
+                exampleImage.src = "example_screenshot.png";
                 localStorage.setItem('theme', 'dark');
             }
         });

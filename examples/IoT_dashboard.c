@@ -295,7 +295,8 @@ void initialize_dashboard()
 
     GooeyLabel *title = GooeyLabel_Create("Smart Factory", 0.4f, 65, 35);
     theme_toggle = GooeyButton_Create("Dark Mode OFF", 1350, 10, 130, 40, toggle_dark_mode);
-    GooeyImage *avatar = GooeyImage_Create("utilisateur.png", 1100, 10, 32, 32, NULL);
+    GooeyLabel *avatar_message = GooeyLabel_Create("Welcome back, Mouhib", 0.3f, 960, 35);
+    GooeyImage *avatar = GooeyImage_Create("utilisateur.png", 1140, 15, 32, 32, NULL);
     GooeyCanvas *sidebar = GooeyCanvas_Create(0, 60, 250, 640);
     GooeyCanvas_DrawRectangle(sidebar, 0, 0, 60, 640, dashboard->active_theme->widget_base, true);
 
@@ -307,6 +308,7 @@ void initialize_dashboard()
     GooeyImage *settings_icon = GooeyImage_Create("settings.png", 18, 130, 24, 24, nav_system);
     GooeyImage *alerts_icon = GooeyImage_Create("alerts_icon.png", 18, 180, 24, 24, nav_alerts);
     GooeyImage *help_icon = GooeyImage_Create("help_icon.png", 18, 650, 24, 24, NULL);
+    GooeyWindow_RegisterWidget(dashboard, avatar_message);
 
     GooeyWindow_RegisterWidget(dashboard, sidebar);
     GooeyWindow_RegisterWidget(dashboard, dashboard_icon);
@@ -325,13 +327,13 @@ void initialize_dashboard()
     GooeyTabs_InsertTab(tabs, "Alerts");
 
     GooeyWindow_RegisterWidget(dashboard, tabs);
-    GooeyLabel *dashboard_bc = GooeyLabel_Create("Home /", 0.28f, 77, 45);
-    GooeyLabel *dashboard_title = GooeyLabel_Create("Dashboard", 0.6f, 77, 80);
-    GooeyLabel *dashboard_desc = GooeyLabel_Create("This is the overview page, where you monitor your sensors.", 0.26f, 77, 105);
+    GooeyLabel *dashboard_bc = GooeyLabel_Create("Home /", 0.28f, 77, 65);
+    GooeyLabel *dashboard_title = GooeyLabel_Create("Dashboard", 0.6f, 77, 100);
+    GooeyLabel *dashboard_desc = GooeyLabel_Create("This is the overview page, where you monitor your sensors.", 0.26f, 77, 125);
 
-    light_meter = GooeyMeter_Create(80, 140, 240, 240, 80, "Light", "light_icon.png");
-    storage_meter = GooeyMeter_Create(415, 140, 240, 240, 30, "Storage", "storage_icon.png");
-    GooeyMeter *battery_meter = GooeyMeter_Create(750, 140, 240, 240, 60, "Battery", "battery_icon.png");
+    light_meter = GooeyMeter_Create(80, 160, 240, 240, 80, "Light", "light_icon.png");
+    storage_meter = GooeyMeter_Create(415, 160, 240, 240, 30, "Storage", "storage_icon.png");
+    GooeyMeter *battery_meter = GooeyMeter_Create(750, 160, 240, 240, 60, "Battery", "battery_icon.png");
 
     GooeyLabel *temp_label = GooeyLabel_Create("Temperature", 0.25f, 100, 295);
     GooeyProgressBar *temp_bar = GooeyProgressBar_Create(100, 305, 500, 20, 25);
@@ -347,6 +349,7 @@ void initialize_dashboard()
 
     toggle_light = GooeyButton_Create("Toggle Light", 100, 570, 220, 30, toggle_light_callback);
     GooeyButton *refresh_btn = GooeyButton_Create("Refresh", 380, 570, 220, 30, NULL);
+    GooeyLabel *made_with_label = GooeyLabel_Create("Made with Gooey UI ToolKit v1.0.1", 0.3f, 945, 680);
 
     // GooeyTabs_AddWidget(tabs, 0, play_btn);
     //  GooeyTabs_AddWidget(tabs, 0, pause_btn);
@@ -374,6 +377,7 @@ void initialize_dashboard()
 
     GooeyWindow_RegisterWidget(dashboard, dashboard_title);
     GooeyWindow_RegisterWidget(dashboard, dashboard_desc);
+    GooeyWindow_RegisterWidget(dashboard, made_with_label);
 
     GooeyWindow_RegisterWidget(dashboard, light_meter);
     GooeyWindow_RegisterWidget(dashboard, storage_meter);

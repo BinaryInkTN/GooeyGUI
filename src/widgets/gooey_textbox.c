@@ -24,16 +24,17 @@
 GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
                                int height, char *placeholder, void (*onTextChanged)(char *text))
 {
-    GooeyTextbox* textBox =calloc(1, sizeof(GooeyTextbox)); 
+    GooeyTextbox* textBox =calloc(1, sizeof(GooeyTextbox));
     if ( textBox == NULL ){
-        LOG_ERROR("Failed to allocate memory to textBox "); 
-        return NULL; 
+        LOG_ERROR("Failed to allocate memory to textBox ");
+        return NULL;
     }
-    *textBox = (GooeyTextbox){0}; 
+    *textBox = (GooeyTextbox){0};
     textBox->core.type = WIDGET_TEXTBOX;
     textBox->core.x = x;
     textBox->core.y = y;
     textBox->core.width = width;
+    textBox->cursor_pos = 0;
     textBox->core.height = height;
     textBox->core.is_visible = true;
     textBox->focused = false;

@@ -159,7 +159,7 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glUseProgram(ctx.shape_program);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);    
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
 
     if (isRounded)
@@ -173,7 +173,7 @@ void glps_fill_rectangle(int x, int y, int width, int height,
 
     glBindVertexArray(ctx.shape_vaos[window_id]);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 void glps_draw_rectangle(int x, int y, int width, int height,
                          long unsigned int color, float thickness,
@@ -271,7 +271,7 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 }
 void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1, int angle2, int window_id) {
@@ -300,11 +300,11 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
     float angle_range = angle2_rad - angle1_rad;
 
     float aspect_ratio = (float)height / (float)width;
-    
+
     for (int i = 0; i <= segments; ++i) {
         float t = (float)i / segments;
         float angle = angle1_rad + t * angle_range;
-        
+
         float x = ndc_x_center - (cos(angle) * 2.0 / win_width) * (width / 2.0);
         float y = ndc_y_center + (sin(angle) * 2.0 / win_height) * (height / 2.0) * aspect_ratio;
 
@@ -328,7 +328,7 @@ void glps_fill_arc(int x_center, int y_center, int width, int height, int angle1
     glBindVertexArray(ctx.shape_vaos[window_id]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);   
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 }
 void glps_set_projection(int window_id, int width, int height)
@@ -342,7 +342,7 @@ void glps_set_projection(int window_id, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-static void keyboard_callback(size_t window_id, bool state, const char *value,
+static void keyboard_callback(size_t window_id, bool state, const char *value, unsigned long keycode,
                               void *data)
 {
 
@@ -353,6 +353,7 @@ static void keyboard_callback(size_t window_id, bool state, const char *value,
     event->key_press.state = state;
     LOG_INFO("%s", value);
     strncpy(event->key_press.value, value, sizeof(event->key_press.value));
+    event->key_press.keycode = keycode;
 }
 
 static void mouse_scroll_callback(size_t window_id, GLPS_SCROLL_AXES axe,

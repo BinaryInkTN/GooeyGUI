@@ -17,10 +17,10 @@
 
  #ifndef GOOEY_EVENT_INTERNAL_H
  #define GOOEY_EVENT_INTERNAL_H
- 
+
  /**
   * @brief Enumeration of event types.
-  * 
+  *
   * This enum defines the types of events that can be handled in the Gooey
   * event system. Each event corresponds to a different action, such as mouse
   * interactions, key presses, window events, etc.
@@ -40,10 +40,10 @@
      GOOEY_EVENT_DROP, /**< File drop event (drag and drop) */
      GOOEY_EVENT_RESET
  } GooeyEventType;
- 
+
  /**
   * @brief Data structure for mouse events.
-  * 
+  *
   * This struct holds the x and y coordinates for mouse-related events such as
   * mouse clicks, movement, and scrolling.
   */
@@ -52,10 +52,10 @@
      int x; /**< The x-coordinate of the mouse position */
      int y; /**< The y-coordinate of the mouse position */
  } GooeyMouseData;
- 
+
  /**
   * @brief Data structure for key press events.
-  * 
+  *
   * This struct holds information about key press events, including the key
   * state and the key value (typically a string representation of the key).
   */
@@ -63,11 +63,12 @@
  {
      unsigned int state; /**< The state of the key (e.g., pressed or released) */
      char value[20]; /**< The value of the key (e.g., the key name or symbol) */
+     unsigned long keycode; /**< The keycode of the key */
  } GooeyKeyPressData;
- 
+
  /**
   * @brief Data structure for file drop events.
-  * 
+  *
   * This struct holds information about file drop events, including the
   * state of the drop, the MIME type, the file path, and the position
   * where the file was dropped.
@@ -80,28 +81,27 @@
      int drop_x; /**< The x-coordinate where the file was dropped */
      int drop_y; /**< The y-coordinate where the file was dropped */
  } GooeyDropData;
- 
+
  /**
   * @brief Event structure holding various event data.
-  * 
+  *
   * This struct represents a generic event and can hold data for multiple
   * event types, such as mouse events, key events, and file drop events.
   */
  typedef struct
  {
      GooeyEventType type; /**< The type of event (e.g., click, mouse move, etc.) */
-     
+
      // Mouse-related event data
      GooeyMouseData click; /**< Mouse click event data */
      GooeyMouseData mouse_move; /**< Mouse movement event data */
      GooeyMouseData mouse_scroll; /**< Mouse scroll event data */
-     
+
      // Key press event data
      GooeyKeyPressData key_press; /**< Key press event data */
-     
+
      // File drop event data
      GooeyDropData drop_data; /**< File drop event data */
  } GooeyEvent;
- 
+
  #endif /* GOOEY_EVENT_INTERNAL_H */
- 

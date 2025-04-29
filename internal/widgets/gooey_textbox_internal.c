@@ -1,5 +1,6 @@
 #include "gooey_textbox_internal.h"
 #include "backends/gooey_backend_internal.h"
+#include "event/gooey_event_internal.h"
 #include <ctype.h>
 
 void GooeyTextbox_Draw(GooeyWindow *win)
@@ -54,7 +55,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
 
 void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
 {
-
+    GooeyEvent* event = (GooeyEvent*)key_event;
     static bool is_capslock_on = false;
     static int ascii_offset = 'a' - 'A';
     printf("Key pressed\n");
@@ -72,7 +73,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
 
         size_t len = strlen(win->textboxes[i]->text);
 
-        if (strcmp(buf, "Backspace") == 0)
+        if (event->key_press.keycode == 22)
         {
             if (len > 0)
             {

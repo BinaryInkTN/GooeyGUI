@@ -9,6 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(SOURCES
     src/core/gooey.c
     src/core/gooey_window.c
+    src/core/gooey_widget.c
     src/theme/gooey_theme.c
     src/widgets/gooey_drop_surface.c
     src/widgets/gooey_button.c

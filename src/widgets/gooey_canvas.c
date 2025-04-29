@@ -20,17 +20,17 @@
 #include "logger/pico_logger_internal.h"
 
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
-                             int height)
+                                int height)
 {
-    GooeyCanvas *canvas = (GooeyCanvas *) calloc(1, sizeof(GooeyButton));
+    GooeyCanvas *canvas = (GooeyCanvas *)calloc(1, sizeof(GooeyButton));
 
-    if(!canvas) 
+    if (!canvas)
     {
         LOG_ERROR("Couldn't allocated memory for canvas");
         return NULL;
     }
 
-    *canvas = (GooeyCanvas) {0};
+    *canvas = (GooeyCanvas){0};
     canvas->core.type = WIDGET_CANVAS;
     canvas->core.x = x;
     canvas->core.y = y;
@@ -45,7 +45,6 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
 
 void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius)
 {
-
 
     int x_win = x + canvas->core.x;
     int y_win = y + canvas->core.y;
@@ -65,7 +64,6 @@ void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int
 
 void GooeyCanvas_DrawLine(GooeyCanvas *canvas, int x1, int y1, int x2, int y2, unsigned long color_hex)
 {
-
 
     int x1_win = x1 + canvas->core.x;
     int y1_win = y1 + canvas->core.y;

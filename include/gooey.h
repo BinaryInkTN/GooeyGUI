@@ -22,6 +22,8 @@
 #include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
 #include "core/gooey_window.h"
+#include "core/gooey_widget.h"
+
 #include "widgets/gooey_image.h"
 #include "widgets/gooey_button.h"
 #include "widgets/gooey_canvas.h"

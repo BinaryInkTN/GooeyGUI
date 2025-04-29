@@ -38,7 +38,9 @@ void GooeyTextbox_Draw(GooeyWindow *win) {
     strncpy(display_text, textbox->text + start_index,
             sizeof(display_text) - 1);
     display_text[sizeof(display_text) - 1] = '\0';
-
+    if(textbox->is_password) {
+        memset(display_text, '*', strlen(display_text));
+    }
     active_backend->DrawText(text_x, text_y, display_text,
                              win->active_theme->neutral, 0.27f,
                              win->creation_id);

@@ -150,6 +150,7 @@ typedef struct
     int cursor_pos;               /**< Position of the cursor in the text */
     int scroll_offset;            /**< Scroll offset of the textbox */
     void (*callback)(char *text); /**< Callback when text changes */
+    bool is_password;             /**< Whether the textbox is a password field */
 } GooeyTextbox;
 
 /**

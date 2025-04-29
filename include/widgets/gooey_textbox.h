@@ -17,11 +17,11 @@
  * @param height The height of the textbox.
  * @param placeholder The placeholder text for the textbox.
  * @param onTextChanged The callback function to call when the text changes.
- * 
+ *
  * @return A new GooeyTextbox object.
  */
 GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
-                               int height, char *placeholder, void (*onTextChanged)(char *text));
+                               int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text));
 
 /**
  * @brief Draws the textbox on the window.
@@ -42,7 +42,7 @@ void GooeyTextbox_Draw(GooeyWindow *win);
  * @param win The window containing the textbox.
  * @param x The x-coordinate of the click event.
  * @param y The y-coordinate of the click event.
- * 
+ *
  * @return True if the textbox was clicked, false otherwise.
  */
 bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
@@ -62,9 +62,9 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
  * @brief Gets the text of the textbox.
  *
  * This function retrieves the current content of the textbox.
- * 
+ *
  * @param textbox The textbox to retrieve text from.
- * 
+ *
  * @return The current text of the textbox.
  */
 const char *GooeyTextbox_GetText(GooeyTextbox *textbox);

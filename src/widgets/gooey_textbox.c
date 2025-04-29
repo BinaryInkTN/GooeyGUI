@@ -22,7 +22,7 @@
 
 
 GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
-                               int height, char *placeholder, void (*onTextChanged)(char *text))
+                               int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text))
 {
     GooeyTextbox* textBox =calloc(1, sizeof(GooeyTextbox));
     if ( textBox == NULL ){
@@ -39,6 +39,7 @@ GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
     textBox->core.is_visible = true;
     textBox->focused = false;
     textBox->callback = onTextChanged;
+    textBox->is_password = is_password;
     textBox->scroll_offset = 0;
     textBox->text[0] = '\0';
     strcpy(textBox->placeholder, placeholder);

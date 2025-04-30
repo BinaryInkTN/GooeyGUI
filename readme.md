@@ -3,6 +3,7 @@
 
 The elegant way to build cross-platform applications with native performance.
 
+<img src="website/example_screenshot_login.png" style="max-width:600px;"/>
 
 <img src="website/example_screenshot.png" style="max-width:600px;"/>
 
@@ -67,7 +68,7 @@ Explore our comprehensive documentation:
 	```bash
 	git submodule init
 	git submodule update --remote --merge
-   ```	
+   ```
 
 4. Build the library:
    ```bash
@@ -81,7 +82,7 @@ Explore our comprehensive documentation:
    ```bash
    sudo make install
    ```
-6. Building a example 
+6. Building a example
    ```bash
    gcc example.c  -o example -L/usr/local/lib/ -lfreetype -lGooeyGUI -lGLPS  -lm -I/usr/local/include/   -fsanitize=address,undefined && ./example
    ```
@@ -106,4 +107,4 @@ To all our [contributors](https://github.com/GooeyUI/GooeyGUI/graphs/contributor
 
 ---
 
-© 2025 Gooey GUI Library | [Website](https://gooeyui.github.io/GooeyGUI/website/) 
+© 2025 Gooey GUI Library | [Website](https://gooeyui.github.io/GooeyGUI/website/)

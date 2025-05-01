@@ -3,7 +3,6 @@
 
 void GooeyCanvas_Draw(GooeyWindow *win)
 {
-
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
         GooeyCanvas *canvas = win->canvas[i];
@@ -14,26 +13,33 @@ void GooeyCanvas_Draw(GooeyWindow *win)
             CanvaElement *element = &canvas->elements[j];
             switch (element->operation)
             {
-            case CANVA_DRAW_RECT:
+            case CANVA_DRAW_RECT: {
                 CanvasDrawRectangleArgs *args = (CanvasDrawRectangleArgs *)element->args;
                 if (args->is_filled)
                     active_backend->FillRectangle(args->x, args->y, args->width, args->height, args->color, win->creation_id, args->is_rounded, args->corner_radius);
                 else
                     active_backend->DrawRectangle(args->x, args->y, args->width, args->height, args->color, args->thickness, win->creation_id, args->is_rounded, args->corner_radius);
                 break;
+            }
 
-            case CANVA_DRAW_LINE:
+            case CANVA_DRAW_LINE: {
                 CanvasDrawLineArgs *args_line = (CanvasDrawLineArgs *)element->args;
                 active_backend->DrawLine(args_line->x1, args_line->y1, args_line->x2, args_line->y2, args_line->color, win->creation_id);
                 break;
-            case CANVA_DRAW_ARC:
+            }
+            
+            case CANVA_DRAW_ARC: {
                 CanvasDrawArcArgs *args_arc = (CanvasDrawArcArgs *)element->args;
                 active_backend->FillArc(args_arc->x_center, args_arc->y_center, args_arc->width, args_arc->height, args_arc->angle1, args_arc->angle2, win->creation_id);
                 break;
-            case CANVA_DRAW_SET_FG:
+            }
+            
+            case CANVA_DRAW_SET_FG: {
                 CanvasSetFGArgs *args_fg = (CanvasSetFGArgs *)element->args;
                 active_backend->SetForeground(args_fg->color);
                 break;
+            }
+            
             default:
                 break;
             }

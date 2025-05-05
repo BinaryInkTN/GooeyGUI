@@ -107,9 +107,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a295b5c4f364ff07130c54ee394c88f1d" id="r_a295b5c4f364ff07130c54ee394c88f1d"><td class="memItemLeft" align="right" valign="top">GooeyCanvas *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a295b5c4f364ff07130c54ee394c88f1d">GooeyCanvas_Create</a> (int x, int y, int width, int height)</td></tr>
 <tr class="memdesc:a295b5c4f364ff07130c54ee394c88f1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a canvas to the specified window.  <br /></td></tr>
 <tr class="separator:a295b5c4f364ff07130c54ee394c88f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebab8a9a2a61ed662ce3cfafab32b3e9" id="r_aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#aebab8a9a2a61ed662ce3cfafab32b3e9">GooeyCanvas_DrawRectangle</a> (GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled)</td></tr>
-<tr class="memdesc:aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle onto the user-defined canvas.  <br /></td></tr>
-<tr class="separator:aebab8a9a2a61ed662ce3cfafab32b3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ec6f4d8e9dd283dd0a426cddf2712e2" id="r_a0ec6f4d8e9dd283dd0a426cddf2712e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a0ec6f4d8e9dd283dd0a426cddf2712e2">GooeyCanvas_DrawRectangle</a> (GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius)</td></tr>
+<tr class="memdesc:a0ec6f4d8e9dd283dd0a426cddf2712e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a rectangle onto the user-defined canvas.  <br /></td></tr>
+<tr class="separator:a0ec6f4d8e9dd283dd0a426cddf2712e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8cec780d171d779fbc16f82f0d2c5b7e" id="r_a8cec780d171d779fbc16f82f0d2c5b7e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gooey__canvas_8h.html#a8cec780d171d779fbc16f82f0d2c5b7e">GooeyCanvas_DrawLine</a> (GooeyCanvas *canvas, int x1, int y1, int x2, int y2, unsigned long color_hex)</td></tr>
 <tr class="memdesc:a8cec780d171d779fbc16f82f0d2c5b7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a line onto the user-defined canvas.  <br /></td></tr>
 <tr class="separator:a8cec780d171d779fbc16f82f0d2c5b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -317,8 +317,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aebab8a9a2a61ed662ce3cfafab32b3e9" name="aebab8a9a2a61ed662ce3cfafab32b3e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aebab8a9a2a61ed662ce3cfafab32b3e9">&#9670;&#160;</a></span>GooeyCanvas_DrawRectangle()</h2>
+<a id="a0ec6f4d8e9dd283dd0a426cddf2712e2" name="a0ec6f4d8e9dd283dd0a426cddf2712e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ec6f4d8e9dd283dd0a426cddf2712e2">&#9670;&#160;</a></span>GooeyCanvas_DrawRectangle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -363,7 +363,25 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>is_filled</em>&#160;</td>
+          <td class="paramname"><em>is_filled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>thickness</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>is_rounded</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>corner_radius</em>&#160;</td>
         </tr>
         <tr>
           <td></td>

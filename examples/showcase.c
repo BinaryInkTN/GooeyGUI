@@ -24,34 +24,35 @@ int main()
 {
   Gooey_Init();
 
-  win = GooeyWindow_Create("window", 800, 600, true);
+  win = GooeyWindow_Create("window", 800, 600, false);
 
   //GooeyWindow_SetContinuousRedraw(win);
   //GooeyWindow_SetTheme(win, GooeyWindow_LoadTheme("dark.json"));
 
-  GooeyMenu *menu = GooeyMenu_Set(win);
+  //GooeyMenu *menu = GooeyMenu_Set(win);
 
-  GooeyMenuChild *file_child = GooeyMenu_AddChild(win, "File");
+//  GooeyMenuChild *file_child = GooeyMenu_AddChild(win, "File");
 
-  GooeyMenuChild_AddElement(file_child, "New", progress);
-  GooeyMenuChild_AddElement(file_child, "Open", NULL);
-  GooeyMenuChild_AddElement(file_child, "Save", NULL);
-  GooeyMenuChild_AddElement(file_child, "Exit", NULL);
+//  GooeyMenuChild_AddElement(file_child, "New", progress);
+ // GooeyMenuChild_AddElement(file_child, "Open", NULL);
+//  GooeyMenuChild_AddElement(file_child, "Save", NULL);
+  //GooeyMenuChild_AddElement(file_child, "Exit", NULL);
 
-  GooeyMenuChild *settings_child = GooeyMenu_AddChild(win, "Settings");
+////  GooeyMenuChild *settings_child = GooeyMenu_AddChild(win, "Settings");
 
-  GooeyMenuChild_AddElement(settings_child, "New", NULL);
-  GooeyMenuChild_AddElement(settings_child, "Open", NULL);
-  GooeyMenuChild_AddElement(settings_child, "Save", NULL);
-  GooeyMenuChild_AddElement(settings_child, "Exit", NULL);
+ // GooeyMenuChild_AddElement(settings_child, "New", NULL);
+//  GooeyMenuChild_AddElement(settings_child, "Open", NULL);
+//  GooeyMenuChild_AddElement(settings_child, "Save", NULL);
+ // GooeyMenuChild_AddElement(settings_child, "Exit", NULL);
 
-  GooeyMenuChild *about_child = GooeyMenu_AddChild(win, "Debug");
+ // GooeyMenuChild *about_child = GooeyMenu_AddChild(win, "Debug");
 
-  GooeyMenuChild_AddElement(about_child, "Enable Overlay", enable_overlay);
+ // GooeyMenuChild_AddElement(about_child, "Enable Overlay", enable_overlay);
 
   //GooeyWindow_SetContinuousRedraw(win);
-  GooeyWindow_MakeVisible(win, false);
-  GooeyWindow_MakeResizable(win, false);
+//  GooeyWindow_MakeVisible(win, false);
+//  GooeyWindow_MakeResizable(win, false);
+GooeyImage *test_img = GooeyImage_Create("", 0, 0, 20, 20, NULL);
   GooeyButton *button_0 = GooeyButton_Create("Button", 198, 92, 100, 30, NULL);
   GooeyList *list_1 = GooeyList_Create(58, 186, 200, 200, NULL);
   GooeyList_AddItem(list_1, "test", "test");
@@ -93,10 +94,10 @@ int main()
   GooeyProgressBar* progressbar = GooeyProgressBar_Create(300, 550, 200, 40, progress_percentage);
   GooeyProgressBar_Update(progressbar, 50);
 
-  GooeyWindow_RegisterWidget(win, progressbar);
- GooeyWindow_RegisterWidget(win, plot);
+//  GooeyWindow_RegisterWidget(win, progressbar);
+ //GooeyWindow_RegisterWidget(win, test_img);
  //GooeyWindow_RegisterWidget(win, progressbar);
-  GooeyWindow_RegisterWidget(win, meter);
+ //GooeyWindow_RegisterWidget(win, meter);
   GooeyWindow_RegisterWidget(win, button_0);
   GooeyWindow_RegisterWidget(win, list_1);
   GooeyWindow_RegisterWidget(win, dropdown_2);

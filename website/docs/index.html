@@ -94,23 +94,27 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md_readme"></a> The elegant way to build cross-platform applications with native performance.</p>
-<p><img src="website/example_dark.png" alt="" style="max-width:600px;" class="inline"/></p>
+<p><img src="website/example_screenshot_login.png" alt="" style="max-width:600px;" class="inline"/></p>
+<p><img src="website/example_screenshot.png" alt="" style="max-width:600px;" class="inline"/></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
+Warning</h1>
+<p>For production code disable address sanitizer, it will cause high memory usage.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Features</h1>
 <ul>
-<li><b>Cross-Platform</b>: Build once, run anywhere (Windows, Linux)</li>
+<li><b>Cross-Platform</b>: Write once, build anywhere (Windows, Linux)</li>
 <li><b>Lightweight</b>: Minimal footprint with maximum functionality</li>
 <li><b>Customizable</b>: Tailor every aspect of your UI</li>
-<li><b>No Dependencies</b>: Built from scratch for maximum control</li>
+<li><b>Minimal Dependencies</b>: Built with minimal dependencies</li>
 <li><b>Pure C</b>: Portable code perfect for embedded solutions</li>
 <li><b>Community Driven</b>: Open-source under GPL v2 license</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md2"></a>
+<h1><a class="anchor" id="autotoc_md3"></a>
 Quick Start</h1>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 Installation</h2>
 <p>Download the latest release from our <a href="https://github.com/GooeyUI/GooeyGUI/releases">GitHub Releases</a> page.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Basic Example</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;Gooey/gooey.h&gt;</span></div>
 <div class="line"> </div>
@@ -119,8 +123,6 @@ Basic Example</h2>
 <div class="line">    <a class="code hl_function" href="gooey_8h.html#a45fb2e84e7be6afa5e9c2fa39d581439">Gooey_Init</a>();</div>
 <div class="line">    GooeyWindow *win = GooeyWindow_Create(<span class="stringliteral">&quot;My Window&quot;</span>, 400, 400, <span class="keyword">true</span>);</div>
 <div class="line"> </div>
-<div class="line">    GooeyWindow_MakeVisible(win, <span class="keyword">false</span>);</div>
-<div class="line">    GooeyWindow_MakeResizable(win, <span class="keyword">false</span>);</div>
 <div class="line">    GooeyLabel *label_0 = <a class="code hl_function" href="gooey__label_8h.html#af142f996c8d97023481713bbb30984f9">GooeyLabel_Create</a>(<span class="stringliteral">&quot;Hello World!&quot;</span>, 0.26f, 164, 159);</div>
 <div class="line"> </div>
 <div class="line">    GooeyWindow_RegisterWidget(win, label_0);</div>
@@ -132,7 +134,7 @@ Basic Example</h2>
 <div class="line">}</div>
 <div class="ttc" id="agooey_8h_html_a45fb2e84e7be6afa5e9c2fa39d581439"><div class="ttname"><a href="gooey_8h.html#a45fb2e84e7be6afa5e9c2fa39d581439">Gooey_Init</a></div><div class="ttdeci">int Gooey_Init()</div><div class="ttdoc">Initializes the Gooey system with the specified backend.</div></div>
 <div class="ttc" id="agooey__label_8h_html_af142f996c8d97023481713bbb30984f9"><div class="ttname"><a href="gooey__label_8h.html#af142f996c8d97023481713bbb30984f9">GooeyLabel_Create</a></div><div class="ttdeci">GooeyLabel * GooeyLabel_Create(const char *text, float font_size, int x, int y)</div><div class="ttdoc">Creates a Label.</div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md5"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md6"></a>
 Documentation</h1>
 <p>Explore our comprehensive documentation:</p>
 <ul>
@@ -140,7 +142,7 @@ Documentation</h1>
 <li><a href="https://github.com/GooeyUI/GooeyGUI/tree/main/examples">Examples Directory</a></li>
 <li><a href="https://gooeyui.github.io/GooeyBuilder/">Web Builder Tool</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Building from Source</h1>
 <ol type="1">
 <li>Clone the repository: <div class="fragment"><div class="line">git clone https://github.com/GooeyUI/GooeyGUI.git GooeyGUI</div>
@@ -151,24 +153,28 @@ Building from Source</h1>
 </div><!-- fragment --></li>
 <li>Build the library: <div class="fragment"><div class="line">cmake -S . -B build</div>
 <div class="line">cd build &amp;&amp; make</div>
+<div class="line"># Install if you encounter missing packages</div>
+<div class="line">sudo apt install libdrm-dev libgbm-dev libegl-dev libgl-dev libwayland-dev libxkbcommon-dev mesa-utils</div>
 </div><!-- fragment --></li>
 <li>Install (optional): <div class="fragment"><div class="line">sudo make install</div>
 </div><!-- fragment --></li>
+<li>Building a example <div class="fragment"><div class="line">gcc example.c  -o example -L/usr/local/lib/ -lfreetype -lGooeyGUI -lGLPS  -lm -I/usr/local/include/   -fsanitize=address,undefined &amp;&amp; ./example</div>
+</div><!-- fragment --> </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md7"></a>
+<h1><a class="anchor" id="autotoc_md8"></a>
 Contributing</h1>
 <p>We welcome contributions!</p>
-<h1><a class="anchor" id="autotoc_md8"></a>
+<h1><a class="anchor" id="autotoc_md9"></a>
 License</h1>
 <p>Gooey is released under the <b>GNU General Public License v2.0</b>.</p>
-<h1><a class="anchor" id="autotoc_md9"></a>
+<h1><a class="anchor" id="autotoc_md10"></a>
 Community</h1>
 <p>Join our growing community:</p>
 <ul>
 <li><a href="https://github.com/GooeyUI/GooeyGUI/discussions">GitHub Discussions</a></li>
 <li><a href="https://github.com/GooeyUI/GooeyGUI/issues">Report Issues</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md10"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 Special Thanks</h1>
 <p>To all our <a href="https://github.com/GooeyUI/GooeyGUI/graphs/contributors">contributors</a> who help make Gooey better!</p>
 <hr  />

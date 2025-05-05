@@ -91,7 +91,7 @@ static const char *rectangle_vertex_shader =
     "    vec2 innerSize = size - vec2(borderWidth);\n"
     "    if (innerSize.x <= 0.0 || innerSize.y <= 0.0) return outer;\n"
     "\n"
-    "    float innerRadius = max(radius - borderWidth, 0.0);\n"
+    "    float innerRadius = clamp(radius - borderWidth, 0.0, radius);\n"
     "    float inner = isRounded ? \n"
     "        roundedBoxSDF(centerPos, innerSize, innerRadius) : \n"
     "        rectangleSDF(centerPos, innerSize);\n"

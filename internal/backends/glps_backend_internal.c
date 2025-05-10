@@ -33,10 +33,12 @@ typedef struct
     mat4x4 projection;
     GLuint text_fragment_shader;
     glps_WindowManager *wm;
+    glps_timer **timers;
     GLuint text_vertex_shader;
     Character characters[128];
     char font_path[256];
     size_t active_window_count;
+    size_t timer_count;
     bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
     unsigned int selected_color;
 } GooeyBackendContext;
@@ -277,10 +279,10 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
         vertices[i + 1].col[2] = color_rgb[2];
     }
 
-    glUseProgram(ctx.shape_program); 
+    glUseProgram(ctx.shape_program);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
 
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 2); 
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 2);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), GL_FALSE);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);
 
@@ -299,7 +301,7 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
     glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0); 
+    glBindVertexArray(0);
 }
 
 void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
@@ -415,8 +417,8 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glUniform2f(glGetUniformLocation(ctx.shape_program, "size"), width, height);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "radius"), cornerRadius);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), 1.0f);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 1); 
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 0);  
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 1);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
 
     glBindVertexArray(ctx.shape_vaos[window_id]);
@@ -587,7 +589,8 @@ int glps_init()
     ctx.shape_vaos = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
     ctx.text_programs = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
     ctx.wm = glps_wm_init();
-
+    ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer));
+    ctx.timer_count = 0;
     return 0;
 }
 
@@ -967,7 +970,51 @@ void glps_run()
     {
         for (size_t i = 0; i < ctx.active_window_count; ++i)
             glps_wm_window_update(ctx.wm, i);
+
+        for (size_t i = 0; i < ctx.timer_count; ++i)
+            glps_timer_check_and_call(ctx.timers[i]);
     }
+}
+
+GooeyTimer *glps_create_timer()
+{
+    glps_timer *timer = glps_timer_init();
+
+    ctx.timers[ctx.timer_count++] = timer;
+
+    GooeyTimer *gooey_timer = calloc(1, sizeof(GooeyTimer));
+    gooey_timer->timer_ptr = timer;
+
+    return gooey_timer;
+}
+
+void glps_destroy_timer(GooeyTimer *gooey_timer)
+{
+    if (!gooey_timer || !gooey_timer->timer_ptr)
+        return;
+
+    for (size_t i = 0; i < ctx.timer_count; ++i)
+    {
+        if (ctx.timers[i] == gooey_timer->timer_ptr)
+        {
+            free(gooey_timer->timer_ptr);
+            glps_timer_destroy(ctx.timers[i]);
+
+            for (size_t j = i; j < ctx.timer_count - 1; ++j)
+            {
+                ctx.timers[j] = ctx.timers[j + 1];
+            }
+
+            ctx.timers[ctx.timer_count - 1] = NULL;
+            ctx.timer_count--;
+
+            break;
+        }
+    }
+}
+void glps_set_callback_for_timer(uint64_t time, GooeyTimer *timer, void (*callback)(void* user_data), void *user_data)
+{
+    glps_timer_start(timer->timer_ptr, time, callback, user_data);
 }
 
 size_t glps_get_active_window_count()
@@ -1033,4 +1080,7 @@ GooeyBackend glps_backend = {
     .DrawText = glps_draw_text,
     .GetKeyFromCode = glps_get_key_from_code,
     .SetCursor = glps_set_cursor,
+    .CreateTimer = glps_create_timer,
+    .SetTimerCallback = glps_set_callback_for_timer,
+    .DestroyTimer = glps_destroy_timer,
     .Clear = glps_clear};

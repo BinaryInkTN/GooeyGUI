@@ -13,6 +13,7 @@
 #define GOOEY_BACKEND_INTERNAL_H
 
 #include "common/gooey_common.h"
+#include <stdint.h>
 
 /**
  * @brief Enumeration for available backends in the Gooey framework.
@@ -30,32 +31,32 @@ typedef enum GooeyBackends
  */
 typedef struct GooeyBackend
 {
-    int (*Init)();                                                                                         /**< Initializes the backend. */
-    void (*Run)();                                                                                         /**< Starts the main loop of the backend. */
-    void (*Cleanup)();                                                                                     /**< Cleans up resources used by the backend. */
-    void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);                    /**< Sets up event callbacks. */
-    void (*RequestRedraw)(GooeyWindow *win);                                                               /**< Requests a redraw of the specified window. */
-    void (*SetViewport)(size_t window_id, int width, int height);                                          /**< Sets the viewport for the specified window. */
-    size_t (*GetActiveWindowCount)(void);                                                                  /**< Returns the number of active windows. */
-    size_t (*GetTotalWindowCount)(void);                                                                   /**< Returns the total number of windows. */
-    GooeyWindow *(*CreateWindow)(const char *title, int width, int height);                                /**< Creates a new window. */
-    GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);                 /**< Spawns a new window with visibility control. */
-    void (*MakeWindowVisible)(int window_id, bool visibility);                                             /**< Sets the visibility of a window. */
-    void (*MakeWindowResizable)(bool value, int window_id);                                                /**< Makes a window resizable or non-resizable. */
-    int (*GetCurrentClickedWindow)(void);                                                                  /**< Returns the ID of the currently clicked window. */
-    void (*DestroyWindows)(void);                                                                          /**< Destroys all windows. */
-    void (*DestroyWindowFromId)(int window_id);                                                            /**< Destroys a specific window by ID. */
-    void (*HideCurrentChild)(void);                                                                        /**< Hides the current child window. */
-    void (*SetContext)(GooeyWindow *win);                                                                  /**< Sets the rendering context for a window. */
-    void (*UpdateBackground)(GooeyWindow *win);                                                            /**< Updates the background of a window. */
-    void (*Clear)(GooeyWindow *win);                                                                       /**< Clears the contents of a window. */
-    void (*Render)(GooeyWindow *win);                                                                      /**< Renders the contents of a window. */
-    void (*SetForeground)(unsigned long color);                                                            /**< Sets the foreground color for rendering. */
-    void (*DrawText)(int x, int y, const char *text, unsigned long color, float font_size, int window_id); /**< Draws text on a window. */
-    unsigned int (*LoadImage)(const char *image_path);                                                     /**< Loads an image from a file. */
-    unsigned int (*LoadImageFromBin)(unsigned char *data, unsigned long binary_len);                       /**< Loads an image from binary data. */
-    void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id);        /**< Draws an image on a window. */
-    void (*FillRectangle)(int x, int y, int width, int height, unsigned long color, int window_id, bool isRounded, float cornerRadius);        /**< Fills a rectangle on a window. */
+    int (*Init)();                                                                                                                      /**< Initializes the backend. */
+    void (*Run)();                                                                                                                      /**< Starts the main loop of the backend. */
+    void (*Cleanup)();                                                                                                                  /**< Cleans up resources used by the backend. */
+    void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);                                                 /**< Sets up event callbacks. */
+    void (*RequestRedraw)(GooeyWindow *win);                                                                                            /**< Requests a redraw of the specified window. */
+    void (*SetViewport)(size_t window_id, int width, int height);                                                                       /**< Sets the viewport for the specified window. */
+    size_t (*GetActiveWindowCount)(void);                                                                                               /**< Returns the number of active windows. */
+    size_t (*GetTotalWindowCount)(void);                                                                                                /**< Returns the total number of windows. */
+    GooeyWindow *(*CreateWindow)(const char *title, int width, int height);                                                             /**< Creates a new window. */
+    GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);                                              /**< Spawns a new window with visibility control. */
+    void (*MakeWindowVisible)(int window_id, bool visibility);                                                                          /**< Sets the visibility of a window. */
+    void (*MakeWindowResizable)(bool value, int window_id);                                                                             /**< Makes a window resizable or non-resizable. */
+    int (*GetCurrentClickedWindow)(void);                                                                                               /**< Returns the ID of the currently clicked window. */
+    void (*DestroyWindows)(void);                                                                                                       /**< Destroys all windows. */
+    void (*DestroyWindowFromId)(int window_id);                                                                                         /**< Destroys a specific window by ID. */
+    void (*HideCurrentChild)(void);                                                                                                     /**< Hides the current child window. */
+    void (*SetContext)(GooeyWindow *win);                                                                                               /**< Sets the rendering context for a window. */
+    void (*UpdateBackground)(GooeyWindow *win);                                                                                         /**< Updates the background of a window. */
+    void (*Clear)(GooeyWindow *win);                                                                                                    /**< Clears the contents of a window. */
+    void (*Render)(GooeyWindow *win);                                                                                                   /**< Renders the contents of a window. */
+    void (*SetForeground)(unsigned long color);                                                                                         /**< Sets the foreground color for rendering. */
+    void (*DrawText)(int x, int y, const char *text, unsigned long color, float font_size, int window_id);                              /**< Draws text on a window. */
+    unsigned int (*LoadImage)(const char *image_path);                                                                                  /**< Loads an image from a file. */
+    unsigned int (*LoadImageFromBin)(unsigned char *data, unsigned long binary_len);                                                    /**< Loads an image from binary data. */
+    void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id);                                     /**< Draws an image on a window. */
+    void (*FillRectangle)(int x, int y, int width, int height, unsigned long color, int window_id, bool isRounded, float cornerRadius); /**< Fills a rectangle on a window. */
     void (*DrawRectangle)(int x, int y, int width, int height,
                           long unsigned int color, float thickness,
                           int window_id, bool isRounded, float cornerRadius); /**< Draws the outline of a rectangle on a window. */
@@ -71,6 +72,10 @@ typedef struct GooeyBackend
     float (*GetTextHeight)(const char *text, int length);                                        /**< Calculates the height of a text string. */
     void (*SetCursor)(GOOEY_CURSOR cursor);                                                      /**< Sets the cursor type for the window. */
     void (*UnloadImage)(unsigned int texture_id);
+    GooeyTimer *(*CreateTimer)(void);
+    void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void* user_data), void *user_data);
+    void (*DestroyTimer)(GooeyTimer *timer);
+
 } GooeyBackend;
 
 /**

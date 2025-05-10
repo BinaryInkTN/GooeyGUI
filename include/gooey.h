@@ -46,6 +46,8 @@
 // Threads
 #include "glps_thread.h"
 
+#include "core/gooey_timers.h"
+
 /**
  * @brief Initializes the Gooey system with the specified backend.
  *

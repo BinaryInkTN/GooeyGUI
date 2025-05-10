@@ -22,6 +22,7 @@
 #include <GLES3/gl3.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
+#include "glps_timer.h"
 #include "backends/utils/linmath/linmath.h"
 #include <stdio.h>
 #include <stdlib.h>

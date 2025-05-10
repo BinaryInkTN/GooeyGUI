@@ -18,6 +18,8 @@
 
 #include "theme/gooey_theme.h"
 
+#define MAX_TIMERS 100
+
 /** Maximum number of widgets that can be added to a window. */
 #define MAX_WIDGETS 100
 
@@ -68,6 +70,11 @@ typedef enum
     WIDGET_TABS
 } WIDGET_TYPE;
 
+typedef struct
+{
+    void *timer_ptr;
+} GooeyTimer;
+
 /**
  * @brief A base structure for all Gooey widgets containing their position and size.
  */
@@ -101,7 +108,6 @@ typedef enum
     SLIDER_HORIZONTAL,
     SLIDER_VERTICAL
 } SLIDER_ORIENTATION;
-
 
 /**
  * @brief Enumeration for message box types in the Gooey framework.
@@ -488,7 +494,7 @@ typedef struct
 {
     GooeyWidget core;
     long value;
-    const char* label;
+    const char *label;
     unsigned long texture_id;
 } GooeyMeter;
 
@@ -500,7 +506,6 @@ typedef enum
     WINDOW_REGULAR, /**< Regular window */
     WINDOW_MSGBOX   /**< Message box window */
 } WINDOW_TYPE;
-
 
 /**
  * @brief A structure representing a window containing various widgets.

@@ -10,6 +10,7 @@ set(SOURCES
     src/core/gooey.c
     src/core/gooey_window.c
     src/core/gooey_widget.c
+    src/core/gooey_timers.c
     src/theme/gooey_theme.c
     src/widgets/gooey_drop_surface.c
     src/widgets/gooey_button.c
@@ -29,6 +30,7 @@ set(SOURCES
     src/widgets/gooey_tabs.c
     src/widgets/gooey_meter.c
     src/signals/gooey_signals.c
+    internal/widgets/gooey_layout_internal.c
     internal/widgets/gooey_drop_surface_internal.c
     internal/widgets/gooey_button_internal.c
     internal/widgets/gooey_canvas_internal.c

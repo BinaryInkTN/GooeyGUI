@@ -41,6 +41,7 @@
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_window_internal.h"
 #include "widgets/gooey_meter_internal.h"
+#include "widgets/gooey_layout_internal.h"
 #include <stdarg.h>
 #include <string.h>
 
@@ -609,6 +610,8 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
+    for (size_t i = 0; i < win->layout_count; ++i)
+        GooeyLayout_Build(win->layouts[i]);
     GooeyTabs_Draw(win);
     GooeyCanvas_Draw(win);
     GooeyMeter_Draw(win);

@@ -729,6 +729,12 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 }
 
+
+void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable)
+{
+    active_backend->WindowToggleDecorations(win, enable);
+}
+
 void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
 {
     if (!active_backend)

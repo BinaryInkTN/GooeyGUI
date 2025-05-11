@@ -1017,6 +1017,17 @@ void glps_set_callback_for_timer(uint64_t time, GooeyTimer *timer, void (*callba
     glps_timer_start(timer->timer_ptr, time, callback, user_data);
 }
 
+void glps_window_toggle_decorations(GooeyWindow *win, bool enable)
+{
+    if(!win) 
+    {
+        LOG_ERROR("Window is null.");
+        return;
+    }
+
+    glps_wm_toggle_window_decorations(ctx.wm, enable, win->creation_id);
+}
+
 size_t glps_get_active_window_count()
 {
     return ctx.active_window_count;
@@ -1049,6 +1060,7 @@ GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
     .CreateWindow = glps_create_window,
+    .WindowToggleDecorations = glps_window_toggle_decorations,
     .GetWinFramerate = glps_get_window_framerate,
     .GetActiveWindowCount = glps_get_active_window_count,
     .GetTotalWindowCount = glps_get_total_window_count,

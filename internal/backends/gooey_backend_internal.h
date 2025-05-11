@@ -31,18 +31,19 @@ typedef enum GooeyBackends
  */
 typedef struct GooeyBackend
 {
-    int (*Init)();                                                                                                                      /**< Initializes the backend. */
-    void (*Run)();                                                                                                                      /**< Starts the main loop of the backend. */
-    void (*Cleanup)();                                                                                                                  /**< Cleans up resources used by the backend. */
-    void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);                                                 /**< Sets up event callbacks. */
-    void (*RequestRedraw)(GooeyWindow *win);                                                                                            /**< Requests a redraw of the specified window. */
-    void (*SetViewport)(size_t window_id, int width, int height);                                                                       /**< Sets the viewport for the specified window. */
-    size_t (*GetActiveWindowCount)(void);                                                                                               /**< Returns the number of active windows. */
-    size_t (*GetTotalWindowCount)(void);                                                                                                /**< Returns the total number of windows. */
-    GooeyWindow *(*CreateWindow)(const char *title, int width, int height);                                                             /**< Creates a new window. */
-    GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);                                              /**< Spawns a new window with visibility control. */
-    void (*MakeWindowVisible)(int window_id, bool visibility);                                                                          /**< Sets the visibility of a window. */
-    void (*MakeWindowResizable)(bool value, int window_id);                                                                             /**< Makes a window resizable or non-resizable. */
+    int (*Init)();                                                                         /**< Initializes the backend. */
+    void (*Run)();                                                                         /**< Starts the main loop of the backend. */
+    void (*Cleanup)();                                                                     /**< Cleans up resources used by the backend. */
+    void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);    /**< Sets up event callbacks. */
+    void (*RequestRedraw)(GooeyWindow *win);                                               /**< Requests a redraw of the specified window. */
+    void (*SetViewport)(size_t window_id, int width, int height);                          /**< Sets the viewport for the specified window. */
+    size_t (*GetActiveWindowCount)(void);                                                  /**< Returns the number of active windows. */
+    size_t (*GetTotalWindowCount)(void);                                                   /**< Returns the total number of windows. */
+    GooeyWindow *(*CreateWindow)(const char *title, int width, int height);                /**< Creates a new window. */
+    GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility); /**< Spawns a new window with visibility control. */
+    void (*MakeWindowVisible)(int window_id, bool visibility);                             /**< Sets the visibility of a window. */
+    void (*MakeWindowResizable)(bool value, int window_id);                                /**< Makes a window resizable or non-resizable. */
+    void (*WindowToggleDecorations)(GooeyWindow *win, bool enable);
     int (*GetCurrentClickedWindow)(void);                                                                                               /**< Returns the ID of the currently clicked window. */
     void (*DestroyWindows)(void);                                                                                                       /**< Destroys all windows. */
     void (*DestroyWindowFromId)(int window_id);                                                                                         /**< Destroys a specific window by ID. */
@@ -73,7 +74,7 @@ typedef struct GooeyBackend
     void (*SetCursor)(GOOEY_CURSOR cursor);                                                      /**< Sets the cursor type for the window. */
     void (*UnloadImage)(unsigned int texture_id);
     GooeyTimer *(*CreateTimer)(void);
-    void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void* user_data), void *user_data);
+    void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data);
     void (*DestroyTimer)(GooeyTimer *timer);
 
 } GooeyBackend;

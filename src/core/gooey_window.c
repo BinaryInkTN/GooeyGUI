@@ -222,21 +222,18 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
 
 void GooeyWindow_FreeResources(GooeyWindow *win)
 {
-    // Free active theme if it's not the default theme
     if (win->active_theme && win->active_theme != win->default_theme)
     {
         __destroy_theme(win->active_theme);
         win->active_theme = NULL;
     }
 
-    // Free default theme
     if (win->default_theme)
     {
         __destroy_theme(win->default_theme);
         win->default_theme = NULL;
     }
 
-    // Rest of the resource freeing remains the same
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
         if (!win->canvas[i]->elements)

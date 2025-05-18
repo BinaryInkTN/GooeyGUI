@@ -860,7 +860,6 @@ void glps_cleanup()
 
     glDeleteShader(ctx.text_vertex_shader);
     glDeleteShader(ctx.text_fragment_shader);
-
     glps_wm_destroy(ctx.wm);
 }
 
@@ -988,38 +987,46 @@ GooeyTimer *glps_create_timer()
     return gooey_timer;
 }
 
+void glps_stop_timer(GooeyTimer *timer)
+{
+    glps_timer_stop(timer->timer_ptr);
+}
+
 void glps_destroy_timer(GooeyTimer *gooey_timer)
 {
     if (!gooey_timer || !gooey_timer->timer_ptr)
+    {
         return;
+    }
+
+    glps_timer *internal_timer = (glps_timer *) gooey_timer->timer_ptr;
 
     for (size_t i = 0; i < ctx.timer_count; ++i)
     {
-        if (ctx.timers[i] == gooey_timer->timer_ptr)
+        if (ctx.timers[i] == internal_timer)
         {
-            free(gooey_timer->timer_ptr);
-            glps_timer_destroy(ctx.timers[i]);
+            glps_timer_destroy(internal_timer);
 
-            for (size_t j = i; j < ctx.timer_count - 1; ++j)
-            {
-                ctx.timers[j] = ctx.timers[j + 1];
-            }
-
-            ctx.timers[ctx.timer_count - 1] = NULL;
+            memmove(&ctx.timers[i], &ctx.timers[i + 1],
+                    (ctx.timer_count - i - 1) * sizeof(glps_timer*));
             ctx.timer_count--;
+            ctx.timers[ctx.timer_count] = NULL;
 
             break;
         }
     }
+
+    free(gooey_timer);
 }
-void glps_set_callback_for_timer(uint64_t time, GooeyTimer *timer, void (*callback)(void* user_data), void *user_data)
+
+void glps_set_callback_for_timer(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data)
 {
     glps_timer_start(timer->timer_ptr, time, callback, user_data);
 }
 
 void glps_window_toggle_decorations(GooeyWindow *win, bool enable)
 {
-    if(!win) 
+    if (!win)
     {
         LOG_ERROR("Window is null.");
         return;
@@ -1095,4 +1102,5 @@ GooeyBackend glps_backend = {
     .CreateTimer = glps_create_timer,
     .SetTimerCallback = glps_set_callback_for_timer,
     .DestroyTimer = glps_destroy_timer,
+    .StopTimer = glps_stop_timer,
     .Clear = glps_clear};

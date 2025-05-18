@@ -75,6 +75,7 @@ typedef struct GooeyBackend
     void (*UnloadImage)(unsigned int texture_id);
     GooeyTimer *(*CreateTimer)(void);
     void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data);
+    void (*StopTimer)(GooeyTimer* timer);
     void (*DestroyTimer)(GooeyTimer *timer);
 
 } GooeyBackend;

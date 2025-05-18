@@ -15,20 +15,27 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "core/gooey_widget_internal.h"
-#include "utils/logger/pico_logger.h"
 
-void GooeyWidget_MakeVisible(void *widget, bool state)
+#include "core/gooey_timers_internal.h"
+#include "backends/gooey_backend_internal.h"
+
+GooeyTimer *GooeyTimer_Create_Internal()
 {
-    GooeyWidget_MakeVisible_Internal(widget, state);
+    GooeyTimer *timer = active_backend->CreateTimer();
+    return timer;
 }
 
-void GooeyWidget_MoveTo(void *widget, int x, int y)
+void GooeyTimer_SetCallback_Internal(uint64_t time, GooeyTimer *timer, void (*callback)(void* user_data), void *user_data)
 {
-    GooeyWidget_MoveTo_Internal(widget, x, y);
+    active_backend->SetTimerCallback(time, timer, callback, user_data);
 }
 
-void GooeyWidget_Resize(void *widget, int w, int h)
+void GooeyTimer_Stop_Internal(GooeyTimer *timer)
 {
-    GooeyWidget_Resize_Internal(widget, w, h);
+    active_backend->StopTimer(timer);
+}
+
+void GooeyTimer_Destroy_Internal(GooeyTimer *timer)
+{
+    active_backend->DestroyTimer(timer);
 }

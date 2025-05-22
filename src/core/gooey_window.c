@@ -45,7 +45,9 @@
 #include <stdarg.h>
 #include <string.h>
 
+#ifndef WIN32
 #include <sys/resource.h>
+#endif
 
 GooeyBackend *active_backend = NULL;
 GooeyBackends ACTIVE_BACKEND = -1;
@@ -625,7 +627,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyDropdown_Draw(win);
     GooeyLabel_Draw(win);
     GooeyMenu_Draw(win);
-    GooeyDebugOverlay_Draw(win);
+  //  GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);
 }

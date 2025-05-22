@@ -17,8 +17,6 @@
 
 #include "backend_utils_internal.h"
 #include "logger/pico_logger_internal.h"
-
-
 void check_shader_compile(GLuint shader)
 {
     GLint success;
@@ -31,7 +29,6 @@ void check_shader_compile(GLuint shader)
         exit(EXIT_FAILURE);
     }
 }
-
 void check_shader_link(GLuint program)
 {
     GLint success;

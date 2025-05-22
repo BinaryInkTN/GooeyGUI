@@ -67,7 +67,7 @@ void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
     else
     {
         LOG_WARNING("Invalid tab name, sticking to default.");
-        snprintf(tab->tab_name, sizeof(tab->tab_name), "Tab %ld", tab_id);
+      //  snprintf(tab->tab_name, sizeof(tab->tab_name), "Tab %ld", tab_id);
     }
 }
 

@@ -19,13 +19,13 @@
 
 #include "backends/gooey_backend_internal.h"
 #include <freetype2/ft2build.h>
-#include <GLES3/gl3.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
 #include "glps_timer.h"
 #include "backends/utils/linmath/linmath.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "glad/glad.h"
 
 typedef struct
 {
@@ -46,7 +46,7 @@ typedef struct Vertex
 
 } Vertex;
 static const char *rectangle_vertex_shader =
-    "#version 300 es\n" 
+    "#version 400 core\n"
     "precision mediump float;\n"
     "layout(location = 0) in vec2 pos;\n"
     "layout(location = 1) in vec3 col;\n"
@@ -60,7 +60,7 @@ static const char *rectangle_vertex_shader =
     "}\n";
 
     static const char *rectangle_fragment_shader =
-    "#version 300 es\n"
+    "#version 400 core\n"
     "precision mediump float;\n"
     "in vec3 color;\n"
     "in vec2 TexCoord;\n"
@@ -128,7 +128,7 @@ static const char *rectangle_vertex_shader =
     "    fragment = baseColor;\n"
     "}\n";
 static const char *text_vertex_shader_source =
-    "#version 300 es\n"
+    "#version 400 core\n"
     "precision mediump float;\n"
     "layout(location = 0) in vec4 vertex;\n"
     "out vec2 TexCoords;\n"
@@ -138,7 +138,7 @@ static const char *text_vertex_shader_source =
     "    TexCoords = vec2(vertex.z, 1.0-vertex.w);\n"
     "}\n";
 static const char *text_fragment_shader_source =
-    "#version 300 es\n"
+    "#version 400 core\n"
     "precision mediump float;\n"
     "in vec2 TexCoords;\n"
     "out vec4 color;\n"

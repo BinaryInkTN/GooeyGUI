@@ -1,10 +1,25 @@
 cmake_minimum_required(VERSION 3.10)
 
+# Set project info
 project(GooeyGUI VERSION 1.0 LANGUAGES C)
 
+
+
+
+# Output directories
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set(CMAKE_BUILD_TYPE Debug)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g3 -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter")
+
+if(WIN32)
+    message(STATUS "Compiling on Windows")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_CRT_SECURE_NO_WARNINGS")
+endif()
 
 set(SOURCES
     src/core/gooey.c
@@ -49,18 +64,15 @@ set(SOURCES
     internal/widgets/gooey_image_internal.c
     internal/widgets/gooey_tabs_internal.c
     internal/widgets/gooey_progressbar_internal.c
-    internal/widgets/gooey_debug_overlay_internal.c
+    #internal/widgets/gooey_debug_overlay_internal.c
+        internal/backends/utils/glad/glad.c
     internal/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c
     internal/backends/glps_backend_internal.c
     internal/logger/pico_logger_internal.c
     internal/widgets/gooey_meter_internal.c
 )
-# -Wall -Wextra -Wno-unused-variable -Wno-unused-parameter -g3 -fsanitize=address,undefined
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC ")
 
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
 
 add_subdirectory(third_party/cjson)
 add_subdirectory(third_party/glps)
@@ -69,25 +81,39 @@ add_subdirectory(third_party/freetype)
 add_dependencies(cjson GLPS freetype)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE
-    cjson
-    GLPS
-    freetype
-    GLESv2
-)
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-    $<INSTALL_INTERFACE:include/Gooey>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include/Gooey>
     PRIVATE
-    ${PROJECT_SOURCE_DIR}/internal
-    ${PROJECT_SOURCE_DIR}/third_party/freetype/include
-    ${PROJECT_SOURCE_DIR}/third_party/glps/include
-    ${PROJECT_SOURCE_DIR}/third_party/glps/internal
-    ${PROJECT_SOURCE_DIR}/third_party/cjson
+        ${PROJECT_SOURCE_DIR}/internal
+        ${PROJECT_SOURCE_DIR}/third_party/freetype/include
+        ${PROJECT_SOURCE_DIR}/third_party/glps/include
+        ${PROJECT_SOURCE_DIR}/third_party/glps/internal
+        ${PROJECT_SOURCE_DIR}/third_party/cjson
 )
+
+if(WIN32)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            cjson
+            GLPS
+            freetype
+            #glad
+            gdi32
+            user32
+            kernel32
+    )
+else()
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            cjson
+            GLPS
+            freetype
+            GLESv2
+    )
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     POSITION_INDEPENDENT_CODE ON

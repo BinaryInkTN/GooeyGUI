@@ -26,7 +26,10 @@
  #include <time.h>
  #include <stdio.h>
  #include <stdarg.h>
+
+#ifndef _WIN32
  #include <execinfo.h>
+#endif
  #include <unistd.h>
  
  static bool logging_enabled = true;
@@ -161,6 +164,7 @@
  
  void print_stack_trace(void)
  {
+     /*
      void *buffer[10];
      int size = backtrace(buffer, 10);
      char **symbols = backtrace_symbols(buffer, size);
@@ -171,6 +175,7 @@
          printf("%s\n", symbols[i]);
      }
      free(symbols);
+     */
  }
  
  void dump_memory(const char *label, const void *buffer, size_t size)

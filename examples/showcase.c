@@ -96,7 +96,7 @@ GooeyImage *test_img = GooeyImage_Create("", 0, 0, 20, 20, NULL);
 
 //  GooeyWindow_RegisterWidget(win, progressbar);
  //GooeyWindow_RegisterWidget(win, test_img);
- //GooeyWindow_RegisterWidget(win, progressbar);
+ GooeyWindow_RegisterWidget(win, progressbar);
  GooeyWindow_RegisterWidget(win, meter);
   GooeyWindow_RegisterWidget(win, button_0);
   GooeyWindow_RegisterWidget(win, list_1);

@@ -14,19 +14,16 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include "gooey_debug_overlay_internal.h"
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
+#include "common/gooey_common.h"
 #include "logger/pico_logger_internal.h"
 #include <time.h>
 
 #define OVERLAY_POS 20
 
 #ifdef __linux__
-#include <stdio.h>
-#include <string.h>
-
 static void get_memory_footprint(size_t *total_kb)
 {
     *total_kb = 0;
@@ -46,20 +43,9 @@ static void get_memory_footprint(size_t *total_kb)
     fclose(fp);
 }
 #elif defined(_WIN32)
-#include <windows.h>
-#include <psapi.h>
-
 static void get_memory_footprint(size_t *total_kb)
 {
-    PROCESS_MEMORY_COUNTERS_EX pmc;
-    if (GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS *)&pmc, sizeof(pmc)))
-    {
-        *total_kb = pmc.PrivateUsage / 1024; // In KB
-    }
-    else
-    {
-        *total_kb = 0;
-    }
+ //TODO: implement in GLPS
 }
 #else
 static void get_memory_footprint(size_t *total_kb)

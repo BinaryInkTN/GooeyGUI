@@ -64,7 +64,7 @@ set(SOURCES
     internal/widgets/gooey_image_internal.c
     internal/widgets/gooey_tabs_internal.c
     internal/widgets/gooey_progressbar_internal.c
-    #internal/widgets/gooey_debug_overlay_internal.c
+    internal/widgets/gooey_debug_overlay_internal.c
         internal/backends/utils/glad/glad.c
     internal/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c

@@ -627,7 +627,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     GooeyDropdown_Draw(win);
     GooeyLabel_Draw(win);
     GooeyMenu_Draw(win);
-  //  GooeyDebugOverlay_Draw(win);
+     GooeyDebugOverlay_Draw(win);
 
     active_backend->Render(win);
 }

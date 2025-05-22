@@ -21,7 +21,7 @@ void GooeyList_Draw(GooeyWindow *win)
         active_backend->DrawRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            win->active_theme->neutral, 0.5f, win->creation_id, false, 0.0f);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f);
 
         active_backend->FillRectangle(
             list->core.x + list->core.width, list->core.y,
@@ -31,7 +31,7 @@ void GooeyList_Draw(GooeyWindow *win)
         active_backend->DrawRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            win->active_theme->neutral, 0.5f, win->creation_id, false, 0.0f);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f);
 
         int total_content_height = list->item_count * list->item_spacing;
         int visible_height = list->core.height;

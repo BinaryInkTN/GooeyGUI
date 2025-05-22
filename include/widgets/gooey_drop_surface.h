@@ -12,7 +12,7 @@
 #define GOOEY_DROP_SURFACE_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_DROP_SURFACE)
 /**
  * @brief Adds a file drop surface.
  *
@@ -42,5 +42,5 @@ GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width,
  * @param drop_surface The drop surface to clear.
  */
 void GooeyDropSurface_Clear(GooeyDropSurface *drop_surface);
-
+#endif
 #endif // GOOEY_DROP_SURFACE_H

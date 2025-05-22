@@ -1,6 +1,7 @@
 #include "gooey_radiobutton_internal.h"
+#if(ENABLE_RADIOBUTTON)
 #include "backends/gooey_backend_internal.h"
-
+#define RADIO_BUTTON_RADIUS 10 /** Radius of the radio button widget. */
 void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
 {
 
@@ -95,3 +96,4 @@ bool GooeyRadioButton_HandleClick(GooeyWindow *win, int x, int y)
     }
     return state;
 }
+#endif

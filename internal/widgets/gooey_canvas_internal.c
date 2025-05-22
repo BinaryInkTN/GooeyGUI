@@ -1,4 +1,7 @@
+
 #include "gooey_canvas_internal.h"
+#if (ENABLE_CANVAS)
+
 #include "backends/gooey_backend_internal.h"
 
 void GooeyCanvas_Draw(GooeyWindow *win)
@@ -46,3 +49,5 @@ void GooeyCanvas_Draw(GooeyWindow *win)
         }
     }
 }
+
+#endif

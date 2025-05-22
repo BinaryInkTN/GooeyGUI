@@ -11,7 +11,7 @@
 #define GOOEY_CHECKBOX_INTERNAL_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_CHECKBOX)
 /**
  * @brief Handles click events for checkboxes within the specified window.
  *
@@ -34,5 +34,5 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param win The window containing the checkboxes.
  */
 void GooeyCheckbox_Draw(GooeyWindow *win);
-
+#endif
 #endif // GOOEY_CHECKBOX_H

@@ -1,3 +1,4 @@
+
 /*
  Copyright (c) 2024 Yassine Ahmed Ali
 
@@ -16,6 +17,7 @@
  */
 
 #include "widgets/gooey_button.h"
+#if (ENABLE_BUTTON)
 #include "backends/gooey_backend_internal.h"
 #include "theme/gooey_theme.h"
 #include "logger/pico_logger_internal.h"
@@ -62,3 +64,4 @@ void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
 {
     button->is_highlighted = true;
 }
+#endif

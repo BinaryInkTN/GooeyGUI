@@ -12,7 +12,7 @@
 #define GOOEY_CANVAS_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_CANVAS)
 /**
  * @brief Adds a canvas to the specified window.
  *
@@ -79,6 +79,6 @@ void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int wi
  * @param color_hex The foreground color in hexadecimal format.
  */
 void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex);
-
+#endif
 
 #endif // GOOEY_CANVAS_H

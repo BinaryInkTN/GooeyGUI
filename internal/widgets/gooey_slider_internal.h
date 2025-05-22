@@ -2,6 +2,7 @@
 #define GOOEY_SLIDER_INTERNAL_H
 
 #include "common/gooey_common.h"
+#if(ENABLE_SLIDER)
 #include <stdbool.h>
 
 /**
@@ -26,5 +27,6 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *event);
  * @param window The window to draw the slider on.
  */
 void GooeySlider_Draw(GooeyWindow *window);
+#endif
 
 #endif /* GOOEY_SLIDER_H */

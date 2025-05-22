@@ -18,6 +18,7 @@
 
 
 #include "widgets/gooey_progressbar.h"
+#if(ENABLE_PROGRESSBAR)
 #include "logger/pico_logger_internal.h"
 
 GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, long initial_value)
@@ -66,3 +67,4 @@ void GooeyProgressBar_Update(GooeyProgressBar *progressbar, long new_value)
 
     progressbar->value = new_value > 100 ? 100 : new_value;
 }
+#endif

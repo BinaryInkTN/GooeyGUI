@@ -1,4 +1,5 @@
 #include "gooey_drop_surface_internal.h"
+#if(ENABLE_DROP_SURFACE)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 
@@ -109,3 +110,4 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
         active_backend->DrawText(text_x, text_y, filename, win->active_theme->neutral, 0.28f, win->creation_id);
     }
 }
+#endif

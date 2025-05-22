@@ -1,4 +1,5 @@
 #include "gooey_layout_internal.h"
+#if(ENABLE_LAYOUT)
 #include "logger/pico_logger_internal.h"
 
 void GooeyLayout_Build(GooeyLayout *layout)
@@ -72,3 +73,4 @@ void GooeyLayout_Build(GooeyLayout *layout)
         }
     }
 }
+#endif

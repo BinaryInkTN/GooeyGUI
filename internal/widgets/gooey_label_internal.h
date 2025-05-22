@@ -13,7 +13,7 @@
  #define GOOEY_LABEL_INTERNAL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_LABEL)
  /**
   * @brief Draws all labels within the specified window.
   *
@@ -25,4 +25,4 @@
  void GooeyLabel_Draw(GooeyWindow *win);
  
  #endif // GOOEY_LABEL_H
- 
+ #endif

@@ -14,7 +14,7 @@
  #define GOOEY_PLOT_INTERNAL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_PLOT)
  
  /**
   * @brief Draws the plot in the specified Gooey window.
@@ -27,6 +27,6 @@
   */
  void GooeyPlot_Draw(GooeyWindow* win);
  
- 
+#endif
  #endif /* GOOEY_PLOT_H */
  

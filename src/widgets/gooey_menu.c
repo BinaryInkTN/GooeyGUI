@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_menu.h"
+#if(ENABLE_MENU)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -56,3 +57,4 @@ void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title,
     child->menu_elements_count++;
     LOG_INFO("Element added to menu child with title=\"%s\"", title);
 }
+#endif

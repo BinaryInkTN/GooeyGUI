@@ -1,4 +1,5 @@
 #include "gooey_dropdown_internal.h"
+#if(ENABLE_DROPDOWN)
 #include "backends/gooey_backend_internal.h"
 
 void GooeyDropdown_Draw(GooeyWindow *win)
@@ -162,3 +163,4 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
 
     return click_handled;
 }
+#endif

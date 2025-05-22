@@ -16,8 +16,10 @@
  */
 
 #include "widgets/gooey_radiobutton.h"
+#if(ENABLE_RADIOBUTTON)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
+#define RADIO_BUTTON_RADIUS 10 /** Radius of the radio button widget. */
 
 GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create()
 {
@@ -97,3 +99,4 @@ GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
 
     return radio_button;
 }
+#endif

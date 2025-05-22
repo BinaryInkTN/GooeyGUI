@@ -11,7 +11,7 @@
 #define GOOEY_CHECKBOX_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_CHECKBOX)
 /**
  * @brief Adds a checkbox to the specified window.
  *
@@ -28,5 +28,5 @@
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
                                  void (*callback)(bool checked));
 
-
+#endif
 #endif // GOOEY_CHECKBOX_H

@@ -11,7 +11,7 @@
 #define GOOEY_IMAGE_H
 
 #include "common/gooey_common.h"
-
+#if (ENABLE_IMAGE)
 /**
  * @brief Adds an image to a Gooey window.
  *
@@ -31,4 +31,5 @@ GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, i
 void GooeyImage_SetImage(GooeyImage *image, const char *image_path);
 void GooeyImage_Damage(GooeyImage *image);
 
+#endif
 #endif

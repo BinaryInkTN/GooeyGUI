@@ -13,7 +13,7 @@
  #define GOOEY_DROPDOWN_INTERNAL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_DROPDOWN)
  /**
   * @brief Handles click events for dropdown menus within the specified window.
   *
@@ -38,6 +38,6 @@
   * @param win The window containing the dropdown menu.
   */
  void GooeyDropdown_Draw(GooeyWindow *win);
- 
- #endif // GOOEY_DROPDOWN_INTERNAL_H
+#endif
+#endif // GOOEY_DROPDOWN_INTERNAL_H
  

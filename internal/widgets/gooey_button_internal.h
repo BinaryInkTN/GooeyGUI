@@ -1,3 +1,4 @@
+
 /**
  * @file gooey_button.h
  * @brief Button handling functions for the Gooey GUI library.
@@ -11,6 +12,7 @@
 #define GOOEY_BUTTON_INTERNAL_H
 
 #include "common/gooey_common.h"
+#if (ENABLE_BUTTON)
 #include <stdbool.h>
 
 /**
@@ -39,4 +41,5 @@ bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y);
 void GooeyButton_Draw(GooeyWindow *win);
 
 
+#endif
 #endif

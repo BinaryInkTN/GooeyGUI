@@ -12,7 +12,7 @@
  #define GOOEY_LIST_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_LIST)
  /**
   * @brief Creates a widget.
   *
@@ -56,4 +56,4 @@
  void GooeyList_ShowSeparator(GooeyList *list, bool state);
  void GooeyList_UpdateItem(GooeyList *list, size_t item_index, const char *title, const char *description);
  #endif // GOOEY_LIST_H
- 
+ #endif

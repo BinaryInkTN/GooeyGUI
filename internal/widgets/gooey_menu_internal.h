@@ -12,7 +12,7 @@
 #define GOOEY_MENU_INTERNAL_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_MENU)
 /**
  * @brief Handles menu item click events.
  *
@@ -34,4 +34,5 @@ bool GooeyMenu_HandleHover(GooeyWindow *win);
  */
 void GooeyMenu_Draw(GooeyWindow *win);
 
+#endif
 #endif // GOOEY_MENU_H

@@ -11,7 +11,7 @@
  #define GOOEY_IMAGE_INTERNAL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_IMAGE)
 
  bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY);
  
@@ -23,5 +23,6 @@
   * @param win The Gooey window containing the images to draw.
   */
  void GooeyImage_Draw(GooeyWindow* win);
- 
+
+#endif
  #endif

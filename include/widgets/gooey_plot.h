@@ -14,7 +14,7 @@
 #define GOOEY_PLOT_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_PLOT)
 /**
  * @brief Creates a plot widget.
  *
@@ -44,5 +44,5 @@ GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int 
  */
 void GooeyPlot_Update(GooeyPlot *plot, GooeyPlotData *new_data);
 
-
+#endif
 #endif /* GOOEY_PLOT_H */

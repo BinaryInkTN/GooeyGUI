@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_tabs.h"
+#if(ENABLE_TABS)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_tabs_internal.h"
@@ -100,3 +101,4 @@ void GooeyTabs_SetActiveTab(GooeyTabs *tabs, size_t tab_id)
 
     tabs->active_tab_id = tab_id;
 }
+#endif

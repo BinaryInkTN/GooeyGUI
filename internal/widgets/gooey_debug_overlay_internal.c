@@ -15,6 +15,7 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 #include "gooey_debug_overlay_internal.h"
+#if(ENABLE_DEBUG_OVERLAY)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include "common/gooey_common.h"
@@ -149,3 +150,4 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     active_backend->DrawText(x_pos + padding, current_y, time_text,
                              win->active_theme->neutral, 0.27f, win->creation_id);
 }
+#endif

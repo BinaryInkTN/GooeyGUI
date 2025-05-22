@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_list.h"
+#if(ENABLE_LIST)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -99,3 +100,4 @@ void GooeyList_ShowSeparator(GooeyList *list, bool state)
 {
     list->show_separator = state;
 }
+#endif

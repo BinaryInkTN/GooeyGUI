@@ -1,3 +1,4 @@
+
 /**
  * @file gooey_button.h
  * @brief Button handling functions for the Gooey GUI library.
@@ -11,6 +12,8 @@
 #define GOOEY_BUTTON_H
 
 #include "common/gooey_common.h"
+#if (ENABLE_BUTTON)
+
 #include <stdbool.h>
 
 /**
@@ -53,4 +56,5 @@ void GooeyButton_SetText(GooeyButton *button, const char *text);
  */
 void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted);
 
+#endif
 #endif

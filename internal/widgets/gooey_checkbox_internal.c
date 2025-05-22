@@ -1,5 +1,7 @@
 #include "gooey_checkbox_internal.h"
+#if (ENABLE_CHECKBOX)
 #include "backends/gooey_backend_internal.h"
+#define CHECKBOX_SIZE 20 /** Size of a checkbox widget. */
 
 void GooeyCheckbox_Draw(GooeyWindow *win)
 {
@@ -46,3 +48,4 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y)
     }
     return false;
 }
+#endif

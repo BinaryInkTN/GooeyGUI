@@ -16,6 +16,7 @@
  */
 
 #include <widgets/gooey_plot.h>
+#if(ENABLE_PLOT)
 #include <stdint.h>
 #include <math.h>
 #include <float.h>
@@ -191,3 +192,4 @@ void GooeyPlot_Update(GooeyPlot *plot, GooeyPlotData *new_data)
     add_placeholder_point(plot->data, false);
     sort_data(plot->data);
 }
+#endif

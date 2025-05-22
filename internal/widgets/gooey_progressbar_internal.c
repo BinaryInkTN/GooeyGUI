@@ -16,6 +16,7 @@
  */
 
 #include "gooey_progressbar_internal.h"
+#if(ENABLE_PROGRESSBAR)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <string.h>
@@ -119,3 +120,4 @@ void GooeyProgressBar_Draw(GooeyWindow *win)
         DrawProgressPercentage(progressbar, win);
     }
 }
+#endif

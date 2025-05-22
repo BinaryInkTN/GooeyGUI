@@ -2,7 +2,7 @@
 #define GOOEY_RADIOBUTTON_INTERNAL_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_RADIOBUTTON)
 /**
  * @brief Handles radio button click events.
  *
@@ -40,5 +40,5 @@ bool GooeyRadioButtonGroup_HandleClick(GooeyWindow *win, int x, int y);
  * @param win The window to draw the radio button group on.
  */
 void GooeyRadioButtonGroup_Draw(GooeyWindow *win);
-
+#endif
 #endif /* GOOEY_RADIOBUTTON_H */

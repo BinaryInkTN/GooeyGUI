@@ -1,4 +1,5 @@
 #include "gooey_meter_internal.h"
+#if(ENABLE_METER)
 #include "common/gooey_common.h"
 #include "backends/gooey_backend_internal.h"
 
@@ -135,3 +136,4 @@ void GooeyMeter_Draw(GooeyWindow *win)
 
         }
 }
+#endif

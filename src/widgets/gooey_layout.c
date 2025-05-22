@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_layout.h"
+#if(ENABLE_LAYOUT)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -93,3 +94,4 @@ void GooeyLayout_Destroy(GooeyLayout *layout)
     // Note: This doesn't free child widgets - ownership must be managed separately
     free(layout);
 }
+#endif

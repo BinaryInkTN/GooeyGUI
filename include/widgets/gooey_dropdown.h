@@ -13,7 +13,7 @@
  #define GOOEY_DROPDOWN_H
  
  #include "common/gooey_common.h"
- 
+#if (ENABLE_DROPDOWN)
  /**
   * @brief Adds a dropdown menu to the specified window.
   *
@@ -34,6 +34,6 @@
                                   int num_options,
                                   void (*callback)(int selected_index));
  
- 
+#endif
  #endif // GOOEY_DROPDOWN_H
  

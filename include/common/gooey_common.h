@@ -15,37 +15,8 @@
 #include <stddef.h>
 #include <string.h>
 #include <math.h>
-
+#include "user_config.h"
 #include "theme/gooey_theme.h"
-
-#define MAX_TIMERS 100
-
-/** Maximum number of widgets that can be added to a window. */
-#define MAX_WIDGETS 100
-
-/** Size of a checkbox widget. */
-#define CHECKBOX_SIZE 20
-
-/** Radius of the radio button widget. */
-#define RADIO_BUTTON_RADIUS 10
-
-/** Width of the slider widget. */
-#define SLIDER_WIDTH 100
-
-/** Height of the slider widget. */
-#define SLIDER_HEIGHT 5
-
-/** Maximum number of menu children. */
-#define MAX_MENU_CHILDREN 10
-
-/** Maximum number of radio buttons in a group. */
-#define MAX_RADIO_BUTTONS 10
-
-/** Maximum number of plots. */
-#define MAX_PLOT_COUNT 100
-
-/** Maximum number of tabs. */
-#define MAX_TABS 50
 
 /**
  * @brief Enumeration for widget types in the Gooey framework.

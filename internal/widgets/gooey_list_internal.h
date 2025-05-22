@@ -12,7 +12,7 @@
  #define GOOEY_LIST_INTERNAL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_LIST)
  /**
   * @brief Handles scroll events for a list widget.
   *
@@ -55,6 +55,6 @@
   * @param window The window on which the list widget will be drawn.
   */
  void GooeyList_Draw(GooeyWindow *window);
- 
+#endif
  #endif // GOOEY_LIST_H
  

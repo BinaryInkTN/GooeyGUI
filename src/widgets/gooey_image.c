@@ -1,4 +1,5 @@
 #include "widgets/gooey_image.h"
+#if(ENABLE_IMAGE)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <fcntl.h>
@@ -52,3 +53,4 @@ void GooeyImage_Damage(GooeyImage *image)
 {
     image->needs_refresh = access(image->image_path, F_OK) == 0;
 }
+#endif

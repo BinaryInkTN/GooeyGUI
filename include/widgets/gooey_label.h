@@ -13,7 +13,7 @@
  #define GOOEY_LABEL_H
  
  #include "common/gooey_common.h"
- 
+#if(ENABLE_LABEL)
  /**
   * @brief Creates a Label.
   *
@@ -46,6 +46,7 @@
   * @param color A string representing the color (e.g., "red", "#FF0000").
   */
  void GooeyLabel_SetColor(GooeyLabel *label, unsigned long color);
- 
+
+#endif
  #endif // GOOEY_LABEL_H
  

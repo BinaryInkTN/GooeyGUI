@@ -1,3 +1,5 @@
+
+
 /*
  Copyright (c) 2024 Yassine Ahmed Ali
 
@@ -16,6 +18,7 @@
  */
 
 #include "widgets/gooey_canvas.h"
+#if (ENABLE_CANVAS)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -110,3 +113,4 @@ void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex)
     canvas->elements[canvas->element_count++] = (CanvaElement){.operation = CANVA_DRAW_SET_FG, .args = args};
     LOG_INFO("Set foreground with color %lX.", color_hex);
 }
+#endif

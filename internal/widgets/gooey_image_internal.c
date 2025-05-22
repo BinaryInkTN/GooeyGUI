@@ -1,4 +1,5 @@
 #include "gooey_image_internal.h"
+#if(ENABLE_IMAGE)
 #include "backends/gooey_backend_internal.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -41,3 +42,4 @@ void GooeyImage_Draw(GooeyWindow *win)
         active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
     }
 }
+#endif

@@ -2,6 +2,7 @@
 #define GOOEY_TEXTBOX_INTERNAL_H
 
 #include "common/gooey_common.h"
+#if(ENABLE_TEXTBOX)
 #include <stdbool.h>
 
 /**
@@ -38,5 +39,6 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param event The key event to handle.
  */
 void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
+#endif
 
 #endif /* GOOEY_TEXTBOX_H */

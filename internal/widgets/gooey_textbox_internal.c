@@ -1,4 +1,5 @@
 #include "gooey_textbox_internal.h"
+#if(ENABLE_TEXTBOX)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include <ctype.h>
@@ -193,3 +194,4 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y) {
   }
   return false;
 }
+#endif

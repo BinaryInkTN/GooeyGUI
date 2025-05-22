@@ -16,8 +16,10 @@
  */
 
 #include "widgets/gooey_checkbox.h"
+#if(ENABLE_CHECKBOX)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
+#define CHECKBOX_SIZE 20 /** Size of a checkbox widget. */
 
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
                                     void (*callback)(bool checked))
@@ -52,3 +54,4 @@ GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
 
     return checkbox;
 }
+#endif

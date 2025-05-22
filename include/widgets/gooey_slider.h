@@ -2,6 +2,7 @@
 #define GOOEY_SLIDER_H
 
 #include "common/gooey_common.h"
+#if(ENABLE_SLIDER)
 #include <stdbool.h>
 
 /**
@@ -48,5 +49,5 @@ long GooeySlider_GetValue(GooeySlider *slider);
  */
 void GooeySlider_SetValue(GooeySlider *slider, long value);
 
-
+#endif
 #endif /* GOOEY_SLIDER_H */

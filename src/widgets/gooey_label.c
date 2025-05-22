@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_label.h"
+#if(ENABLE_LABEL)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -54,3 +55,4 @@ void GooeyLabel_SetText(GooeyLabel *label, const char *text)
     if (label)
         strcpy(label->text, text);
 }
+#endif

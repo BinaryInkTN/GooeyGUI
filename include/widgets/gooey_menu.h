@@ -12,7 +12,7 @@
 #define GOOEY_MENU_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_MENU)
 /**
  * @brief Sets the menu for the specified Gooey window.
  *
@@ -43,5 +43,5 @@ GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title);
  */
 void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title, void (*callback)());
 
-
+#endif
 #endif // GOOEY_MENU_H

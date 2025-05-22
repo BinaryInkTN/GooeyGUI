@@ -1,4 +1,5 @@
 #include "widgets/gooey_meter.h"
+#if(ENABLE_METER)
 #include "logger/pico_logger_internal.h"
 #include "backends/gooey_backend_internal.h"
 
@@ -38,3 +39,4 @@ void GooeyMeter_Update(GooeyMeter *meter, long new_value)
 
     meter->value = new_value;
 }
+#endif

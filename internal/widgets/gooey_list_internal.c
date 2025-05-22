@@ -1,4 +1,5 @@
 #include "gooey_list_internal.h"
+#if(ENABLE_LIST)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
@@ -225,3 +226,4 @@ bool GooeyList_HandleThumbScroll(GooeyWindow *window, void *scroll_event)
     }
     return false;
 }
+#endif

@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_textbox.h"
+#if(ENABLE_TEXTBOX)
 #include <math.h>
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
@@ -70,3 +71,4 @@ void GooeyTextbox_setText(GooeyTextbox *textbox, const char *text)
     }
     strcpy(textbox->text, text);
 }
+#endif

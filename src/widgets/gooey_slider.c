@@ -16,9 +16,12 @@
  */
 
 #include "widgets/gooey_slider.h"
+#if(ENABLE_SLIDER)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
+#define SLIDER_WIDTH 100
+#define SLIDER_HEIGHT 5
 GooeySlider *GooeySlider_Create( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
                              void (*callback)(long value))
@@ -71,3 +74,4 @@ void GooeySlider_setValue(GooeySlider *slider, long value)
 
     slider->value = value;
 }
+#endif

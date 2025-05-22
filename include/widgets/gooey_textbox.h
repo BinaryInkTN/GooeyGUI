@@ -2,6 +2,7 @@
 #define GOOEY_TEXTBOX_H
 
 #include "common/gooey_common.h"
+#if(ENABLE_TEXTBOX)
 #include <stdbool.h>
 
 /**
@@ -78,5 +79,5 @@ const char *GooeyTextbox_GetText(GooeyTextbox *textbox);
  * @param text The new text to set in the textbox.
  */
 void GooeyTextbox_SetText(GooeyTextbox *textbox, const char *text);
-
+#endif
 #endif /* GOOEY_TEXTBOX_H */

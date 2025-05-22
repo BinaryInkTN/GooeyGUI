@@ -1,3 +1,4 @@
+
 /**
  * @file gooey_canvas.h
  * @brief Header file for the GooeyCanvas module.
@@ -12,6 +13,7 @@
 #define GOOEY_CANVAS_INTERNAL_H
 
 #include "common/gooey_common.h"
+#if (ENABLE_CANVAS)
 
 /**
  * @brief Draws the canvas onto the specified window.
@@ -23,3 +25,4 @@
 void GooeyCanvas_Draw(GooeyWindow *window);
 
 #endif // GOOEY_CANVAS_INTERNAL_H
+#endif

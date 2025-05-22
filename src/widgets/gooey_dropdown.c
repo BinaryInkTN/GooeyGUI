@@ -16,6 +16,7 @@
  */
 
 #include "widgets/gooey_dropdown.h"
+#if(ENABLE_DROPDOWN)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -51,3 +52,5 @@ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
     dropdown->is_open = false;
     return dropdown;
 }
+#endif
+

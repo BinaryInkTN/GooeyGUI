@@ -13,7 +13,7 @@
  #define GOOEY_LAYOUT_H
 
  #include "common/gooey_common.h"
-
+#if(ENABLE_LAYOUT)
  /**
   * @brief Creates a layout.
   *
@@ -40,4 +40,5 @@
   */
  void GooeyLayout_AddChild(GooeyLayout *layout, void *widget);
 
+#endif
  #endif // GOOEY_LAYOUT_H

@@ -1,4 +1,5 @@
 #include "widgets/gooey_drop_surface.h"
+#if(ENABLE_DROP_SURFACE)
 #include "backends/gooey_backend_internal.h"
 #include "assets/drop_surface_image.h"
 #include "logger/pico_logger_internal.h"
@@ -33,3 +34,4 @@ void GooeyDropSurface_Clear(GooeyDropSurface *drop_surface)
 {
     drop_surface->is_file_dropped = false;
 }
+#endif

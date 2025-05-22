@@ -1,6 +1,8 @@
 #include "gooey_slider_internal.h"
+#if(ENABLE_SLIDER)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
+
 
 #define GOOEY_SLIDER_DEFAULT_RADIUS 2.0f
 void GooeySlider_Draw(GooeyWindow *win)
@@ -99,3 +101,4 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *drag_event)
 
     return false;
 }
+#endif

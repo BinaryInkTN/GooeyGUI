@@ -12,7 +12,7 @@
 #define GOOEY_DROP_SURFACE_INTERNAL_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_DROP_SURFACE)
 /**
  * @brief Handles file drop events for drop surfaces within the specified window.
  *
@@ -35,5 +35,5 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY);
  * @param win The window containing the drop surfaces.
  */
 void GooeyDropSurface_Draw(GooeyWindow *win);
-
+#endif
 #endif // GOOEY_DROP_SURFACE_H

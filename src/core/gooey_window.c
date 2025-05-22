@@ -609,26 +609,62 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
-    for (size_t i = 0; i < win->layout_count; ++i)
+    for (size_t i = 0; i < win->layout_count; ++i) {
+#if(ENABLE_LAYOUT)
         GooeyLayout_Build(win->layouts[i]);
+#endif
+    }
+#if (ENABLE_TABS)
     GooeyTabs_Draw(win);
+#endif
+#if (ENABLE_CANVAS)
     GooeyCanvas_Draw(win);
+#endif
+#if (ENABLE_METER)
     GooeyMeter_Draw(win);
+#endif
+#if (ENABLE_PROGRESSBAR)
     GooeyProgressBar_Draw(win);
+#endif
+#if(ENABLE_DROP_SURFACE)
     GooeyDropSurface_Draw(win);
+#endif
+#if(ENABLE_IMAGE)
     GooeyImage_Draw(win);
+#endif
+#if(ENABLE_LIST)
     GooeyList_Draw(win);
+#endif
+#if (ENABLE_BUTTON)
     GooeyButton_Draw(win);
+#endif
+#if(ENABLE_TEXTBOX)
     GooeyTextbox_Draw(win);
+#endif
+#if (ENABLE_CHECKBOX)
     GooeyCheckbox_Draw(win);
+#endif
+#if (ENABLE_RADIOBUTTON)
     GooeyRadioButtonGroup_Draw(win);
+#endif
+#if (ENABLE_SLIDER)
     GooeySlider_Draw(win);
+#endif
+#if (ENABLE_PLOT)
     GooeyPlot_Draw(win);
+#endif
+#if(ENABLE_DROPDOWN)
     GooeyDropdown_Draw(win);
+#endif
+#if(ENABLE_LABEL)
     GooeyLabel_Draw(win);
+#endif
+#if(ENABLE_MENU)
     GooeyMenu_Draw(win);
+#endif
+#if(ENABLE_DEBUG_OVERLAY)
      GooeyDebugOverlay_Draw(win);
-
+#endif
     active_backend->Render(win);
 }
 
@@ -656,18 +692,30 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
     active_backend->UpdateBackground(window);
-
+#if(ENABLE_SLIDER)
     needs_redraw |= GooeySlider_HandleDrag(window, event);
+#endif
+
+#if (ENABLE_BUTTON)
     GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+#endif
+#if(ENABLE_MENU)
     GooeyMenu_HandleHover(window);
+#endif
+#if(ENABLE_DROPDOWN)
     GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+#endif
+#if(ENABLE_LIST)
     needs_redraw |= GooeyList_HandleThumbScroll(window, event);
+#endif
 
     switch (event->type)
     {
 
     case GOOEY_EVENT_MOUSE_SCROLL:
+#if(ENABLE_LIST)
         needs_redraw |= GooeyList_HandleScroll(window, event);
+#endif
         break;
 
     case GOOEY_EVENT_RESIZE:
@@ -679,24 +727,44 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_KEY_PRESS:
+#if(ENABLE_TEXTBOX)
         GooeyTextbox_HandleKeyPress(window, event);
+#endif
         needs_redraw = true;
         break;
 
     case GOOEY_EVENT_CLICK_PRESS:
     {
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
-        needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
-        needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
-        needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
 
+#if(ENABLE_BUTTON)
+        needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if (ENABLE_DROPDOWN)
+        needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_CHECKBOX)
+        needs_redraw |= GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_RADIOBUTTON)
+        needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_TEXTBOX)
+        needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_MENU)
+        needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_LIST)
+        needs_redraw |= GooeyList_HandleThumbScroll(window, event);
+        needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_IMAGE)
+        needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
+#if(ENABLE_TABS)
+        needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
         break;
     }
 
@@ -705,7 +773,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_DROP:
+#if (ENABLE_DROP_SURFACE)
         needs_redraw |= GooeyDropSurface_HandleFileDrop(window, event->drop_data.drop_x, event->drop_data.drop_y);
+#endif
         break;
 
     case GOOEY_EVENT_WINDOW_CLOSE:

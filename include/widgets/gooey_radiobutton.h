@@ -2,7 +2,7 @@
 #define GOOEY_RADIOBUTTON_H
 
 #include "common/gooey_common.h"
-
+#if(ENABLE_RADIOBUTTON)
 /**
  * @brief Adds a radio button to the window.
  *
@@ -86,5 +86,5 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
  * @param win The window to draw the radio button group on.
  */
 void GooeyRadioButtonGroup_Draw(GooeyWindow *win);
-
+#endif
 #endif /* GOOEY_RADIOBUTTON_H */

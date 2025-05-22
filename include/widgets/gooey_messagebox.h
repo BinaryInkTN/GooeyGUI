@@ -13,7 +13,7 @@
  #define GOOEY_MESSAGEBOX_H
  
  #include "common/gooey_common.h"
- 
+
  /**
   * @brief Creates a message box window.
   *

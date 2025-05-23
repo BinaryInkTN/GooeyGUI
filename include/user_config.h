@@ -2,7 +2,7 @@
 #define USER_CONFIG_H
 
 // DEBUG/PROD
-#define PROJECT_BRANCH 1 // 1=debug 2=prod
+#define PROJECT_BRANCH 1 // 0=debug 1=prod TODO
 
 // MAX
 #define MAX_TIMERS 100 /** Maximum number of timer objects. */
@@ -24,7 +24,7 @@
 #define ENABLE_LABEL 1
 #define ENABLE_LAYOUT 1
 #define ENABLE_LIST 1
- #define ENABLE_MENU 1
+#define ENABLE_MENU 1
 #define ENABLE_METER 1
 #define ENABLE_PLOT 1
 #define ENABLE_PROGRESSBAR 1

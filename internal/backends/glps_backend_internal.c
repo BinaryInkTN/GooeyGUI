@@ -969,9 +969,10 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
-        glps_wm_window_update(ctx.wm, 0);
+        for (size_t i = 0; i < ctx.active_window_count; ++i)
+            glps_wm_window_update(ctx.wm, i);
 
-    //  for (size_t i = 0; i < ctx.active_window_count; ++i)
+
 
         for (size_t i = 0; i < ctx.timer_count; ++i)
             glps_timer_check_and_call(ctx.timers[i]);

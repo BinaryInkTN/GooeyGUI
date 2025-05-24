@@ -40,5 +40,7 @@
   */
  void GooeyLayout_AddChild(GooeyLayout *layout, void *widget);
 
+void GooeyLayout_Build(GooeyLayout* layout);
+
 #endif
  #endif // GOOEY_LAYOUT_H

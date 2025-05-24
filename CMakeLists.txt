@@ -32,6 +32,7 @@ set(SOURCES
     src/widgets/gooey_canvas.c
     src/widgets/gooey_checkbox.c
     src/widgets/gooey_dropdown.c
+        src/widgets/gooey_messagebox.c
     src/widgets/gooey_label.c
     src/widgets/gooey_layout.c
     src/widgets/gooey_list.c

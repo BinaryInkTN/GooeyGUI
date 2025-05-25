@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gooey - Quickstart Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css"/>
+
+    <style>
+        :root {
+            --primary: #4285F4;
+            --secondary: #34A853;
+            --accent: #FBBC04;
+            --error: #EA4335;
+            --bg: #FFFFFF;
+            --surface: #F8F9FA;
+            --on-surface: #202124;
+            --text-primary: #3C4043;
+            --text-secondary: #5F6368;
+            --border: #DADCE0;
+            --radius: 8px;
+        }
+        
+        body {
+            font-family: 'Google Sans', sans-serif;
+            color: var(--text-primary);
+            background: var(--bg);
+            margin: 0;
+            line-height: 1.6;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            margin: 0;
+            color: var(--on-surface);
+        }
+        
+        .sidebar-version {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 4px 0 0;
+        }
+        
+        nav {
+            padding: 16px 0;
+        }
+        
+        .nav-section {
+            margin-bottom: 24px;
+        }
+        
+        .nav-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            padding: 8px 20px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 8px 20px 8px 28px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0,0,0,0.04);
+            color: var(--primary);
+        }
+        
+        .nav-link.active {
+            border-left-color: var(--primary);
+            padding-left: 25px;
+        }
+        
+        /* Main Content */
+        .content {
+            padding: 40px;
+            max-width: 900px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin: 0 0 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin: 48px 0 16px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 500;
+            margin: 32px 0 12px;
+        }
+        
+        p, li {
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Code Blocks */
+        pre {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 16px 0;
+        }
+        
+        code {
+            font-family: 'Roboto Mono', monospace;
+            background: var(--surface);
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* API Reference */
+        .api-item {
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .api-name {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 18px;
+            color: var(--primary);
+        }
+        
+        .api-type {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .api-description {
+            margin: 8px 0;
+        }
+        
+        .api-params, .api-returns {
+            margin: 16px 0;
+        }
+        
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+        }
+        
+        .param-table th, .param-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .param-table th {
+            background: var(--surface);
+            font-weight: 500;
+        }
+        
+        /* Callouts */
+        .callout {
+            padding: 16px;
+            border-radius: var(--radius);
+            margin: 16px 0;
+            background: var(--surface);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .callout.warning {
+            border-left-color: var(--accent);
+            background: rgba(251,188,4,0.08);
+        }
+        
+        .callout.important {
+            border-left-color: var(--error);
+            background: rgba(234,67,53,0.08);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .content {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">Gooey</h1>
+            <p class="sidebar-version">v1.0.2</p>
+        </div>
+        
+        <nav>
+            <div class="nav-section">
+                <h2 class="nav-title">Getting Started</h2>
+                <ul class="nav-links">
+
+                    <li><a href="#introduction" class="nav-link active">Introduction</a></li>
+                                        <li><a href="#config-build" class="nav-link">Configure Build</a></li>
+
+                    <li><a href="#installation" class="nav-link">Installation</a></li>
+                    <li><a href="#quickstart" class="nav-link">Quickstart</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-section">
+                <h2 class="nav-title">Core Concepts</h2>
+                <ul class="nav-links">
+                    <li><a href="#architecture" class="nav-link">Architecture</a></li>
+                    <li><a href="#widgets" class="nav-link">Widgets</a></li>
+                    <li><a href="#layout" class="nav-link">Layout System</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-section">
+                <h2 class="nav-title">API Reference</h2>
+                <ul class="nav-links">
+                    <li><a href="docs/files.html" class="nav-link">Full API Reference</a></li>
+                
+                </ul>
+            </div>
+        
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="content">
+        <!-- Introduction -->
+        <section id="introduction">
+            <h1>Introduction to Gooey</h1>
+            <p>Gooey is a lightweight, cross-platform GUI framework for building native-feeling applications with a single codebase. Written in pure C, Gooey provides a simple yet powerful API for creating beautiful user interfaces.</p>
+            
+            <div class="callout">
+                <p><strong>Note:</strong> Web support is still in development, will release on v1.0.3.</p>
+            </div>
+            
+            
+        </section>
+        
+
+         <section id="config-build">
+ <h2>Customize your build of Gooey</h2>
+            <p>If you're building from source you can enable/disable features in <code>include/user_config.h</code>.</p>
+
+                   <pre><code class="language-c">#ifndef USER_CONFIG_H
+#define USER_CONFIG_H
+
+// DEBUG/PROD
+#define PROJECT_BRANCH 1 // 0=debug 1=prod TODO
+
+// MAX
+#define MAX_TIMERS 100 /** Maximum number of timer objects. */
+#define MAX_WIDGETS 100 /** Maximum number of widgets that can be added to a window. */
+#define MAX_MENU_CHILDREN 10 /** Maximum number of menu children. */
+#define MAX_RADIO_BUTTONS 10 /** Maximum number of radio buttons in a group. */
+#define MAX_PLOT_COUNT 100 /** Maximum number of plots. */
+#define MAX_TABS 50 /** Maximum number of tabs. */
+
+// ENABLE/DISABLE WIDGETS
+#define ENABLE_BUTTON 1
+#define ENABLE_CANVAS 1
+#define ENABLE_CHECKBOX 1
+#define ENABLE_CTX_MENU 1 // TODO
+#define ENABLE_DEBUG_OVERLAY 1
+#define ENABLE_DROP_SURFACE 1
+#define ENABLE_DROPDOWN 1
+#define ENABLE_IMAGE 1
+#define ENABLE_LABEL 1
+#define ENABLE_LAYOUT 1
+#define ENABLE_LIST 1
+#define ENABLE_MENU 1
+#define ENABLE_METER 1
+#define ENABLE_PLOT 1
+#define ENABLE_PROGRESSBAR 1
+#define ENABLE_RADIOBUTTON 1
+#define ENABLE_SLIDER 1
+#define ENABLE_TABS 1
+#define ENABLE_TEXTBOX 1
+
+#endif
+</code></pre>
+         </section>
+        <!-- Installation -->
+        <section id="installation">
+            <h2>Installation</h2>
+            <p>To get started with Gooey, download the latest release for your platform:</p>
+            
+            <h3>Linux</h3>
+            <pre ><code class="language-bash"># For X11 systems:
+wget https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_x11.tar.gz
+
+# Extract archive
+tar -xvzf gooey_x11.tar.gz
+
+# move .so lib files into /usr/local/lib/
+</code></pre>
+            
+           
+            <h3>Windows</h3>
+            <pre><code class="language-bash"># Download the dlls from:
+# https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_win32.zip</code></pre>
+        </section>
+          <div class="callout">
+                <p><strong>Note:</strong> For older releases visit the <a href="https://github.com/GooeyUI/GooeyGUI/releases">release page</a>.</p>
+            </div>
+        <!-- Quickstart -->
+        <section id="quickstart">
+            <h2>Quickstart</h2>
+            <p>Here's a simple hello world example with a message box widget:</p>
+            
+            <pre><code class="language-c">#include "gooey.h"
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+bool state = false;
+GooeyWindow *msgBox;
+
+void messageBoxCallback(int option)
+{
+    LOG_INFO("MessageBox option: %d", option);
+}
+
+void onButtonClick()
+{
+    state = !state;
+    GooeyWindow_MakeVisible(msgBox, state);
+}
+
+int main()
+{
+    Gooey_Init();
+
+    GooeyWindow* win = GooeyWindow_Create("Hello World", 400, 300, true);
+
+    msgBox = GooeyMessageBox_Create("Hello", "Welcome to Gooey!", MSGBOX_INFO, messageBoxCallback);
+
+    GooeyMessageBox_Show(&msgBox);
+
+    GooeyButton *btn = GooeyButton_Create("Click Me", 150, 100, 100, 40, onButtonClick);
+
+    GooeyWindow_Run(2, win, msgBox);
+
+    GooeyWindow_Cleanup(2, win, msgBox);
+
+    return 0;
+}
+</code></pre>
+            
+            <div class="callout important">
+                <p><strong>Important:</strong> Remember to link against the Gooey library when compiling <code>-lGooeyGUI</code> and to provide the installation .so or .dll folder <code>-Lfolder_containing_lib</code></p>
+            </div>
+        </section>
+
+    
+  
+                <p><strong>Searching for full API reference?</strong> <a href="docs/files.html"> visit here</a></p>
+            
+                    <!-- Core Concepts -->
+        <section id="architecture">
+            <h2>Architecture</h2>
+            <p>Gooey follows a simple yet powerful architecture designed for performance and flexibility:</p>
+            
+            <h3>Component Hierarchy</h3>
+            <p>The Gooey framework is built around these core components:</p>
+            <ul>
+                <li><strong>Application</strong> - The main container that manages windows and global state</li>
+                <li><strong>Window</strong> - Top-level container that holds widgets and handles platform-specific rendering</li>
+                <li><strong>Widgets</strong> - UI elements like buttons, text inputs, and containers</li>
+                <li><strong>Canvas</strong> - Drawing surface for custom rendering</li>
+            </ul>
+
+            <img src="architecture.png" width="700px"/>
+            
+            
+            <div class="callout">
+                <p><strong>Tip:</strong> Events bubble up through the widget hierarchy unless stopped with <code>GooeyEvent_StopPropagation()</code></p>
+            </div>
+        </section>
+        
+        <section id="widgets">
+            <h2>Widgets</h2>
+            <p>Widgets are the building blocks of Gooey applications. All widgets share common properties and methods:</p>
+            
+            <h3>Common Widget Properties</h3>
+            <table class="param-table">
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>is_visible</td>
+                    <td>bool</td>
+                    <td>Controls widget visibility</td>
+                </tr>
+                <tr>
+                    <td>type</td>
+                    <td>WIDGET_TYPE</td>
+                    <td>Contains the widget type</td>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>int</td>
+                    <td>x coordinate.</td>
+                </tr>
+                 <tr>
+                    <td>y</td>
+                    <td>int</td>
+                    <td>y coordinate.</td>
+                </tr>
+                 <tr>
+                    <td>width</td>
+                    <td>int</td>
+                    <td>Width of widget.</td>
+                </tr>
+                 <tr>
+                    <td>height</td>
+                    <td>int</td>
+                    <td>Height of widget</td>
+                </tr>
+               
+            </table>
+            
+            <h3>Widget Types</h3>
+            <p>Gooey provides several built-in widget types:</p>
+            <ul>
+                <li><strong>Basic Controls:</strong> Button, Label, Checkbox, RadioButton, etc...</li>
+                <li><strong>Text Input:</strong> Textbox</li>
+                <li><strong>Containers:</strong> Layout, Tab, etc...</li>
+                <li><strong>Specialized:</strong> ProgressBar, Slider, Meter, etc...</li>
+            </ul>
+            
+            <pre><code class="language-c">// Example widget creation
+GooeyButton* btn = GooeyButton_Create("Click Me", 10, 10, 100, 40);
+GooeyLabel* lbl = GooeyLabel_Create("Hello world", 0.26f, 50, 50);
+
+// Add to window
+GooeyWindow_RegisterWidget(window, (void*)btn);
+GooeyWindow_RegisterWidget(window, (void*)lbl);</code></pre>
+        </section>
+        
+        <section id="layout">
+            <h2>Layout System</h2>
+            <p>Gooey offers flexible layout options for responsive UI design:</p>
+            
+            <h3>Layout</h3>
+            <p>Use layouts for responsive designs:</p>
+            <pre><code class="language-c">// Create a vertical layout
+GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400); 
+
+// Add widget
+ void GooeyLayout_AddChild(layout, widget);</code></pre>
+            
+            <h3>Alignment</h3>
+            <p>Control widget positioning within their allocated space:</p>
+          <table class="param-table">
+                <tr>
+                    <th>Property</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+               
+                 <tr>
+                    <td>Grid Layout</td>
+                    <td>LAYOUT_GRID</td>
+                    <td>Put your widgets in a grid layout.</td>
+                </tr>
+                 <tr>
+                    <td>Vertical Layout</td>
+                    <td>LAYOUT_VERTICAL</td>
+                    <td>Put your widgets in a vertical layout.</td>
+                </tr>
+                 <tr>
+                    <td>Horizontal Layout</td>
+                    <td>LAYOUT_HORIZONTAL</td>
+                    <td>Put your widgets in a horizontal layout.</td>
+                </tr>
+               
+            </table>
+<br><br><br><br><br><br><br><br><br>
+    </main>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
+    <script>
+        // Highlight active nav item based on scroll position
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            window.addEventListener('scroll', function() {
+                let current = '';
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (window.scrollY >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

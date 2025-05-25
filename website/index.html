@@ -235,6 +235,8 @@
             text-align: center;
             position: relative;
             overflow: hidden;
+            background: var(--mdc-theme-background);
+
         }
         
         .hero::before {
@@ -244,7 +246,7 @@
             left: 0;
             right: 0;
             height: 400px;
-            background: linear-gradient(135deg, var(--mdc-theme-primary) 0%, var(--mdc-theme-secondary) 100%);
+            background: var(--mdc-theme-background);
             z-index: -1;
             transform: skewY(-40deg);
             transform-origin: top left;
@@ -299,6 +301,8 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             margin-top: 48px;
+            justify-content: center;
+
         }
         .feature-card {
             background-color: var(--mdc-theme-surface);
@@ -793,7 +797,9 @@
             <a href="#features" class="app-bar__nav-item">Features</a>
             <a href="#examples" class="app-bar__nav-item">Examples</a>
             <a href="#download" class="app-bar__nav-item">Download</a>
-            <a href="docs.html" class="app-bar__nav-item">Installation</a>
+            <a href="docs/files.html" class="app-bar__nav-item">Documentation</a>
+
+            <a href="quickstart.html" class="app-bar__nav-item">Quickstart</a>
         </nav>
         
         <div class="app-bar__actions">
@@ -813,7 +819,7 @@
             <h1 class="hero__title fade-in">Build beautiful, cross-platform GUIs with Gooey</h1>
             <p class="hero__subtitle fade-in delay-1">Fluid Web, Linux, and Windows apps all with one code base.</p>
             <div class="hero__buttons fade-in delay-2">
-                <a href="#download" class="mdc-button mdc-button--raised hero-button hero-button--primary">Get Started</a>
+                <a href="quickstart.html" class="mdc-button mdc-button--raised hero-button hero-button--primary">Get Started</a>
                 <a href="builder.html" class="mdc-button hero-button hero-button--secondary">
                     <i class="fas fa-sliders-h" style="margin-right: 8px;"></i>
                     Drag & Drop Builder
@@ -834,7 +840,7 @@
                         <i class="fas fa-laptop-code"></i>
                     </div>
                     <h3 class="feature-title">Cross-Platform</h3>
-                    <p class="feature-description">Write once, build anywhere. Gooey applications work seamlessly on Windows, macOS, Linux and embedded systems with native performance.</p>
+                    <p class="feature-description">Write once, build anywhere. Gooey applications work seamlessly on Windows, Linux and embedded systems with native performance.</p>
                 </div>
                 
                 <div class="feature-card fade-in delay-1">
@@ -1010,7 +1016,10 @@
                     <a href="#features" class="footer-link">Features</a>
                     <a href="#examples" class="footer-link">Examples</a>
                     <a href="#download" class="footer-link">Download</a>
-                    <a href="https://gooeyui.github.io/GooeyGUI/website/docs/files.html" class="footer-link">Documentation</a>
+
+                    <a href="docs/files.html" class="footer-link">Documentation</a>
+                    <a href="quickstart.html" class="footer-link">Quickstart</a>
+
                 </div>
                 
                 <div>

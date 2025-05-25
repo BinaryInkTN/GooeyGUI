@@ -22,7 +22,7 @@
             --border: #DADCE0;
             --radius: 8px;
         }
-        
+
         body {
             font-family: 'Google Sans', sans-serif;
             color: var(--text-primary);
@@ -33,7 +33,7 @@
             grid-template-columns: 280px 1fr;
             min-height: 100vh;
         }
-        
+
         /* Sidebar */
         .sidebar {
             background: var(--surface);
@@ -44,32 +44,32 @@
             height: 100vh;
             overflow-y: auto;
         }
-        
+
         .sidebar-header {
             padding: 0 20px 16px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .sidebar-title {
             font-size: 18px;
             margin: 0;
             color: var(--on-surface);
         }
-        
+
         .sidebar-version {
             font-size: 14px;
             color: var(--text-secondary);
             margin: 4px 0 0;
         }
-        
+
         nav {
             padding: 16px 0;
         }
-        
+
         .nav-section {
             margin-bottom: 24px;
         }
-        
+
         .nav-title {
             font-size: 14px;
             font-weight: 500;
@@ -79,13 +79,13 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
-        
+
         .nav-links {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        
+
         .nav-link {
             display: block;
             padding: 8px 20px 8px 28px;
@@ -95,23 +95,23 @@
             transition: all 0.2s;
             border-left: 3px solid transparent;
         }
-        
+
         .nav-link:hover, .nav-link.active {
             background: rgba(0,0,0,0.04);
             color: var(--primary);
         }
-        
+
         .nav-link.active {
             border-left-color: var(--primary);
             padding-left: 25px;
         }
-        
+
         /* Main Content */
         .content {
             padding: 40px;
             max-width: 900px;
         }
-        
+
         h1 {
             font-size: 32px;
             font-weight: 400;
@@ -119,33 +119,33 @@
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         h2 {
             font-size: 24px;
             font-weight: 500;
             margin: 48px 0 16px;
         }
-        
+
         h3 {
             font-size: 20px;
             font-weight: 500;
             margin: 32px 0 12px;
         }
-        
+
         p, li {
             color: var(--text-primary);
             font-size: 16px;
         }
-        
+
         a {
             color: var(--primary);
             text-decoration: none;
         }
-        
+
         a:hover {
             text-decoration: underline;
         }
-        
+
         /* Code Blocks */
         pre {
             background: var(--surface);
@@ -157,7 +157,7 @@
             line-height: 1.5;
             margin: 16px 0;
         }
-        
+
         code {
             font-family: 'Roboto Mono', monospace;
             background: var(--surface);
@@ -165,20 +165,20 @@
             border-radius: 4px;
             font-size: 14px;
         }
-        
+
         /* API Reference */
         .api-item {
             margin-bottom: 32px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .api-name {
             font-family: 'Roboto Mono', monospace;
             font-size: 18px;
             color: var(--primary);
         }
-        
+
         .api-type {
             display: inline-block;
             background: var(--primary);
@@ -189,32 +189,32 @@
             margin-left: 8px;
             vertical-align: middle;
         }
-        
+
         .api-description {
             margin: 8px 0;
         }
-        
+
         .api-params, .api-returns {
             margin: 16px 0;
         }
-        
+
         .param-table {
             width: 100%;
             border-collapse: collapse;
             margin: 8px 0;
         }
-        
+
         .param-table th, .param-table td {
             padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
         }
-        
+
         .param-table th {
             background: var(--surface);
             font-weight: 500;
         }
-        
+
         /* Callouts */
         .callout {
             padding: 16px;
@@ -223,30 +223,30 @@
             background: var(--surface);
             border-left: 4px solid var(--primary);
         }
-        
+
         .callout.warning {
             border-left-color: var(--accent);
             background: rgba(251,188,4,0.08);
         }
-        
+
         .callout.important {
             border-left-color: var(--error);
             background: rgba(234,67,53,0.08);
         }
-        
+
         /* Responsive */
         @media (max-width: 768px) {
             body {
                 grid-template-columns: 1fr;
             }
-            
+
             .sidebar {
                 position: static;
                 height: auto;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
             }
-            
+
             .content {
                 padding: 24px;
             }
@@ -260,7 +260,7 @@
             <h1 class="sidebar-title">Gooey</h1>
             <p class="sidebar-version">v1.0.2</p>
         </div>
-        
+
         <nav>
             <div class="nav-section">
                 <h2 class="nav-title">Getting Started</h2>
@@ -273,7 +273,7 @@
                     <li><a href="#quickstart" class="nav-link">Quickstart</a></li>
                 </ul>
             </div>
-            
+
             <div class="nav-section">
                 <h2 class="nav-title">Core Concepts</h2>
                 <ul class="nav-links">
@@ -282,32 +282,32 @@
                     <li><a href="#layout" class="nav-link">Layout System</a></li>
                 </ul>
             </div>
-            
+
             <div class="nav-section">
                 <h2 class="nav-title">API Reference</h2>
                 <ul class="nav-links">
                     <li><a href="docs/files.html" class="nav-link">Full API Reference</a></li>
-                
+
                 </ul>
             </div>
-        
+
         </nav>
     </aside>
-    
+
     <!-- Main Content -->
     <main class="content">
         <!-- Introduction -->
         <section id="introduction">
             <h1>Introduction to Gooey</h1>
             <p>Gooey is a lightweight, cross-platform GUI framework for building native-feeling applications with a single codebase. Written in pure C, Gooey provides a simple yet powerful API for creating beautiful user interfaces.</p>
-            
+
             <div class="callout">
                 <p><strong>Note:</strong> Web support is still in development, will release on v1.0.3.</p>
             </div>
-            
-            
+
+
         </section>
-        
+
 
          <section id="config-build">
  <h2>Customize your build of Gooey</h2>
@@ -355,7 +355,7 @@
         <section id="installation">
             <h2>Installation</h2>
             <p>To get started with Gooey, download the latest release for your platform:</p>
-            
+
             <h3>Linux</h3>
             <pre ><code class="language-bash"># For X11 systems:
 wget https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_x11.tar.gz
@@ -365,8 +365,8 @@ tar -xvzf gooey_x11.tar.gz
 
 # move .so lib files into /usr/local/lib/
 </code></pre>
-            
-           
+
+
             <h3>Windows</h3>
             <pre><code class="language-bash"># Download the dlls from:
 # https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_win32.zip</code></pre>
@@ -378,7 +378,7 @@ tar -xvzf gooey_x11.tar.gz
         <section id="quickstart">
             <h2>Quickstart</h2>
             <p>Here's a simple hello world example with a message box widget:</p>
-            
+
             <pre><code class="language-c">#include "gooey.h"
 #include &lt;stdio.h&gt;
 #include &lt;stdbool.h&gt;
@@ -416,21 +416,21 @@ int main()
     return 0;
 }
 </code></pre>
-            
+
             <div class="callout important">
                 <p><strong>Important:</strong> Remember to link against the Gooey library when compiling <code>-lGooeyGUI</code> and to provide the installation .so or .dll folder <code>-Lfolder_containing_lib</code></p>
             </div>
         </section>
 
-    
-  
+
+
                 <p><strong>Searching for full API reference?</strong> <a href="docs/files.html"> visit here</a></p>
-            
+
                     <!-- Core Concepts -->
         <section id="architecture">
             <h2>Architecture</h2>
             <p>Gooey follows a simple yet powerful architecture designed for performance and flexibility:</p>
-            
+
             <h3>Component Hierarchy</h3>
             <p>The Gooey framework is built around these core components:</p>
             <ul>
@@ -443,11 +443,11 @@ int main()
             <img src="architecture.png" width="700px"/>
 
         </section>
-        
+
         <section id="widgets">
             <h2>Widgets</h2>
             <p>Widgets are the building blocks of Gooey applications. All widgets share common properties and methods:</p>
-            
+
             <h3>Common Widget Properties</h3>
             <table class="param-table">
                 <tr>
@@ -485,9 +485,9 @@ int main()
                     <td>int</td>
                     <td>Height of widget</td>
                 </tr>
-               
+
             </table>
-            
+
             <h3>Widget Types</h3>
             <p>Gooey provides several built-in widget types:</p>
             <ul>
@@ -496,7 +496,7 @@ int main()
                 <li><strong>Containers:</strong> Layout, Tab, etc...</li>
                 <li><strong>Specialized:</strong> ProgressBar, Slider, Meter, etc...</li>
             </ul>
-            
+
             <pre><code class="language-c">// Example widget creation
 GooeyButton* btn = GooeyButton_Create("Click Me", 10, 10, 100, 40);
 GooeyLabel* lbl = GooeyLabel_Create("Hello world", 0.26f, 50, 50);
@@ -505,19 +505,24 @@ GooeyLabel* lbl = GooeyLabel_Create("Hello world", 0.26f, 50, 50);
 GooeyWindow_RegisterWidget(window, (void*)btn);
 GooeyWindow_RegisterWidget(window, (void*)lbl);</code></pre>
         </section>
-        
+
         <section id="layout">
             <h2>Layout System</h2>
             <p>Gooey offers flexible layout options for responsive UI design:</p>
-            
+
             <h3>Layout</h3>
             <p>Use layouts for responsive designs:</p>
             <pre><code class="language-c">// Create a vertical layout
-GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400); 
+GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400);
 
 // Add widget
- void GooeyLayout_AddChild(layout, widget);</code></pre>
-            
+GooeyLayout_AddChild(layout, widget);
+
+// Build layout
+GooeyLayout_Build(layout);
+            </code></pre>
+
+
             <h3>Alignment</h3>
             <p>Control widget positioning within their allocated space:</p>
           <table class="param-table">
@@ -526,7 +531,7 @@ GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400);
                     <th>Type</th>
                     <th>Description</th>
                 </tr>
-               
+
                  <tr>
                     <td>Grid Layout</td>
                     <td>LAYOUT_GRID</td>
@@ -542,7 +547,7 @@ GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400);
                     <td>LAYOUT_HORIZONTAL</td>
                     <td>Put your widgets in a horizontal layout.</td>
                 </tr>
-               
+
             </table>
 <br><br><br><br><br><br><br><br><br>
     </main>
@@ -555,17 +560,17 @@ GooeyLayout* layout = GooeyLayout_Create(LAYOUT_VERTICAL, 10, 10, 400, 400);
         document.addEventListener('DOMContentLoaded', function() {
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
-            
+
             window.addEventListener('scroll', function() {
                 let current = '';
-                
+
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     if (window.scrollY >= sectionTop - 100) {
                         current = section.getAttribute('id');
                     }
                 });
-                
+
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     if (link.getAttribute('href') === '#' + current) {

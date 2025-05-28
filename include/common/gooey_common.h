@@ -15,7 +15,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <math.h>
-#include "user_config.h"
+#include "../user_config.h"
 #include "theme/gooey_theme.h"
 
 /**

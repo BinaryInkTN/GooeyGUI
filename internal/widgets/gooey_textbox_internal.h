@@ -39,6 +39,8 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param event The key event to handle.
  */
 void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
+void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y);
+
 #endif
 
 #endif /* GOOEY_TEXTBOX_H */

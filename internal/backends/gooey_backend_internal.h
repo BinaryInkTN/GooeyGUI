@@ -77,6 +77,8 @@ typedef struct GooeyBackend
     void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data);
     void (*StopTimer)(GooeyTimer* timer);
     void (*DestroyTimer)(GooeyTimer *timer);
+    void (*CursorChange)(GOOEY_CURSOR cursor);
+    void (*StopCursorReset)(bool state);
 
 } GooeyBackend;
 

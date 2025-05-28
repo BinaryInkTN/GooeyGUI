@@ -924,6 +924,23 @@ const char *glps_get_key_from_code(void *gooey_event)
 
 void glps_set_cursor(GOOEY_CURSOR cursor)
 {
+    switch (cursor)
+    {
+    case GOOEY_CURSOR_HAND:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_HAND);
+        break;
+    case GOOEY_CURSOR_TEXT:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_IBEAM);
+        break;
+    default:
+        break;
+    }
+    
+}
+
+void glps_stop_cursor_reset(bool state)
+{
+    ctx.inhibit_reset = state;
 }
 
 void glps_destroy_window_from_id(int window_id)
@@ -969,6 +986,10 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
+        if (!ctx.inhibit_reset)
+        {
+            glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_ARROW);
+        }
         for (size_t i = 0; i < ctx.active_window_count; ++i)
             glps_wm_window_update(ctx.wm, i);
 
@@ -1107,4 +1128,7 @@ GooeyBackend glps_backend = {
     .SetTimerCallback = glps_set_callback_for_timer,
     .DestroyTimer = glps_destroy_timer,
     .StopTimer = glps_stop_timer,
-    .Clear = glps_clear};
+    .Clear = glps_clear,
+    .CursorChange = glps_set_cursor,
+    .StopCursorReset = glps_stop_cursor_reset,
+    };

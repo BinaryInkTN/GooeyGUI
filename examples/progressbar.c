@@ -1,4 +1,4 @@
-#include "gooey.h"
+#include <Gooey/gooey.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -67,8 +67,10 @@ int main()
 
     progressbar = GooeyProgressBar_Create(300, 250, 200, 30, progress_percentage);
     GooeyButton *start_btn = GooeyButton_Create("Start/Stop", 300, 300, 200, 40, toggle_progress);
-    GooeyButton *reset_btn = GooeyButton_Create("Reset", 300, 350, 200, 40, reset_progress);
+    GooeyButton *reset_btn = GooeyButton_Create("Reset", 300, 450, 200, 40, reset_progress);
 
+    GooeyTextbox *textbox1 = GooeyTextBox_Create(300, 350, 100, 30, "achref",false, NULL);
+    GooeyWindow_RegisterWidget(win, textbox1);
     GooeyWindow_RegisterWidget(win, progressbar);
     GooeyWindow_RegisterWidget(win, start_btn);
     GooeyWindow_RegisterWidget(win, reset_btn);

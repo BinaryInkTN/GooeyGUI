@@ -708,7 +708,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 #if(ENABLE_LIST)
     needs_redraw |= GooeyList_HandleThumbScroll(window, event);
 #endif
-
+#if(ENABLE_TEXTBOX)
+    GooeyTextbox_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
+#endif
     switch (event->type)
     {
 

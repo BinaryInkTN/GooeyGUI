@@ -197,19 +197,29 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y) {
 
 void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y)
 {
-  active_backend->StopCursorReset(false);
-  for(size_t i = 0; i<win->textboxes_count; i++)
+  static bool was_hovered_over = false;
+  bool is_hovered_over = false;
+
+  for (size_t i = 0; i < win->textboxes_count; ++i)
   {
     GooeyTextbox *textbox = win->textboxes[i];
     if (!textbox || !textbox->core.is_visible)
       continue;
+
     if (x >= textbox->core.x && x <= textbox->core.x + textbox->core.width &&
         y >= textbox->core.y && y <= textbox->core.y + textbox->core.height)
-        {
-          active_backend->StopCursorReset(true);
-          active_backend->CursorChange(GOOEY_CURSOR_TEXT);
-        }
+    {
+      is_hovered_over = true;
+      break;
+    }
+  }
+
+  if (is_hovered_over != was_hovered_over)
+  {
+    active_backend->CursorChange(is_hovered_over ? GOOEY_CURSOR_TEXT : GOOEY_CURSOR_ARROW);
+    was_hovered_over = is_hovered_over;
   }
 }
+
 
 #endif

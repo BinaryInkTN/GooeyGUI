@@ -43,29 +43,35 @@ void GooeyButton_Draw(GooeyWindow *win)
         }
     }
 }
-
 bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
 {
+    static bool was_hovered = false;
     bool hover_over_button = false;
-    active_backend->StopCursorReset(false);
+
     for (size_t i = 0; i < win->button_count; ++i)
     {
-        
         GooeyButton *button = win->buttons[i];
+        if (!button || !button->core.is_visible) // Safety check
+            continue;
+
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
         button->hover = is_within_bounds;
-        hover_over_button = is_within_bounds;
-        if(button->hover)
-        {
-            active_backend->StopCursorReset(true);
-            active_backend->CursorChange(GOOEY_CURSOR_HAND);
+
+        if (is_within_bounds) {
+            hover_over_button = true;
+            break;
         }
     }
-    
+
+    if (hover_over_button != was_hovered) {
+        active_backend->CursorChange(hover_over_button ? GOOEY_CURSOR_HAND : GOOEY_CURSOR_ARROW);
+        was_hovered = hover_over_button;
+    }
 
     return hover_over_button;
 }
+
 
 bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 {

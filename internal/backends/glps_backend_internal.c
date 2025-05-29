@@ -932,6 +932,9 @@ void glps_set_cursor(GOOEY_CURSOR cursor)
     case GOOEY_CURSOR_TEXT:
         glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_IBEAM);
         break;
+        case GOOEY_CURSOR_ARROW:
+            glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_ARROW);
+            break;
     default:
         break;
     }
@@ -986,10 +989,6 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm))
     {
-        if (!ctx.inhibit_reset)
-        {
-            glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_ARROW);
-        }
         for (size_t i = 0; i < ctx.active_window_count; ++i)
             glps_wm_window_update(ctx.wm, i);
 

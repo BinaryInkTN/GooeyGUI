@@ -6,7 +6,7 @@
     <title>Gooey - Quickstart Guide</title>
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css"/>
+    <link id="prism-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css"/>
 
     <style>
         :root {
@@ -23,6 +23,19 @@
             --radius: 8px;
         }
 
+        :root.dark-theme {
+            --primary: #8AB4F8;
+            --secondary: #81C995;
+            --accent: #FDD663;
+            --error: #F28B82;
+            --bg: #202124;
+            --surface: #292A2D;
+            --on-surface: #E8EAED;
+            --text-primary: #E8EAED;
+            --text-secondary: #9AA0A6;
+            --border: #3C4043;
+        }
+
         body {
             font-family: 'Google Sans', sans-serif;
             color: var(--text-primary);
@@ -32,6 +45,31 @@
             display: grid;
             grid-template-columns: 280px 1fr;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
         }
 
         /* Sidebar */
@@ -43,23 +81,27 @@
             top: 0;
             height: 100vh;
             overflow-y: auto;
+            transition: background 0.3s ease, border-color 0.3s ease;
         }
 
         .sidebar-header {
             padding: 0 20px 16px;
             border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
         }
 
         .sidebar-title {
             font-size: 18px;
             margin: 0;
             color: var(--on-surface);
+            transition: color 0.3s ease;
         }
 
         .sidebar-version {
             font-size: 14px;
             color: var(--text-secondary);
             margin: 4px 0 0;
+            transition: color 0.3s ease;
         }
 
         nav {
@@ -78,6 +120,7 @@
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            transition: color 0.3s ease;
         }
 
         .nav-links {
@@ -110,6 +153,7 @@
         .content {
             padding: 40px;
             max-width: 900px;
+            transition: background 0.3s ease;
         }
 
         h1 {
@@ -118,6 +162,7 @@
             margin: 0 0 24px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
         }
 
         h2 {
@@ -135,11 +180,13 @@
         p, li {
             color: var(--text-primary);
             font-size: 16px;
+            transition: color 0.3s ease;
         }
 
         a {
             color: var(--primary);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
 
         a:hover {
@@ -156,6 +203,7 @@
             font-size: 14px;
             line-height: 1.5;
             margin: 16px 0;
+            transition: background 0.3s ease;
         }
 
         code {
@@ -164,6 +212,7 @@
             padding: 2px 4px;
             border-radius: 4px;
             font-size: 14px;
+            transition: background 0.3s ease;
         }
 
         /* API Reference */
@@ -171,12 +220,14 @@
             margin-bottom: 32px;
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
         }
 
         .api-name {
             font-family: 'Roboto Mono', monospace;
             font-size: 18px;
             color: var(--primary);
+            transition: color 0.3s ease;
         }
 
         .api-type {
@@ -188,6 +239,7 @@
             font-size: 12px;
             margin-left: 8px;
             vertical-align: middle;
+            transition: background 0.3s ease;
         }
 
         .api-description {
@@ -208,11 +260,13 @@
             padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid var(--border);
+            transition: border-color 0.3s ease;
         }
 
         .param-table th {
             background: var(--surface);
             font-weight: 500;
+            transition: background 0.3s ease;
         }
 
         /* Callouts */
@@ -222,6 +276,7 @@
             margin: 16px 0;
             background: var(--surface);
             border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
         }
 
         .callout.warning {
@@ -250,10 +305,20 @@
             .content {
                 padding: 24px;
             }
+            
+            .theme-toggle {
+                bottom: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+
     <!-- Sidebar Navigation -->
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -265,10 +330,8 @@
             <div class="nav-section">
                 <h2 class="nav-title">Getting Started</h2>
                 <ul class="nav-links">
-
                     <li><a href="#introduction" class="nav-link active">Introduction</a></li>
-                                        <li><a href="#config-build" class="nav-link">Configure Build</a></li>
-
+                    <li><a href="#config-build" class="nav-link">Configure Build</a></li>
                     <li><a href="#installation" class="nav-link">Installation</a></li>
                     <li><a href="#quickstart" class="nav-link">Quickstart</a></li>
                 </ul>
@@ -287,10 +350,8 @@
                 <h2 class="nav-title">API Reference</h2>
                 <ul class="nav-links">
                     <li><a href="docs/files.html" class="nav-link">Full API Reference</a></li>
-
                 </ul>
             </div>
-
         </nav>
     </aside>
 
@@ -304,16 +365,13 @@
             <div class="callout">
                 <p><strong>Note:</strong> Web support is still in development, will release on v1.0.3.</p>
             </div>
-
-
         </section>
 
-
-         <section id="config-build">
- <h2>Customize your build of Gooey</h2>
+        <section id="config-build">
+            <h2>Customize your build of Gooey</h2>
             <p>If you're building from source you can enable/disable features in <code>include/user_config.h</code>.</p>
 
-                   <pre><code class="language-c">#ifndef USER_CONFIG_H
+            <pre><code class="language-c">#ifndef USER_CONFIG_H
 #define USER_CONFIG_H
 
 // DEBUG/PROD
@@ -350,14 +408,15 @@
 
 #endif
 </code></pre>
-         </section>
+        </section>
+
         <!-- Installation -->
         <section id="installation">
             <h2>Installation</h2>
             <p>To get started with Gooey, download the latest release for your platform:</p>
 
             <h3>Linux</h3>
-            <pre ><code class="language-bash"># For X11 systems:
+            <pre><code class="language-bash"># For X11 systems:
 wget https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_x11.tar.gz
 
 # Extract archive
@@ -366,14 +425,15 @@ tar -xvzf gooey_x11.tar.gz
 # move .so lib files into /usr/local/lib/
 </code></pre>
 
-
             <h3>Windows</h3>
             <pre><code class="language-bash"># Download the dlls from:
 # https://github.com/GooeyUI/GooeyGUI/releases/download/v1.0.2/gooey_win32.zip</code></pre>
         </section>
-          <div class="callout">
-                <p><strong>Note:</strong> For older releases visit the <a href="https://github.com/GooeyUI/GooeyGUI/releases">release page</a>.</p>
-            </div>
+        
+        <div class="callout">
+            <p><strong>Note:</strong> For older releases visit the <a href="https://github.com/GooeyUI/GooeyGUI/releases">release page</a>.</p>
+        </div>
+
         <!-- Quickstart -->
         <section id="quickstart">
             <h2>Quickstart</h2>
@@ -422,11 +482,9 @@ int main()
             </div>
         </section>
 
+        <p><strong>Searching for full API reference?</strong> <a href="docs/files.html"> visit here</a></p>
 
-
-                <p><strong>Searching for full API reference?</strong> <a href="docs/files.html"> visit here</a></p>
-
-                    <!-- Core Concepts -->
+        <!-- Core Concepts -->
         <section id="architecture">
             <h2>Architecture</h2>
             <p>Gooey follows a simple yet powerful architecture designed for performance and flexibility:</p>
@@ -441,7 +499,6 @@ int main()
             </ul>
 
             <img src="architecture.png" width="700px"/>
-
         </section>
 
         <section id="widgets">
@@ -470,22 +527,21 @@ int main()
                     <td>int</td>
                     <td>x coordinate.</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>y</td>
                     <td>int</td>
                     <td>y coordinate.</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>width</td>
                     <td>int</td>
                     <td>Width of widget.</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>height</td>
                     <td>int</td>
                     <td>Height of widget</td>
                 </tr>
-
             </table>
 
             <h3>Widget Types</h3>
@@ -522,55 +578,93 @@ GooeyLayout_AddChild(layout, widget);
 GooeyLayout_Build(layout);
             </code></pre>
 
-
             <h3>Alignment</h3>
             <p>Control widget positioning within their allocated space:</p>
-          <table class="param-table">
+            <table class="param-table">
                 <tr>
                     <th>Property</th>
                     <th>Type</th>
                     <th>Description</th>
                 </tr>
-
-                 <tr>
+                <tr>
                     <td>Grid Layout</td>
                     <td>LAYOUT_GRID</td>
                     <td>Put your widgets in a grid layout.</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>Vertical Layout</td>
                     <td>LAYOUT_VERTICAL</td>
                     <td>Put your widgets in a vertical layout.</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td>Horizontal Layout</td>
                     <td>LAYOUT_HORIZONTAL</td>
                     <td>Put your widgets in a horizontal layout.</td>
                 </tr>
-
             </table>
-<br><br><br><br><br><br><br><br><br>
+            <br><br><br><br><br><br><br><br><br>
+        </section>
     </main>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-batch.min.js"></script>
+    
     <script>
-        // Highlight active nav item based on scroll position
+        // Theme management
         document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const prismTheme = document.getElementById('prism-theme');
+            
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                enableDarkTheme();
+            } else {
+                enableLightTheme();
+            }
+            
+            // Toggle theme on button click
+            themeToggle.addEventListener('click', function() {
+                if (document.documentElement.classList.contains('dark-theme')) {
+                    enableLightTheme();
+                } else {
+                    enableDarkTheme();
+                }
+            });
+            
+            function enableDarkTheme() {
+                document.documentElement.classList.add('dark-theme');
+                prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-dark.min.css';
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
+            
+            function enableLightTheme() {
+                document.documentElement.classList.remove('dark-theme');
+                prismTheme.href = 'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-one-light.min.css';
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+            
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
-
+            
             window.addEventListener('scroll', function() {
                 let current = '';
-
+                
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     if (window.scrollY >= sectionTop - 100) {
                         current = section.getAttribute('id');
                     }
                 });
-
+                
                 navLinks.forEach(link => {
                     link.classList.remove('active');
                     if (link.getAttribute('href') === '#' + current) {

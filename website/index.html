@@ -63,7 +63,40 @@
             --code-background: #2C2C2E;
             --code-text: #F5F5F7;
         }
+        .platforms {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
         
+        .platform {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .platform:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        
+        .platform-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+        
+        .platform-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-primary);
@@ -772,7 +805,24 @@
             </div>
         </div>
     </section>
-    
+      <div class="platforms fade-in delay-3">
+        <div class="platform">
+
+            <img class="platform-logo" src="wl_logo.png" />
+                
+            <span class="platform-name">Wayland</span>
+        </div>
+        <div class="platform">
+                    <img class="platform-logo" src="x11_logo.png" />
+
+            <span class="platform-name">X11</span>
+        </div>
+        <div class="platform">
+                       <img class="platform-logo" src="win32_logo.png" />
+
+            <span class="platform-name">Win32</span>
+        </div>
+    </div>
     <!-- Features Section -->
     <section class="section" id="features">
         <div class="container">

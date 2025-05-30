@@ -80,6 +80,7 @@ bool GooeyMenu_HandleHover(GooeyWindow *win)
     const int x = event->mouse_move.x;
     const int y = event->mouse_move.y;
     bool is_any_element_hovered_over = false;
+    static bool was_hovered_over = false;
 
     int x_offset = 10;
     for (int i = 0; i < win->menu->children_count; i++)
@@ -105,6 +106,12 @@ bool GooeyMenu_HandleHover(GooeyWindow *win)
             }
         }
         x_offset += active_backend->GetTextWidth(child->title, strlen(child->title)) + 20;
+    }
+
+    if (is_any_element_hovered_over != was_hovered_over)
+    {
+        active_backend->CursorChange(is_any_element_hovered_over ? GOOEY_CURSOR_HAND : GOOEY_CURSOR_ARROW);
+        was_hovered_over = is_any_element_hovered_over;
     }
 
     return is_any_element_hovered_over;

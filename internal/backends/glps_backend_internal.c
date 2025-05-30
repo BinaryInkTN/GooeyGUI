@@ -932,9 +932,18 @@ void glps_set_cursor(GOOEY_CURSOR cursor)
     case GOOEY_CURSOR_TEXT:
         glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_IBEAM);
         break;
-        case GOOEY_CURSOR_ARROW:
-            glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_ARROW);
-            break;
+    case GOOEY_CURSOR_ARROW:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_ARROW);
+        break;
+    case GOOEY_CURSOR_CROSSHAIR:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_CROSSHAIR);
+        break;
+    case GOOEY_CURSOR_RESIZE_H:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_HRESIZE);
+        break;
+    case GOOEY_CURSOR_RESIZE_V:
+        glps_wm_cursor_change(ctx.wm, GLPS_CURSOR_VRESIZE);
+        break;
     default:
         break;
     }

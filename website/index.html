@@ -3,138 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gooey - Cross-Platform GUI Lib</title>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Gooey - Cross-Platform GUI Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.css">
     <style>
         :root {
-            --mdc-theme-primary: #4285F4;
-            --mdc-theme-secondary: #34A853;
-            --mdc-theme-error: #EA4335;
-            --mdc-theme-surface: #FFFFFF;
-            --mdc-theme-background: #FAFAFA;
-            --mdc-theme-on-primary: #FFFFFF;
-            --mdc-theme-on-secondary: #FFFFFF;
-            --mdc-theme-on-surface: #202124;
-            --mdc-theme-on-error: #FFFFFF;
+            --primary: #4E86EE;
+            --primary-dark: #3D6DCC;
+            --secondary: #6CACE4;
+            --accent: #FF6B6B;
+            --success: #5CD85A;
+            --warning: #FFC94D;
+            --error: #FF6B6B;
             
-            --mdc-typography-font-family: 'Google Sans', Roboto, sans-serif;
-            --mdc-typography-monospace-font-family: 'Roboto Mono', monospace;
+            --text-primary: #1C1C1E;
+            --text-secondary: #5E5E60;
+            --text-tertiary: #8E8E93;
+            --text-on-primary: #FFFFFF;
             
-            --mdc-shape-small: 8px;
-            --mdc-shape-medium: 12px;
-            --mdc-shape-large: 16px;
+            --background: #FFFFFF;
+            --surface: #F7F7F7;
+            --surface-dark: #EBEBEB;
+            --border: #D1D1D6;
             
-            --elevation-1: 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px rgba(0,0,0,0.06);
-            --elevation-2: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            --elevation-3: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-            --elevation-4: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --code-background: #F2F2F7;
+            --code-text: #1C1C1E;
             
-            --transition-standard: cubic-bezier(0.2, 0, 0, 1);
-            --transition-emphasized: cubic-bezier(0.2, 0, 0, 1);
+            --elevation-1: 0 1px 3px rgba(0,0,0,0.08);
+            --elevation-2: 0 4px 12px rgba(0,0,0,0.12);
+            --elevation-3: 0 8px 24px rgba(0,0,0,0.16);
             
-            --color-divider: rgba(0, 0, 0, 0.12);
-            --color-hover: rgba(0, 0, 0, 0.04);
-            --color-focus: rgba(0, 0, 0, 0.12);
-            --color-pressed: rgba(0, 0, 0, 0.16);
-            --color-selected: rgba(0, 0, 0, 0.08);
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
             
-            --surface-overlay: rgba(0, 0, 0, 0.05);
-            --surface-overlay-hover: rgba(0, 0, 0, 0.08);
-            --surface-overlay-focus: rgba(0, 0, 0, 0.12);
-            --surface-overlay-selected: rgba(0, 0, 0, 0.08);
-            --surface-overlay-activated: rgba(0, 0, 0, 0.12);
-            --surface-overlay-pressed: rgba(0, 0, 0, 0.16);
-            
-            --text-primary: rgba(0, 0, 0, 0.87);
-            --text-secondary: rgba(0, 0, 0, 0.6);
-            --text-hint: rgba(0, 0, 0, 0.38);
-            --text-disabled: rgba(0, 0, 0, 0.38);
-            --text-icon: rgba(0, 0, 0, 0.38);
-            
-            --dark-text-primary: rgba(255, 255, 255, 0.87);
-            --dark-text-secondary: rgba(255, 255, 255, 0.6);
-            --dark-text-hint: rgba(255, 255, 255, 0.38);
-            --dark-text-disabled: rgba(255, 255, 255, 0.38);
-            --dark-text-icon: rgba(255, 255, 255, 0.38);
-            
-            --dark-color-divider: rgba(255, 255, 255, 0.12);
-            --dark-color-hover: rgba(255, 255, 255, 0.04);
-            --dark-color-focus: rgba(255, 255, 255, 0.12);
-            --dark-color-pressed: rgba(255, 255, 255, 0.16);
-            --dark-color-selected: rgba(255, 255, 255, 0.08);
-            
-            --dark-surface-overlay: rgba(255, 255, 255, 0.05);
-            --dark-surface-overlay-hover: rgba(255, 255, 255, 0.08);
-            --dark-surface-overlay-focus: rgba(255, 255, 255, 0.12);
-            --dark-surface-overlay-selected: rgba(255, 255, 255, 0.08);
-            --dark-surface-overlay-activated: rgba(255, 255, 255, 0.12);
-            --dark-surface-overlay-pressed: rgba(255, 255, 255, 0.16);
+            --transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
         }
         
         .dark-mode {
-            --mdc-theme-primary: #8AB4F8;
-            --mdc-theme-secondary: #81C995;
-            --mdc-theme-error: #F28B82;
-            --mdc-theme-surface: #202124;
-            --mdc-theme-background: #121212;
-            --mdc-theme-on-primary: #202124;
-            --mdc-theme-on-secondary: #202124;
-            --mdc-theme-on-surface: #E8EAED;
-            --mdc-theme-on-error: #202124;
+            --primary: #4E86EE;
+            --primary-dark: #3D6DCC;
+            --secondary: #6CACE4;
+            --accent: #FF6B6B;
+            --success: #5CD85A;
+            --warning: #FFC94D;
+            --error: #FF6B6B;
             
-            --text-primary: var(--dark-text-primary);
-            --text-secondary: var(--dark-text-secondary);
-            --text-hint: var(--dark-text-hint);
-            --text-disabled: var(--dark-text-disabled);
-            --text-icon: var(--dark-text-icon);
+            --text-primary: #F5F5F7;
+            --text-secondary: #AEAEB2;
+            --text-tertiary: #636366;
+            --text-on-primary: #FFFFFF;
             
-            --color-divider: var(--dark-color-divider);
-            --color-hover: var(--dark-color-hover);
-            --color-focus: var(--dark-color-focus);
-            --color-pressed: var(--dark-color-pressed);
-            --color-selected: var(--dark-color-selected);
+            --background: #1C1C1E;
+            --surface: #2C2C2E;
+            --surface-dark: #3A3A3C;
+            --border: #48484A;
             
-            --surface-overlay: var(--dark-surface-overlay);
-            --surface-overlay-hover: var(--dark-surface-overlay-hover);
-            --surface-overlay-focus: var(--dark-surface-overlay-focus);
-            --surface-overlay-selected: var(--dark-surface-overlay-selected);
-            --surface-overlay-activated: var(--dark-surface-overlay-activated);
-            --surface-overlay-pressed: var(--dark-surface-overlay-pressed);
+            --code-background: #2C2C2E;
+            --code-text: #F5F5F7;
         }
         
         body {
-            font-family: var(--mdc-typography-font-family);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-primary);
-            background-color: var(--mdc-theme-background);
+            background-color: var(--background);
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s var(--transition-standard);
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
-            line-height: 1.5;
+            transition: background-color 0.3s ease;
         }
         
         h1, h2, h3, h4, h5, h6 {
-            font-weight: 500;
-            letter-spacing: -0.02em;
+            font-weight: 600;
             margin: 0 0 16px;
             color: var(--text-primary);
+        }
+        
+        h1 {
+            font-size: 48px;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 36px;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }
+        
+        h3 {
+            font-size: 24px;
+            line-height: 1.3;
         }
         
         p {
             color: var(--text-secondary);
             margin: 0 0 16px;
+            font-size: 18px;
+            line-height: 1.6;
         }
         
         a {
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
             text-decoration: none;
-            transition: color 0.2s var(--transition-standard);
+            transition: var(--transition);
         }
         
         a:hover {
-            color: var(--mdc-theme-primary);
+            color: var(--primary-dark);
             text-decoration: underline;
         }
         
@@ -156,15 +134,15 @@
             display: flex;
             align-items: center;
             padding: 0 24px;
-            background-color: var(--mdc-theme-surface);
+            background-color: var(--surface);
             box-shadow: var(--elevation-1);
             z-index: 1000;
-            transition: background-color 0.3s var(--transition-standard);
+            transition: all 0.3s ease;
         }
         
         .app-bar__title {
-            font-size: 22px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 600;
             margin: 0;
             color: var(--text-primary);
             display: flex;
@@ -173,7 +151,7 @@
         
         .app-bar__title i {
             margin-right: 12px;
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
             font-size: 24px;
         }
         
@@ -194,39 +172,54 @@
             color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: 4px;
-            transition: all 0.2s var(--transition-standard);
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
         }
         
         .app-bar__nav-item:hover {
-            color: var(--mdc-theme-primary);
-            background-color: var(--surface-overlay-hover);
+            color: var(--primary);
+            background-color: var(--surface-dark);
             text-decoration: none;
         }
         
         .app-bar__nav-item--active {
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
+            background-color: var(--surface-dark);
         }
         
         .theme-toggle {
             background: none;
             border: none;
-            color: var(--text-icon);
+            color: var(--text-secondary);
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s var(--transition-standard);
+            transition: var(--transition);
         }
         
         .theme-toggle:hover {
-            background-color: var(--surface-overlay-hover);
+            background-color: var(--surface-dark);
             color: var(--text-primary);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+        }
+        
+        .badge i {
+            margin-right: 6px;
+            font-size: 12px;
         }
         
         /* Hero Section */
@@ -234,38 +227,35 @@
             padding: 160px 0 120px;
             text-align: center;
             position: relative;
-            overflow: hidden;
-            background: var(--mdc-theme-background);
+            background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+        }
+     .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='blueGradient' x1='0%' y1='0%' x2='100%' y2='100%'%3E%3Cstop offset='0%' stop-color='%230066cc' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%23ffffff' stop-opacity='0.1'/%3E%3C/linearGradient%3E%3CradialGradient id='lightBlob' cx='50%' cy='50%' r='50%'%3E%3Cstop offset='0%' stop-color='%230099ff' stop-opacity='0.15'/%3E%3Cstop offset='100%' stop-color='%23002255' stop-opacity='0.05'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='200' cy='300' r='160' fill='url(%23blueGradient)' /%3E%3Ccircle cx='1250' cy='200' r='100' fill='url(%23blueGradient)'/%3E%3Cellipse cx='700' cy='600' rx='280' ry='180' fill='url(%23lightBlob)'/%3E%3Cpath d='M600,400 a80,80 0 1,0 160,0 a80,80 0 1,0 -160,0' fill='none' stroke='%230066cc' stroke-width='2' stroke-opacity='0.05'/%3E%3Cpath d='M300,800 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0' fill='none' stroke='%230099ff' stroke-width='1.5' stroke-opacity='0.05'/%3E%3Cpolygon points='1300,800 1320,830 1300,860 1270,860 1250,830 1270,800' fill='%230066cc' fill-opacity='0.03'/%3E%3Cpolygon points='200,950 220,980 200,1010 170,1010 150,980 170,950' fill='%230099ff' fill-opacity='0.04'/%3E%3Cpath d='M0,900 C400,1020 1000,800 1440,960 L1440,1024 L0,1024 Z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
 
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 400px;
-            background: var(--mdc-theme-background);
-            z-index: -1;
-            transform: skewY(-40deg);
-            transform-origin: top left;
-        }
-        
         .hero__title {
-            font-size: 56px;
-            font-weight: 300;
+            font-weight: 700;
             margin-bottom: 24px;
-            color: var(--text-primary);
-            line-height: 1.2;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .hero__subtitle {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 400;
-            color:bottom;
             max-width: 700px;
             margin: 0 auto 40px;
+            color: var(--text-secondary);
         }
         
         .hero__buttons {
@@ -275,92 +265,131 @@
             margin-top: 32px;
         }
         
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+        }
+        
+        .btn--primary {
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            box-shadow: var(--elevation-1);
+        }
+        
+        .btn--primary:hover {
+            color: white;
+            box-shadow: var(--elevation-2);
+            transform: translateY(-1px);
+        }
+        
+        .btn--secondary {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn--secondary:hover {
+            background-color: var(--surface-dark);
+            border-color: var(--text-tertiary);
+            transform: translateY(-1px);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
         /* Features Section */
-        .features {
-            padding: 80px 0;
-            background-color: var(--mdc-theme-surface);
+        .section {
+            padding: 100px 0;
+        }
+        
+        .section--alt {
+            background-color: var(--surface);
         }
         
         .section-title {
-            font-size: 40px;
-            font-weight: 400;
             text-align: center;
             margin-bottom: 16px;
         }
         
         .section-subtitle {
-            font-size: 18px;
             text-align: center;
-            color: var(--text-secondary);
             max-width: 700px;
             margin: 0 auto 48px;
         }
-         
+        
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             margin-top: 48px;
-            justify-content: center;
-
         }
-        .feature-card {
-            background-color: var(--mdc-theme-surface);
-            border-radius: var(--mdc-shape-medium);
+        
+        .card {
+            background-color: var(--background);
+            border-radius: var(--radius-md);
             padding: 32px;
             box-shadow: var(--elevation-1);
-            transition: all 0.3s var(--transition-standard);
-            max-width: 300px;
+            transition: var(--transition);
+            border: 1px solid var(--border);
         }
         
-        .feature-card:hover {
-            box-shadow: var(--elevation-3);
+        .card:hover {
+            box-shadow: var(--elevation-2);
             transform: translateY(-4px);
+            border-color: var(--primary);
         }
         
-        .feature-icon {
+        .card__icon {
             width: 48px;
             height: 48px;
-            border-radius: 50%;
-            background-color: rgba(var(--mdc-theme-primary), 0.1);
+            border-radius: var(--radius-md);
+            background-color: rgba(var(--primary), 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 24px;
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
             font-size: 20px;
         }
         
-        .feature-title {
-            font-size: 22px;
-            font-weight: 500;
+        .card__title {
+            font-size: 20px;
+            font-weight: 600;
             margin-bottom: 16px;
         }
         
-        .feature-description {
+        .card__description {
             color: var(--text-secondary);
             font-size: 16px;
         }
         
         /* Code Preview Section */
-        .code-preview {
-            background-color: var(--mdc-theme-background);
-            width: auto;
-            margin: 60px;
-        }
-        
         .code-window {
-            background-color: var(--mdc-theme-surface);
-            border-radius: var(--mdc-shape-medium);
-            box-shadow: var(--elevation-2);
+            background-color: var(--code-background);
+            border-radius: var(--radius-md);
+            box-shadow: var(--elevation-1);
             overflow: hidden;
             margin: 48px auto;
+            border: 1px solid var(--border);
         }
         
         .code-header {
             height: 48px;
-            background-color: var(--mdc-theme-surface);
-            border-bottom: 1px solid var(--color-divider);
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             padding: 0 16px;
@@ -379,113 +408,67 @@
         }
         
         .code-dot--red {
-            background-color: #FF5F56;
+            background-color: var(--error);
         }
         
         .code-dot--yellow {
-            background-color: #FFBD2E;
+            background-color: var(--warning);
         }
         
         .code-dot--green {
-            background-color: #27C93F;
+            background-color: var(--success);
         }
         
         .code-title {
-            font-family: var(--mdc-typography-monospace-font-family);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             color: var(--text-secondary);
         }
         
         .code-content {
-            font-family: var(--mdc-typography-monospace-font-family);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             line-height: 1.6;
-            color: var(--text-primary);
-            background-color: var(--mdc-theme-surface);
-            overflow-x: none;
-            width: auto;
+            color: var(--code-text);
+            padding: 24px;
+            overflow-x: auto;
         }
-
-
+        
         .code-line {
             margin-bottom: 8px;
-            width: auto;
         }
         
         .code-comment {
-            color: var(--text-hint);
+            color: var(--text-tertiary);
         }
         
         .code-keyword {
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
         }
         
         .code-string {
-            color: var(--mdc-theme-secondary);
+            color: var(--success);
         }
         
         .code-number {
-            color: #FF7043;
+            color: var(--accent);
         }
         
-        /* Downloads Section */
-        .downloads {
-            padding: 80px 0;
-            background-color: var(--mdc-theme-surface);
+        /* Screenshot */
+        .screenshot {
+            width: 100%;
+            border-radius: var(--radius-md);
+            box-shadow: var(--elevation-2);
+            border: 1px solid var(--border);
+            transition: var(--transition);
         }
         
-        .download-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 48px;
-        }
-        
-        .download-card {
-            background-color: var(--mdc-theme-surface);
-            border-radius: var(--mdc-shape-medium);
-            padding: 32px;
-            box-shadow: var(--elevation-1);
-            text-align: center;
-            transition: all 0.3s var(--transition-standard);
-        }
-        
-        .download-card:hover {
-            box-shadow: var(--elevation-3);
+        .screenshot:hover {
             transform: translateY(-4px);
-        }
-        
-        .download-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background-color: rgba(var(--mdc-theme-primary), 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            color: var(--mdc-theme-primary);
-            font-size: 24px;
-        }
-        
-        .download-title {
-            font-size: 20px;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-        
-        .download-description {
-            color: var(--text-secondary);
-            font-size: 16px;
-            margin-bottom: 24px;
+            box-shadow: var(--elevation-3);
         }
         
         /* Contributors Section */
-        .contributors {
-            padding: 80px 0;
-            background-color: var(--mdc-theme-background);
-        }
-        
         .contributors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -494,17 +477,19 @@
         }
         
         .contributor-card {
-            background-color: var(--mdc-theme-surface);
-            border-radius: var(--mdc-shape-medium);
+            background-color: var(--background);
+            border-radius: var(--radius-md);
             padding: 24px;
             box-shadow: var(--elevation-1);
             text-align: center;
-            transition: all 0.3s var(--transition-standard);
+            transition: var(--transition);
+            border: 1px solid var(--border);
         }
         
         .contributor-card:hover {
-            box-shadow: var(--elevation-3);
+            box-shadow: var(--elevation-2);
             transform: translateY(-4px);
+            border-color: var(--primary);
         }
         
         .contributor-avatar {
@@ -513,12 +498,12 @@
             border-radius: 50%;
             object-fit: cover;
             margin: 0 auto 16px;
-            border: 3px solid var(--mdc-theme-primary);
+            border: 3px solid var(--primary);
         }
         
         .contributor-name {
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 4px;
         }
         
@@ -536,7 +521,7 @@
         }
         
         .contributor-stat {
-            background-color: var(--surface-overlay);
+            background-color: var(--surface);
             padding: 4px 12px;
             border-radius: 16px;
             font-size: 12px;
@@ -545,21 +530,21 @@
         
         /* Footer */
         .footer {
-            padding: 64px 0 32px;
-            background-color: var(--mdc-theme-surface);
-            border-top: 1px solid var(--color-divider);
+            padding: 80px 0 40px;
+            background-color: var(--surface);
+            border-top: 1px solid var(--border);
         }
         
         .footer-content {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 2fr));
-            gap: 200px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 48px;
             margin-bottom: 48px;
         }
         
         .footer-column-title {
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             margin-bottom: 20px;
             color: var(--text-primary);
         }
@@ -569,11 +554,11 @@
             color: var(--text-secondary);
             margin-bottom: 12px;
             font-size: 14px;
-            transition: color 0.2s var(--transition-standard);
+            transition: var(--transition);
         }
         
         .footer-link:hover {
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
             text-decoration: none;
         }
         
@@ -582,12 +567,12 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 32px;
-            border-top: 1px solid var(--color-divider);
+            border-top: 1px solid var(--border);
         }
         
         .footer-logo {
             font-size: 18px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-primary);
             display: flex;
             align-items: center;
@@ -595,7 +580,7 @@
         
         .footer-logo i {
             margin-right: 8px;
-            color: var(--mdc-theme-primary);
+            color: var(--primary);
         }
         
         .footer-copyright {
@@ -609,69 +594,55 @@
         }
         
         .social-link {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background-color: var(--surface-overlay);
+            background-color: var(--surface-dark);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-secondary);
-            transition: all 0.2s var(--transition-standard);
+            transition: var(--transition);
         }
         
         .social-link:hover {
-            background-color: var(--surface-overlay-hover);
-            color: var(--text-primary);
+            background-color: var(--primary);
+            color: var(--text-on-primary);
             text-decoration: none;
         }
         
-        /* Buttons */
-        .mdc-button {
-            letter-spacing: 0.025em;
-            font-weight: 500;
-            text-transform: none;
-            border-radius: 20px;
-            padding: 0 24px;
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            width: 40px;
             height: 40px;
+            border: 4px solid rgba(var(--primary), 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 40px auto;
         }
         
-        .mdc-button--raised {
-            box-shadow: var(--elevation-1);
-            transition: box-shadow 0.2s var(--transition-standard);
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
-        .mdc-button--raised:hover {
-            box-shadow: var(--elevation-2);
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
-        .mdc-button--outlined {
-            border-width: 2px;
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
         }
         
-        .hero-button {
-            height: 48px;
-            border-radius: 24px;
-            padding: 0 32px;
-            font-size: 16px;
-            font-weight: 500;
-        }
-        
-        .hero-button--primary {
-            background-color: white;
-            color: var(--mdc-theme-primary);
-        }
-        
-        .hero-button--secondary {
-            background-color: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .hero-button--secondary:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: white;
-        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
         
         /* Utility Classes */
         .text-center {
@@ -690,51 +661,18 @@
         .mb-4 { margin-bottom: 32px; }
         .mb-5 { margin-bottom: 40px; }
         
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.6s var(--transition-emphasized) forwards;
-            opacity: 0;
-        }
-        
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        .delay-4 { animation-delay: 0.4s; }
-        .delay-5 { animation-delay: 0.5s; }
-        
-        /* Loading Spinner */
-        .loading-spinner {
-            display: none;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(var(--mdc-theme-primary), 0.1);
-            border-top-color: var(--mdc-theme-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 40px auto;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
         /* Responsive Adjustments */
         @media (max-width: 960px) {
-            .hero__title {
-                font-size: 48px;
+            h1 {
+                font-size: 40px;
             }
             
-            .hero__subtitle {
-                font-size: 20px;
+            h2 {
+                font-size: 32px;
             }
             
-            .section-title {
-                font-size: 36px;
+            .hero {
+                padding: 140px 0 100px;
             }
         }
         
@@ -748,12 +686,16 @@
                 display: none;
             }
             
-            .hero {
-                padding: 120px 0 80px;
+            h1 {
+                font-size: 36px;
             }
             
-            .hero__title {
-                font-size: 40px;
+            h2 {
+                font-size: 28px;
+            }
+            
+            .hero {
+                padding: 120px 0 80px;
             }
             
             .hero__subtitle {
@@ -765,22 +707,26 @@
                 align-items: center;
             }
             
-            .section-title {
-                font-size: 32px;
+            .section {
+                padding: 80px 0;
             }
         }
         
         @media (max-width: 480px) {
-            .hero__title {
+            h1 {
                 font-size: 32px;
             }
             
-            .hero__subtitle {
+            h2 {
+                font-size: 24px;
+            }
+            
+            p {
                 font-size: 16px;
             }
             
-            .section-title {
-                font-size: 28px;
+            .hero {
+                padding: 100px 0 60px;
             }
         }
     </style>
@@ -789,7 +735,7 @@
     <!-- App Bar -->
     <header class="app-bar">
         <h1 class="app-bar__title">
-            <i class="fas fa-object-group"></i>
+           
             Gooey
         </h1>
         
@@ -798,13 +744,12 @@
             <a href="#examples" class="app-bar__nav-item">Examples</a>
             <a href="#download" class="app-bar__nav-item">Download</a>
             <a href="docs/files.html" class="app-bar__nav-item">Documentation</a>
-
             <a href="quickstart.html" class="app-bar__nav-item">Quickstart</a>
         </nav>
         
         <div class="app-bar__actions">
-            <div class="release-tag" style="background-color: #FBBC04; color: #202124; padding: 4px 12px; border-radius: 16px; font-size: 14px; font-weight: 500;">
-                <i class="fas fa-star" style="margin-right: 4px;"></i>
+            <div class="badge">
+                <i class="fas fa-star"></i>
                 <span id="stargazer-count">Loading...</span>
             </div>
             <button class="theme-toggle" id="themeToggle">
@@ -817,11 +762,11 @@
     <section class="hero">
         <div class="container">
             <h1 class="hero__title fade-in">Build beautiful, cross-platform GUIs with Gooey</h1>
-            <p class="hero__subtitle fade-in delay-1">Fluid Web, Linux, and Windows apps all with one code base.</p>
+            <p class="hero__subtitle fade-in delay-1">Create native-feeling applications for Web, Linux, and Windows with a single codebase.</p>
             <div class="hero__buttons fade-in delay-2">
-                <a href="quickstart.html" class="mdc-button mdc-button--raised hero-button hero-button--primary">Get Started</a>
-                <a href="builder.html" class="mdc-button hero-button hero-button--secondary">
-                    <i class="fas fa-sliders-h" style="margin-right: 8px;"></i>
+                <a href="quickstart.html" class="btn btn--primary">Get Started</a>
+                <a href="builder.html" class="btn btn--secondary">
+                    <i class="fas fa-sliders-h"></i>
                     Drag & Drop Builder
                 </a>
             </div>
@@ -829,132 +774,126 @@
     </section>
     
     <!-- Features Section -->
-    <section class="features" id="features">
+    <section class="section" id="features">
         <div class="container">
-            <h2 class="section-title fade-in">Designed for developers</h2>
+            <h2 class="section-title fade-in">Designed for Developers</h2>
             <p class="section-subtitle fade-in delay-1">Gooey provides everything you need to create beautiful, native-feeling applications across platforms.</p>
             
             <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
+                <div class="card fade-in">
+                    <div class="card__icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
-                    <h3 class="feature-title">Cross-Platform</h3>
-                    <p class="feature-description">Write once, build anywhere. Gooey applications work seamlessly on Windows, Linux and embedded systems with native performance.</p>
+                    <h3 class="card__title">Cross-Platform</h3>
+                    <p class="card__description">Write once, build anywhere. Gooey applications work seamlessly on Windows, Linux and embedded systems with native performance.</p>
                 </div>
                 
-                <div class="feature-card fade-in delay-1">
-                    <div class="feature-icon">
+                <div class="card fade-in delay-1">
+                    <div class="card__icon">
                         <i class="fas fa-bolt"></i>
                     </div>
-                    <h3 class="feature-title">Lightweight</h3>
-                    <p class="feature-description">Minimal footprint with maximum functionality. Gooey is designed to be fast and efficient without bloat, perfect for resource-constrained environments.</p>
+                    <h3 class="card__title">Lightweight</h3>
+                    <p class="card__description">Minimal footprint with maximum functionality. Gooey is designed to be fast and efficient without bloat, perfect for resource-constrained environments.</p>
                 </div>
                 
-                <div class="feature-card fade-in delay-2">
-                    <div class="feature-icon">
+                <div class="card fade-in delay-2">
+                    <div class="card__icon">
                         <i class="fas fa-palette"></i>
                     </div>
-                    <h3 class="feature-title">Customizable</h3>
-                    <p class="feature-description">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives you complete control over the look and feel.</p>
+                    <h3 class="card__title">Customizable</h3>
+                    <p class="card__description">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives you complete control over the look and feel.</p>
                 </div>
                 
-                <div class="feature-card fade-in delay-3">
-                    <div class="feature-icon">
+                <div class="card fade-in delay-3">
+                    <div class="card__icon">
                         <i class="fas fa-layer-group"></i>
                     </div>
-                    <h3 class="feature-title">Minimal Dependencies</h3>
-                    <p class="feature-description">Built with minimal external dependencies for maximum portability and ease of integration.</p>
+                    <h3 class="card__title">Minimal Dependencies</h3>
+                    <p class="card__description">Built with minimal external dependencies for maximum portability and ease of integration.</p>
                 </div>
                 
-                <div class="feature-card fade-in delay-4">
-                    <div class="feature-icon">
+                <div class="card fade-in delay-4">
+                    <div class="card__icon">
                         <i class="fas fa-code"></i>
                     </div>
-                    <h3 class="feature-title">Pure C</h3>
-                    <p class="feature-description">Written in portable C for maximum compatibility. Perfect for embedded solutions and systems with limited resources.</p>
+                    <h3 class="card__title">Pure C</h3>
+                    <p class="card__description">Written in portable C for maximum compatibility. Perfect for embedded solutions and systems with limited resources.</p>
                 </div>
                 
-                <div class="feature-card fade-in delay-5">
-                    <div class="feature-icon">
+                <div class="card fade-in delay-5">
+                    <div class="card__icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="feature-title">Community Driven</h3>
-                    <p class="feature-description">Gooey is open source and released under the Apache 2.0 license. Join our growing community of contributors.</p>
+                    <h3 class="card__title">Community Driven</h3>
+                    <p class="card__description">Gooey is open source and released under the Apache 2.0 license. Join our growing community of contributors.</p>
                 </div>
             </div>
         </div>
     </section>
     
     <!-- Code Preview Section -->
-   <!-- Code Preview Section -->
-<section class="code-preview" id="examples">
-  <div class="container">
-    <h2 class="section-title fade-in">Login Implementation</h2>
-    <p class="section-subtitle fade-in delay-1">See how easy it is to create a secure login interface with Gooey</p>
-    
-    <div class="code-window fade-in delay-2">
-      <div class="code-header">
-        <div class="code-dots">
-          <div class="code-dot code-dot--red"></div>
-          <div class="code-dot code-dot--yellow"></div>
-          <div class="code-dot code-dot--green"></div>
+    <section class="section section--alt" id="examples">
+        <div class="container">
+            <h2 class="section-title fade-in">Secure IoT MQTT Dashboard</h2>
+            <p class="section-subtitle fade-in delay-1">See how easy it is to create a secure MQTT Dashboard with Gooey.</p>
+             <div class="text-center fade-in delay-3">
+                    <img src="example_screenshot-landscape.png" alt="Gooey Login Example" width="1000px">
+        
+   
+            </div>
+            <div class="text-center fade-in delay-3">
+                <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/blob/main/dashboard/IoT_dashboard.c" class="btn btn--secondary">
+                    <i class="fas fa-code"></i>
+                    View Full Example
+                </a>
+            </div>
         </div>
-        <div class="code-title">IoT Dashboard - Login</div>
-      </div>
-      <div class="code-content">
-        <img src="example_screenshot_login.png"/>
-      </div>
-    </div>
+    </section>
     
-    <div class="text-center fade-in delay-3">
-      <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/blob/main/dashboard/IoT_dashboard.c" class="mdc-button mdc-button--raised">
-        <i class="fas fa-code" style="margin-right: 8px;"></i>
-        View Full Example
-      </a>
-    </div>
-  </div>
-</section>
     <!-- Apps Made With Section -->
-    <section class="features" id="apps-made-with">
+    <section class="section" id="apps-made-with">
         <div class="container">
             <h2 class="section-title fade-in">Apps made with Gooey</h2>
             <p class="section-subtitle fade-in delay-1">The apps that talented developers have built with our framework</p>
             
             <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <div class="feature-icon">
+                <div class="card fade-in">
+                    <div class="card__icon">
                         <i class="fas fa-thermometer-half"></i>
                     </div>
-                    <h3 class="feature-title">IoT Dashboard</h3>
-                    <p class="feature-description">A beautiful MQTTS control panel for factory automation systems.</p>
+                    <h3 class="card__title">IoT Dashboard</h3>
+                    <p class="card__description">A beautiful MQTTS control panel for factory automation systems.</p>
                     <div class="mt-3">
-                        <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="mdc-button mdc-button--outlined mdc-button--dense">
-                            <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>
+                        <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                            <i class="fas fa-external-link-alt"></i>
                             View Project
                         </a>
                     </div>
                 </div>
-                  <div class="feature-card fade-in">
-                    <div class="feature-icon">
-<i class="fa-brands fa-php"></i>                    </div>
-                    <h3 class="feature-title">AMP Control Panel</h3>
-                    <p class="feature-description">An easy to use AMP Control panel for PHP development.</p>
+                
+                <div class="card fade-in">
+                    <div class="card__icon">
+                        <i class="fa-brands fa-php"></i>
+                    </div>
+                    <h3 class="card__title">AMP Control Panel</h3>
+                    <p class="card__description">An easy to use AMP Control panel for PHP development.</p>
                     <div class="mt-3">
-                        <a href="#" class="mdc-button mdc-button--outlined mdc-button--dense">
-                            <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>
+                        <a href="#" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                            <i class="fas fa-external-link-alt"></i>
                             Coming soon
                         </a>
                     </div>
                 </div>
-         <div class="feature-card fade-in">
-                    <div class="feature-icon">
-<i class="fa-solid fa-question"></i>                    </div>
-                    <h3 class="feature-title">Want to share your project?</h3>
-                    <p class="feature-description">Want to have your project featured here? Hit us up!</p>
+                
+                <div class="card fade-in">
+                    <div class="card__icon">
+                        <i class="fa-solid fa-question"></i>
+                    </div>
+                    <h3 class="card__title">Want to share your project?</h3>
+                    <p class="card__description">Want to have your project featured here? Hit us up!</p>
                     <div class="mt-3">
-                        <a href="https://www.linkedin.com/in/med-yassine-ahmed-ali/" class="mdc-button mdc-button--outlined mdc-button--dense">
-                            <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>
+                        <a href="https://www.linkedin.com/in/med-yassine-ahmed-ali/" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                            <i class="fas fa-external-link-alt"></i>
                             Contact
                         </a>
                     </div>
@@ -964,7 +903,7 @@
     </section>
     
     <!-- Contributors Section -->
-    <section class="contributors" id="contributors">
+    <section class="section section--alt" id="contributors">
         <div class="container">
             <h2 class="section-title fade-in">Our Contributors</h2>
             <p class="section-subtitle fade-in delay-1">The team and community that helps make Gooey better</p>
@@ -977,8 +916,8 @@
             
             <div class="text-center mt-5 fade-in delay-3">
                 <p>Want to contribute to Gooey?</p>
-                <a href="https://github.com/GooeyUI/GooeyGUI" class="mdc-button mdc-button--outlined">
-                    <i class="fab fa-github" style="margin-right: 8px;"></i>
+                <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn--secondary">
+                    <i class="fab fa-github"></i>
                     Join us on GitHub
                 </a>
             </div>
@@ -986,21 +925,21 @@
     </section>
     
     <!-- Downloads Section -->
-    <section class="downloads" id="download">
+    <section class="section" id="download">
         <div class="container">
             <h2 class="section-title fade-in">Download Gooey</h2>
             <p class="section-subtitle fade-in delay-1">Get the latest version or browse previous releases</p>
             
             <div id="releases-loading" class="loading-spinner"></div>
-            <div id="releases-container" class="download-cards fade-in delay-2">
+            <div id="releases-container" class="features-grid fade-in delay-2">
                 <!-- Releases will be loaded here dynamically -->
             </div>
             <div id="releases-error" class="error-message" style="display: none;"></div>
             
             <div class="text-center mt-5 fade-in delay-3">
                 <p>Looking for older versions or source code?</p>
-                <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="mdc-button mdc-button--outlined">
-                    <i class="fas fa-history" style="margin-right: 8px;"></i>
+                <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="btn btn--secondary">
+                    <i class="fas fa-history"></i>
                     View all releases
                 </a>
             </div>
@@ -1016,10 +955,8 @@
                     <a href="#features" class="footer-link">Features</a>
                     <a href="#examples" class="footer-link">Examples</a>
                     <a href="#download" class="footer-link">Download</a>
-
                     <a href="docs/files.html" class="footer-link">Documentation</a>
                     <a href="quickstart.html" class="footer-link">Quickstart</a>
-
                 </div>
                 
                 <div>
@@ -1029,27 +966,19 @@
                     <a href="https://github.com/GooeyUI/GooeyGUI/discussions" class="footer-link">Community</a>
                     <a href="builder.html" class="footer-link">UI Builder</a>
                 </div>
-                
-              
             </div>
             
             <div class="footer-bottom">
                 <div class="footer-logo">
-                    <i class="fas fa-object-group"></i>
                     Gooey
                 </div>
                 
                 <div class="footer-copyright">
-                    © 2025 GooeyGUI All rights reserved.
+                    © 2025 GooeyGUI. All rights reserved.
                 </div>
                 
                 <div class="footer-social">
-                    <a href="#" class="social-link">
-                        <i class="fas fa-globe"></i>
-                    </a>
-                    <a href="#" class="social-link">
-                        <i class="fas fa-comment"></i>
-                    </a>
+                 
                     <a href="https://github.com/GooeyUI/GooeyGUI" class="social-link">
                         <i class="fab fa-github"></i>
                     </a>
@@ -1058,12 +987,9 @@
         </div>
     </footer>
     
-    <script src="https://unpkg.com/material-components-web@13.0.0/dist/material-components-web.min.js"></script>
     <script>
         // Initialize Material Components
         document.addEventListener('DOMContentLoaded', function() {
-            mdc.autoInit();
-            
             // Theme toggle functionality
             const themeToggle = document.getElementById('themeToggle');
             const themeIcon = document.getElementById('themeIcon');
@@ -1154,9 +1080,9 @@
                     
                     if (!contributors || contributors.length === 0) {
                         containerElement.innerHTML = `
-                            <div class="feature-card" style="grid-column: 1 / -1; text-align: center;">
-                                <h3 class="feature-title">No contributors yet</h3>
-                                <p class="feature-description">Be the first to contribute to our project!</p>
+                            <div class="card" style="grid-column: 1 / -1; text-align: center;">
+                                <h3 class="card__title">No contributors yet</h3>
+                                <p class="card__description">Be the first to contribute to our project!</p>
                             </div>
                         `;
                         return;
@@ -1181,8 +1107,8 @@
                                     <a href="${contributor.html_url}" 
                                        target="_blank" 
                                        rel="noopener noreferrer" 
-                                       class="mdc-button mdc-button--outlined mdc-button--dense">
-                                        <i class="fas fa-user" style="margin-right: 8px;"></i>
+                                       class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                                        <i class="fas fa-user"></i>
                                         Profile
                                     </a>
                                 </div>
@@ -1194,11 +1120,11 @@
                     loadingElement.style.display = 'none';
                     errorElement.style.display = 'block';
                     errorElement.innerHTML = `
-                        <div class="feature-card" style="grid-column: 1 / -1; text-align: center;">
-                            <h3 class="feature-title">Error loading contributors</h3>
-                            <p class="feature-description">Please try again later or view them on GitHub</p>
+                        <div class="card" style="grid-column: 1 / -1; text-align: center;">
+                            <h3 class="card__title">Error loading contributors</h3>
+                            <p class="card__description">Please try again later or view them on GitHub</p>
                             <a href="https://github.com/GooeyUI/GooeyGUI/graphs/contributors" 
-                               class="mdc-button mdc-button--outlined">
+                               class="btn btn--secondary">
                                 View on GitHub
                             </a>
                         </div>
@@ -1229,9 +1155,9 @@
                     
                     if (!releases || releases.length === 0) {
                         containerElement.innerHTML = `
-                            <div class="feature-card" style="grid-column: 1 / -1; text-align: center;">
-                                <h3 class="feature-title">No releases found</h3>
-                                <p class="feature-description">Check back later for new releases</p>
+                            <div class="card" style="grid-column: 1 / -1; text-align: center;">
+                                <h3 class="card__title">No releases found</h3>
+                                <p class="card__description">Check back later for new releases</p>
                             </div>
                         `;
                         return;
@@ -1249,29 +1175,29 @@
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <span style="font-size: 14px; color: var(--text-secondary);">${asset.name}</span>
                                 <a href="${asset.browser_download_url}" 
-                                   class="mdc-button mdc-button--outlined mdc-button--dense"
-                                   style="--mdc-typography-button-font-size: 12px;">
-                                    <i class="fas fa-download" style="margin-right: 4px;"></i>
+                                   class="btn btn--secondary"
+                                   style="padding: 0 12px; height: 32px; font-size: 12px;">
+                                    <i class="fas fa-download"></i>
                                     Download
                                 </a>
                             </div>
                         `).join('');
                         
                         const releaseHTML = `
-                            <div class="download-card">
-                                <div class="download-icon">
+                            <div class="card">
+                                <div class="card__icon">
                                     <i class="fas fa-download"></i>
                                 </div>
-                                <h3 class="download-title">${release.name || release.tag_name}</h3>
-                                <p class="download-description">Published on ${releaseDate}</p>
+                                <h3 class="card__title">${release.name || release.tag_name}</h3>
+                                <p class="card__description">Published on ${releaseDate}</p>
                                 
                                 ${assetsHTML || '<p style="color: var(--text-secondary); font-size: 14px;">No download assets available</p>'}
                                 
                                 <div class="mt-3">
                                     <a href="${release.html_url}" 
-                                       class="mdc-button mdc-button--outlined"
+                                       class="btn btn--secondary"
                                        target="_blank">
-                                        <i class="fas fa-file-alt" style="margin-right: 8px;"></i>
+                                        <i class="fas fa-file-alt"></i>
                                         Release Notes
                                     </a>
                                 </div>
@@ -1283,11 +1209,11 @@
                     loadingElement.style.display = 'none';
                     errorElement.style.display = 'block';
                     errorElement.innerHTML = `
-                        <div class="feature-card" style="grid-column: 1 / -1; text-align: center;">
-                            <h3 class="feature-title">Error loading releases</h3>
-                            <p class="feature-description">Please try again later or view them on GitHub</p>
+                        <div class="card" style="grid-column: 1 / -1; text-align: center;">
+                            <h3 class="card__title">Error loading releases</h3>
+                            <p class="card__description">Please try again later or view them on GitHub</p>
                             <a href="https://github.com/GooeyUI/GooeyGUI/releases" 
-                               class="mdc-button mdc-button--outlined">
+                               class="btn btn--secondary">
                                 View on GitHub
                             </a>
                         </div>

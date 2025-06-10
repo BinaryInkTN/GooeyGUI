@@ -72,6 +72,10 @@ set(SOURCES
     internal/backends/glps_backend_internal.c
     internal/logger/pico_logger_internal.c
     internal/widgets/gooey_meter_internal.c
+        internal/widgets/gooey_container_internal.h
+        internal/widgets/gooey_container_internal.c
+        include/widgets/gooey_container.h
+        src/widgets/gooey_container.c
 )
 
 

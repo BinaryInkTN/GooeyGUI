@@ -38,6 +38,7 @@ typedef enum
     WIDGET_LIST,
     WIDGET_PROGRESSBAR,
     WIDGET_METER,
+    WIDGET_CONTAINER,
     WIDGET_TABS
 } WIDGET_TYPE;
 
@@ -103,6 +104,14 @@ typedef struct
     bool is_highlighted; /**< Whether the button is highlighted */
     int click_timer;     /**< Timer for click effect */
 } GooeyButton;
+/**
+ * @brief Container widget.
+ */
+typedef struct {
+    GooeyWidget core;
+    GooeyWidget **widgets;
+    size_t widget_count;
+} GooeyContainer;
 
 /**
  * @brief Enumeration for canvas drawing operations.
@@ -511,7 +520,9 @@ typedef struct
     GooeyDropSurface **drop_surface; /**< List of drop surface widgets in the window */
     GooeyTabs **tabs;
     GooeyMeter **meters;
+    GooeyContainer **containers;
 
+    size_t container_count;
     size_t meter_count;
     size_t tab_count;
     size_t drop_surface_count;       /**< Number of drop surface widgets */

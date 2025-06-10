@@ -37,6 +37,7 @@
 #include "widgets/gooey_plot_internal.h"
 #include "widgets/gooey_debug_overlay_internal.h"
 #include "widgets/gooey_progressbar_internal.h"
+#include "widgets/gooey_container_internal.h"
 #include "signals/gooey_signals.h"
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_window_internal.h"
@@ -206,7 +207,8 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
         !(win->widgets = calloc(MAX_WIDGETS, sizeof(GooeyWidget *))) ||
         !(win->plots = calloc(MAX_PLOT_COUNT, sizeof(GooeyPlot *))) ||
         !(win->progressbars = calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
-        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))))
+        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *)))||
+        !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *))))
     {
         return false;
     }
@@ -271,6 +273,11 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     {
         free(win->meters);
         win->meters = NULL;
+    }
+
+    if (win->containers) {
+        free(win->containers);
+        win->containers = NULL;
     }
 
     if (win->tabs)
@@ -563,7 +570,9 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->list_count = 0;
     win->progressbar_count = 0;
     win->meter_count = 0;
+    win->container_count = 0;
     win->widget_count = 0;
+
     win->continuous_redraw = false;
 
     LOG_INFO("Window created with dimensions (%d, %d).", width, height);
@@ -664,6 +673,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #endif
 #if(ENABLE_DEBUG_OVERLAY)
      GooeyDebugOverlay_Draw(win);
+#endif
+#if(ENABLE_CONTAINER)
+    GooeyContainer_Draw(win);
 #endif
     active_backend->Render(win);
 }

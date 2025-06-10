@@ -1,5 +1,5 @@
 #include "gooey_button_internal.h"
-#if (ENABLE_BUTTON==1)
+#if (ENABLE_BUTTON)
 #include "backends/gooey_backend_internal.h"
 
 #define GOOEY_BUTTON_DEFAULT_RADIUS 2.0f

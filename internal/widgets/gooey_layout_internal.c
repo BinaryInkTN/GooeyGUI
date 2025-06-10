@@ -34,6 +34,7 @@ void GooeyLayout_Build(GooeyLayout *layout)
             LOG_ERROR("Null widget at index %d", i);
             continue;
         }
+
         widget->is_visible = layout->core.is_visible;
 
         switch (layout->layout_type)

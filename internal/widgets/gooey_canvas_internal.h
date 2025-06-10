@@ -23,6 +23,6 @@
  * @param window The window onto which the canvas is drawn.
  */
 void GooeyCanvas_Draw(GooeyWindow *window);
-
+void GooeyCanvas_HandleClick(GooeyWindow* win, int x, int y);
 #endif // GOOEY_CANVAS_INTERNAL_H
 #endif

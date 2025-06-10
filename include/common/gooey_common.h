@@ -300,6 +300,7 @@ typedef struct
     GooeyWidget core;       /**< Core widget properties */
     CanvaElement *elements; /**< List of drawing operations */
     int element_count;      /**< Number of drawing operations */
+    void (*callback)(int x, int y);
 } GooeyCanvas;
 
 /**

@@ -23,11 +23,12 @@
  * @param y The y-coordinate of the canvas position.
  * @param width The width of the canvas.
  * @param height The height of the canvas.
+ * @param callback Click callback function.
  * @return A pointer to the newly created GooeyCanvas.
  */
 
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
-                                int height);
+                                int height, void (*callback)(int x, int y));
 /**
  * @brief Draws a rectangle onto the user-defined canvas.
  *

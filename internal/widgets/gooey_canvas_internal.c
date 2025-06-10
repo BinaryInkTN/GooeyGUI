@@ -3,6 +3,7 @@
 #if (ENABLE_CANVAS)
 
 #include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 
 void GooeyCanvas_Draw(GooeyWindow *win)
 {
@@ -45,6 +46,32 @@ void GooeyCanvas_Draw(GooeyWindow *win)
             
             default:
                 break;
+            }
+        }
+    }
+}
+
+void GooeyCanvas_HandleClick(GooeyWindow* win, int x, int y) {
+    if (!win) {
+        LOG_ERROR("Window invalid.");
+        return;
+    }
+
+    for (size_t i = 0; i < win->canvas_count; ++i) {
+        GooeyCanvas* canvas = win->canvas[i];
+        if (!canvas || !canvas->core.is_visible) {
+            LOG_ERROR("Canvas is invalid.");
+            continue;
+        }
+
+        const int CANVAS_X = canvas->core.x;
+        const int CANVAS_Y = canvas->core.y;
+        const int CANVAS_WIDTH = canvas->core.width;
+        const int CANVAS_HEIGHT = canvas->core.height;
+
+        if (x >= CANVAS_X && x <= CANVAS_X + CANVAS_WIDTH && y >= CANVAS_Y && y <= CANVAS_Y + CANVAS_HEIGHT) {
+            if (canvas->callback) {
+                canvas->callback(x - CANVAS_X, y - CANVAS_Y);
             }
         }
     }

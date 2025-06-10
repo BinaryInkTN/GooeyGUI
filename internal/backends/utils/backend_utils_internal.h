@@ -18,7 +18,7 @@
 #define BACKEND_UTILS_INTERNAL_H
 
 #include "backends/gooey_backend_internal.h"
-#include <freetype2/ft2build.h>
+#include <freetype/freetype.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
 #include "glps_timer.h"

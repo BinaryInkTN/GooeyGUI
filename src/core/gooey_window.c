@@ -767,6 +767,9 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 #if(ENABLE_TABS)
         needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
+#if(ENABLE_CANVAS)
+        GooeyCanvas_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
         break;
     }
 

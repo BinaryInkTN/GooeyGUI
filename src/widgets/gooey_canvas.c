@@ -23,7 +23,7 @@
 #include "logger/pico_logger_internal.h"
 
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
-                                int height)
+                                int height, void (*callback)(int x, int y))
 {
     GooeyCanvas *canvas = (GooeyCanvas *)calloc(1, sizeof(GooeyButton));
 
@@ -42,6 +42,7 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
     canvas->core.is_visible = true;
     canvas->elements = calloc(100, sizeof(CanvaElement));
     canvas->element_count = 0;
+    canvas->callback = callback;
     LOG_INFO("Canvas added to window with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
     return canvas;
 }

@@ -33,7 +33,9 @@ void GooeyLayout_Build(GooeyLayout *layout)
             LOG_ERROR("Null widget at index %d", i);
             continue;
         }
-
+        if (!layout->core.is_visible) {
+            widget->is_visible = false;
+        }
         switch (layout->layout_type)
         {
         case LAYOUT_VERTICAL:

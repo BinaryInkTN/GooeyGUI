@@ -28,14 +28,14 @@ void GooeyLayout_Build(GooeyLayout *layout)
     for (int i = 0; i < layout->widget_count; i++)
     {
         GooeyWidget *widget = layout->widgets[i];
+
         if (!widget)
         {
             LOG_ERROR("Null widget at index %d", i);
             continue;
         }
-        if (!layout->core.is_visible) {
-            widget->is_visible = false;
-        }
+        widget->is_visible = layout->core.is_visible;
+
         switch (layout->layout_type)
         {
         case LAYOUT_VERTICAL:

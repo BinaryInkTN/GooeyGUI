@@ -107,11 +107,22 @@ typedef struct
 /**
  * @brief Container widget.
  */
-typedef struct {
-    GooeyWidget core;
-    GooeyWidget **widgets;
+typedef struct
+{
+    size_t id;
+    void **widgets;
     size_t widget_count;
 } GooeyContainer;
+typedef struct {
+   
+    GooeyWidget core;
+    GooeyContainer *container;
+    size_t container_count;
+    size_t active_container_id;
+} GooeyContainers;
+
+
+
 
 /**
  * @brief Enumeration for canvas drawing operations.
@@ -520,7 +531,7 @@ typedef struct
     GooeyDropSurface **drop_surface; /**< List of drop surface widgets in the window */
     GooeyTabs **tabs;
     GooeyMeter **meters;
-    GooeyContainer **containers;
+    GooeyContainers **containers;
 
     size_t container_count;
     size_t meter_count;

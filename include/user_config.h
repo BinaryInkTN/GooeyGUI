@@ -11,7 +11,7 @@
 #define MAX_RADIO_BUTTONS 10 /** Maximum number of radio buttons in a group. */
 #define MAX_PLOT_COUNT 100 /** Maximum number of plots. */
 #define MAX_TABS 50 /** Maximum number of tabs. */
-#define MAX_CONTAINER_CHILDREN 50
+#define MAX_CONTAINER 50 /** Maximum number of Containers. */
 // ENABLE/DISABLE WIDGETS
 #define ENABLE_BUTTON 1
 #define ENABLE_CANVAS 1

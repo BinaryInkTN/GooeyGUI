@@ -7,6 +7,11 @@
 #include "common/gooey_common.h"
 
 #if(ENABLE_CONTAINER)
-GooeyContainer* GooeyContainer_Create(int x, int y, int width, int height);
+GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height);
+void GooeyContainer_InsertContainer(GooeyContainers *container);
+void GooeyContainer_AddWidget(GooeyContainers* container, size_t container_id, void *widget);
+void GooeyContainer_SetActiveContainer(GooeyContainers *container, size_t container_id);
+
+
 #endif
 #endif //GOOEY_CONTAINER_H

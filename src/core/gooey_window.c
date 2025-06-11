@@ -276,6 +276,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     }
 
     if (win->containers) {
+        //TODO
         free(win->containers);
         win->containers = NULL;
     }

@@ -38,7 +38,7 @@ GooeyTabs *GooeyTabs_Create( int x, int y, int width, int height)
     tabs_widget->core.y = y;
     tabs_widget->core.width = width;
     tabs_widget->core.height = height;
-    tabs_widget->tabs = malloc(sizeof(void *[MAX_TABS][MAX_WIDGETS]));
+    tabs_widget->tabs = malloc(sizeof(GooeyTab)* MAX_TABS);
     tabs_widget->tab_count = 0;
     tabs_widget->active_tab_id = 0; // default active tab is the first one.
 
@@ -68,11 +68,11 @@ void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
     else
     {
         LOG_WARNING("Invalid tab name, sticking to default.");
-      //  snprintf(tab->tab_name, sizeof(tab->tab_name), "Tab %ld", tab_id);
+      //  snprintf(tdWab->tab_name, sizeof(tab->tab_name), "Tab %ld", tab_id);
     }
 }
 
-void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget)
+void GooeyTabs_Adidget(GooeyTabs* tabs, size_t tab_id, void *widget)
 {
     GooeyTab* selected_tab = (GooeyTab*) &tabs->tabs[tab_id];
     if (!tabs || !selected_tab || !widget)

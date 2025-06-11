@@ -91,15 +91,16 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->meters[win->meter_count++] = (GooeyMeter *)widget;
         break;
     }
-        case WIDGET_CONTAINER: {
-        win->containers[win->container_count++] = (GooeyContainer *)widget;
+    case WIDGET_CONTAINER:
+    {
+        win->containers[win->container_count++] = (GooeyContainers *)widget;
+        break;
     }
     case WIDGET_TABS:
     {
         win->tabs[win->tab_count++] = (GooeyTabs *)widget;
         break;
     }
-
     default:
         LOG_ERROR("Invalid widget type.");
         break;

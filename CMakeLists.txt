@@ -32,7 +32,7 @@ set(SOURCES
     src/widgets/gooey_canvas.c
     src/widgets/gooey_checkbox.c
     src/widgets/gooey_dropdown.c
-        src/widgets/gooey_messagebox.c
+    src/widgets/gooey_messagebox.c
     src/widgets/gooey_label.c
     src/widgets/gooey_layout.c
     src/widgets/gooey_list.c
@@ -44,6 +44,7 @@ set(SOURCES
     src/widgets/gooey_progressbar.c
     src/widgets/gooey_image.c
     src/widgets/gooey_tabs.c
+    src/widgets/gooey_container.c
     src/widgets/gooey_meter.c
     src/signals/gooey_signals.c
     src/animations/gooey_animations.c
@@ -64,18 +65,19 @@ set(SOURCES
     internal/widgets/gooey_plot_internal.c
     internal/widgets/gooey_image_internal.c
     internal/widgets/gooey_tabs_internal.c
+    internal/widgets/gooey_container_internal.c
     internal/widgets/gooey_progressbar_internal.c
     internal/widgets/gooey_debug_overlay_internal.c
-        internal/backends/utils/glad/glad.c
+    internal/backends/utils/glad/glad.c
     internal/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c
     internal/backends/glps_backend_internal.c
     internal/logger/pico_logger_internal.c
     internal/widgets/gooey_meter_internal.c
-        internal/widgets/gooey_container_internal.h
-        internal/widgets/gooey_container_internal.c
-        include/widgets/gooey_container.h
-        src/widgets/gooey_container.c
+    internal/widgets/gooey_container_internal.h
+    internal/widgets/gooey_container_internal.c
+    include/widgets/gooey_container.h
+    src/widgets/gooey_container.c
 )
 
 
@@ -89,34 +91,34 @@ add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include/Gooey>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include/Gooey>
     PRIVATE
-        ${PROJECT_SOURCE_DIR}/internal
-        ${PROJECT_SOURCE_DIR}/third_party/freetype/include
-        ${PROJECT_SOURCE_DIR}/third_party/glps/include
-        ${PROJECT_SOURCE_DIR}/third_party/glps/internal
-        ${PROJECT_SOURCE_DIR}/third_party/cjson
+    ${PROJECT_SOURCE_DIR}/internal
+    ${PROJECT_SOURCE_DIR}/third_party/freetype/include
+    ${PROJECT_SOURCE_DIR}/third_party/glps/include
+    ${PROJECT_SOURCE_DIR}/third_party/glps/internal
+    ${PROJECT_SOURCE_DIR}/third_party/cjson
 )
 
 if(WIN32)
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
-            cjson
-            GLPS
-            freetype
-            #glad
-            gdi32
-            user32
-            kernel32
+        cjson
+        GLPS
+        freetype
+        #glad
+        gdi32
+        user32
+        kernel32
     )
 else()
     target_link_libraries(${PROJECT_NAME}
         PRIVATE
-            cjson
-            GLPS
-            freetype
-            GLESv2
+        cjson
+        GLPS
+        freetype
+        GLESv2
     )
 endif()
 

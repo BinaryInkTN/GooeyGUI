@@ -13,7 +13,7 @@ void button_callback()
     printf("Button clicked!\n");
 }
 void bt_clbk(){ 
-    if ( i >= 3 ){ 
+    if ( i >= 2 ){ 
         i = 0 ; 
     }else { 
         i++; 

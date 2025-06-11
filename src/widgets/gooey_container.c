@@ -24,7 +24,7 @@ GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
     container_widget->container = malloc(sizeof(GooeyContainer)* MAX_CONTAINER);
     container_widget->container_count = 0;
     container_widget->active_container_id = 0; // default active tab is the first one.
-
+    container_widget->core.is_visible = true;
     return container_widget;
 }
 

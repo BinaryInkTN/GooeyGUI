@@ -17,7 +17,7 @@ void GooeyContainer_Draw(GooeyWindow *window)
     for (size_t i = 0; i < window->container_count; ++i)
     {
         GooeyContainers *container = window->containers[i];
-        if (!container || !container->core.is_visible)
+        if (!container)
         {
             continue;
         }
@@ -27,7 +27,6 @@ void GooeyContainer_Draw(GooeyWindow *window)
             GooeyContainer *cont = &container->container[j];
             for (size_t k = 0; k < cont->widget_count; ++k)
             {
-
                 void *widget = cont->widgets[k];
                 GooeyWidget *core = (GooeyWidget *)widget;
 
@@ -35,7 +34,7 @@ void GooeyContainer_Draw(GooeyWindow *window)
                 if (container->active_container_id == cont->id)
                 {
 
-                    core->is_visible = true;
+                    core->is_visible = container->core.is_visible;
                 }
                 else
                 {

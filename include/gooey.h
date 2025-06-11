@@ -41,7 +41,7 @@
 #include "widgets/gooey_progressbar.h"
 #include "widgets/gooey_meter.h"
 #include "signals/gooey_signals.h"
-
+#include "widgets/gooey_container.h"
 
 // Threads
 #include "glps_thread.h"

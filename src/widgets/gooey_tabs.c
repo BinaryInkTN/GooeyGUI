@@ -72,7 +72,7 @@ void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
     }
 }
 
-void GooeyTabs_Adidget(GooeyTabs* tabs, size_t tab_id, void *widget)
+void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget)
 {
     GooeyTab* selected_tab = (GooeyTab*) &tabs->tabs[tab_id];
     if (!tabs || !selected_tab || !widget)

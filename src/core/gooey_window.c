@@ -207,7 +207,7 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
         !(win->widgets = calloc(MAX_WIDGETS, sizeof(GooeyWidget *))) ||
         !(win->plots = calloc(MAX_PLOT_COUNT, sizeof(GooeyPlot *))) ||
         !(win->progressbars = calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
-        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *)))||
+        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))) ||
         !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *))))
     {
         return false;
@@ -275,30 +275,40 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         win->meters = NULL;
     }
 
-    if (win->containers) {
-        for ( size_t container_index = 0 ; container_index < win->container_count; ++container_index){ 
-                GooeyContainers* container = win->containers[container_index]; 
-                if (container){ 
-                        for ( size_t cont_index = 0 ; cont_index < container->container_count ; ++ cont_index){ 
-                             GooeyContainer* cont = &container->container[cont_index]; 
-                             if (cont ){ 
-                                    for ( size_t wid_count = 0 ; wid_count< cont->widget_count ; ++wid_count ){ 
-                                        void* wid = cont->widgets[wid_count]; 
-                                        free (wid); 
-                                        wid = NULL ; 
-                                    }
-                             }
-                             free ( cont->widgets ); 
-                             cont->widgets = NULL ; 
-                        }
+    if (win->containers)
+    {
+        for (size_t container_index = 0; container_index < win->container_count; ++container_index)
+        {
+            GooeyContainers *container = win->containers[container_index];
+            if (container)
+            {
+                // Free widgets in each container
+                for (size_t cont_index = 0; cont_index < container->container_count; ++cont_index)
+                {
+                    GooeyContainer *cont = &container->container[cont_index]; // Changed from &container->container
+                    if (cont)
+                    {
+                    
+                        // Free widgets array
+                        free(cont->widgets);
+                        cont->widgets = NULL;
+                    }
+                }
 
-                        free ( container->container ); 
-                        container->container = NULL ;
-                }  
+                // Free containers array
+                free(container->container); // Changed from container->container
+                container->container = NULL;
+
+                // Free the container itself
+                free(container);
+                win->containers[container_index] = NULL; // Actually set in array
+            }
         }
 
+        // Free the containers array
         free(win->containers);
         win->containers = NULL;
+        win->container_count = 0; // Important to reset count
     }
 
     if (win->tabs)
@@ -639,8 +649,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     active_backend->Clear(win);
 
     // Draw all UI components
-    for (size_t i = 0; i < win->layout_count; ++i) {
-#if(ENABLE_LAYOUT)
+    for (size_t i = 0; i < win->layout_count; ++i)
+    {
+#if (ENABLE_LAYOUT)
         GooeyLayout_Build(win->layouts[i]);
 #endif
     }
@@ -656,19 +667,19 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_PROGRESSBAR)
     GooeyProgressBar_Draw(win);
 #endif
-#if(ENABLE_DROP_SURFACE)
+#if (ENABLE_DROP_SURFACE)
     GooeyDropSurface_Draw(win);
 #endif
-#if(ENABLE_IMAGE)
+#if (ENABLE_IMAGE)
     GooeyImage_Draw(win);
 #endif
-#if(ENABLE_LIST)
+#if (ENABLE_LIST)
     GooeyList_Draw(win);
 #endif
 #if (ENABLE_BUTTON)
     GooeyButton_Draw(win);
 #endif
-#if(ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX)
     GooeyTextbox_Draw(win);
 #endif
 #if (ENABLE_CHECKBOX)
@@ -683,19 +694,19 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_PLOT)
     GooeyPlot_Draw(win);
 #endif
-#if(ENABLE_DROPDOWN)
+#if (ENABLE_DROPDOWN)
     GooeyDropdown_Draw(win);
 #endif
-#if(ENABLE_LABEL)
+#if (ENABLE_LABEL)
     GooeyLabel_Draw(win);
 #endif
-#if(ENABLE_MENU)
+#if (ENABLE_MENU)
     GooeyMenu_Draw(win);
 #endif
-#if(ENABLE_DEBUG_OVERLAY)
-     GooeyDebugOverlay_Draw(win);
+#if (ENABLE_DEBUG_OVERLAY)
+    GooeyDebugOverlay_Draw(win);
 #endif
-#if(ENABLE_CONTAINER)
+#if (ENABLE_CONTAINER)
     GooeyContainer_Draw(win);
 #endif
     active_backend->Render(win);
@@ -725,30 +736,30 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->GetWinDim(&width, &height, window_id);
     active_backend->SetViewport(window_id, width, height);
     active_backend->UpdateBackground(window);
-#if(ENABLE_SLIDER)
+#if (ENABLE_SLIDER)
     needs_redraw |= GooeySlider_HandleDrag(window, event);
 #endif
 
 #if (ENABLE_BUTTON)
     GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
-#if(ENABLE_MENU)
+#if (ENABLE_MENU)
     GooeyMenu_HandleHover(window);
 #endif
-#if(ENABLE_DROPDOWN)
+#if (ENABLE_DROPDOWN)
     GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
-#if(ENABLE_LIST)
+#if (ENABLE_LIST)
     needs_redraw |= GooeyList_HandleThumbScroll(window, event);
 #endif
-#if(ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX)
     GooeyTextbox_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
     switch (event->type)
     {
 
     case GOOEY_EVENT_MOUSE_SCROLL:
-#if(ENABLE_LIST)
+#if (ENABLE_LIST)
         needs_redraw |= GooeyList_HandleScroll(window, event);
 #endif
         break;
@@ -762,7 +773,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_KEY_PRESS:
-#if(ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX)
         GooeyTextbox_HandleKeyPress(window, event);
 #endif
         needs_redraw = true;
@@ -772,35 +783,35 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     {
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
 
-#if(ENABLE_BUTTON)
+#if (ENABLE_BUTTON)
         needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
 #if (ENABLE_DROPDOWN)
         needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_CHECKBOX)
+#if (ENABLE_CHECKBOX)
         needs_redraw |= GooeyCheckbox_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_RADIOBUTTON)
+#if (ENABLE_RADIOBUTTON)
         needs_redraw |= GooeyRadioButtonGroup_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX)
         needs_redraw |= GooeyTextbox_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_MENU)
+#if (ENABLE_MENU)
         needs_redraw |= GooeyMenu_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_LIST)
+#if (ENABLE_LIST)
         needs_redraw |= GooeyList_HandleThumbScroll(window, event);
         needs_redraw |= GooeyList_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_IMAGE)
+#if (ENABLE_IMAGE)
         needs_redraw |= GooeyImage_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_TABS)
+#if (ENABLE_TABS)
         needs_redraw |= GooeyTabs_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
-#if(ENABLE_CANVAS)
+#if (ENABLE_CANVAS)
         GooeyCanvas_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
         break;
@@ -835,7 +846,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         active_backend->ResetEvents(window);
     }
 }
-
 
 void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable)
 {

@@ -276,7 +276,27 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     }
 
     if (win->containers) {
-        //TODO
+        for ( size_t container_index = 0 ; container_index < win->container_count; ++container_index){ 
+                GooeyContainers* container = win->containers[container_index]; 
+                if (container){ 
+                        for ( size_t cont_index = 0 ; cont_index < container->container_count ; ++ cont_index){ 
+                             GooeyContainer* cont = &container->container[cont_index]; 
+                             if (cont ){ 
+                                    for ( size_t wid_count = 0 ; wid_count< cont->widget_count ; ++wid_count ){ 
+                                        void* wid = cont->widgets[wid_count]; 
+                                        free (wid); 
+                                        wid = NULL ; 
+                                    }
+                             }
+                             free ( cont->widgets ); 
+                             cont->widgets = NULL ; 
+                        }
+
+                        free ( container->container ); 
+                        container->container = NULL ;
+                }  
+        }
+
         free(win->containers);
         win->containers = NULL;
     }

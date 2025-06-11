@@ -68,6 +68,8 @@ void GooeyContainer_SetActiveContainer(GooeyContainers *container, size_t contai
     if (!container || container_id > container->container_count)
     {
         LOG_ERROR("Couldn't set active Container.");
+        // container->active_container_id = 0;
+
         return;
     }
 

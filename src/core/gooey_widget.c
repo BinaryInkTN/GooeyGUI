@@ -16,7 +16,7 @@
  */
 
 #include "core/gooey_widget_internal.h"
-#include "utils/logger/pico_logger.h"
+#include "logger/pico_logger_internal.h"
 
 void GooeyWidget_MakeVisible(void *widget, bool state)
 {

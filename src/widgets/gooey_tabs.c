@@ -20,6 +20,7 @@
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_tabs_internal.h"
+#include "widgets/gooey_window_internal.h"
 
 
 
@@ -72,7 +73,7 @@ void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)
     }
 }
 
-void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget)
+void GooeyTabs_AddWidget(GooeyWindow* window, GooeyTabs* tabs, size_t tab_id, void *widget)
 {
     GooeyTab* selected_tab = (GooeyTab*) &tabs->tabs[tab_id];
     if (!tabs || !selected_tab || !widget)
@@ -87,8 +88,9 @@ void GooeyTabs_AddWidget(GooeyTabs* tabs, size_t tab_id, void *widget)
     core->y = core->y + tabs->core.y + TAB_HEIGHT;
 
     selected_tab->widgets[selected_tab->widget_count++] = widget;
-   
-    
+
+    // Register widget to window implicitly
+   GooeyWindow_Internal_RegisterWidget(window, widget);
 }
 
 void GooeyTabs_SetActiveTab(GooeyTabs *tabs, size_t tab_id)

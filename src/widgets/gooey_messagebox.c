@@ -79,17 +79,17 @@ GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGB
     GooeyLabel *title_label = GooeyLabel_Create(title, 0.5f, 50, 50);
     GooeyWindow_RegisterWidget(window, title_label);
     GooeyLabel_SetColor(title_label, msgbox_title_color);
-    GooeyLayout_AddChild(layout, title_label);
+    GooeyLayout_AddChild(window, layout, title_label);
     GooeyLabel* message_label = GooeyLabel_Create(message, 0.3f, 0, 0);
     GooeyWindow_RegisterWidget(window, message_label);
-    GooeyLayout_AddChild(layout, message_label);
-    GooeyLayout_AddChild(layout, button_layout);
+    GooeyLayout_AddChild(window, layout, message_label);
+    GooeyLayout_AddChild(window, layout, button_layout);
     GooeyButton *ok_button = GooeyButton_Create("Ok", 0, 0, 20, 40, __msgbox_ok);
     GooeyWindow_RegisterWidget(window, ok_button);
 
     GooeyButton_SetHighlight(ok_button, 1);
-    GooeyLayout_AddChild(button_layout, ok_button);
-    GooeyLayout_AddChild(button_layout, GooeyButton_Create("Cancel", 0, 0, 20, 40, __msgbox_cancel));
+    GooeyLayout_AddChild(window, button_layout, ok_button);
+    GooeyLayout_AddChild(window, button_layout, GooeyButton_Create("Cancel", 0, 0, 20, 40, __msgbox_cancel));
 
     GooeyLayout_Build(layout);
 

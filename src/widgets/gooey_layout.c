@@ -19,6 +19,7 @@
 #if(ENABLE_LAYOUT)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
+#include "widgets/gooey_window_internal.h"
 
 GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
                                 int x, int y, int width, int height)
@@ -51,7 +52,7 @@ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
     return layout;
 }
 
-void GooeyLayout_AddChild(GooeyLayout *layout, void *widget)
+void GooeyLayout_AddChild(GooeyWindow* window, GooeyLayout *layout, void *widget)
 {
     if (!layout)
     {
@@ -80,6 +81,9 @@ void GooeyLayout_AddChild(GooeyLayout *layout, void *widget)
     }
 
     layout->widgets[layout->widget_count++] = widget_core;
+
+    // Register widget to window implicitly
+    GooeyWindow_Internal_RegisterWidget(window, widget);
 }
 
 

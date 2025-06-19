@@ -35,11 +35,11 @@
   * Registers a widget as a child of the given layout, allowing it to be positioned
   * according to the layout's rules.
   *
+  * @param window The Application window.
   * @param layout The layout to which the widget will be added.
   * @param widget A pointer to the widget to add.
   */
- void GooeyLayout_AddChild(GooeyLayout *layout, void *widget);
-
+void GooeyLayout_AddChild(GooeyWindow* window, GooeyLayout *layout, void *widget);
 void GooeyLayout_Build(GooeyLayout* layout);
 
 #endif

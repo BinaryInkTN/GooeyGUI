@@ -4,6 +4,7 @@
 
 #include "widgets/gooey_container.h"
 #include "logger/pico_logger_internal.h"
+#include "widgets/gooey_window_internal.h"
 
 
 GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
@@ -44,7 +45,7 @@ void GooeyContainer_InsertContainer(GooeyContainers *container)
     cont->widget_count = 0;
 }
 
-void GooeyContainer_AddWidget(GooeyContainers* container, size_t container_id, void *widget)
+void GooeyContainer_AddWidget(GooeyWindow* window, GooeyContainers* container, size_t container_id, void *widget)
 {
     GooeyContainer* selected_cont = (GooeyContainer*) &container->container[container_id];
     if (!container || !selected_cont || !widget)
@@ -59,7 +60,9 @@ void GooeyContainer_AddWidget(GooeyContainers* container, size_t container_id, v
     core->y = core->y + container->core.y ;
 
     selected_cont->widgets[selected_cont->widget_count++] = widget;
-   
+
+    // Register widget to window implicitly
+    GooeyWindow_Internal_RegisterWidget(window, widget);
     
 }
 

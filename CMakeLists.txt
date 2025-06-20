@@ -118,7 +118,7 @@ install(TARGETS GooeyGUI
         INCLUDES DESTINATION include
 )
 
-install(DIRECTORY include/ DESTINATION include/GooeyGUI)
+install(DIRECTORY include/ DESTINATION include/Gooey)
 
 # Generate package config
 include(CMakePackageConfigHelpers)

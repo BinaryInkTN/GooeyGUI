@@ -69,42 +69,28 @@ int main()
 
     // Add widgets to their respective tabs
     // Tab 0: Controls
-    GooeyContainer_AddWidget(mainContainer, 0, btn1);
-    GooeyContainer_AddWidget(mainContainer, 0, checkbox);
-    GooeyContainer_AddWidget(mainContainer, 0, slider);
+    GooeyContainer_AddWidget(win, mainContainer, 0, btn1);
+    GooeyContainer_AddWidget(win, mainContainer, 0, checkbox);
+    GooeyContainer_AddWidget(win, mainContainer, 0, slider);
     
 
     GooeyButton* button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL);
 
     // Tab 1: Options
-    GooeyContainer_AddWidget(mainContainer, 1, dropdownLabel);
-    GooeyContainer_AddWidget(mainContainer, 1, qualityDropdown);
-    GooeyContainer_AddWidget(mainContainer, 1, button_test);
-    GooeyContainer_AddWidget(mainContainer, 1, colorLabel);
-    GooeyContainer_AddWidget(mainContainer, 1, colorDropdown);
+    GooeyContainer_AddWidget(win, mainContainer, 1, dropdownLabel);
+    GooeyContainer_AddWidget(win, mainContainer, 1, qualityDropdown);
+    GooeyContainer_AddWidget(win, mainContainer, 1, button_test);
+    GooeyContainer_AddWidget(win, mainContainer, 1, colorLabel);
+    GooeyContainer_AddWidget(win, mainContainer, 1, colorDropdown);
 
     // Tab 2: Forms
-    GooeyContainer_AddWidget(mainContainer, 2, nameLabel);
+    GooeyContainer_AddWidget(win, mainContainer, 2, nameLabel);
     // GooeyContainer_AddWidget(mainContainer, 2, nameTextbox);
-    GooeyContainer_AddWidget(mainContainer, 2, emailLabel);
+    GooeyContainer_AddWidget(win, mainContainer, 2, emailLabel);
     // GooeyContainer_AddWidget(mainContainer, 2, emailTextbox);
-    GooeyContainer_AddWidget(mainContainer, 2, submitBtn);
+    GooeyContainer_AddWidget(win, mainContainer, 2, submitBtn);
 
-    // Register all widgets with the window
-    GooeyWindow_RegisterWidget(win, btn1);
-    GooeyWindow_RegisterWidget(win, checkbox);
-    GooeyWindow_RegisterWidget(win, slider);
-    GooeyWindow_RegisterWidget(win, dropdownLabel);
-    GooeyWindow_RegisterWidget(win, qualityDropdown);
-    GooeyWindow_RegisterWidget(win, colorLabel);
-    GooeyWindow_RegisterWidget(win, colorDropdown);
-    GooeyWindow_RegisterWidget(win, button_test);
-
-    GooeyWindow_RegisterWidget(win, nameLabel);
-    // GooeyWindow_RegisterWidget(win, nameTextbox);
-    GooeyWindow_RegisterWidget(win, emailLabel);
-    // GooeyWindow_RegisterWidget(win, emailTextbox);
-    GooeyWindow_RegisterWidget(win, submitBtn);
+    
     GooeyWindow_RegisterWidget(win, mainContainer);
 
     // Set initial active tab

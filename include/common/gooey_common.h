@@ -480,6 +480,7 @@ typedef struct
     GooeyTab *tabs;
     size_t tab_count;
     size_t active_tab_id;
+    bool is_sidebar;
 } GooeyTabs;
 
 typedef struct

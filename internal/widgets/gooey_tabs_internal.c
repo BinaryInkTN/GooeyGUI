@@ -3,10 +3,7 @@
 #include "backends/gooey_backend_internal.h"
 #include "gooey_window_internal.h"
 
-#define TAB_TEXT_PADDING 10
-#define TAB_HIGHLIGHT_EXTRA 5
-#define TAB_TEXT_SCALE 0.28f
-#define TAB_HIGHLIGHT_ALPHA 0.1f
+
 
 bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
 {
@@ -132,8 +129,8 @@ void GooeyTabs_Draw(GooeyWindow *win)
                     tabs->core.height,
                     win->active_theme->widget_base,
                     win->creation_id,
-                    false,
-                    0.0f);
+                    true,
+                    2.0f);
             }
 
             for (size_t j = 0; j < tabs->tab_count; ++j)

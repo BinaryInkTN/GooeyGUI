@@ -5,28 +5,38 @@ void dropdown_callback(int selected_index)
 {
     printf("Dropdown selection changed to index: %d\n", selected_index);
 }
-
+bool state = true;
+GooeyTabs *mainTabs;
 void button_callback()
 {
-    printf("Button clicked!\n");
+    if (state)
+    {
+        GooeyTabs_Sidebar_Open(mainTabs);
+    } else {
+        GooeyTabs_Sidebar_Close(mainTabs);
+    }
+
+    state = !state;
+        
 }
 
 int main()
 {
     Gooey_Init();
     GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 800, 600, true);
+    GooeyAppbar_Set(win, "test");
     GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
     GooeyWindow_SetTheme(win, dark_mode);
 
     // Create main tabs container
-    GooeyTabs *mainTabs = GooeyTabs_Create(10, 10, 780, 580);
+    mainTabs = GooeyTabs_Create(10, 10, 780, 580, true);
     mainTabs->is_sidebar = 1;
     // Tab 1: Controls Demo
     GooeyTabs_InsertTab(mainTabs, "Controls");
 
     // Widgets for Controls tab
     GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 30, 100, 30, button_callback);
-    GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80,  "Enable Feature", NULL);
+    GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80, "Enable Feature", NULL);
     GooeySlider *slider = GooeySlider_Create(30, 130, 200, 0, 100, true, NULL);
 
     // Tab 2: Dropdowns and Options
@@ -51,8 +61,8 @@ int main()
     GooeyLabel *nameLabel = GooeyLabel_Create("Name:", 0.28f, 30, 30);
     GooeyTextbox *nameTextbox = GooeyTextBox_Create(100, 30, 200, 25, "Name:", false, NULL);
 
-    GooeyLabel *emailLabel = GooeyLabel_Create("Email:", 0.28f, 30, 70);
-    GooeyTextbox *emailTextbox = GooeyTextBox_Create(100, 70, 200, 25,"Email:", false,NULL);
+    GooeyLabel *emailLabel = GooeyLabel_Create("Password:", 0.28f, 30, 70);
+    GooeyTextbox *emailTextbox = GooeyTextBox_Create(100, 70, 200, 25, "Password:", true, NULL);
 
     GooeyButton *submitBtn = GooeyButton_Create("Submit", 150, 120, 100, 30, button_callback);
 
@@ -61,9 +71,8 @@ int main()
     GooeyTabs_AddWidget(win, mainTabs, 0, btn1);
     GooeyTabs_AddWidget(win, mainTabs, 0, checkbox);
     GooeyTabs_AddWidget(win, mainTabs, 0, slider);
-    
 
-    GooeyButton* button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL);
+    GooeyButton *button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL);
 
     // Tab 1: Options
     GooeyTabs_AddWidget(win, mainTabs, 1, dropdownLabel);

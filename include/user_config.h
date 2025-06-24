@@ -4,6 +4,7 @@
 // DEBUG/PROD
 #define PROJECT_BRANCH 1 // 0=debug 1=prod TODO
 
+#define APPBAR_HEIGHT 50
 // MAX
 #define MAX_TIMERS 100 /** Maximum number of timer objects. */
 #define MAX_WIDGETS 100 /** Maximum number of widgets that can be added to a window. */
@@ -33,6 +34,7 @@
 #define ENABLE_TABS 1
 #define ENABLE_TEXTBOX 1
 #define ENABLE_CONTAINER 1
+#define ENABLE_APPBAR 1
 
 
 

@@ -140,6 +140,21 @@ void GooeyTabs_Draw(GooeyWindow *win)
 
                 if (tabs->is_open)
                 {
+
+                     // Active tab highlight
+                    if (tabs->active_tab_id == tab->tab_id)
+                    {
+                        active_backend->FillRectangle(
+                            tabs->core.x,
+                            tab_y,
+                            TAB_WIDTH,
+                            TAB_ELEMENT_HEIGHT,
+                            win->active_theme->primary,
+                            win->creation_id,
+                            false,
+                            0.0f);
+                    }
+
                     // Tab text
                     const int text_height = active_backend->GetTextHeight(tab->tab_name, strlen(tab->tab_name));
                     active_backend->DrawText(
@@ -150,20 +165,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                         TAB_TEXT_SCALE,
                         win->creation_id);
 
-                    // Active tab highlight
-                    if (tabs->active_tab_id == tab->tab_id)
-                    {
-                        active_backend->DrawRectangle(
-                            tabs->core.x,
-                            tab_y,
-                            TAB_WIDTH,
-                            TAB_ELEMENT_HEIGHT + TAB_HIGHLIGHT_EXTRA,
-                            win->active_theme->primary,
-                            TAB_HIGHLIGHT_ALPHA,
-                            win->creation_id,
-                            false,
-                            0.0f);
-                    }
+                   
                 }
 
                 // Handle widget visibility

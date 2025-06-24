@@ -43,6 +43,7 @@
 #include "widgets/gooey_window_internal.h"
 #include "widgets/gooey_meter_internal.h"
 #include "widgets/gooey_layout_internal.h"
+#include "widgets/gooey_appbar_internal.h"
 #include <stdarg.h>
 #include <string.h>
 
@@ -231,7 +232,11 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         __destroy_theme(win->active_theme);
         win->active_theme = NULL;
     }
-
+    if (win->appbar)
+    {
+        free(win->appbar);
+        win->appbar = NULL;
+    }
     if (win->default_theme)
     {
         __destroy_theme(win->default_theme);
@@ -288,7 +293,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
                     GooeyContainer *cont = &container->container[cont_index]; // Changed from &container->container
                     if (cont)
                     {
-                    
+
                         // Free widgets array
                         free(cont->widgets);
                         cont->widgets = NULL;
@@ -582,6 +587,9 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     }
 
     win->menu = NULL;
+    win->appbar = NULL;
+    win->width = width;
+    win->height = height;
     win->enable_debug_overlay = false;
     win->tab_count = 0;
     win->visibility = visibility;
@@ -708,6 +716,9 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #endif
 #if (ENABLE_CONTAINER)
     GooeyContainer_Draw(win);
+#endif
+#if(ENABLE_APPBAR)
+    GooeyAppbar_Internal_Draw(win);
 #endif
     active_backend->Render(win);
 }

@@ -486,6 +486,11 @@ typedef struct
 
 typedef struct
 {
+    const char* appname;
+} GooeyAppbar;
+
+typedef struct
+{
     GooeyWidget core;
     long value;
     const char *label;
@@ -508,9 +513,12 @@ typedef struct
 {
     WINDOW_TYPE type; /**< Type of the window */
     int creation_id;  /**< Unique window ID */
+    int width;
+    int height;
     bool visibility;  /**< Whether the window is visible */
     bool enable_debug_overlay;
     bool continuous_redraw;
+    GooeyAppbar* appbar;
     GooeyButton **buttons;                       /**< List of buttons in the window */
     GooeyLabel **labels;                         /**< List of labels in the window */
     GooeyCheckbox **checkboxes;                  /**< List of checkboxes in the window */

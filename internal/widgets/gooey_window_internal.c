@@ -13,7 +13,7 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
 
     GooeyWidget *core = (GooeyWidget *)widget;
     WIDGET_TYPE type = core->type;
-
+    if(win->appbar) core->y += APPBAR_HEIGHT; 
     switch (type)
     {
     case WIDGET_LABEL:

@@ -505,6 +505,8 @@ static void window_resize_callback(size_t window_id, int width, int height, void
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
     event->type = GOOEY_EVENT_RESIZE;
+    win->width = width;
+    win->height = height;
 }
 static void window_close_callback(size_t window_id, void *data)
 {

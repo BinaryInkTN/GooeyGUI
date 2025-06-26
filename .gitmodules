@@ -7,3 +7,6 @@
 [submodule "third_party/glps"]
 	path = third_party/glps
 	url = https://github.com/GooeyUI/GLPS.git
+[submodule "third_party/tft_espi"]
+	path = third_party/tft_espi
+	url = https://github.com/Bodmer/TFT_eSPI.git

@@ -19,6 +19,23 @@ endif()
 add_subdirectory(third_party/cjson)
 add_subdirectory(third_party/glps)
 add_subdirectory(third_party/freetype)
+
+# TFT_eSPI configuration
+option(ENABLE_TFT_ESPI "Enable TFT_eSPI backend" OFF)
+if(ENABLE_TFT_ESPI)
+    add_definitions(-DTFT_ESPI_ENABLED)
+    find_library(TFT_ESPI_LIB TFT_eSPI)
+    find_library(SPI_LIB SPI)
+
+    if(NOT TFT_ESPI_LIB OR NOT SPI_LIB)
+        message(WARNING "TFT_eSPI libraries not found - disabling TFT backend")
+        set(ENABLE_TFT_ESPI OFF)
+    else()
+        message(STATUS "TFT_eSPI backend enabled")
+        list(APPEND EXTRA_LIBS ${TFT_ESPI_LIB} ${SPI_LIB})
+    endif()
+endif()
+
 set(SOURCES
         src/core/gooey.c
         src/core/gooey_window.c
@@ -74,7 +91,16 @@ set(SOURCES
         internal/backends/glps_backend_internal.c
         internal/logger/pico_logger_internal.c
         internal/widgets/gooey_meter_internal.c
+        internal/backends/tft_backend_internal.c
 )
+
+# Conditionally add TFT backend sources
+if(ENABLE_TFT_ESPI)
+    list(APPEND SOURCES
+            backends/tft_espi/tft_espi.c
+    )
+endif()
+
 # Main library target
 add_library(GooeyGUI SHARED ${SOURCES})
 
@@ -90,6 +116,7 @@ target_include_directories(GooeyGUI PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/include
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/internal
         ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/tft_espi/
 )
 
 # Link dependencies
@@ -97,6 +124,7 @@ target_link_libraries(GooeyGUI PRIVATE
         cjson
         GLPS
         freetype
+        ${EXTRA_LIBS}
 )
 
 if(WIN32)

@@ -35,7 +35,7 @@
 #define ENABLE_TEXTBOX 1
 #define ENABLE_CONTAINER 1
 #define ENABLE_APPBAR 1
-#define TFT_ESPI_ENABLED 0
+#define TFT_ESPI_ENABLED 1
 
 
 

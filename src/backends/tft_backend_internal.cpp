@@ -16,6 +16,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <TFT_eSPI.h>
+#include <XPT2046_Touchscreen.h>
 #include <stdint.h>
 #include <math.h>
 #include <stdlib.h>
@@ -245,9 +246,17 @@ void tft_setup_callbacks(void (*callback)(size_t window_id, void* data), void* d
 
 void tft_run() {
     while (1) {
-       
-    }
+     
+  uint16_t x, y;
+
+  if (ctx.tft->getTouch(&x, &y))
+  {
+    Serial.printf("touch %u %u ", x, y);
+  }  
+    
 }
+}
+
 
 GooeyTimer* tft_create_timer() {
     return NULL;

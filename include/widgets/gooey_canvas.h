@@ -11,8 +11,14 @@
 #ifndef GOOEY_CANVAS_H
 #define GOOEY_CANVAS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
-#if(ENABLE_CANVAS)
+
+#if (ENABLE_CANVAS)
+
 /**
  * @brief Adds a canvas to the specified window.
  *
@@ -26,9 +32,9 @@
  * @param callback Click callback function.
  * @return A pointer to the newly created GooeyCanvas.
  */
-
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
                                 int height, void (*callback)(int x, int y));
+
 /**
  * @brief Draws a rectangle onto the user-defined canvas.
  *
@@ -41,8 +47,13 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
  * @param height The height of the rectangle.
  * @param color_hex The color of the rectangle in hexadecimal format.
  * @param is_filled If true, the rectangle is filled with a solid color; otherwise, it is hollow.
+ * @param thickness The line thickness for the outline.
+ * @param is_rounded If true, corners are rounded.
+ * @param corner_radius Radius of the rounded corners.
  */
-void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius);
+void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height,
+                               unsigned long color_hex, bool is_filled, float thickness,
+                               bool is_rounded, float corner_radius);
 
 /**
  * @brief Draws a line onto the user-defined canvas.
@@ -69,7 +80,8 @@ void GooeyCanvas_DrawLine(GooeyCanvas *canvas, int x1, int y1, int x2, int y2, u
  * @param angle1 The starting angle of the arc in degrees.
  * @param angle2 The ending angle of the arc in degrees.
  */
-void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int width, int height, int angle1, int angle2);
+void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int width,
+                         int height, int angle1, int angle2);
 
 /**
  * @brief Sets the foreground color of the user-defined canvas.
@@ -80,6 +92,11 @@ void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int wi
  * @param color_hex The foreground color in hexadecimal format.
  */
 void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex);
+
+#endif // ENABLE_CANVAS
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif // GOOEY_CANVAS_H

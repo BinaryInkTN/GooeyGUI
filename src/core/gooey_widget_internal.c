@@ -15,7 +15,7 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "gooey_widget_internal.h"
+#include "core/gooey_widget_internal.h"
 #include "common/gooey_common.h"
 #include "logger/pico_logger_internal.h"
 #include <stdbool.h>

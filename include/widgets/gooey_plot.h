@@ -1,48 +1,45 @@
-/**
- * @file gooey_plot.h
- * @brief Gooey Plot API - Provides various types of plots for visualization.
- *
- * This API allows the addition, drawing, and updating of different types of plots
- * within a Gooey window. It supports various plot types such as line charts,
- * bar charts, etc., and enables dynamic data updates for real-time visualizations.
- *
- * @author Yassine Ahmed Ali
- * @license GPL-3.0
- */
-
 #ifndef GOOEY_PLOT_H
 #define GOOEY_PLOT_H
 
 #include "common/gooey_common.h"
-#if(ENABLE_PLOT)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if (ENABLE_PLOT)
+
 /**
  * @brief Creates a plot widget.
  *
- * This function allows adding various types of plots to a given Gooey window.
- * The plot type is specified by the user, and the plot data is provided through
- * a GooeyPlotData structure.
+ * Adds a plot widget of the specified type to the given position and size,
+ * using the provided plot data.
  *
- * @param plot_type The type of plot to be added (e.g., LINE, BAR).
- * @param data Pointer to the structure containing the plot data.
+ * @param plot_type The type of plot to be created (e.g., LINE, BAR).
+ * @param data Pointer to the plot data structure.
  * @param x The x-coordinate of the plot's position.
  * @param y The y-coordinate of the plot's position.
- * @param width The width of the plot.
- * @param height The height of the plot.
- *
- * @return A pointer to the newly created GooeyPlot.
+ * @param width The width of the plot widget.
+ * @param height The height of the plot widget.
+ * @return Pointer to the newly created GooeyPlot object.
  */
 GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int x, int y, int width, int height);
 
 /**
- * @brief Updates the data of an existing plot.
+ * @brief Updates an existing plot with new data.
  *
- * This function updates the plot with new data. It is intended to modify the
- * content of an existing plot, maintaining its type and other configurations.
+ * Updates the content of the given plot widget while maintaining
+ * its configuration and type.
  *
- * @param plot Pointer to the GooeyPlot to be updated.
- * @param new_data Pointer to the new plot data.
+ * @param plot Pointer to the plot widget to update.
+ * @param new_data Pointer to the new data to update the plot with.
  */
 void GooeyPlot_Update(GooeyPlot *plot, GooeyPlotData *new_data);
 
+#endif // ENABLE_PLOT
+
+#ifdef __cplusplus
+} // extern "C"
 #endif
-#endif /* GOOEY_PLOT_H */
+
+#endif // GOOEY_PLOT_H

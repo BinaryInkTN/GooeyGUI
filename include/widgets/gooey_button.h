@@ -1,4 +1,3 @@
-
 /**
  * @file gooey_button.h
  * @brief Button handling functions for the Gooey GUI library.
@@ -11,7 +10,12 @@
 #ifndef GOOEY_BUTTON_H
 #define GOOEY_BUTTON_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
+
 #if (ENABLE_BUTTON)
 
 #include <stdbool.h>
@@ -33,7 +37,6 @@
 GooeyButton *GooeyButton_Create(const char *label, int x, int y,
                                 int width, int height, void (*callback)());
 
-
 /**
  * @brief Sets the text of the button.
  *
@@ -43,7 +46,6 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
  * @param text The new text to display on the button.
  */
 void GooeyButton_SetText(GooeyButton *button, const char *text);
-
 
 /**
  * @brief Highlights or unhighlights a button.
@@ -56,5 +58,10 @@ void GooeyButton_SetText(GooeyButton *button, const char *text);
  */
 void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted);
 
+#endif // ENABLE_BUTTON
+
+#ifdef __cplusplus
+}
 #endif
-#endif
+
+#endif // GOOEY_BUTTON_H

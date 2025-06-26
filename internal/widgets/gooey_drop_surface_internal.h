@@ -1,5 +1,5 @@
 /**
- * @file gooey_drop_surface.h
+ * @file gooey_drop_surface_internal.h
  * @brief Header file for the GooeyDropSurface module.
  * @author Yassine Ahmed Ali
  * @copyright GNU General Public License v3.0
@@ -11,8 +11,14 @@
 #ifndef GOOEY_DROP_SURFACE_INTERNAL_H
 #define GOOEY_DROP_SURFACE_INTERNAL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
-#if(ENABLE_DROP_SURFACE)
+
+#if (ENABLE_DROP_SURFACE)
+
 /**
  * @brief Handles file drop events for drop surfaces within the specified window.
  *
@@ -35,5 +41,11 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY);
  * @param win The window containing the drop surfaces.
  */
 void GooeyDropSurface_Draw(GooeyWindow *win);
+
+#endif // ENABLE_DROP_SURFACE
+
+#ifdef __cplusplus
+}
 #endif
-#endif // GOOEY_DROP_SURFACE_H
+
+#endif // GOOEY_DROP_SURFACE_INTERNAL_H

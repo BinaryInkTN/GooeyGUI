@@ -1,4 +1,4 @@
-#include "gooey_layout_internal.h"
+#include "widgets/gooey_layout_internal.h"
 #if(ENABLE_LAYOUT)
 #include "logger/pico_logger_internal.h"
 

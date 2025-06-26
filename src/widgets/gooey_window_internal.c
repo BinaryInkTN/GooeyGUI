@@ -1,4 +1,4 @@
-#include "gooey_window_internal.h"
+#include "widgets/gooey_window_internal.h"
 #include "common/gooey_common.h"
 #include "logger/pico_logger_internal.h"
 

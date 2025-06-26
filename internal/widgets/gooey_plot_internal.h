@@ -10,23 +10,23 @@
  * @license GPL-3.0
  */
 
- #ifndef GOOEY_PLOT_INTERNAL_H
- #define GOOEY_PLOT_INTERNAL_H
- 
- #include "common/gooey_common.h"
-#if(ENABLE_PLOT)
- 
- /**
-  * @brief Draws the plot in the specified Gooey window.
-  *
-  * This function is used to render the plot within the specified window.
-  * It should be called after the plot data has been added or updated to
-  * visualize the plot on the screen.
-  *
-  * @param win Pointer to the Gooey window where the plot will be drawn.
-  */
- void GooeyPlot_Draw(GooeyWindow* win);
- 
-#endif
- #endif /* GOOEY_PLOT_H */
- 
+#ifndef GOOEY_PLOT_INTERNAL_H
+#define GOOEY_PLOT_INTERNAL_H
+
+#include "common/gooey_common.h"
+
+#if (ENABLE_PLOT)
+
+/**
+ * @brief Draws the plot in the specified Gooey window.
+ *
+ * This function renders the plot inside the given window. It should be called
+ * whenever plot data is added or updated to refresh the visualization.
+ *
+ * @param win Pointer to the Gooey window where the plot will be drawn.
+ */
+void GooeyPlot_Draw(GooeyWindow *win);
+
+#endif // ENABLE_PLOT
+
+#endif /* GOOEY_PLOT_INTERNAL_H */

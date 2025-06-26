@@ -1,4 +1,4 @@
-#include "gooey_button_internal.h"
+#include "widgets/gooey_button_internal.h"
 #if (ENABLE_BUTTON)
 #include "backends/gooey_backend_internal.h"
 

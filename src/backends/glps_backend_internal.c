@@ -16,8 +16,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "utils/stb_image/stb_image.h"
+
 #include "backends/utils/backend_utils_internal.h"
+#if (TFT_ESPI_ENABLED == 0)
+#include "backends/utils/stb_image/stb_image.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -1142,3 +1144,4 @@ GooeyBackend glps_backend = {
     .CursorChange = glps_set_cursor,
     .StopCursorReset = glps_stop_cursor_reset,
     };
+#endif

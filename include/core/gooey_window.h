@@ -23,7 +23,9 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-#include "common/gooey_common.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Loads a theme from the specified file path.
@@ -83,6 +85,7 @@ void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility);
  * @param ... Additional windows to handle in the event loop.
  */
 void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...);
+
 void GooeyTheme_Destroy(GooeyTheme *theme);
 
 /**
@@ -120,6 +123,7 @@ void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget);
 void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable);
 
 void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable);
+
 /**
  * @brief Requests a redraw of the window.
  *
@@ -131,5 +135,9 @@ void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable);
 void GooeyWindow_RequestRedraw(GooeyWindow *win);
 
 void GooeyWindow_SetContinuousRedraw(GooeyWindow *win);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GOOEY_COMMON_H */

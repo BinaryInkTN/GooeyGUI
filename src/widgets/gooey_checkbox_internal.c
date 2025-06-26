@@ -1,4 +1,4 @@
-#include "gooey_checkbox_internal.h"
+#include "widgets/gooey_checkbox_internal.h"
 #if (ENABLE_CHECKBOX)
 #include "backends/gooey_backend_internal.h"
 #define CHECKBOX_SIZE 20 /** Size of a checkbox widget. */

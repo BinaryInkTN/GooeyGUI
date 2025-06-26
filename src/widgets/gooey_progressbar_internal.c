@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "gooey_progressbar_internal.h"
+#include "widgets/gooey_progressbar_internal.h"
 #if(ENABLE_PROGRESSBAR)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"

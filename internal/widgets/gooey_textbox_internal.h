@@ -2,8 +2,9 @@
 #define GOOEY_TEXTBOX_INTERNAL_H
 
 #include "common/gooey_common.h"
-#if(ENABLE_TEXTBOX)
 #include <stdbool.h>
+
+#if (ENABLE_TEXTBOX)
 
 /**
  * @brief Draws the textbox on the window.
@@ -39,8 +40,16 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param event The key event to handle.
  */
 void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
+
+/**
+ * @brief Handles hover events over the textbox.
+ *
+ * @param win The window containing the textbox.
+ * @param x The x-coordinate of the mouse cursor.
+ * @param y The y-coordinate of the mouse cursor.
+ */
 void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y);
 
-#endif
+#endif // ENABLE_TEXTBOX
 
-#endif /* GOOEY_TEXTBOX_H */
+#endif /* GOOEY_TEXTBOX_INTERNAL_H */

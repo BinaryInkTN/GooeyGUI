@@ -13,12 +13,13 @@
 
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
+*/
 
 #ifndef GOOEY_H
 #define GOOEY_H
 
 #include "common/gooey_common.h"
+
 #include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
 #include "core/gooey_window.h"
@@ -44,16 +45,28 @@
 #include "widgets/gooey_container.h"
 
 // Threads
+#if (TFT_ESPI_ENABLED==0)
 #include "glps_thread.h"
-
 #include "core/gooey_timers.h"
 
+#endif
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
- * @brief Initializes the Gooey system with the specified backend.
+ * @brief Initializes the Gooey system with the selected backend.
  *
- * This implementation only supports GLPS (OpenGL) backend for now.
+ * Currently, only the GLPS (OpenGL) backend is supported.
+ *
  * @return 0 on success, non-zero on failure.
  */
 int Gooey_Init();
 
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* GOOEY_H */

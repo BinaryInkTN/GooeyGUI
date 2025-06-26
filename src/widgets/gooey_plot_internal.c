@@ -1,4 +1,4 @@
-#include "gooey_plot_internal.h"
+#include "widgets/gooey_plot_internal.h"
 #if(ENABLE_PLOT)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"

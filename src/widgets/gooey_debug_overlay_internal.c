@@ -14,7 +14,7 @@
  You should have received a copy of the GNU General Public License
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-#include "gooey_debug_overlay_internal.h"
+#include "widgets/gooey_debug_overlay_internal.h"
 #if(ENABLE_DEBUG_OVERLAY)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"

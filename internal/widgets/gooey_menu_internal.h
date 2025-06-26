@@ -12,7 +12,9 @@
 #define GOOEY_MENU_INTERNAL_H
 
 #include "common/gooey_common.h"
-#if(ENABLE_MENU)
+
+#if (ENABLE_MENU)
+
 /**
  * @brief Handles menu item click events.
  *
@@ -21,10 +23,20 @@
  * @param win The window containing the menu.
  * @param x The x-coordinate of the click event.
  * @param y The y-coordinate of the click event.
- * @return `true` if the menu item was clicked, otherwise `false`.
+ * @return true if the menu item was clicked, otherwise false.
  */
 bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y);
+
+/**
+ * @brief Handles hover events on the menu.
+ *
+ * Processes user hovering over menu items.
+ *
+ * @param win The window containing the menu.
+ * @return true if the hover event was handled, otherwise false.
+ */
 bool GooeyMenu_HandleHover(GooeyWindow *win);
+
 /**
  * @brief Draws the menu and its items on the window.
  *
@@ -34,5 +46,6 @@ bool GooeyMenu_HandleHover(GooeyWindow *win);
  */
 void GooeyMenu_Draw(GooeyWindow *win);
 
-#endif
-#endif // GOOEY_MENU_H
+#endif // ENABLE_MENU
+
+#endif // GOOEY_MENU_INTERNAL_H

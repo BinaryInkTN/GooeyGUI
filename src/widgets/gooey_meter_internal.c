@@ -1,4 +1,4 @@
-#include "gooey_meter_internal.h"
+#include "widgets/gooey_meter_internal.h"
 #if(ENABLE_METER)
 #include "common/gooey_common.h"
 #include "backends/gooey_backend_internal.h"

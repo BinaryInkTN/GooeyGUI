@@ -1,4 +1,4 @@
-#include "gooey_appbar_internal.h"
+#include "widgets/gooey_appbar_internal.h"
 #include "logger/pico_logger_internal.h"
 #include "backends/gooey_backend_internal.h"
 #if(ENABLE_APPBAR)

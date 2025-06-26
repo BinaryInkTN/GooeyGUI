@@ -2,7 +2,7 @@
 // Created by overflow on 6/10/2025.
 //
 
-#include "gooey_container_internal.h"
+#include "widgets/gooey_container_internal.h"
 #include "logger/pico_logger_internal.h"
 #if (ENABLE_CONTAINER)
 

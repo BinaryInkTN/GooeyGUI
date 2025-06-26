@@ -10,8 +10,14 @@
 #ifndef GOOEY_CHECKBOX_H
 #define GOOEY_CHECKBOX_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
-#if(ENABLE_CHECKBOX)
+
+#if (ENABLE_CHECKBOX)
+
 /**
  * @brief Adds a checkbox to the specified window.
  *
@@ -26,7 +32,12 @@
  * @return A pointer to the newly created GooeyCheckbox.
  */
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
-                                 void (*callback)(bool checked));
+                                    void (*callback)(bool checked));
 
+#endif // ENABLE_CHECKBOX
+
+#ifdef __cplusplus
+}
 #endif
+
 #endif // GOOEY_CHECKBOX_H

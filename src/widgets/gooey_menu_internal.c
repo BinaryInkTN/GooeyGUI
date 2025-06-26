@@ -1,4 +1,4 @@
-#include "gooey_menu_internal.h"
+#include "widgets/gooey_menu_internal.h"
 #if(ENABLE_MENU)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"

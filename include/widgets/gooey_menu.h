@@ -12,7 +12,13 @@
 #define GOOEY_MENU_H
 
 #include "common/gooey_common.h"
-#if(ENABLE_MENU)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if (ENABLE_MENU)
+
 /**
  * @brief Sets the menu for the specified Gooey window.
  *
@@ -41,7 +47,12 @@ GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title);
  * @param title The title of the menu item.
  * @param callback The function to be called when the menu item is selected.
  */
-void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title, void (*callback)());
+void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title, void (*callback)(void));
 
+#endif // ENABLE_MENU
+
+#ifdef __cplusplus
+}
 #endif
+
 #endif // GOOEY_MENU_H

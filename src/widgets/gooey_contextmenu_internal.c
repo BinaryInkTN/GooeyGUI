@@ -1,4 +1,4 @@
-#include "gooey_contextmenu_internal.h"
+#include "widgets/gooey_contextmenu_internal.h"
 
 void GooeyContextMenu_Draw(GooeyWindow *win)
 {

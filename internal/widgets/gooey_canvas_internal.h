@@ -1,7 +1,6 @@
-
 /**
- * @file gooey_canvas.h
- * @brief Header file for the GooeyCanvas module.
+ * @file gooey_canvas_internal.h
+ * @brief Internal header for the GooeyCanvas module.
  * @author Yassine Ahmed Ali
  * @copyright GNU General Public License v3.0
  *
@@ -12,7 +11,12 @@
 #ifndef GOOEY_CANVAS_INTERNAL_H
 #define GOOEY_CANVAS_INTERNAL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
+
 #if (ENABLE_CANVAS)
 
 /**
@@ -23,6 +27,23 @@
  * @param window The window onto which the canvas is drawn.
  */
 void GooeyCanvas_Draw(GooeyWindow *window);
-void GooeyCanvas_HandleClick(GooeyWindow* win, int x, int y);
-#endif // GOOEY_CANVAS_INTERNAL_H
+
+/**
+ * @brief Handles click events on the canvas.
+ *
+ * Processes a click at the specified coordinates on the canvas,
+ * typically to support interaction with canvas elements.
+ *
+ * @param win The window containing the canvas.
+ * @param x The x-coordinate of the click event.
+ * @param y The y-coordinate of the click event.
+ */
+void GooeyCanvas_HandleClick(GooeyWindow *win, int x, int y);
+
+#endif // ENABLE_CANVAS
+
+#ifdef __cplusplus
+}
 #endif
+
+#endif // GOOEY_CANVAS_INTERNAL_H

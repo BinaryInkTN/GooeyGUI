@@ -1,15 +1,18 @@
 #ifndef GOOEY_SIGNALS_H
 #define GOOEY_SIGNALS_H
 
-
 /* ============ Signaling system ==============*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Callback function type for signal events.
- * 
+ *
  * This function type is used for the callback that is executed when a signal
  * is emitted. The callback receives a context and data passed from the emitter.
- * 
+ *
  * @param context The user-defined context passed when linking the callback.
  * @param data The data passed when emitting the signal.
  */
@@ -17,20 +20,20 @@ typedef void (*GooeySignal_CallbackFunction)(void *context, void *data);
 
 /**
  * @brief A slot representing a linked callback in the signal system.
- * 
+ *
  * A slot contains a callback function, its associated context, and a link
  * to the next slot in a potentially linked list of callbacks.
  */
 typedef struct GooeySignal_Slot
 {
     GooeySignal_CallbackFunction callback; /**< The callback function to be executed */
-    void *context; /**< The user-defined context to be passed to the callback */
-    struct GooeySignal_Slot *next; /**< Pointer to the next slot in the list */
+    void *context;                         /**< The user-defined context to be passed to the callback */
+    struct GooeySignal_Slot *next;        /**< Pointer to the next slot in the list */
 } GooeySignal_Slot;
 
 /**
  * @brief A signal that can emit events to all linked slots.
- * 
+ *
  * A signal contains a list of slots. Each slot corresponds to a callback
  * function that will be executed when the signal is emitted.
  */
@@ -82,5 +85,9 @@ void GooeySignal_Emit(GooeySignal *signal, void *data);
  * @param signal A pointer to the signal from which callbacks should be unlinked.
  */
 void GooeySignal_UnLinkAll(GooeySignal *signal);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif /* GOOEY_SIGNALS_H */

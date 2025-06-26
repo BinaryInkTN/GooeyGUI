@@ -1,7 +1,7 @@
-#include "gooey_tabs_internal.h"
+#include "widgets/gooey_tabs_internal.h"
 #if (ENABLE_TABS)
 #include "backends/gooey_backend_internal.h"
-#include "gooey_window_internal.h"
+#include "widgets/gooey_window_internal.h"
 
 
 

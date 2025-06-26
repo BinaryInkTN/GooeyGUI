@@ -24,11 +24,10 @@ int called = 0;
 
 int Gooey_Init()
 {
-
-#ifndef (TFT_ESPI_ENABLED)
-    active_backend = &glps_backend;
-# else
+#if (TFT_ESPI_ENABLED)
     active_backend = &tft_backend;
+#else
+    active_backend = &glps_backend;
 #endif
 
     active_backend->Init();

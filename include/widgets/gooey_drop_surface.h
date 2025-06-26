@@ -11,8 +11,14 @@
 #ifndef GOOEY_DROP_SURFACE_H
 #define GOOEY_DROP_SURFACE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "common/gooey_common.h"
-#if(ENABLE_DROP_SURFACE)
+
+#if (ENABLE_DROP_SURFACE)
+
 /**
  * @brief Adds a file drop surface.
  *
@@ -29,9 +35,11 @@
  *                 It receives the file's MIME type and path.
  * @return A pointer to the newly created GooeyDropSurface.
  */
-GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width,
-                                       int height, char *default_message,
-                                       void (*callback)(char *mime, char *file_path));
+GooeyDropSurface *GooeyDropSurface_Create(
+    int x, int y, int width, int height,
+    char *default_message,
+    void (*callback)(char *mime, char *file_path)
+);
 
 /**
  * @brief Clears the content of a drop surface.
@@ -42,5 +50,11 @@ GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width,
  * @param drop_surface The drop surface to clear.
  */
 void GooeyDropSurface_Clear(GooeyDropSurface *drop_surface);
+
+#endif // ENABLE_DROP_SURFACE
+
+#ifdef __cplusplus
+}
 #endif
+
 #endif // GOOEY_DROP_SURFACE_H

@@ -17,7 +17,9 @@
 #ifndef BACKEND_UTILS_INTERNAL_H
 #define BACKEND_UTILS_INTERNAL_H
 
+
 #include "backends/gooey_backend_internal.h"
+#if (TFT_ESPI_ENABLED == 0)
 #include <freetype/freetype.h>
 #include FT_FREETYPE_H
 #include "glps_window_manager.h"
@@ -156,4 +158,5 @@ void convert_dimension_to_ndc(glps_WindowManager *wm, size_t window_id, float *n
 void convert_hex_to_rgb(vec3 *rgb, unsigned int color_hex);
 const char *LookupString(int keycode);
 
+#endif
 #endif // BACKEND_UTILS_H

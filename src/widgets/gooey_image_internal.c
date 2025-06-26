@@ -1,4 +1,4 @@
-#include "gooey_image_internal.h"
+#include "widgets/gooey_image_internal.h"
 #if(ENABLE_IMAGE)
 #include "backends/gooey_backend_internal.h"
 #include <fcntl.h>

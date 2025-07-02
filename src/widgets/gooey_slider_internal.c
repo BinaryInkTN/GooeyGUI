@@ -19,9 +19,12 @@ void GooeySlider_Draw(GooeyWindow *win)
         int thumb_x = slider->core.x + (slider->value - slider->min_value) *
                                            slider->core.width /
                                            (slider->max_value - slider->min_value);
-
+        
         active_backend->FillRectangle(thumb_x - 5,
                                       slider->core.y - 5, 10, slider->core.height + 10, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS);
+
+        active_backend->FillRectangle(slider->core.x,
+                                      slider->core.y, thumb_x - slider->core.x, slider->core.height, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS);
 
         if (slider->show_hints)
         {

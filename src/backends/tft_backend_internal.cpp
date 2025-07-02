@@ -16,18 +16,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include <TFT_eSPI.h>
-#include <XPT2046_Touchscreen.h>
 #include <stdint.h>
 #include <math.h>
 #include <stdlib.h>
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
+#include <EEPROM.h>
 
 static uint16_t rgb888_to_rgb565(uint32_t color) {
     return ((color & 0xF80000) >> 8) | ((color & 0xFC00) >> 5) | ((color & 0xF8) >> 3);
 }
-
+uint16_t cal[5] = { 0, 0, 0, 0, 0 };
 typedef struct {
     TFT_eSPI* tft;
     size_t active_window_count;
@@ -35,17 +35,47 @@ typedef struct {
     uint32_t selected_color;
     uint16_t* palette;
     size_t palette_size;
+    GooeyWindow** windows;
+    void (*ReDrawCallback)(size_t window_id, void*data);
+
 } GooeyBackendContext;
 
 static GooeyBackendContext ctx = {0};
+bool loadTouchCalibration(uint16_t *calData) {
+    if (EEPROM.read(0) == 0xA5) { 
+        for (int i = 0; i < 5; i++) {
+            calData[i] = EEPROM.read(i * 2 + 1) << 8 | EEPROM.read(i * 2 + 2);
+        }
+        return true;
+    }
+    return false;
+}
+
+void saveTouchCalibration(uint16_t *calData) {
+    EEPROM.write(0, 0xA5); 
+    for (int i = 0; i < 5; i++) {
+        EEPROM.write(i * 2 + 1, calData[i] >> 8);
+        EEPROM.write(i * 2 + 2, calData[i] & 0xFF);
+    }
+    EEPROM.commit();
+}
 
 void tft_setup_shared() {
     ctx.tft = new TFT_eSPI();
     ctx.tft->init();
     ctx.tft->setRotation(1);
     ctx.tft->fillScreen(TFT_BLACK);
-}
 
+    if (!loadTouchCalibration(cal)) {
+        ctx.tft->fillScreen(TFT_BLACK);
+        ctx.tft->setCursor(20, 20);
+        ctx.tft->setTextColor(TFT_WHITE, TFT_BLACK);
+        ctx.tft->println("Touch the dots to calibrate");
+        ctx.tft->calibrateTouch(cal, TFT_YELLOW, TFT_BLACK, 20);
+        saveTouchCalibration(cal); 
+    }
+    ctx.tft->setTouch(cal);
+}
 void tft_setup_separate_vao(int window_id) {
 }
 
@@ -241,20 +271,26 @@ static void drag_n_drop_callback(size_t origin_window_id, char* mime, char* buff
 }
 
 void tft_setup_callbacks(void (*callback)(size_t window_id, void* data), void* data) {
+    GooeyWindow **windows = (GooeyWindow **)data;
+    GooeyWindow *win = (GooeyWindow *)windows[0];
+    ctx.windows = windows;
+    ctx.ReDrawCallback = callback;
+}   
 
-}
 
 void tft_run() {
-    while (1) {
-     
-  uint16_t x, y;
+    while (1) {     
+        uint16_t x, y;
+        if (ctx.tft->getTouch(&x, &y)) {
+        Serial.printf("touch %d %d\n", x, y);
+        GooeyEvent* event = (GooeyEvent*) ctx.windows[0]->current_event;
+        event->click.x = x;
+        event->click.y = y;
+        event->type = GOOEY_EVENT_CLICK_PRESS;
+        ctx.ReDrawCallback(0, ctx.windows);
 
-  if (ctx.tft->getTouch(&x, &y))
-  {
-    Serial.printf("touch %u %u ", x, y);
-  }  
-    
-}
+        }
+    }
 }
 
 
@@ -344,6 +380,6 @@ extern "C" {
         .StopTimer = tft_stop_timer,
         .DestroyTimer = tft_destroy_timer,
         .CursorChange = NULL,
-        .StopCursorReset = tft_stop_cursor_reset
+        .StopCursorReset = tft_stop_cursor_reset,
     };
 }

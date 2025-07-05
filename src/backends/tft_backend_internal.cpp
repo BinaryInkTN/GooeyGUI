@@ -62,11 +62,13 @@ void saveTouchCalibration(uint16_t *calData) {
 }
 
 void tft_setup_shared() {
+    
     ctx.tft = new TFT_eSPI();
     ctx.tft->init();
     ctx.tft->setRotation(TFT_SCREEN_ROTATION);
     ctx.tft->fillScreen(TFT_BLACK);
-   // ctx.tft->loadFont(Roboto_Thin_24Bitmaps);
+    ctx.tft->setFreeFont(&FreeMono9pt7b);    
+    ctx.tft->setTextSize(1);
     if (!loadTouchCalibration(cal)) {
         ctx.tft->fillScreen(TFT_BLACK);
         ctx.tft->setCursor(20, 20);
@@ -246,8 +248,7 @@ float tft_get_text_width(const char* text, int length) {
 }
 
 float tft_get_text_height(const char* text, int length) {
- //   Serial.printf("height: %f \n", ctx.tft->fontHeight());
-    return 8.0f;
+    return (float) ctx.tft->fontHeight();
 }
 
 const char* tft_get_key_from_code(void* gooey_event) {

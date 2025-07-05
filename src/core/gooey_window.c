@@ -750,19 +750,19 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     needs_redraw |= GooeySlider_HandleDrag(window, event);
 #endif
 
-#if (ENABLE_BUTTON)
+#if (ENABLE_BUTTON && !TFT_ESPI_ENABLED)
     GooeyButton_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
-#if (ENABLE_MENU)
+#if (ENABLE_MENU && !TFT_ESPI_ENABLED)
     GooeyMenu_HandleHover(window);
 #endif
-#if (ENABLE_DROPDOWN)
+#if (ENABLE_DROPDOWN && !TFT_ESPI_ENABLED)
     GooeyDropdown_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
 #if (ENABLE_LIST)
     needs_redraw |= GooeyList_HandleThumbScroll(window, event);
 #endif
-#if (ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX && !TFT_ESPI_ENABLED)
     GooeyTextbox_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
     switch (event->type)
@@ -794,7 +794,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
 
 #if (ENABLE_BUTTON)
-        needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
+    needs_redraw |= GooeyButton_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
 #if (ENABLE_DROPDOWN)
         needs_redraw |= GooeyDropdown_HandleClick(window, mouse_click_x, mouse_click_y);

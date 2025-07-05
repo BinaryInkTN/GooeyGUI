@@ -90,6 +90,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
         
             button->clicked = !button->clicked;
             clicked_any_button = true;
+
             if (button->callback)
             {
                 button->callback();

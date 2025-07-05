@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <EEPROM.h>
+#include <string>
 
 static uint16_t rgb888_to_rgb565(uint32_t color) {
     return ((color & 0xF80000) >> 8) | ((color & 0xFC00) >> 5) | ((color & 0xF8) >> 3);
@@ -65,7 +66,7 @@ void tft_setup_shared() {
     ctx.tft->init();
     ctx.tft->setRotation(1);
     ctx.tft->fillScreen(TFT_BLACK);
-
+   // ctx.tft->loadFont(Roboto_Thin_24Bitmaps);
     if (!loadTouchCalibration(cal)) {
         ctx.tft->fillScreen(TFT_BLACK);
         ctx.tft->setCursor(20, 20);
@@ -170,6 +171,7 @@ int tft_init() {
     ctx.selected_color = TFT_WHITE;
     ctx.active_window_count = 1;
     tft_setup_shared();
+
     return 0;
 }
 
@@ -239,13 +241,12 @@ void tft_update_background(GooeyWindow* win) {
 void tft_render(GooeyWindow* win) {
 
 }
-
 float tft_get_text_width(const char* text, int length) {
-    return (float)ctx.tft->textWidth(text);
+    return (float)ctx.tft->textWidth((String) text);
 }
 
 float tft_get_text_height(const char* text, int length) {
-    return (float)ctx.tft->fontHeight();
+    return (float)ctx.tft->fontHeight() - 10;
 }
 
 const char* tft_get_key_from_code(void* gooey_event) {

@@ -37,7 +37,7 @@ extern "C" {
  * @return A pointer to the loaded `GooeyTheme` object.
  */
 GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path);
-
+GooeyTheme *GooeyTheme_LoadFromString(const char *styling);
 /**
  * @brief Sets the theme for the specified Gooey window.
  *

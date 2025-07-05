@@ -37,7 +37,7 @@ typedef struct
  * @return The parsed GooeyTheme object. If loading fails, the returned object contains undefined data.
  */
 GooeyTheme parser_load_theme_from_file(const char *filePath, bool *is_theme_loaded);
-
+GooeyTheme parser_load_theme_from_string(const char *styling, bool *is_theme_loaded);
 #ifdef __cplusplus
 }
 #endif

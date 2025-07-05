@@ -104,6 +104,29 @@ GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path)
     return theme;
 }
 
+
+GooeyTheme *GooeyTheme_LoadFromString(const char *styling)
+{
+    bool is_loaded = false;
+    GooeyTheme *theme = malloc(sizeof(GooeyTheme));
+    if (!theme)
+    {
+        LOG_ERROR("Failed to allocate memory for theme");
+        return NULL;
+    }
+
+    *theme = parser_load_theme_from_string(styling, &is_loaded);
+
+    if (!is_loaded)
+    {
+        LOG_WARNING("Failed to load theme from %s", theme_path);
+        free(theme);
+        return NULL;
+    }
+
+    return theme;
+}
+
 static void __destroy_theme(GooeyTheme *theme)
 {
     if (theme)

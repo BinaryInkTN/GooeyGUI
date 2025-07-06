@@ -72,6 +72,7 @@ set(SOURCES
         src/widgets/gooey_container_internal.c
         src/widgets/gooey_progressbar_internal.c
         src/widgets/gooey_debug_overlay_internal.c
+        src/virtual/gooey_keyboard_internal.c
         internal/backends/utils/glad/glad.c
         src/widgets/gooey_window_internal.c
         internal/backends/utils/backend_utils_internal.c

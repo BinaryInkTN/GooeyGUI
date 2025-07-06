@@ -507,6 +507,13 @@ typedef struct
     unsigned long texture_id;
 } GooeyMeter;
 
+typedef struct 
+{
+    GooeyWidget core;
+    bool is_shown;
+} GooeyVK;
+
+
 /**
  * @brief Enumeration for window types in the Gooey framework.
  */
@@ -529,6 +536,7 @@ typedef struct
     bool enable_debug_overlay;
     bool continuous_redraw;
     GooeyAppbar* appbar;
+    GooeyVK* vk;
     GooeyButton **buttons;                       /**< List of buttons in the window */
     GooeyLabel **labels;                         /**< List of labels in the window */
     GooeyCheckbox **checkboxes;                  /**< List of checkboxes in the window */

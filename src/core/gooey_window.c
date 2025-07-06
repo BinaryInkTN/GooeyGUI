@@ -43,6 +43,7 @@
 #include "widgets/gooey_tabs_internal.h"
 #include "widgets/gooey_textbox_internal.h"
 #include "widgets/gooey_window_internal.h"
+#include "virtual/gooey_keyboard_internal.h"
 #include <stdarg.h>
 #include <string.h>
 
@@ -55,9 +56,11 @@ GooeyBackends ACTIVE_BACKEND = -1;
 
 /* Theme Management Functions */
 
-static GooeyTheme *__default_theme() {
+static GooeyTheme *__default_theme()
+{
   GooeyTheme *theme = malloc(sizeof(GooeyTheme));
-  if (!theme) {
+  if (!theme)
+  {
     LOG_ERROR("Failed to allocate memory for default theme");
     return NULL;
   }
@@ -73,22 +76,26 @@ static GooeyTheme *__default_theme() {
   return theme;
 }
 
-GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path) {
-  if (!theme_path) {
+GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path)
+{
+  if (!theme_path)
+  {
     LOG_ERROR("Invalid theme path");
     return NULL;
   }
 
   bool is_loaded = false;
   GooeyTheme *theme = malloc(sizeof(GooeyTheme));
-  if (!theme) {
+  if (!theme)
+  {
     LOG_ERROR("Failed to allocate memory for theme");
     return NULL;
   }
 
   *theme = parser_load_theme_from_file(theme_path, &is_loaded);
 
-  if (!is_loaded) {
+  if (!is_loaded)
+  {
     LOG_WARNING("Failed to load theme from %s", theme_path);
     free(theme);
     return NULL;
@@ -97,17 +104,20 @@ GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path) {
   return theme;
 }
 
-GooeyTheme *GooeyTheme_LoadFromString(const char *styling) {
+GooeyTheme *GooeyTheme_LoadFromString(const char *styling)
+{
   bool is_loaded = false;
   GooeyTheme *theme = malloc(sizeof(GooeyTheme));
-  if (!theme) {
+  if (!theme)
+  {
     LOG_ERROR("Failed to allocate memory for theme");
     return NULL;
   }
 
   *theme = parser_load_theme_from_string(styling, &is_loaded);
 
-  if (!is_loaded) {
+  if (!is_loaded)
+  {
     LOG_WARNING("Failed to load theme from ");
     free(theme);
     return NULL;
@@ -116,8 +126,10 @@ GooeyTheme *GooeyTheme_LoadFromString(const char *styling) {
   return theme;
 }
 
-static void __destroy_theme(GooeyTheme *theme) {
-  if (theme) {
+static void __destroy_theme(GooeyTheme *theme)
+{
+  if (theme)
+  {
     free(theme);
   }
 }
@@ -126,26 +138,33 @@ void GooeyTheme_Destroy(GooeyTheme *theme) { __destroy_theme(theme); }
 
 /* Window Functions */
 
-void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget) {
+void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
+{
   GooeyWindow_Internal_RegisterWidget(win, widget);
 }
 
-void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility) {
+void GooeyWindow_MakeVisible(GooeyWindow *win, bool visibility)
+{
   active_backend->MakeWindowVisible(win->creation_id, visibility);
 }
 
-void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable) {
+void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable)
+{
   active_backend->MakeWindowResizable(is_resizable, msgBoxWindow->creation_id);
 }
 
 bool GooeyWindow_HandleCursorChange(GooeyWindow *win, GOOEY_CURSOR *cursor,
-                                    int x, int y) {
-  for (size_t i = 0; i < win->widget_count; ++i) {
+                                    int x, int y)
+{
+  for (size_t i = 0; i < win->widget_count; ++i)
+  {
     if (x >= win->widgets[i]->x &&
         x <= win->widgets[i]->x + win->widgets[i]->width &&
         y >= win->widgets[i]->y &&
-        y <= win->widgets[i]->y + win->widgets[i]->height) {
-      switch (win->widgets[i]->type) {
+        y <= win->widgets[i]->y + win->widgets[i]->height)
+    {
+      switch (win->widgets[i]->type)
+      {
       case WIDGET_TEXTBOX:
         *cursor = GOOEY_CURSOR_TEXT;
         break;
@@ -163,21 +182,26 @@ bool GooeyWindow_HandleCursorChange(GooeyWindow *win, GOOEY_CURSOR *cursor,
   return false;
 }
 
-void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme) {
-  if (!win) {
+void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
+{
+  if (!win)
+  {
     LOG_ERROR("Invalid window pointer");
     return;
   }
 
-  if (!theme) {
+  if (!theme)
+  {
     LOG_WARNING("NULL theme provided, using default");
-    if (win->default_theme) {
+    if (win->default_theme)
+    {
       win->active_theme = win->default_theme;
     }
     return;
   }
 
-  if (win->active_theme && win->active_theme != win->default_theme) {
+  if (win->active_theme && win->active_theme != win->default_theme)
+  {
     __destroy_theme(win->active_theme);
   }
 
@@ -185,7 +209,8 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme) {
   active_backend->RequestRedraw(win);
 }
 
-bool GooeyWindow_AllocateResources(GooeyWindow *win) {
+bool GooeyWindow_AllocateResources(GooeyWindow *win)
+{
   if (!(win->tabs = calloc(MAX_WIDGETS, sizeof(GooeyTabs *))) ||
       !(win->drop_surface = calloc(MAX_WIDGETS, sizeof(GooeyDropSurface *))) ||
       !(win->images = calloc(MAX_WIDGETS, sizeof(GooeyImage *))) ||
@@ -208,12 +233,15 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win) {
             calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
       !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))) ||
       !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *))) ||
-      !(win->switches = calloc(MAX_SWITCHES, sizeof(GooeySwitch *)))) {
+      !(win->switches = calloc(MAX_SWITCHES, sizeof(GooeySwitch *))) ||
+      !(win->vk = calloc(1, sizeof(GooeyVK))))
+  {
     return false;
   }
 
   win->default_theme = __default_theme();
-  if (!win->default_theme) {
+  if (!win->default_theme)
+  {
     LOG_ERROR("Failed to allocate memory for default theme");
     return false;
   }
@@ -222,27 +250,38 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win) {
   return true;
 }
 
-void GooeyWindow_FreeResources(GooeyWindow *win) {
-  if (win->active_theme && win->active_theme != win->default_theme) {
+void GooeyWindow_FreeResources(GooeyWindow *win)
+{
+  if (win->active_theme && win->active_theme != win->default_theme)
+  {
     __destroy_theme(win->active_theme);
     win->active_theme = NULL;
   }
-  if (win->appbar) {
+  if (win->appbar)
+  {
     free(win->appbar);
     win->appbar = NULL;
   }
-  if (win->default_theme) {
+  if (win->default_theme)
+  {
     __destroy_theme(win->default_theme);
     win->default_theme = NULL;
   }
-
-  for (size_t i = 0; i < win->canvas_count; ++i) {
+  if (win->vk)
+  {
+    free(win->vk);
+    win->vk = NULL;
+  }
+  for (size_t i = 0; i < win->canvas_count; ++i)
+  {
     if (!win->canvas[i]->elements)
       continue;
 
-    for (int j = 0; j < win->canvas[i]->element_count; ++j) {
+    for (int j = 0; j < win->canvas[i]->element_count; ++j)
+    {
       CanvaElement *element = &win->canvas[i]->elements[j];
-      if (element->args) {
+      if (element->args)
+      {
         free(element->args);
         element->args = NULL;
       }
@@ -251,34 +290,42 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->canvas[i]->elements);
     win->canvas[i]->elements = NULL;
 
-    if (win->canvas[i]) {
+    if (win->canvas[i])
+    {
       free(win->canvas[i]);
       win->canvas[i] = NULL;
     }
   }
 
-  if (win->canvas) {
+  if (win->canvas)
+  {
     free(win->canvas);
     win->canvas = NULL;
   }
 
-  if (win->meters) {
+  if (win->meters)
+  {
     free(win->meters);
     win->meters = NULL;
   }
 
-  if (win->containers) {
+  if (win->containers)
+  {
     for (size_t container_index = 0; container_index < win->container_count;
-         ++container_index) {
+         ++container_index)
+    {
       GooeyContainers *container = win->containers[container_index];
-      if (container) {
+      if (container)
+      {
         // Free widgets in each container
         for (size_t cont_index = 0; cont_index < container->container_count;
-             ++cont_index) {
+             ++cont_index)
+        {
           GooeyContainer *cont =
               &container->container[cont_index]; // Changed from
                                                  // &container->container
-          if (cont) {
+          if (cont)
+          {
 
             // Free widgets array
             free(cont->widgets);
@@ -302,18 +349,24 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->container_count = 0; // Important to reset count
   }
 
-  if (win->tabs) {
+  if (win->tabs)
+  {
     for (size_t tab_container_index = 0; tab_container_index < win->tab_count;
-         ++tab_container_index) {
+         ++tab_container_index)
+    {
       GooeyTabs *current_tab_container = win->tabs[tab_container_index];
 
-      if (current_tab_container) {
-        if (current_tab_container->tabs) {
+      if (current_tab_container)
+      {
+        if (current_tab_container->tabs)
+        {
           for (size_t tab_index = 0;
-               tab_index < current_tab_container->tab_count; ++tab_index) {
+               tab_index < current_tab_container->tab_count; ++tab_index)
+          {
             GooeyTab *current_tab = &current_tab_container->tabs[tab_index];
 
-            if (current_tab->widgets) {
+            if (current_tab->widgets)
+            {
               free(current_tab->widgets);
               current_tab->widgets = NULL;
             }
@@ -332,9 +385,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->tabs = NULL;
   }
 
-  if (win->drop_surface) {
-    for (size_t i = 0; i < win->drop_surface_count; ++i) {
-      if (win->drop_surface[i]) {
+  if (win->drop_surface)
+  {
+    for (size_t i = 0; i < win->drop_surface_count; ++i)
+    {
+      if (win->drop_surface[i])
+      {
         free(win->drop_surface[i]);
         win->drop_surface[i] = NULL;
       }
@@ -343,9 +399,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->drop_surface = NULL;
   }
 
-  if (win->images) {
-    for (size_t i = 0; i < win->image_count; ++i) {
-      if (win->images[i]) {
+  if (win->images)
+  {
+    for (size_t i = 0; i < win->image_count; ++i)
+    {
+      if (win->images[i])
+      {
         free(win->images[i]);
         win->images[i] = NULL;
       }
@@ -354,9 +413,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->images = NULL;
   }
 
-  if (win->progressbars) {
-    for (size_t i = 0; i < win->progressbar_count; ++i) {
-      if (win->progressbars[i]) {
+  if (win->progressbars)
+  {
+    for (size_t i = 0; i < win->progressbar_count; ++i)
+    {
+      if (win->progressbars[i])
+      {
         free(win->progressbars[i]);
         win->progressbars[i] = NULL;
       }
@@ -366,13 +428,17 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->progressbars = NULL;
   }
 
-  if (win->current_event) {
+  if (win->current_event)
+  {
     free(win->current_event);
     win->current_event = NULL;
   }
-  if (win->switches) {
-    for (size_t i = 0; i < win->switch_count; ++i) {
-      if (win->switches[i]) {
+  if (win->switches)
+  {
+    for (size_t i = 0; i < win->switch_count; ++i)
+    {
+      if (win->switches[i])
+      {
         free(win->switches[i]);
         win->switches[i] = NULL;
       }
@@ -381,9 +447,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->switches = NULL;
   }
 
-  if (win->buttons) {
-    for (size_t i = 0; i < win->button_count; ++i) {
-      if (win->buttons[i]) {
+  if (win->buttons)
+  {
+    for (size_t i = 0; i < win->button_count; ++i)
+    {
+      if (win->buttons[i])
+      {
         free(win->buttons[i]);
         win->buttons[i] = NULL;
       }
@@ -391,9 +460,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->buttons);
     win->buttons = NULL;
   }
-  if (win->labels) {
-    for (size_t i = 0; i < win->label_count; ++i) {
-      if (win->labels[i]) {
+  if (win->labels)
+  {
+    for (size_t i = 0; i < win->label_count; ++i)
+    {
+      if (win->labels[i])
+      {
         free(win->labels[i]);
         win->labels[i] = NULL;
       }
@@ -401,9 +473,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->labels);
     win->labels = NULL;
   }
-  if (win->checkboxes) {
-    for (size_t i = 0; i < win->checkbox_count; ++i) {
-      if (win->checkboxes[i]) {
+  if (win->checkboxes)
+  {
+    for (size_t i = 0; i < win->checkbox_count; ++i)
+    {
+      if (win->checkboxes[i])
+      {
         free(win->checkboxes[i]);
         win->checkboxes[i] = NULL;
       }
@@ -411,9 +486,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->checkboxes);
     win->checkboxes = NULL;
   }
-  if (win->radio_buttons) {
-    for (size_t i = 0; i < win->radio_button_count; ++i) {
-      if (win->radio_buttons[i]) {
+  if (win->radio_buttons)
+  {
+    for (size_t i = 0; i < win->radio_button_count; ++i)
+    {
+      if (win->radio_buttons[i])
+      {
         free(win->radio_buttons[i]);
         win->radio_buttons[i] = NULL;
       }
@@ -421,9 +499,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->radio_buttons);
     win->radio_buttons = NULL;
   }
-  if (win->radio_button_groups) {
-    for (size_t i = 0; i < win->radio_button_group_count; ++i) {
-      if (win->radio_button_groups[i]) {
+  if (win->radio_button_groups)
+  {
+    for (size_t i = 0; i < win->radio_button_group_count; ++i)
+    {
+      if (win->radio_button_groups[i])
+      {
         free(win->radio_button_groups[i]);
         win->radio_button_groups[i] = NULL;
       }
@@ -431,13 +512,17 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->radio_button_groups);
     win->radio_button_groups = NULL;
   }
-  if (win->menu) {
+  if (win->menu)
+  {
     free(win->menu);
     win->menu = NULL;
   }
-  if (win->sliders) {
-    for (size_t i = 0; i < win->slider_count; ++i) {
-      if (win->sliders[i]) {
+  if (win->sliders)
+  {
+    for (size_t i = 0; i < win->slider_count; ++i)
+    {
+      if (win->sliders[i])
+      {
         free(win->sliders[i]);
         win->sliders[i] = NULL;
       }
@@ -445,9 +530,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->sliders);
     win->sliders = NULL;
   }
-  if (win->dropdowns) {
-    for (size_t i = 0; i < win->dropdown_count; ++i) {
-      if (win->dropdowns[i]) {
+  if (win->dropdowns)
+  {
+    for (size_t i = 0; i < win->dropdown_count; ++i)
+    {
+      if (win->dropdowns[i])
+      {
         free(win->dropdowns[i]);
         win->dropdowns[i] = NULL;
       }
@@ -455,9 +543,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->dropdowns);
     win->dropdowns = NULL;
   }
-  if (win->textboxes) {
-    for (size_t i = 0; i < win->textboxes_count; ++i) {
-      if (win->textboxes[i]) {
+  if (win->textboxes)
+  {
+    for (size_t i = 0; i < win->textboxes_count; ++i)
+    {
+      if (win->textboxes[i])
+      {
         free(win->textboxes[i]);
         win->textboxes[i] = NULL;
       }
@@ -465,9 +556,12 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     free(win->textboxes);
     win->textboxes = NULL;
   }
-  if (win->layouts) {
-    for (size_t i = 0; i < win->layout_count; ++i) {
-      if (win->layouts[i]) {
+  if (win->layouts)
+  {
+    for (size_t i = 0; i < win->layout_count; ++i)
+    {
+      if (win->layouts[i])
+      {
         free(win->layouts[i]);
         win->layouts[i] = NULL;
       }
@@ -476,10 +570,14 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->layouts = NULL;
   }
 
-  if (win->lists) {
-    for (size_t j = 0; j < win->list_count; j++) {
-      if (win->lists[j]) {
-        if (win->lists[j]->items) {
+  if (win->lists)
+  {
+    for (size_t j = 0; j < win->list_count; j++)
+    {
+      if (win->lists[j])
+      {
+        if (win->lists[j]->items)
+        {
           free(win->lists[j]->items);
           win->lists[j]->items = NULL;
         }
@@ -490,15 +588,19 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->lists = NULL;
   }
 
-  if (win->plots) {
-    for (size_t i = 0; i < win->plot_count; ++i) {
+  if (win->plots)
+  {
+    for (size_t i = 0; i < win->plot_count; ++i)
+    {
       GooeyPlotData *data = win->plots[i]->data;
-      if (data->x_data) {
+      if (data->x_data)
+      {
         free(data->x_data);
         data->x_data = NULL;
       }
 
-      if (data->y_data) {
+      if (data->y_data)
+      {
         free(data->y_data);
         data->y_data = NULL;
       }
@@ -508,26 +610,33 @@ void GooeyWindow_FreeResources(GooeyWindow *win) {
     win->plots = NULL;
   }
 
-  if (win->widgets) {
+  if (win->widgets)
+  {
     free(win->widgets);
     win->widgets = NULL;
   }
 }
 
 GooeyWindow *GooeyWindow_Create(const char *title, int width, int height,
-                                bool visibility) {
+                                bool visibility)
+{
   GooeyWindow *win = active_backend->CreateWindow(title, width, height);
-  if (!win) {
+  if (!win)
+  {
     LOG_CRITICAL("Failed to create window");
     return NULL;
   }
 
   win->type = WINDOW_REGULAR;
-  if (!GooeyWindow_AllocateResources(win)) {
+  if (!GooeyWindow_AllocateResources(win))
+  {
     GooeyWindow_FreeResources(win);
     LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
     exit(EXIT_FAILURE);
   }
+
+  if (win->vk)
+    win->vk->is_shown = false;
 
   win->menu = NULL;
   win->appbar = NULL;
@@ -554,7 +663,7 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height,
   win->meter_count = 0;
   win->container_count = 0;
   win->widget_count = 0;
-  win->switch_count = 0 ;
+  win->switch_count = 0;
   win->continuous_redraw = false;
 
   LOG_INFO("Window created with dimensions (%d, %d).", width, height);
@@ -562,12 +671,14 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height,
 }
 
 GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height,
-                                    bool visibility) {
+                                    bool visibility)
+{
   GooeyWindow win =
       active_backend->SpawnWindow(title, width, height, visibility);
 
   win.type = WINDOW_REGULAR;
-  if (!GooeyWindow_AllocateResources(&win)) {
+  if (!GooeyWindow_AllocateResources(&win))
+  {
     GooeyWindow_FreeResources(&win);
     active_backend->DestroyWindowFromId(win.creation_id);
     LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
@@ -592,14 +703,22 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height,
   return win;
 }
 
-void GooeyWindow_DrawUIElements(GooeyWindow *win) {
+void GooeyWindow_DrawUIElements(GooeyWindow *win)
+{
   if (win == NULL)
     return;
 
   active_backend->Clear(win);
-
+#if (ENABLE_VIRTUAL_KEYBOARD)
+  GooeyVK_Internal_Draw(win);
+#endif
+  if (win->vk->is_shown)
+  {
+    return;
+  }
   // Draw all UI components
-  for (size_t i = 0; i < win->layout_count; ++i) {
+  for (size_t i = 0; i < win->layout_count; ++i)
+  {
 #if (ENABLE_LAYOUT)
     GooeyLayout_Build(win->layouts[i]);
 #endif
@@ -629,7 +748,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win) {
   GooeyButton_Draw(win);
 #endif
 #if (ENABLE_SWITCH)
-GooeySwitch_Draw(win);
+  GooeySwitch_Draw(win);
 #endif
 #if (ENABLE_TEXTBOX)
   GooeyTextbox_Draw(win);
@@ -664,21 +783,25 @@ GooeySwitch_Draw(win);
 #if (ENABLE_APPBAR)
   GooeyAppbar_Internal_Draw(win);
 #endif
+
   active_backend->Render(win);
 }
 
-void GooeyWindow_Redraw(size_t window_id, void *data) {
+void GooeyWindow_Redraw(size_t window_id, void *data)
+{
   bool needs_redraw = true; // Keep true for now, we need to work on pending
                             // events for this to work properly.
 
-  if (!data || !active_backend) {
+  if (!data || !active_backend)
+  {
     LOG_CRITICAL("Invalid data or backend in Redraw callback");
     return;
   }
 
   GooeyWindow **windows = (GooeyWindow **)data;
   if (window_id > active_backend->GetTotalWindowCount() ||
-      !windows[window_id]) {
+      !windows[window_id])
+  {
     LOG_CRITICAL("Invalid window ID or window is NULL");
     return;
   }
@@ -709,7 +832,8 @@ void GooeyWindow_Redraw(size_t window_id, void *data) {
 #if (ENABLE_TEXTBOX && !TFT_ESPI_ENABLED)
   GooeyTextbox_HandleHover(window, event->mouse_move.x, event->mouse_move.y);
 #endif
-  switch (event->type) {
+  switch (event->type)
+  {
 
   case GOOEY_EVENT_MOUSE_SCROLL:
 #if (ENABLE_LIST)
@@ -732,7 +856,8 @@ void GooeyWindow_Redraw(size_t window_id, void *data) {
     needs_redraw = true;
     break;
 
-  case GOOEY_EVENT_CLICK_PRESS: {
+  case GOOEY_EVENT_CLICK_PRESS:
+  {
     int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
 
 #if (ENABLE_BUTTON)
@@ -776,8 +901,17 @@ void GooeyWindow_Redraw(size_t window_id, void *data) {
 #if (ENABLE_CANVAS)
     GooeyCanvas_HandleClick(window, mouse_click_x, mouse_click_y);
 #endif
+#if (ENABLE_VIRTUAL_KEYBOARD)
+    GooeyVK_Internal_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
     break;
   }
+
+  case GOOEY_EVENT_VK_ENTER:
+#if (ENABLE_TEXTBOX)
+    GooeyTextbox_Internal_HandleVK(window);
+#endif
+    break;
 
   case GOOEY_EVENT_CLICK_RELEASE:
 
@@ -803,18 +937,22 @@ void GooeyWindow_Redraw(size_t window_id, void *data) {
     break;
   }
 
-  if (needs_redraw) {
+  if (needs_redraw)
+  {
     GooeyWindow_DrawUIElements(window);
     active_backend->ResetEvents(window);
   }
 }
 
-void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable) {
+void GooeyWindow_ToggleDecorations(GooeyWindow *win, bool enable)
+{
   active_backend->WindowToggleDecorations(win, enable);
 }
 
-void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...) {
-  if (!active_backend) {
+void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
+{
+  if (!active_backend)
+  {
     LOG_CRITICAL("Backend is not initialized");
     return;
   }
@@ -825,14 +963,17 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...) {
   va_start(args, first_win);
   windows[0] = first_win;
 
-  for (int i = 1; i < num_windows; ++i) {
+  for (int i = 1; i < num_windows; ++i)
+  {
     GooeyWindow *win = va_arg(args, GooeyWindow *);
     windows[i] = win;
   }
   va_end(args);
 
-  for (int i = 0; i < num_windows; ++i) {
-    if (windows[i]) {
+  for (int i = 0; i < num_windows; ++i)
+  {
+    if (windows[i])
+    {
       GooeyWindow_FreeResources(windows[i]);
       free(windows[i]);
       windows[i] = NULL;
@@ -842,8 +983,10 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...) {
   active_backend->Cleanup();
 }
 
-void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...) {
-  if (!active_backend) {
+void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
+{
+  if (!active_backend)
+  {
     LOG_CRITICAL("Backend is not initialized");
     return;
   }
@@ -857,7 +1000,8 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...) {
   windows[0] = first_win;
   GooeyWindow_DrawUIElements(first_win);
 
-  for (int i = 1; i < num_windows; ++i) {
+  for (int i = 1; i < num_windows; ++i)
+  {
     GooeyWindow *win = va_arg(args, GooeyWindow *);
     windows[i] = win;
     GooeyWindow_DrawUIElements(win);
@@ -868,16 +1012,19 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...) {
   active_backend->Run();
 }
 
-void GooeyWindow_RequestRedraw(GooeyWindow *win) {
+void GooeyWindow_RequestRedraw(GooeyWindow *win)
+{
   LOG_CRITICAL("Window redraw req %ld", win->creation_id);
   active_backend->RequestRedraw(win);
 }
 
-void GooeyWindow_SetContinuousRedraw(GooeyWindow *win) {
+void GooeyWindow_SetContinuousRedraw(GooeyWindow *win)
+{
   //  win->continuous_redraw = true;
   // removed for now.
 }
 
-void GooeyWindow_EnableDebugOverlay(GooeyWindow *win, bool is_enabled) {
+void GooeyWindow_EnableDebugOverlay(GooeyWindow *win, bool is_enabled)
+{
   win->enable_debug_overlay = is_enabled;
 }

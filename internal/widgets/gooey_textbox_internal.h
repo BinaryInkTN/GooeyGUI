@@ -15,7 +15,7 @@
  * @param win The window to draw the textbox on.
  */
 void GooeyTextbox_Draw(GooeyWindow *win);
-
+void GooeyTextbox_Internal_HandleVK(GooeyWindow *win);
 /**
  * @brief Handles textbox click events.
  *

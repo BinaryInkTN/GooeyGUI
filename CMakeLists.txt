@@ -28,6 +28,7 @@ set(SOURCES
         src/core/gooey_timers.c
         src/theme/gooey_theme.c
         src/widgets/gooey_drop_surface.c
+        src/widgets/gooey_switch.c
         src/widgets/gooey_button.c
         src/widgets/gooey_canvas.c
         src/widgets/gooey_checkbox.c
@@ -59,6 +60,7 @@ set(SOURCES
         src/widgets/gooey_checkbox_internal.c
         src/widgets/gooey_dropdown_internal.c
         src/widgets/gooey_label_internal.c
+        src/widgets/gooey_switch_internal.c
         src/widgets/gooey_list_internal.c
         src/widgets/gooey_menu_internal.c
         src/widgets/gooey_radiobutton_internal.c

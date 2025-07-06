@@ -6,8 +6,8 @@
 #define SWITCH_ON_TEXT  "ON"
 #define SWITCH_OFF_TEXT  "OFF"
 
-#define GOOEY_SWITCH_DEFAULT_RADIUS 5.0f
-bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y){ 
+#define GOOEY_SWITCH_DEFAULT_RADIUS 17.0f
+bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y){ 
     bool clicked_any_gswitch = false;
 
     for (size_t i = 0; i < win->switch_count; ++i)
@@ -45,75 +45,67 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y){
  *
  * @param win The window containing the checkboxes.
  */
-void GooeyCheckbox_Draw(GooeyWindow *win)
+void GooeySwitch_Draw(GooeyWindow *win)
 {
+    const int thumb_scaling_factor = 5; // consistent horizontal padding
+    const int thumb_padding = 20 ;
     for (size_t i = 0; i < win->switch_count; ++i)
     {
         GooeySwitch *gswitch = win->switches[i];
         if (!gswitch->core.is_visible)
             continue;
+
+        // Track dimensions
+        const int track_x = gswitch->core.x;
+        const int track_y = gswitch->core.y;
+        const int track_width = gswitch->core.width;
         const int track_height = gswitch->core.height;
-        const int thumb_diameter = track_height; // Make thumb height match track
+
+        // Thumb dimensions
+        const int thumb_diameter = track_height - 2 * thumb_scaling_factor; // slightly smaller than track
         const int thumb_radius = thumb_diameter / 2;
-        const int padding = 2;
-        // int thumb_x = gswitch->is_on ? (gswitch->core.x + gswitch->core.width - thumb_diameter - padding) : (gswitch->core.x + padding);
 
-        // Draw the thumb
-        // active_backend->FillArc(
-        //     thumb_x,
-        //     gswitch->core.y + (track_height - thumb_diameter) / 2, // Center vertically
-        //     thumb_diameter,
-        //     thumb_diameter,
-        //     0,
-        //     360 * 64, // Full circle
-        //     win->creation_id);
-        unsigned long gswitch_color = win->active_theme->primary;
+        // Draw the track
+        unsigned long gswitch_color =gswitch->is_toggled ?
+             win->active_theme->primary : 
+             win->active_theme->widget_base ;
+        active_backend->FillRectangle(
+            track_x,
+            track_y,
+            track_width,
+            track_height,
+            gswitch_color,
+            win->creation_id,
+            true,
+            GOOEY_SWITCH_DEFAULT_RADIUS
+        );
 
-        if (gswitch->is_toggled == false)
-        {
-            int thumb_x = (gswitch->core.x + padding);
-            active_backend->FillRectangle(gswitch->core.x,
-                                          gswitch->core.y, gswitch->core.width, gswitch->core.height, gswitch_color, win->creation_id, true, GOOEY_SWITCH_DEFAULT_RADIUS);
-            active_backend->FillArc(
-                thumb_x,
-                gswitch->core.y + (track_height - thumb_diameter) / 2, // Center vertically
-                thumb_diameter,
-                thumb_diameter,
-                0,
-                360 * 64, // Full circle
-                win->creation_id);
-        }
-        else
-        {
-            int thumb_x = (gswitch->core.x + gswitch->core.width - thumb_diameter - padding);
-            gswitch_color = win->active_theme->primary;
-            active_backend->FillRectangle(gswitch->core.x,
-                                          gswitch->core.y, gswitch->core.width, gswitch->core.height, gswitch_color, win->creation_id, true, GOOEY_SWITCH_DEFAULT_RADIUS);
-            active_backend->FillArc(
-                thumb_x,
-                gswitch->core.y + (track_height - thumb_diameter) / 2, // Center vertically
-                thumb_diameter,
-                thumb_diameter,
-                0,
-                360 * 64, // Full circle
-                win->creation_id);
-        }
-        // float text_width = active_backend->GetTextWidth(gswitch->label, strlen(gswitch->label));
-        // float text_height = active_backend->GetTextHeight(gswitch->label, strlen(gswitch->label));
+        // Proper vertical centering
+        const int thumb_y =( track_y + track_height) - track_height / 2;
 
-        // float text_x = gswitch->core.x + (gswitch->core.width - text_width) / 2;
-        // float text_y = gswitch->core.y + (gswitch->core.height + text_height) / 2;
+        // Proper horizontal placement (left or right with padding)
+        int thumb_x = gswitch->is_toggled
+            ? (track_x + track_width - thumb_padding)
+            : (track_x + thumb_padding);
 
-        // active_backend->DrawText(text_x,
-        //                          text_y, gswitch->label, win->active_theme->neutral, 0.27f, win->creation_id);
-        // active_backend->SetForeground(win->active_theme->neutral);
-
-        // if (gswitch->is_highlighted)
-        // {
-
-        //     active_backend->DrawRectangle(gswitch->core.x,
-        //                                   gswitch->core.y, gswitch->core.width, gswitch->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_gswitch_DEFAULT_RADIUS);
-        // }
+        // Draw the thumb (circle)
+        active_backend->FillArc(
+            thumb_x,
+            thumb_y,
+            thumb_diameter,
+            thumb_diameter,
+            0,
+            360,
+            win->creation_id
+        );
+        active_backend->SetForeground(0xFFFFFF);
     }
 }
+
+
+
+
+
+
+
 #endif

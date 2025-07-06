@@ -16,7 +16,7 @@
  * @param event The current event.
  * @return True if the slider was dragged, false otherwise.
  */
-bool GooeySwitch_HandleClick(GooeyWindow *win, void *event);
+bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y); 
 
 /**
  * @brief Draws the slider on the window.

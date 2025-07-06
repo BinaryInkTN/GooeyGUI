@@ -29,6 +29,7 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
     case WIDGET_SWITCH: 
     {
         win->switches[win->switch_count++] = (GooeySwitch*) widget ; 
+        break ;
     }
     case WIDGET_RADIOBUTTON:
     {

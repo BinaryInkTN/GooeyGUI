@@ -80,15 +80,13 @@ void GooeySwitch_Draw(GooeyWindow *win)
             GOOEY_SWITCH_DEFAULT_RADIUS
         );
 
-        // Proper vertical centering
         const int thumb_y =( track_y + track_height) - track_height / 2;
 
-        // Proper horizontal placement (left or right with padding)
         int thumb_x = gswitch->is_toggled
             ? (track_x + track_width - thumb_padding)
             : (track_x + thumb_padding);
+        active_backend->SetForeground(0xFFFFFF);
 
-        // Draw the thumb (circle)
         active_backend->FillArc(
             thumb_x,
             thumb_y,
@@ -98,7 +96,6 @@ void GooeySwitch_Draw(GooeyWindow *win)
             360,
             win->creation_id
         );
-        active_backend->SetForeground(0xFFFFFF);
     }
 }
 

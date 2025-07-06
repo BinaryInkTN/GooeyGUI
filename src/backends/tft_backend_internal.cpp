@@ -104,26 +104,55 @@ void tft_window_dim(int* width, int* height, int window_id) {
 
 void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id) {
     ctx.tft->drawLine(x1, y1, x2, y2, rgb888_to_rgb565(color));
-}
-
-void tft_fill_arc(int x_center, int y_center, int width, int height,
-                 int angle1, int angle2, int window_id) {
-    const int segments = 36;
+}void tft_fill_arc(int x_center, int y_center, int width, int height,
+                  int angle1, int angle2, int window_id) {
     int radius = (width < height ? width : height) / 2;
     uint16_t color = rgb888_to_rgb565(ctx.selected_color);
-    
-    int prev_x = x_center + radius * cos(angle1 * DEG_TO_RAD);
-    int prev_y = y_center + radius * sin(angle1 * DEG_TO_RAD);
 
-    for (int i = 1; i <= segments; i++) {
-        float angle = angle1 + (angle2 - angle1) * i / (float)segments;
-        int x = x_center + radius * cos(angle * DEG_TO_RAD);
-        int y = y_center + radius * sin(angle * DEG_TO_RAD);
-        ctx.tft->drawLine(prev_x, prev_y, x_center, y_center, color);
-        ctx.tft->drawLine(prev_x, prev_y, x, y, color);
-        prev_x = x;
-        prev_y = y;
+    if (angle2 < angle1) angle2 += 360;
+
+    if (angle2 - angle1 >= 360) {
+        ctx.tft->fillCircle(x_center, y_center, radius, color);
+        return;
     }
+
+    TFT_eSprite arcSprite = TFT_eSprite(ctx.tft);
+    int spriteSize = 2 * radius + 1;
+    arcSprite.createSprite(spriteSize, spriteSize);
+    arcSprite.fillSprite(TFT_TRANSPARENT);
+
+    int radius_sq = radius * radius;
+
+    for (int y = -radius; y <= radius; y++) {
+        int y_sq = y * y;
+        int dx_limit = (int)sqrt(radius_sq - y_sq);
+        int last_start = -1, last_end = -1;
+
+        for (int x = -dx_limit; x <= dx_limit; x++) {
+            float angle = atan2(-y, -x) * RAD_TO_DEG;
+            if (angle < 0) angle += 360;
+
+            if (angle >= angle1 && angle <= angle2) {
+                if (last_start == -1) {
+                    last_start = x;
+                    last_end = x;
+                } else if (x == last_end + 1) {
+                    last_end = x;
+                } else {
+                    arcSprite.drawFastHLine(radius + last_start, radius + y, last_end - last_start + 1, color);
+                    last_start = x;
+                    last_end = x;
+                }
+            }
+        }
+
+        if (last_start != -1) {
+            arcSprite.drawFastHLine(radius + last_start, radius + y, last_end - last_start + 1, color);
+        }
+    }
+
+    arcSprite.pushSprite(x_center - radius, y_center - radius, TFT_TRANSPARENT);
+    arcSprite.deleteSprite();
 }
 
 void tft_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id) {

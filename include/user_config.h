@@ -13,6 +13,7 @@
 #define MAX_PLOT_COUNT 100 /** Maximum number of plots. */
 #define MAX_TABS 50 /** Maximum number of tabs. */
 #define MAX_CONTAINER 50 /** Maximum number of Containers. */
+#define MAX_SWITCHES 50 
 // ENABLE/DISABLE WIDGETS
 #define ENABLE_BUTTON 1
 #define ENABLE_CANVAS 1
@@ -35,6 +36,7 @@
 #define ENABLE_TEXTBOX 1
 #define ENABLE_CONTAINER 1
 #define ENABLE_APPBAR 1
+#define ENABLE_SWITCH 1 
 
 // ESP32 CONFIGURATION
 #define TFT_ESPI_ENABLED 1

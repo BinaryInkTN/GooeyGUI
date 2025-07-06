@@ -26,6 +26,10 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->sliders[win->slider_count++] = (GooeySlider *)widget;
         break;
     }
+    case WIDGET_SWITCH: 
+    {
+        win->switches[win->switch_count++] = (GooeySwitch*) widget ; 
+    }
     case WIDGET_RADIOBUTTON:
     {
         win->radio_button_groups[win->radio_button_count++] = (GooeyRadioButtonGroup *)widget;

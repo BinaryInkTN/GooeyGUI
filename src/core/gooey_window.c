@@ -29,6 +29,7 @@
 #include "widgets/gooey_layout.h"
 #include "widgets/gooey_list_internal.h"
 #include "widgets/gooey_menu_internal.h"
+#include "widgets/gooey_switch_internal.h"
 #include "widgets/gooey_messagebox.h"
 #include "widgets/gooey_radiobutton_internal.h"
 #include "widgets/gooey_slider_internal.h"
@@ -231,7 +232,8 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
         !(win->plots = calloc(MAX_PLOT_COUNT, sizeof(GooeyPlot *))) ||
         !(win->progressbars = calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
         !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))) ||
-        !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *))))
+        !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *)))||
+   !(win->switches = calloc(MAX_SWITCHES, sizeof(GooeySwitch *))) )
     {
         return false;
     }
@@ -419,6 +421,19 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     {
         free(win->current_event);
         win->current_event = NULL;
+    }
+    if (win->switches)
+    {
+        for (size_t i = 0; i < win->switch_count; ++i)
+        {
+            if (win->switches[i])
+            {
+                free(win->switches[i]);
+                win->switches[i] = NULL;
+            }
+        }
+        free(win->switches);
+        win->switches = NULL;
     }
 
     if (win->buttons)

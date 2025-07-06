@@ -43,6 +43,7 @@
 #include "widgets/gooey_meter.h"
 #include "signals/gooey_signals.h"
 #include "widgets/gooey_container.h"
+#include "widgets/gooey_switch.h"
 
 // Threads
 #if (TFT_ESPI_ENABLED==0)

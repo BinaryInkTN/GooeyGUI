@@ -20,6 +20,7 @@
 
 /**
  * @brief Enumeration for widget types in the Gooey framework.
+ * @note add new widget between widet label and tabs 
  */
 typedef enum
 {
@@ -39,6 +40,7 @@ typedef enum
     WIDGET_PROGRESSBAR,
     WIDGET_METER,
     WIDGET_CONTAINER,
+    WIDGET_SWITCH,
     WIDGET_TABS
 } WIDGET_TYPE;
 
@@ -484,6 +486,14 @@ typedef struct
     bool is_open;
 } GooeyTabs;
 
+// gooey switch struct 
+typedef struct {
+GooeyWidget core ; 
+bool is_toggled; 
+bool show_hints;
+void (*callback)(bool state);
+}GooeySwitch;
+
 typedef struct
 {
     const char* appname;
@@ -542,8 +552,10 @@ typedef struct
     GooeyTabs **tabs;
     GooeyMeter **meters;
     GooeyContainers **containers;
+    GooeySwitch** switches ;  
 
     size_t container_count;
+    size_t switch_count ;
     size_t meter_count;
     size_t tab_count;
     size_t drop_surface_count;       /**< Number of drop surface widgets */

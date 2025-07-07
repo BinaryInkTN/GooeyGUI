@@ -25,26 +25,31 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <EEPROM.h>
 #include <string>
 
-static uint16_t rgb888_to_rgb565(uint32_t color) {
+static uint16_t rgb888_to_rgb565(uint32_t color)
+{
     return ((color & 0xF80000) >> 8) | ((color & 0xFC00) >> 5) | ((color & 0xF8) >> 3);
 }
-uint16_t cal[5] = { 0, 0, 0, 0, 0 };
-typedef struct {
-    TFT_eSPI* tft;
+uint16_t cal[5] = {0, 0, 0, 0, 0};
+typedef struct
+{
+    TFT_eSPI *tft;
     size_t active_window_count;
     bool inhibit_reset;
     uint32_t selected_color;
-    uint16_t* palette;
+    uint16_t *palette;
     size_t palette_size;
-    GooeyWindow** windows;
-    void (*ReDrawCallback)(size_t window_id, void*data);
+    GooeyWindow **windows;
+    void (*ReDrawCallback)(size_t window_id, void *data);
 
 } GooeyBackendContext;
 
 static GooeyBackendContext ctx = {0};
-bool loadTouchCalibration(uint16_t *calData) {
-    if (EEPROM.read(0) == 0xA5) { 
-        for (int i = 0; i < 5; i++) {
+bool loadTouchCalibration(uint16_t *calData)
+{
+    if (EEPROM.read(0) == 0xA5)
+    {
+        for (int i = 0; i < 5; i++)
+        {
             calData[i] = EEPROM.read(i * 2 + 1) << 8 | EEPROM.read(i * 2 + 2);
         }
         return true;
@@ -52,66 +57,84 @@ bool loadTouchCalibration(uint16_t *calData) {
     return false;
 }
 
-void saveTouchCalibration(uint16_t *calData) {
-    EEPROM.write(0, 0xA5); 
-    for (int i = 0; i < 5; i++) {
+void saveTouchCalibration(uint16_t *calData)
+{
+    EEPROM.write(0, 0xA5);
+    for (int i = 0; i < 5; i++)
+    {
         EEPROM.write(i * 2 + 1, calData[i] >> 8);
         EEPROM.write(i * 2 + 2, calData[i] & 0xFF);
     }
     EEPROM.commit();
 }
 
-void tft_setup_shared() {
-    
+void tft_setup_shared()
+{
+
     ctx.tft = new TFT_eSPI();
     ctx.tft->init();
     ctx.tft->setRotation(TFT_SCREEN_ROTATION);
     ctx.tft->fillScreen(TFT_BLACK);
-    ctx.tft->setFreeFont(&FreeMono9pt7b);    
+    ctx.tft->setFreeFont(&FreeMono9pt7b);
     ctx.tft->setTextSize(1);
-    if (!loadTouchCalibration(cal)) {
+    if (!loadTouchCalibration(cal))
+    {
         ctx.tft->fillScreen(TFT_BLACK);
         ctx.tft->setCursor(20, 20);
         ctx.tft->setTextColor(TFT_WHITE, TFT_BLACK);
         ctx.tft->println("Touch the dots to calibrate");
         ctx.tft->calibrateTouch(cal, TFT_YELLOW, TFT_BLACK, 20);
-        saveTouchCalibration(cal); 
+        saveTouchCalibration(cal);
     }
     ctx.tft->setTouch(cal);
 }
-void tft_setup_separate_vao(int window_id) {
+void tft_setup_separate_vao(int window_id)
+{
 }
 
 void tft_draw_rectangle(int x, int y, int width, int height,
-                       uint32_t color, float thickness,
-                       int window_id, bool isRounded, float cornerRadius) {
+                        uint32_t color, float thickness,
+                        int window_id, bool isRounded, float cornerRadius)
+{
     uint16_t rgb565 = rgb888_to_rgb565(color);
-    if (isRounded) {
+    if (isRounded)
+    {
         ctx.tft->drawRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
-    } else {
+    }
+    else
+    {
         ctx.tft->drawRect(x, y, width, height, rgb565);
     }
 }
 
-void tft_set_foreground(uint32_t color) {
+void tft_set_foreground(uint32_t color)
+{
     ctx.selected_color = color;
 }
 
-void tft_window_dim(int* width, int* height, int window_id) {
-    if (width) *width = ctx.tft->width();
-    if (height) *height = ctx.tft->height();
+void tft_window_dim(int *width, int *height, int window_id)
+{
+    if (width)
+        *width = ctx.tft->width();
+    if (height)
+        *height = ctx.tft->height();
 }
 
-void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id) {
+void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id)
+{
     ctx.tft->drawLine(x1, y1, x2, y2, rgb888_to_rgb565(color));
-}void tft_fill_arc(int x_center, int y_center, int width, int height,
-                  int angle1, int angle2, int window_id) {
+}
+void tft_fill_arc(int x_center, int y_center, int width, int height,
+                  int angle1, int angle2, int window_id)
+{
     int radius = (width < height ? width : height) / 2;
     uint16_t color = rgb888_to_rgb565(ctx.selected_color);
 
-    if (angle2 < angle1) angle2 += 360;
+    if (angle2 < angle1)
+        angle2 += 360;
 
-    if (angle2 - angle1 >= 360) {
+    if (angle2 - angle1 >= 360)
+    {
         ctx.tft->fillCircle(x_center, y_center, radius, color);
         return;
     }
@@ -123,22 +146,31 @@ void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id
 
     int radius_sq = radius * radius;
 
-    for (int y = -radius; y <= radius; y++) {
+    for (int y = -radius; y <= radius; y++)
+    {
         int y_sq = y * y;
         int dx_limit = (int)sqrt(radius_sq - y_sq);
         int last_start = -1, last_end = -1;
 
-        for (int x = -dx_limit; x <= dx_limit; x++) {
+        for (int x = -dx_limit; x <= dx_limit; x++)
+        {
             float angle = atan2(-y, -x) * RAD_TO_DEG;
-            if (angle < 0) angle += 360;
+            if (angle < 0)
+                angle += 360;
 
-            if (angle >= angle1 && angle <= angle2) {
-                if (last_start == -1) {
+            if (angle >= angle1 && angle <= angle2)
+            {
+                if (last_start == -1)
+                {
                     last_start = x;
                     last_end = x;
-                } else if (x == last_end + 1) {
+                }
+                else if (x == last_end + 1)
+                {
                     last_end = x;
-                } else {
+                }
+                else
+                {
                     arcSprite.drawFastHLine(radius + last_start, radius + y, last_end - last_start + 1, color);
                     last_start = x;
                     last_end = x;
@@ -146,7 +178,8 @@ void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id
             }
         }
 
-        if (last_start != -1) {
+        if (last_start != -1)
+        {
             arcSprite.drawFastHLine(radius + last_start, radius + y, last_end - last_start + 1, color);
         }
     }
@@ -155,49 +188,63 @@ void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id
     arcSprite.deleteSprite();
 }
 
-void tft_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id) {
+void tft_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
+{
 }
 
 void tft_fill_rectangle(int x, int y, int width, int height,
-                       uint32_t color, int window_id,
-                       bool isRounded, float cornerRadius) {
+                        uint32_t color, int window_id,
+                        bool isRounded, float cornerRadius)
+{
     uint16_t rgb565 = rgb888_to_rgb565(color);
-    if (isRounded) {
+    if (isRounded)
+    {
         ctx.tft->fillRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
-    } else {
+    }
+    else
+    {
         ctx.tft->fillRect(x, y, width, height, rgb565);
     }
 }
 
-void tft_set_projection(int window_id, int width, int height) {
+void tft_set_projection(int window_id, int width, int height)
+{
 }
 
-static void keyboard_callback(size_t window_id, bool state, const char* value, unsigned long keycode,
-                            void* data) {
+static void keyboard_callback(size_t window_id, bool state, const char *value, unsigned long keycode,
+                              void *data)
+{
 }
 
-static void mouse_click_callback(size_t window_id, bool state, void* data) {
+static void mouse_click_callback(size_t window_id, bool state, void *data)
+{
 }
 
-void tft_request_redraw(GooeyWindow* win) {
+void tft_request_redraw(GooeyWindow *win)
+{
 }
 
-static void mouse_move_callback(size_t window_id, double posX, double posY, void* data) {
+static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
+{
 }
 
-static void window_resize_callback(size_t window_id, int width, int height, void* data) {
+static void window_resize_callback(size_t window_id, int width, int height, void *data)
+{
 }
 
-static void window_close_callback(size_t window_id, void* data) {
+static void window_close_callback(size_t window_id, void *data)
+{
 }
 
-int tft_init_ft() {
+int tft_init_ft()
+{
     ctx.tft->setTextFont(1);
     ctx.tft->setTextColor(TFT_WHITE, TFT_BLACK);
     return 0;
 }
 
-int tft_init() {
+int tft_init()
+{
     ctx.inhibit_reset = false;
     ctx.selected_color = TFT_WHITE;
     ctx.active_window_count = 1;
@@ -206,167 +253,199 @@ int tft_init() {
     return 0;
 }
 
-int tft_get_current_clicked_window(void) {
+int tft_get_current_clicked_window(void)
+{
     return 0;
 }
 
-void tft_draw_text(int x, int y, const char* text, uint32_t color, float font_size, int window_id) {
+void tft_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id)
+{
     ctx.tft->setTextColor(rgb888_to_rgb565(color), TFT_BLACK);
     ctx.tft->setCursor(x, y);
     ctx.tft->print(text);
 }
 
-void tft_unload_image(unsigned int texture_id) {
+void tft_unload_image(unsigned int texture_id)
+{
 }
 
-unsigned int tft_load_image(const char* image_path) {
+unsigned int tft_load_image(const char *image_path)
+{
     return 0;
 }
 
-unsigned int tft_load_image_from_bin(unsigned char* data, size_t binary_len) {
+unsigned int tft_load_image_from_bin(unsigned char *data, size_t binary_len)
+{
     return 0;
 }
 
-GooeyWindow* tft_create_window(const char* title, int width, int height) {
-    GooeyWindow* window = (GooeyWindow*)malloc(sizeof(GooeyWindow));
-    if (window) {
+GooeyWindow *tft_create_window(const char *title, int width, int height)
+{
+    GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
+    if (window)
+    {
         window->creation_id = 0;
         ctx.active_window_count++;
     }
     return window;
 }
 
-void tft_make_window_visible(int window_id, bool visibility) {
+void tft_make_window_visible(int window_id, bool visibility)
+{
 }
 
-void tft_set_window_resizable(bool value, int window_id) {
+void tft_set_window_resizable(bool value, int window_id)
+{
 }
 
-void tft_hide_current_child(void) {
-
+void tft_hide_current_child(void)
+{
 }
 
-void tft_destroy_windows() {
- 
+void tft_destroy_windows()
+{
 }
 
-void tft_clear(GooeyWindow* win) {
-    if (win && win->active_theme) {
+void tft_clear(GooeyWindow *win)
+{
+    if (win && win->active_theme)
+    {
         ctx.tft->fillScreen(rgb888_to_rgb565(win->active_theme->base));
     }
 }
 
-void tft_cleanup() {
-    if (ctx.tft) {
+void tft_cleanup()
+{
+    if (ctx.tft)
+    {
         delete ctx.tft;
         ctx.tft = nullptr;
     }
 }
 
-void tft_update_background(GooeyWindow* win) {
-    if (win && win->active_theme) {
+void tft_update_background(GooeyWindow *win)
+{
+    if (win && win->active_theme)
+    {
         ctx.tft->fillScreen(rgb888_to_rgb565(win->active_theme->base));
     }
 }
 
-void tft_render(GooeyWindow* win) {
-
+void tft_render(GooeyWindow *win)
+{
 }
-float tft_get_text_width(const char* text, int length) {
-    return (float)ctx.tft->textWidth((String) text);
-}
-
-float tft_get_text_height(const char* text, int length) {
-    return (float) ctx.tft->fontHeight();
+float tft_get_text_width(const char *text, int length)
+{
+    return (float)ctx.tft->textWidth((String)text);
 }
 
-const char* tft_get_key_from_code(void* gooey_event) {
+float tft_get_text_height(const char *text, int length)
+{
+    return (float)ctx.tft->fontHeight();
+}
+
+const char *tft_get_key_from_code(void *gooey_event)
+{
     return NULL;
 }
 
-void tft_set_cursor(GOOEY_CURSOR cursor) {
-
+void tft_set_cursor(GOOEY_CURSOR cursor)
+{
 }
 
-void tft_stop_cursor_reset(bool state) {
+void tft_stop_cursor_reset(bool state)
+{
     ctx.inhibit_reset = state;
 }
 
-void tft_destroy_window_from_id(int window_id) {
-    if (ctx.active_window_count > 0) {
+void tft_destroy_window_from_id(int window_id)
+{
+    if (ctx.active_window_count > 0)
+    {
         ctx.active_window_count--;
     }
 }
 
-static void drag_n_drop_callback(size_t origin_window_id, char* mime, char* buff, int x, int y, void* data) {
-
+static void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff, int x, int y, void *data)
+{
 }
 
-void tft_setup_callbacks(void (*callback)(size_t window_id, void* data), void* data) {
+void tft_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
+{
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyWindow *win = (GooeyWindow *)windows[0];
     ctx.windows = windows;
     ctx.ReDrawCallback = callback;
-}   
+}
 
-
-void tft_run() {
-    while (1) {     
+void tft_run()
+{
+    while (1)
+    {
         uint16_t x, y;
-        if (ctx.tft->getTouch(&x, &y)) {
-        Serial.printf("touch %d %d\n", x, y);
-        GooeyEvent* event = (GooeyEvent*) ctx.windows[0]->current_event;
-        event->click.x = x;
-        event->click.y = y;
-        event->type = GOOEY_EVENT_CLICK_PRESS;
-        ctx.ReDrawCallback(0, ctx.windows);
-
+        if (ctx.tft->getTouch(&x, &y))
+        {
+            Serial.printf("touch %d %d\n", x, y);
+            GooeyEvent *event = (GooeyEvent *)ctx.windows[0]->current_event;
+            event->click.x = x;
+            event->click.y = y;
+            event->type = GOOEY_EVENT_CLICK_PRESS;
+            ctx.ReDrawCallback(0, ctx.windows);
         }
     }
 }
 
+void tft_force_redraw()
+{
+    ctx.ReDrawCallback(0, ctx.windows);
+}
 
-GooeyTimer* tft_create_timer() {
+GooeyTimer *tft_create_timer()
+{
     return NULL;
 }
 
-void tft_stop_timer(GooeyTimer* timer) {
- 
+void tft_stop_timer(GooeyTimer *timer)
+{
 }
 
-void tft_destroy_timer(GooeyTimer* timer) {
-    
+void tft_destroy_timer(GooeyTimer *timer)
+{
 }
 
-void tft_set_callback_for_timer(uint64_t time, GooeyTimer* timer, 
-                              void (*callback)(void* user_data), void* user_data) {
-   
+void tft_set_callback_for_timer(uint64_t time, GooeyTimer *timer,
+                                void (*callback)(void *user_data), void *user_data)
+{
 }
 
-void tft_window_toggle_decorations(GooeyWindow* win, bool enable) {
-  
+void tft_window_toggle_decorations(GooeyWindow *win, bool enable)
+{
 }
 
-size_t tft_get_active_window_count() {
+size_t tft_get_active_window_count()
+{
     return ctx.active_window_count;
 }
 
-size_t tft_get_total_window_count() {
+size_t tft_get_total_window_count()
+{
     return 1;
 }
 
-void tft_reset_events(GooeyWindow* win) {
-   
+void tft_reset_events(GooeyWindow *win)
+{
 }
 
-void tft_set_viewport(size_t window_id, int width, int height) {
-    
+void tft_set_viewport(size_t window_id, int width, int height)
+{
 }
 
-double tft_get_window_framerate(int window_id) {
+double tft_get_window_framerate(int window_id)
+{
     return 0.0;
 }
-extern "C" {
+extern "C"
+{
     __attribute__((used, visibility("default"))) GooeyBackend tft_backend = {
         .Init = tft_init,
         .Run = tft_run,
@@ -377,7 +456,7 @@ extern "C" {
         .GetActiveWindowCount = tft_get_active_window_count,
         .GetTotalWindowCount = tft_get_total_window_count,
         .CreateWindow = tft_create_window,
-        .SpawnWindow = NULL, 
+        .SpawnWindow = NULL,
         .MakeWindowVisible = tft_make_window_visible,
         .MakeWindowResizable = tft_set_window_resizable,
         .WindowToggleDecorations = tft_window_toggle_decorations,
@@ -385,7 +464,7 @@ extern "C" {
         .DestroyWindows = tft_destroy_windows,
         .DestroyWindowFromId = tft_destroy_window_from_id,
         .HideCurrentChild = tft_hide_current_child,
-        .SetContext = NULL,  
+        .SetContext = NULL,
         .UpdateBackground = tft_update_background,
         .Clear = tft_clear,
         .Render = tft_render,
@@ -413,5 +492,6 @@ extern "C" {
         .DestroyTimer = tft_destroy_timer,
         .CursorChange = NULL,
         .StopCursorReset = tft_stop_cursor_reset,
+        .ForceCallRedraw = tft_force_redraw
     };
 }

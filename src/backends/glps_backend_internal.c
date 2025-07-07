@@ -492,6 +492,11 @@ void glps_request_redraw(GooeyWindow *win)
     event->type = GOOEY_EVENT_REDRAWREQ;
 }
 
+
+void glps_force_redraw()
+{}
+
+
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
@@ -1143,5 +1148,6 @@ GooeyBackend glps_backend = {
     .Clear = glps_clear,
     .CursorChange = glps_set_cursor,
     .StopCursorReset = glps_stop_cursor_reset,
+    .ForceCallRedraw = glps_force_redraw
     };
 #endif

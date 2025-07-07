@@ -230,11 +230,8 @@ void GooeyTextbox_Internal_HandleVK(GooeyWindow* win)
     if (!textbox || !textbox->core.is_visible)
       continue;
 
-    if(textbox->focused)
-    {
       // attribute VK output to Focused textbox
       strncpy(textbox->text, GooeyVK_Internal_GetText(win->vk), sizeof(textbox->text));
-    }
   }
 }
 

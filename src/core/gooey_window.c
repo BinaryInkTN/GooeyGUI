@@ -714,6 +714,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #endif
   if (win->vk->is_shown)
   {
+    active_backend->Render(win);
     return;
   }
   // Draw all UI components
@@ -908,11 +909,13 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
   }
 
   case GOOEY_EVENT_VK_ENTER:
+  {
+    LOG_CRITICAL("Clicked enter");
 #if (ENABLE_TEXTBOX)
     GooeyTextbox_Internal_HandleVK(window);
 #endif
     break;
-
+  }
   case GOOEY_EVENT_CLICK_RELEASE:
 
     break;

@@ -82,7 +82,7 @@ typedef struct GooeyBackend
     void (*DestroyTimer)(GooeyTimer *timer);                                                    /**< Destroys a timer. */
     void (*CursorChange)(GOOEY_CURSOR cursor);                                                  /**< Changes the cursor. */
     void (*StopCursorReset)(bool state);                                                        /**< Stops cursor reset. */
-
+    void (*ForceCallRedraw)(void);
 } GooeyBackend;
 
 /**

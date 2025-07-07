@@ -636,7 +636,10 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height,
   }
 
   if (win->vk)
+  {
     win->vk->is_shown = false;
+    win->vk->text_widget_id = -1;
+  }
 
   win->menu = NULL;
   win->appbar = NULL;

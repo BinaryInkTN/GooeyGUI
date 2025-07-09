@@ -53,6 +53,8 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
     button->core.is_visible = true;
     button->core.type = WIDGET_RADIOBUTTON;
     button->selected = false;
+        button->core.sprite = active_backend->CreateSpriteForWidget(x, y, 40, 40);
+
     if (label)
         strncpy(button->label, label, sizeof(button->label) - 1);
     else

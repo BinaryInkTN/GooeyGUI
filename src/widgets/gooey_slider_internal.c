@@ -14,17 +14,17 @@ void GooeySlider_Draw(GooeyWindow *win)
         if (!slider->core.is_visible)
             continue;
         active_backend->FillRectangle(slider->core.x,
-                                      slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id, false, 0.0f);
+                                      slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id, false, 0.0f,slider->core.sprite);
 
         int thumb_x = slider->core.x + (slider->value - slider->min_value) *
                                            slider->core.width /
                                            (slider->max_value - slider->min_value);
         
         active_backend->FillRectangle(thumb_x - 5,
-                                      slider->core.y - 5, 10, slider->core.height + 10, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS);
+                                      slider->core.y - 5, 10, slider->core.height + 10, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS,slider->core.sprite);
 
         active_backend->FillRectangle(slider->core.x,
-                                      slider->core.y, thumb_x - slider->core.x, slider->core.height, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS);
+                                      slider->core.y, thumb_x - slider->core.x, slider->core.height, win->active_theme->primary, win->creation_id, true, GOOEY_SLIDER_DEFAULT_RADIUS,slider->core.sprite);
 
         if (slider->show_hints)
         {

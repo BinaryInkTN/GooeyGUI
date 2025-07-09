@@ -27,6 +27,8 @@ GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, i
     image->callback = callback;
     image->needs_refresh = false;
     image->image_path = image_path;
+    image->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
+
     return image;
 }
 

@@ -19,11 +19,11 @@ void GooeyButton_Draw(GooeyWindow *win)
             button_color = ((button_color & 0x7E7E7E) >> 1) | (button_color & 0x808080) >> 1; // A little darker
         }
         active_backend->FillRectangle(button->core.x,
-                                      button->core.y, button->core.width, button->core.height, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS);
+                                      button->core.y, button->core.width, button->core.height, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
 
         if (button->clicked)
             active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, 4.0f);
+                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, 4.0f, button->core.sprite);
 
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));
         float text_height = active_backend->GetTextHeight(button->label, strlen(button->label));
@@ -39,7 +39,7 @@ void GooeyButton_Draw(GooeyWindow *win)
         {
 
             active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS);
+                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
         }
     }
 }
@@ -90,7 +90,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
         
             button->clicked = !button->clicked;
             clicked_any_button = true;
-
+       
             if (button->callback)
             {
                 button->callback();

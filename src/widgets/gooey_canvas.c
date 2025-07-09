@@ -43,6 +43,8 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
     canvas->elements = calloc(100, sizeof(CanvaElement));
     canvas->element_count = 0;
     canvas->callback = callback;
+    canvas->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
+
     LOG_INFO("Canvas added to window with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
     return canvas;
 }

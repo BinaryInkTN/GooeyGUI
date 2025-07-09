@@ -56,6 +56,8 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
     button->hover = false;
     button->clicked = false;
     button->is_highlighted = false;
+    button->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y-20, width+40, height+40);
+
     LOG_INFO("Button added with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
     return button;
 }

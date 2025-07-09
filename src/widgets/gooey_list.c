@@ -49,6 +49,7 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
     list->callback = callback;
     list->show_separator = true;
     list->element_hovered_over = -1;
+    list->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
 
     return list;
 }

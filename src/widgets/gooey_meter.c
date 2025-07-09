@@ -1,5 +1,5 @@
 #include "widgets/gooey_meter.h"
-#if(ENABLE_METER)
+#if (ENABLE_METER)
 #include "logger/pico_logger_internal.h"
 #include "backends/gooey_backend_internal.h"
 
@@ -16,6 +16,7 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
     *meter = (GooeyMeter){
         .core = {
             .type = WIDGET_METER,
+            .sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, width + 40, height + 40),
             .is_visible = true,
             .x = x,
             .y = y,

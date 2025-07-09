@@ -17,22 +17,22 @@ void GooeyList_Draw(GooeyWindow *win)
         active_backend->FillRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            win->active_theme->widget_base, win->creation_id, false, 0.0f);
+            win->active_theme->widget_base, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->DrawRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->FillRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            win->active_theme->widget_base, win->creation_id, false, 0.0f);
+            win->active_theme->widget_base, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->DrawRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f,list->core.sprite);
 
         int total_content_height = list->item_count * list->item_spacing;
         int visible_height = list->core.height;
@@ -56,7 +56,7 @@ void GooeyList_Draw(GooeyWindow *win)
             active_backend->FillRectangle(
                 list->core.x + list->core.width, list->thumb_y,
                 list->thumb_width, list->thumb_height,
-                win->active_theme->primary, win->creation_id, true, 2.0f);
+                win->active_theme->primary, win->creation_id, true, 2.0f,list->core.sprite);
         }
 
         for (size_t j = 0; j < list->item_count; ++j)
@@ -92,7 +92,7 @@ void GooeyList_Draw(GooeyWindow *win)
                         list->core.x, line_separator_y,
                         list->core.x + list->core.width,
                         line_separator_y, win->active_theme->neutral,
-                        win->creation_id);
+                        win->creation_id,list->core.sprite);
             }
 
             current_y_offset += list->item_spacing;

@@ -27,7 +27,8 @@ GooeySwitch *GooeySwitch_Create( int x, int y, bool IsToggled,
     gswitch->is_toggled = IsToggled;
     gswitch->show_hints = show_hints;
     gswitch->callback = callback;
-    
+        gswitch->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, SWITCH_WIDTH + 40, SWITCH_HEIGHT + 40);
+
 
     return gswitch;
 }

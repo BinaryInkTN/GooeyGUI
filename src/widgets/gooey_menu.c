@@ -26,7 +26,7 @@ GooeyMenu *GooeyMenu_Set(GooeyWindow *win)
     win->menu->children_count = 0;
     win->menu->is_busy = 0;
     LOG_INFO("Set menu for window.");
-
+    
     return win->menu;
 }
 

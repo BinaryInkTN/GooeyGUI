@@ -37,7 +37,7 @@ static int vk_layout_state = 0;
 
 static void render_preview_bar(GooeyWindow *win, int preview_height)
 {
-    active_backend->FillRectangle(0, 0, win->width, preview_height, win->active_theme->widget_base, win->creation_id, true, 4.0f);
+    active_backend->FillRectangle(0, 0, win->width, preview_height, win->active_theme->widget_base, win->creation_id, true, 4.0f, NULL);
 
     const float text_scale = 0.35f;
     int text_height = active_backend->GetTextHeight(vk_preview_buffer, text_scale);
@@ -134,7 +134,7 @@ static void render_keyboard_buttons(GooeyWindow *win, int y_offset)
             int draw_y = y_offset + row * row_height + 2;
 
             active_backend->FillRectangle(draw_x, draw_y, current_button_width - 4, row_height - 4,
-                                          win->active_theme->widget_base, win->creation_id, true, 5.0f);
+                                          win->active_theme->widget_base, win->creation_id, true, 5.0f, NULL);
 
             int label_x = draw_x + current_button_width / 2 - active_backend->GetTextWidth(label, 1) / 2;
             int label_y = draw_y + (row_height - 4) / 2 + active_backend->GetTextHeight(label, 1) / 2;
@@ -153,7 +153,7 @@ void GooeyVK_Internal_Draw(GooeyWindow *win)
 
     const int preview_height = win->height / 6;
 
-    active_backend->FillRectangle(0, 0, win->width, win->height, win->active_theme->base, 0, false, 0.0f);
+    active_backend->FillRectangle(0, 0, win->width, win->height, win->active_theme->base, 0, false, 0.0f,NULL);
 
     render_preview_bar(win, preview_height);
     render_keyboard_buttons(win, preview_height);

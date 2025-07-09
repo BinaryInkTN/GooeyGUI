@@ -20,7 +20,7 @@
 
 /**
  * @brief Enumeration for widget types in the Gooey framework.
- * @note add new widget between widet label and tabs 
+ * @note add new widget between widet label and tabs
  */
 typedef enum
 {
@@ -46,6 +46,17 @@ typedef enum
 
 typedef struct
 {
+    void *sprite_ptr;
+    int x;
+    int y;
+    int width;
+    int height;
+    bool needs_redraw;
+
+} GooeyTFT_Sprite;
+
+typedef struct
+{
     void *timer_ptr;
 } GooeyTimer;
 
@@ -58,6 +69,7 @@ typedef struct
     bool is_visible;   /**< Visibility of the widget */
     int x, y;          /**< Position of the widget (top-left corner) */
     int width, height; /**< Dimensions of the widget */
+    GooeyTFT_Sprite *sprite;
 } GooeyWidget;
 
 /**
@@ -115,16 +127,14 @@ typedef struct
     void **widgets;
     size_t widget_count;
 } GooeyContainer;
-typedef struct {
-   
+typedef struct
+{
+
     GooeyWidget core;
     GooeyContainer *container;
     size_t container_count;
     size_t active_container_id;
 } GooeyContainers;
-
-
-
 
 /**
  * @brief Enumeration for canvas drawing operations.
@@ -486,17 +496,18 @@ typedef struct
     bool is_open;
 } GooeyTabs;
 
-// gooey switch struct 
-typedef struct {
-GooeyWidget core ; 
-bool is_toggled; 
-bool show_hints;
-void (*callback)(bool state);
-}GooeySwitch;
+// gooey switch struct
+typedef struct
+{
+    GooeyWidget core;
+    bool is_toggled;
+    bool show_hints;
+    void (*callback)(bool state);
+} GooeySwitch;
 
 typedef struct
 {
-    const char* appname;
+    const char *appname;
 } GooeyAppbar;
 
 typedef struct
@@ -507,13 +518,12 @@ typedef struct
     unsigned long texture_id;
 } GooeyMeter;
 
-typedef struct 
+typedef struct
 {
     GooeyWidget core;
     bool is_shown;
     int text_widget_id;
 } GooeyVK;
-
 
 /**
  * @brief Enumeration for window types in the Gooey framework.
@@ -533,11 +543,11 @@ typedef struct
     int creation_id;  /**< Unique window ID */
     int width;
     int height;
-    bool visibility;  /**< Whether the window is visible */
+    bool visibility; /**< Whether the window is visible */
     bool enable_debug_overlay;
     bool continuous_redraw;
-    GooeyAppbar* appbar;
-    GooeyVK* vk;
+    GooeyAppbar *appbar;
+    GooeyVK *vk;
     GooeyButton **buttons;                       /**< List of buttons in the window */
     GooeyLabel **labels;                         /**< List of labels in the window */
     GooeyCheckbox **checkboxes;                  /**< List of checkboxes in the window */
@@ -561,10 +571,10 @@ typedef struct
     GooeyTabs **tabs;
     GooeyMeter **meters;
     GooeyContainers **containers;
-    GooeySwitch** switches ;  
+    GooeySwitch **switches;
 
     size_t container_count;
-    size_t switch_count ;
+    size_t switch_count;
     size_t meter_count;
     size_t tab_count;
     size_t drop_surface_count;       /**< Number of drop surface widgets */

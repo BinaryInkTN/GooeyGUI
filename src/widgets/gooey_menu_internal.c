@@ -11,7 +11,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
     int window_width, window_height;
     active_backend->GetWinDim(&window_width, &window_height, win->creation_id);
 
-    active_backend->FillRectangle(0, 0, window_width, 20, win->active_theme->widget_base, win->creation_id, false, 0.0f);
+    active_backend->FillRectangle(0, 0, window_width, 20, win->active_theme->widget_base, win->creation_id, false, 0.0f, NULL);
 
     int x_offset = 10;
     for (int i = 0; i < win->menu->children_count; i++)
@@ -22,7 +22,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
         if (child->is_open)
         {
             active_backend->FillRectangle(x_offset - 10, 0, text_width + 20, 20,
-                                          win->active_theme->primary, win->creation_id, false, 0.0f);
+                                          win->active_theme->primary, win->creation_id, false, 0.0f, NULL);
         }
 
         active_backend->DrawText(x_offset, 15, child->title,
@@ -37,7 +37,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
             const int submenu_height = 25 * child->menu_elements_count;
 
             active_backend->FillRectangle(submenu_x, submenu_y, submenu_width, submenu_height,
-                                          win->active_theme->widget_base, win->creation_id, true, 5.0f);
+                                          win->active_theme->widget_base, win->creation_id, true, 5.0f, NULL);
 
             for (int j = 0; j < child->menu_elements_count; j++)
             {
@@ -47,7 +47,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
                 if (is_hovered)
                 {
                     active_backend->FillRectangle(submenu_x, element_y, submenu_width, 25,
-                                                  win->active_theme->primary, win->creation_id, true, 2.0f);
+                                                  win->active_theme->primary, win->creation_id, true, 2.0f, NULL);
                 }
 
                 active_backend->DrawText(submenu_x + 5, element_y + 18, child->menu_elements[j],
@@ -58,7 +58,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
                 {
                     active_backend->DrawLine(submenu_x, element_y + 24,
                                              submenu_x + submenu_width, element_y + 24,
-                                             win->active_theme->neutral, win->creation_id);
+                                             win->active_theme->neutral, win->creation_id, NULL);
                 }
             }
         }

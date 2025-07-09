@@ -63,15 +63,15 @@ typedef struct GooeyBackend
     unsigned int (*LoadImage)(const char *image_path);                                      /**< Loads an image from a file. */
     unsigned int (*LoadImageFromBin)(unsigned char *data, size_t binary_len);               /**< Loads an image from binary data. */
     void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id); /**< Draws an image on a window. */
-    void (*FillRectangle)(int x, int y, int width, int height, uint32_t color, int window_id, bool isRounded, float cornerRadius); /**< Fills a rectangle on a window. */
-    void (*DrawRectangle)(int x, int y, int width, int height, uint32_t color, float thickness, int window_id, bool isRounded, float cornerRadius); /**< Draws the outline of a rectangle on a window. */
-    void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id); /**< Fills an arc on a window. */
+    void (*FillRectangle)(int x, int y, int width, int height, uint32_t color, int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite* sprite); /**< Fills a rectangle on a window. */
+    void (*DrawRectangle)(int x, int y, int width, int height, uint32_t color, float thickness, int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite* sprite); /**< Draws the outline of a rectangle on a window. */
+    void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id, GooeyTFT_Sprite* sprite); /**< Fills an arc on a window. */
     const char *(*GetKeyFromCode)(void *gooey_event);                                            /**< Converts a key code to a string representation. */
     void *(*HandleEvents)(void);                                                                 /**< Handles input events. */
     void (*ResetEvents)(GooeyWindow *win);                                                       /**< Resets the event state for a window. */
     void (*GetWinDim)(int *width, int *height, int window_id);                                   /**< Retrieves the dimensions of a window. */
     double (*GetWinFramerate)(int window_id);                                                    /**< Gets FPS for window. */
-    void (*DrawLine)(int x1, int y1, int x2, int y2, uint32_t color, int window_id);            /**< Draws a line on a window. */
+    void (*DrawLine)(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite* sprite);            /**< Draws a line on a window. */
     float (*GetTextWidth)(const char *text, int length);                                         /**< Calculates the width of a text string. */
     float (*GetTextHeight)(const char *text, int length);                                        /**< Calculates the height of a text string. */
     void (*SetCursor)(GOOEY_CURSOR cursor);                                                      /**< Sets the cursor type for the window. */
@@ -83,6 +83,11 @@ typedef struct GooeyBackend
     void (*CursorChange)(GOOEY_CURSOR cursor);                                                  /**< Changes the cursor. */
     void (*StopCursorReset)(bool state);                                                        /**< Stops cursor reset. */
     void (*ForceCallRedraw)(void);
+  
+
+    // Arduino
+    GooeyTFT_Sprite *(*CreateSpriteForWidget)(int x, int y, int width, int height);
+    void (*RedrawSprite)(GooeyTFT_Sprite *sprite);
 } GooeyBackend;
 
 /**

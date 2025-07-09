@@ -57,7 +57,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             card_width,
             card_height,
             win->active_theme->widget_base,
-            win->creation_id, true, 10.0f);
+            win->creation_id, true, 10.0f, meter->core.sprite);
 
        
 
@@ -76,7 +76,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             meter->core.height,
             0,
             180,
-            win->creation_id);
+            win->creation_id,meter->core.sprite);
 
         unsigned long color = win->active_theme->primary;
         if(meter->value < 50)
@@ -97,7 +97,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             meter->core.height,
             0,
             180 * ((float) meter->value/100),
-            win->creation_id);
+            win->creation_id,meter->core.sprite);
 
         active_backend->SetForeground(win->active_theme->widget_base);
         active_backend->FillArc(
@@ -107,7 +107,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             meter->core.height * INNER_CIRCLE_SCALE,
             0,
             180,
-            win->creation_id);
+            win->creation_id, meter->core.sprite);
 
         active_backend->DrawText(
             label_text_x,

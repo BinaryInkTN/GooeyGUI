@@ -1,13 +1,14 @@
 #include "widgets/gooey_switch_internal.h"
-#if(ENABLE_SWITCH)
+#if (ENABLE_SWITCH)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 
-#define SWITCH_ON_TEXT  "ON"
-#define SWITCH_OFF_TEXT  "OFF"
+#define SWITCH_ON_TEXT "ON"
+#define SWITCH_OFF_TEXT "OFF"
 
 #define GOOEY_SWITCH_DEFAULT_RADIUS 17.0f
-bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y){ 
+bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y)
+{
     bool clicked_any_gswitch = false;
 
     for (size_t i = 0; i < win->switch_count; ++i)
@@ -20,7 +21,7 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y){
 
         if (is_within_bounds)
         {
-        
+
             gswitch->is_toggled = !gswitch->is_toggled;
             clicked_any_gswitch = true;
 
@@ -28,10 +29,11 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y){
             {
                 gswitch->callback(gswitch->is_toggled);
             }
-        }else { 
-            clicked_any_gswitch = false ; 
         }
-       
+        else
+        {
+            clicked_any_gswitch = false;
+        }
     }
 
     return clicked_any_gswitch;
@@ -48,7 +50,7 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y){
 void GooeySwitch_Draw(GooeyWindow *win)
 {
     const int thumb_scaling_factor = 5; // consistent horizontal padding
-    const int thumb_padding = 20 ;
+    const int thumb_padding = 20;
     for (size_t i = 0; i < win->switch_count; ++i)
     {
         GooeySwitch *gswitch = win->switches[i];
@@ -66,9 +68,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
         const int thumb_radius = thumb_diameter / 2;
 
         // Draw the track
-        unsigned long gswitch_color =gswitch->is_toggled ?
-             win->active_theme->primary : 
-             win->active_theme->widget_base ;
+        unsigned long gswitch_color = gswitch->is_toggled ? win->active_theme->primary : win->active_theme->widget_base;
         active_backend->FillRectangle(
             track_x,
             track_y,
@@ -77,14 +77,13 @@ void GooeySwitch_Draw(GooeyWindow *win)
             gswitch_color,
             win->creation_id,
             true,
-            GOOEY_SWITCH_DEFAULT_RADIUS
-        );
+            GOOEY_SWITCH_DEFAULT_RADIUS,gswitch->core.sprite);
 
-        const int thumb_y =( track_y + track_height) - track_height / 2;
+        const int thumb_y = (track_y + track_height) - track_height / 2;
 
         int thumb_x = gswitch->is_toggled
-            ? (track_x + track_width - thumb_padding)
-            : (track_x + thumb_padding);
+                          ? (track_x + track_width - thumb_padding)
+                          : (track_x + thumb_padding);
         active_backend->SetForeground(0xFFFFFF);
 
         active_backend->FillArc(
@@ -94,15 +93,8 @@ void GooeySwitch_Draw(GooeyWindow *win)
             thumb_diameter,
             0,
             360,
-            win->creation_id
-        );
+            win->creation_id, gswitch->core.sprite);
     }
 }
-
-
-
-
-
-
 
 #endif

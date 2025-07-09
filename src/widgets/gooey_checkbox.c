@@ -38,6 +38,7 @@ GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
     checkbox->core.width = CHECKBOX_SIZE;
     checkbox->core.height = CHECKBOX_SIZE;
     checkbox->core.is_visible = true;
+    checkbox->core.sprite = active_backend->CreateSpriteForWidget(x, y, CHECKBOX_SIZE, CHECKBOX_SIZE);
     if (label)
     {
         strncpy(checkbox->label, label, sizeof(checkbox->label) - 1);

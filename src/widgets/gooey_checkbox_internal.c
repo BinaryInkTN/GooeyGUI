@@ -17,14 +17,14 @@ void GooeyCheckbox_Draw(GooeyWindow *win)
         active_backend->DrawText(label_x, label_y, checkbox->label, win->active_theme->neutral, 0.27f, win->creation_id);
 
         active_backend->DrawRectangle(checkbox->core.x, checkbox->core.y,
-                                      checkbox->core.width, checkbox->core.height, win->active_theme->neutral,1.0f, win->creation_id, false, 0.0f);
+                                      checkbox->core.width, checkbox->core.height, win->active_theme->neutral,1.0f, win->creation_id, false, 0.0f, checkbox->core.sprite);
         active_backend->FillRectangle(checkbox->core.x + 1, checkbox->core.y + 1,
-                                      checkbox->core.width - 2, checkbox->core.height - 2, win->active_theme->base, win->creation_id, false, 0.0f);
+                                      checkbox->core.width - 2, checkbox->core.height - 2, win->active_theme->base, win->creation_id, false, 0.0f, checkbox->core.sprite);
 
         if (checkbox->checked)
         {
             active_backend->FillRectangle(checkbox->core.x + 5, checkbox->core.y + 5,
-                                          checkbox->core.width - 10, checkbox->core.height - 10, win->active_theme->primary, win->creation_id, false, 0.0f);
+                                          checkbox->core.width - 10, checkbox->core.height - 10, win->active_theme->primary, win->creation_id, false, 0.0f, checkbox->core.sprite);
         }
     }
 }

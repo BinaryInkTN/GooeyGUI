@@ -70,7 +70,7 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
         active_backend->DrawRectangle(
             drop_surface->core.x, drop_surface->core.y,
             drop_surface->core.width, drop_surface->core.height,
-            surface_color, 1.0f, win->creation_id, false, 0.0f);
+            surface_color, 1.0f, win->creation_id, false, 0.0f, drop_surface->core.sprite);
 
         int available_width = drop_surface->core.width - 20; // Padding
         int text_width = active_backend->GetTextWidth(filename, strlen(filename));

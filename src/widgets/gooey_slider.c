@@ -48,7 +48,8 @@ GooeySlider *GooeySlider_Create( int x, int y, int width,
     slider->value = min_value;
     slider->show_hints = show_hints;
     slider->callback = callback;
-    
+    slider->core.sprite = active_backend->CreateSpriteForWidget(x, y - 10, width + 10, SLIDER_HEIGHT + 20);
+
 
     return slider;
 }

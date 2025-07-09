@@ -42,28 +42,36 @@ GooeyTabs *GooeyTabs_Create(int x, int y, int width, int height, bool is_sidebar
     tabs_widget->active_tab_id = 0; // default active tab is the first one.
     tabs_widget->is_sidebar = is_sidebar;
     tabs_widget->is_open = false;
+    tabs_widget->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
+
     return tabs_widget;
 }
 
-void GooeyTabs_Sidebar_Open(GooeyTabs *tabs_widget) {
-    if (tabs_widget->is_open) return;
-    for (size_t i = 0; i < tabs_widget->tab_count; i++) {
+void GooeyTabs_Sidebar_Open(GooeyTabs *tabs_widget)
+{
+    if (tabs_widget->is_open)
+        return;
+    for (size_t i = 0; i < tabs_widget->tab_count; i++)
+    {
 
-            for (size_t j = 0; j<tabs_widget->tabs[i].widget_count; j++) {
-                GooeyWidget* widget = (GooeyWidget*) tabs_widget->tabs[i].widgets[j];
-                widget->x += TAB_WIDTH;
-            }
-
+        for (size_t j = 0; j < tabs_widget->tabs[i].widget_count; j++)
+        {
+            GooeyWidget *widget = (GooeyWidget *)tabs_widget->tabs[i].widgets[j];
+            widget->x += TAB_WIDTH;
+        }
     }
     tabs_widget->is_open = true;
 }
 
-
-void GooeyTabs_Sidebar_Close(GooeyTabs *tabs_widget) {
-    if (!tabs_widget->is_open) return;
-    for (size_t i = 0; i < tabs_widget->tab_count; i++) {
-        for (size_t j = 0; j<tabs_widget->tabs[i].widget_count; j++) {
-            GooeyWidget* widget = (GooeyWidget*) tabs_widget->tabs[i].widgets[j];
+void GooeyTabs_Sidebar_Close(GooeyTabs *tabs_widget)
+{
+    if (!tabs_widget->is_open)
+        return;
+    for (size_t i = 0; i < tabs_widget->tab_count; i++)
+    {
+        for (size_t j = 0; j < tabs_widget->tabs[i].widget_count; j++)
+        {
+            GooeyWidget *widget = (GooeyWidget *)tabs_widget->tabs[i].widgets[j];
             widget->x -= TAB_WIDTH;
         }
     }
@@ -107,10 +115,13 @@ void GooeyTabs_AddWidget(GooeyWindow *window, GooeyTabs *tabs, size_t tab_id, vo
     }
 
     GooeyWidget *core = (GooeyWidget *)widget;
-    if (!tabs->is_sidebar) {
+    if (!tabs->is_sidebar)
+    {
         core->x += tabs->core.x;
         core->y += tabs->is_open ? tabs->core.y + TAB_HEIGHT : tabs->core.y;
-    } else {
+    }
+    else
+    {
         core->x += tabs->is_open ? tabs->core.x + TAB_WIDTH : tabs->core.x;
         core->y += tabs->core.y;
     }

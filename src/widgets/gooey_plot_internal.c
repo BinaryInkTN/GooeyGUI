@@ -18,7 +18,7 @@ static void draw_plot_background(GooeyPlot *plot, GooeyWindow *win)
         plot->core.width,
         plot->core.height,
         win->active_theme->widget_base,
-        win->creation_id, false, 0.0f);
+        win->creation_id, false, 0.0f, plot->core.sprite);
 }
 
 static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
@@ -31,7 +31,7 @@ static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
         plot->core.x + plot->core.width - PLOT_MARGIN,
         plot->core.y + plot->core.height - PLOT_MARGIN,
         win->active_theme->neutral,
-        win->creation_id);
+        win->creation_id, plot->core.sprite);
 
     // Draw the Y axis
     active_backend->DrawLine(
@@ -40,7 +40,7 @@ static void draw_axes(GooeyPlot *plot, GooeyWindow *win)
         plot->core.x + PLOT_MARGIN,
         plot->core.y + PLOT_MARGIN,
         win->active_theme->neutral,
-        win->creation_id);
+        win->creation_id, plot->core.sprite);
 }
 
 static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
@@ -72,7 +72,7 @@ static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_x_val
                 plot->core.x + PLOT_MARGIN + x_value_spacing * idx,
                 plot->core.y + plot->core.height - PLOT_MARGIN - VALUE_TICK_OFFSET,
                 win->active_theme->primary,
-                win->creation_id);
+                win->creation_id, plot->core.sprite);
 
             plot_x_grid_coords[idx - 1] = plot->core.x + PLOT_MARGIN + x_value_spacing * idx;
         }
@@ -105,7 +105,7 @@ static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_y_val
                 plot->core.x + PLOT_MARGIN + VALUE_TICK_OFFSET,
                 plot->core.y + plot->core.height - PLOT_MARGIN - y_value_spacing * idx,
                 win->active_theme->primary,
-                win->creation_id);
+                win->creation_id, plot->core.sprite);
 
             plot_y_grid_coords[idx - 1] = plot->core.y + plot->core.height - PLOT_MARGIN - y_value_spacing * idx;
         }
@@ -135,7 +135,7 @@ static void draw_grid_lines(GooeyPlot *plot, GooeyWindow *win, uint32_t x_tick_c
             plot_x_grid_coords[i],
             plot->core.y + PLOT_MARGIN,
             win->active_theme->base,
-            win->creation_id);
+            win->creation_id, plot->core.sprite);
     }
 
     for (size_t i = 0; i < y_tick_count - 1; ++i)
@@ -146,7 +146,7 @@ static void draw_grid_lines(GooeyPlot *plot, GooeyWindow *win, uint32_t x_tick_c
             plot->core.x + plot->core.width - PLOT_MARGIN,
             plot_y_grid_coords[i],
             win->active_theme->base,
-            win->creation_id);
+            win->creation_id, plot->core.sprite);
     }
 }
 
@@ -177,7 +177,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                 POINT_SIZE,
                 POINT_SIZE,
                 win->active_theme->primary,
-                win->creation_id, false, 0.0f);
+                win->creation_id, false, 0.0f, plot->core.sprite);
 
             if (j < plot->data->data_count - 2)
             {
@@ -187,7 +187,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                     (int)plot_x_coords[j + 2],
                     (int)plot_y_coords[j + 2],
                     win->active_theme->primary,
-                    win->creation_id);
+                    win->creation_id, plot->core.sprite);
             }
         }
         break;
@@ -213,7 +213,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                     bar_width,
                     (int)bar_height,
                     win->active_theme->primary,
-                    win->creation_id, false, 0.0f);
+                    win->creation_id, false, 0.0f, plot->core.sprite);
 
                 const char *label = plot->data->bar_labels[j - 1];
                 const uint8_t LABEL_SPACING = 10;
@@ -242,7 +242,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                 (int)SCATTER_POINT_SIZE,
                 (int)SCATTER_POINT_SIZE,
                 win->active_theme->primary,
-                win->creation_id, false, 0.0f);
+                win->creation_id, false, 0.0f, plot->core.sprite);
         }
         break;
     }

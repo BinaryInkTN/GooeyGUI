@@ -40,6 +40,7 @@ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
     *layout = (GooeyLayout){
         .core = {
             .type = WIDGET_LAYOUT,
+            .sprite = active_backend->CreateSpriteForWidget(x, y, width, height),
             .x = x,
             .y = y,
             .width = width,

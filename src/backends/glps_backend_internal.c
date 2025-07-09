@@ -123,7 +123,7 @@ void glps_setup_seperate_vao(int window_id)
 
 void glps_draw_rectangle(int x, int y, int width, int height,
                          long unsigned int color, float thickness,
-                         int window_id, bool isRounded, float cornerRadius)
+                         int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
@@ -182,7 +182,7 @@ void glps_window_dim(int *width, int *height, int window_id)
     get_window_size(ctx.wm, window_id,
                     width, height);
 }
-void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int window_id)
+void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int window_id, GooeyTFT_Sprite *sprite)
 {
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
@@ -235,7 +235,7 @@ void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int
     glBindVertexArray(0); // Unbind VAO to prevent interference
 }
 void glps_fill_arc(int x_center, int y_center, int width, int height,
-                   int angle1, int angle2, int window_id)
+                   int angle1, int angle2, int window_id, GooeyTFT_Sprite *sprite)
 {
     if (window_id < 0 || window_id >= MAX_WINDOWS)
         return;
@@ -369,7 +369,7 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
 
 void glps_fill_rectangle(int x, int y, int width, int height,
                          long unsigned int color, int window_id,
-                         bool isRounded, float cornerRadius)
+                         bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
 
     if (window_id < 0 || window_id >= MAX_WINDOWS)
@@ -492,10 +492,9 @@ void glps_request_redraw(GooeyWindow *win)
     event->type = GOOEY_EVENT_REDRAWREQ;
 }
 
-
 void glps_force_redraw()
-{}
-
+{
+}
 
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)
 {
@@ -590,8 +589,6 @@ int glps_init_ft()
 
 int glps_init()
 {
-
-
 
     ctx.inhibit_reset = 0;
     ctx.selected_color = 0x000000;
@@ -956,7 +953,6 @@ void glps_set_cursor(GOOEY_CURSOR cursor)
     default:
         break;
     }
-    
 }
 
 void glps_stop_cursor_reset(bool state)
@@ -1010,8 +1006,6 @@ void glps_run()
         for (size_t i = 0; i < ctx.active_window_count; ++i)
             glps_wm_window_update(ctx.wm, i);
 
-
-
         for (size_t i = 0; i < ctx.timer_count; ++i)
             glps_timer_check_and_call(ctx.timers[i]);
     }
@@ -1041,7 +1035,7 @@ void glps_destroy_timer(GooeyTimer *gooey_timer)
         return;
     }
 
-    glps_timer *internal_timer = (glps_timer *) gooey_timer->timer_ptr;
+    glps_timer *internal_timer = (glps_timer *)gooey_timer->timer_ptr;
 
     for (size_t i = 0; i < ctx.timer_count; ++i)
     {
@@ -1050,7 +1044,7 @@ void glps_destroy_timer(GooeyTimer *gooey_timer)
             glps_timer_destroy(internal_timer);
 
             memmove(&ctx.timers[i], &ctx.timers[i + 1],
-                    (ctx.timer_count - i - 1) * sizeof(glps_timer*));
+                    (ctx.timer_count - i - 1) * sizeof(glps_timer *));
             ctx.timer_count--;
             ctx.timers[ctx.timer_count] = NULL;
 
@@ -1105,6 +1099,15 @@ double glps_get_window_framerate(int window_id)
     return glps_wm_get_fps(ctx.wm, window_id);
 }
 
+GooeyTFT_Sprite *glps_create_widget_sprite(int x, int y, int width, int height)
+{
+    return NULL;
+}
+
+void glps_redraw_sprite(GooeyTFT_Sprite *sprite)
+{
+}
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
@@ -1148,6 +1151,9 @@ GooeyBackend glps_backend = {
     .Clear = glps_clear,
     .CursorChange = glps_set_cursor,
     .StopCursorReset = glps_stop_cursor_reset,
-    .ForceCallRedraw = glps_force_redraw
-    };
+    .ForceCallRedraw = glps_force_redraw,
+    .CreateSpriteForWidget = glps_create_widget_sprite,
+    .RedrawSprite = glps_redraw_sprite
+
+};
 #endif

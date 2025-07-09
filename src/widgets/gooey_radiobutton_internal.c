@@ -22,17 +22,17 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
             int label_y = button->core.y + RADIO_BUTTON_RADIUS / 2;
             active_backend->DrawText(label_x, label_y, button->label, win->active_theme->neutral, 0.27f, win->creation_id);
             active_backend->SetForeground(win->active_theme->neutral);
-            active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 2, RADIO_BUTTON_RADIUS * 2, 0, 360 * 64, win->creation_id);
+            active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 2, RADIO_BUTTON_RADIUS * 2, 0, 360 * 64, win->creation_id, button->core.sprite);
             if (button->selected)
             {
                 active_backend->SetForeground(win->active_theme->primary);
-                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
+                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id, button->core.sprite);
             }
             else
             {
                 active_backend->SetForeground(win->active_theme->base);
 
-                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id);
+                active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 1.5, RADIO_BUTTON_RADIUS * 1.5, 0, 360 * 64, win->creation_id, button->core.sprite);
             }
         }
     }

@@ -20,6 +20,7 @@
 #include "widgets/gooey_progressbar.h"
 #if(ENABLE_PROGRESSBAR)
 #include "logger/pico_logger_internal.h"
+#include "backends/gooey_backend_internal.h"
 
 GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, long initial_value)
 {
@@ -40,6 +41,7 @@ GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, l
 
     *progressbar = (GooeyProgressBar){
         .core.type = WIDGET_PROGRESSBAR,
+        .core.sprite =  active_backend->CreateSpriteForWidget(x, y, width, height),
         .core.x = x,
         .core.y = y,
         .core.is_visible = true,

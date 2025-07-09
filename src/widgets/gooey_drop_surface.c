@@ -24,6 +24,8 @@ GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width, int height, c
     drop_surface->callback = callback;
     drop_surface->is_file_dropped = false;
     drop_surface->file_icon_texture_id = active_backend->LoadImageFromBin(file_png, file_png_len);
+    drop_surface->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
+
     strncpy(drop_surface->default_message, default_message, sizeof(drop_surface->default_message) - 1);
     drop_surface->default_message[sizeof(drop_surface->default_message) - 1] = '\0';
 

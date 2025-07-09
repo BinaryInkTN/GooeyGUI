@@ -15,7 +15,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
 
         active_backend->FillRectangle(dropdown->core.x, dropdown->core.y,
                                       dropdown->core.width, dropdown->core.height,
-                                      win->active_theme->widget_base, win->creation_id, true, 2.0f);
+                                      win->active_theme->widget_base, win->creation_id, true, 2.0f, dropdown->core.sprite);
 
         const char *selected_text = dropdown->options[dropdown->selected_index];
         active_backend->DrawText(dropdown->core.x + 5, dropdown->core.y + 20,
@@ -31,10 +31,10 @@ void GooeyDropdown_Draw(GooeyWindow *win)
 
             active_backend->FillRectangle(submenu_x, submenu_y,
                                           submenu_width, submenu_height,
-                                          win->active_theme->widget_base, win->creation_id, true, 2.0f);
+                                          win->active_theme->widget_base, win->creation_id, true, 2.0f,dropdown->core.sprite);
             active_backend->DrawRectangle(submenu_x, submenu_y,
                                           submenu_width, submenu_height,
-                                          win->active_theme->primary, 0.5f, win->creation_id, true, 2.0f);
+                                          win->active_theme->primary, 0.5f, win->creation_id, true, 2.0f,dropdown->core.sprite);
 
             for (int j = 0; j < dropdown->num_options; j++)
             {
@@ -46,7 +46,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                 {
                     active_backend->FillRectangle(submenu_x, element_y,
                                                   submenu_width, 25,
-                                                  win->active_theme->primary, win->creation_id, false, 0.0f);
+                                                  win->active_theme->primary, win->creation_id, false, 0.0f,dropdown->core.sprite);
                 }
 
                 active_backend->DrawText(submenu_x + 5, element_y + 18,
@@ -58,7 +58,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                 {
                     active_backend->DrawLine(submenu_x, element_y + 24,
                                              submenu_x + submenu_width, element_y + 24,
-                                             win->active_theme->neutral, win->creation_id);
+                                             win->active_theme->neutral, win->creation_id,dropdown->core.sprite);
                 }
             }
         }

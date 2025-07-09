@@ -59,7 +59,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
             tabs->core.width,
             tabs->core.height,
             win->active_theme->widget_base, 1.0f,
-            win->creation_id, false, 0.0f);
+            win->creation_id, false, 0.0f, tabs->core.sprite);
 
         if (!tabs->is_sidebar)
         {
@@ -85,7 +85,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                     tab_y + TAB_HEIGHT,
                     (tabs->active_tab_id != tab->tab_id) ?
                         win->active_theme->widget_base : win->active_theme->primary,
-                    win->creation_id);
+                    win->creation_id, tabs->core.sprite);
 
                 // Tab text
                 const int tab_name_x = tab_x + (tab_width / 2) -
@@ -130,7 +130,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                     win->active_theme->widget_base,
                     win->creation_id,
                     true,
-                    2.0f);
+                    2.0f, tabs->core.sprite);
             }
 
             for (size_t j = 0; j < tabs->tab_count; ++j)
@@ -152,7 +152,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                             win->active_theme->primary,
                             win->creation_id,
                             false,
-                            0.0f);
+                            0.0f, tabs->core.sprite);
                     }
 
                     // Tab text

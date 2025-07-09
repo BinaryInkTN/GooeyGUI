@@ -5,6 +5,7 @@
 #include "widgets/gooey_container.h"
 #include "logger/pico_logger_internal.h"
 #include "widgets/gooey_window_internal.h"
+#include "backends/gooey_backend_internal.h"
 
 
 GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
@@ -26,6 +27,7 @@ GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
     container_widget->container_count = 0;
     container_widget->active_container_id = 0; // default active tab is the first one.
     container_widget->core.is_visible = true;
+    container_widget->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
     return container_widget;
 }
 

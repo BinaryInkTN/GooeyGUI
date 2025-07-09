@@ -16,17 +16,17 @@
  */
 
 #include "widgets/gooey_textbox.h"
-#if(ENABLE_TEXTBOX)
+#if (ENABLE_TEXTBOX)
 #include <math.h>
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
-
-GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
-                               int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text))
+GooeyTextbox *GooeyTextBox_Create(int x, int y, int width,
+                                  int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text))
 {
-    GooeyTextbox* textBox =calloc(1, sizeof(GooeyTextbox));
-    if ( textBox == NULL ){
+    GooeyTextbox *textBox = calloc(1, sizeof(GooeyTextbox));
+    if (textBox == NULL)
+    {
         LOG_ERROR("Failed to allocate memory to textBox ");
         return NULL;
     }
@@ -43,6 +43,8 @@ GooeyTextbox *GooeyTextBox_Create( int x, int y, int width,
     textBox->is_password = is_password;
     textBox->scroll_offset = 0;
     textBox->text[0] = '\0';
+    textBox->core.sprite = active_backend->CreateSpriteForWidget(x - 40, y - 40, width + 40, height + 40);
+
     strcpy(textBox->placeholder, placeholder);
 
     // GooeyWindow_RegisterWidget(win, (GooeyWidget *)&win->textboxes[win->textboxes_count].core);

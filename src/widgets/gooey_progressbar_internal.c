@@ -31,7 +31,7 @@ static void DrawProgressBarBackground(GooeyProgressBar *progressbar, GooeyWindow
         progressbar->core.width,
         progressbar->core.height,
         win->active_theme->widget_base,
-        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS);
+        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS, progressbar->core.sprite);
 }
 
 static void DrawProgressBarFill(GooeyProgressBar *progressbar, GooeyWindow *win)
@@ -55,7 +55,7 @@ static void DrawProgressBarFill(GooeyProgressBar *progressbar, GooeyWindow *win)
         fill_width,
         progressbar->core.height,
         color,
-        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS);
+        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS, progressbar->core.sprite);
 
    
 
@@ -65,7 +65,7 @@ static void DrawProgressBarFill(GooeyProgressBar *progressbar, GooeyWindow *win)
         progressbar->core.width,
         progressbar->core.height,
         color, 1.0f,
-        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS);
+        win->creation_id, true, GOOEY_PROGRESSBAR_DEFAULT_RADIUS, progressbar->core.sprite);
 }
 
 static void DrawProgressPercentage(GooeyProgressBar *progressbar, GooeyWindow *win)

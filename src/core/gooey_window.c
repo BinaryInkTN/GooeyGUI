@@ -710,8 +710,10 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 {
   if (win == NULL)
     return;
-
+#if (!TFT_ESPI_ENABLED)
   active_backend->Clear(win);
+#endif
+
 #if (ENABLE_VIRTUAL_KEYBOARD)
   GooeyVK_Internal_Draw(win);
 #endif
@@ -816,7 +818,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
   int width, height;
   active_backend->GetWinDim(&width, &height, window_id);
   active_backend->SetViewport(window_id, width, height);
-  active_backend->UpdateBackground(window);
+ // active_backend->UpdateBackground(window);
 #if (ENABLE_SLIDER)
   needs_redraw |= GooeySlider_HandleDrag(window, event);
 #endif

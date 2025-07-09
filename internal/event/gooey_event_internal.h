@@ -62,7 +62,7 @@ typedef struct
 typedef struct
 {
     GooeyEventType type;
-
+    
     union {
         GooeyMouseData click;
         GooeyMouseData mouse_move;

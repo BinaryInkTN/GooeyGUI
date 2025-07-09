@@ -1,5 +1,5 @@
 #include "widgets/gooey_drop_surface_internal.h"
-#if(ENABLE_DROP_SURFACE)
+#if (ENABLE_DROP_SURFACE)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 
@@ -50,7 +50,10 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
     {
         GooeyDropSurface *drop_surface = win->drop_surface[i];
         if (!drop_surface->core.is_visible)
+        {
+        //    active_backend->IsSpriteVisible(drop_surface->core.sprite, false);
             continue;
+        }
         unsigned long surface_color = win->active_theme->widget_base;
         bool show_image = true;
         char filename[64];

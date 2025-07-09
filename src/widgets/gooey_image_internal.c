@@ -1,5 +1,5 @@
 #include "widgets/gooey_image_internal.h"
-#if(ENABLE_IMAGE)
+#if (ENABLE_IMAGE)
 #include "backends/gooey_backend_internal.h"
 #include <fcntl.h>
 #include <unistd.h>
@@ -31,7 +31,10 @@ void GooeyImage_Draw(GooeyWindow *win)
     {
         GooeyImage *image = win->images[i];
         if (!image->core.is_visible)
+        {
+          //  active_backend->IsSpriteVisible(image->core.sprite, false);
             continue;
+        }
 
         if (image->needs_refresh)
         {

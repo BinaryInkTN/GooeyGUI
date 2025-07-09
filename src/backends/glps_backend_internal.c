@@ -494,6 +494,7 @@ void glps_request_redraw(GooeyWindow *win)
 
 void glps_force_redraw()
 {
+    glps_wm_window_update(ctx.wm,0);
 }
 
 static void mouse_move_callback(size_t window_id, double posX, double posY, void *data)

@@ -55,7 +55,10 @@ void GooeySwitch_Draw(GooeyWindow *win)
     {
         GooeySwitch *gswitch = win->switches[i];
         if (!gswitch->core.is_visible)
+        {
+         //   active_backend->IsSpriteVisible(gswitch->core.sprite, false);
             continue;
+        }
 
         // Track dimensions
         const int track_x = gswitch->core.x;
@@ -77,7 +80,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             gswitch_color,
             win->creation_id,
             true,
-            GOOEY_SWITCH_DEFAULT_RADIUS,gswitch->core.sprite);
+            GOOEY_SWITCH_DEFAULT_RADIUS, gswitch->core.sprite);
 
         const int thumb_y = (track_y + track_height) - track_height / 2;
 

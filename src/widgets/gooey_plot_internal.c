@@ -1,5 +1,5 @@
 #include "widgets/gooey_plot_internal.h"
-#if(ENABLE_PLOT)
+#if (ENABLE_PLOT)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -264,6 +264,7 @@ void GooeyPlot_Draw(GooeyWindow *win)
         GooeyPlot *plot = win->plots[i];
         if (!plot || !plot->data || !plot->data->x_data || !plot->data->y_data || !plot->core.is_visible)
         {
+          //  active_backend->IsSpriteVisible(plot->core.sprite, false);
             continue;
         }
 

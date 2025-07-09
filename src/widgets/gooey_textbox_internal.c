@@ -13,7 +13,10 @@ void GooeyTextbox_Draw(GooeyWindow *win)
   {
     GooeyTextbox *textbox = (GooeyTextbox *)win->textboxes[index];
     if (!textbox->core.is_visible)
+    {
+    //  active_backend->IsSpriteVisible(textbox->core.sprite, false);
       continue;
+    }
 
     active_backend->FillRectangle(textbox->core.x, textbox->core.y,
                                   textbox->core.width, textbox->core.height,

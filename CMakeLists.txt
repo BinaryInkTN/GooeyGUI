@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(GooeyGUI VERSION 1.0 LANGUAGES C CXX)
+project(GooeyGUI VERSION 1.0.2 LANGUAGES C)
+# set project version 
+set(PROJECT_VERSION_MAJOR 1)
+set(PROJECT_VERSION_MINOR 0)
+set(PROJECT_VERSION_PATCH 2)
 
 include(FetchContent)
 include(CMakePackageConfigHelpers)
@@ -102,7 +106,12 @@ set(SOURCES
 # ----------------------------
 add_library(GooeyGUI SHARED ${SOURCES})
 
-# ----------------------------
+# Set library properties 
+set_target_properties(GooeyGUI PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
+    OUTPUT_NAME "GooeyGUI-${PROJECT_VERSION_MAJOR}"
+)    
 # Include directories
 # ----------------------------
 target_include_directories(GooeyGUI PUBLIC

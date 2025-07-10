@@ -1,5 +1,5 @@
 #include "widgets/gooey_radiobutton_internal.h"
-#if (ENABLE_RADIOBUTTON)
+#if(ENABLE_RADIOBUTTON)
 #include "backends/gooey_backend_internal.h"
 #define RADIO_BUTTON_RADIUS 10 /** Radius of the radio button widget. */
 void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
@@ -12,10 +12,7 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
         {
             GooeyRadioButton *button = &group->buttons[j];
             if (!button->core.is_visible)
-            {
-         //       active_backend->IsSpriteVisible(button->core.sprite, false);
                 continue;
-            }
             int button_center_x = button->core.x + RADIO_BUTTON_RADIUS;
             int button_center_y = button->core.y + RADIO_BUTTON_RADIUS;
 

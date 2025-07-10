@@ -8,7 +8,7 @@ extern "C" {
 
 #if (ENABLE_VIRTUAL_KEYBOARD)
 void GooeyVK_Internal_Draw(GooeyWindow* win);
-void GooeyVK_Internal_Show(GooeyVK *vk, size_t textbox_id);
+void GooeyVK_Internal_Show(GooeyVK* vk);
 void GooeyVK_Internal_Hide(GooeyVK* vk);
 void GooeyVK_Internal_HandleClick(GooeyWindow *win, int mouseX, int mouseY);
 char* GooeyVK_Internal_GetText(GooeyVK *vk);

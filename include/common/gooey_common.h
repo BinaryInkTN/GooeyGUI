@@ -522,7 +522,7 @@ typedef struct
 {
     GooeyWidget core;
     bool is_shown;
-    int text_widget_id;
+    size_t text_widget_id;
 } GooeyVK;
 
 /**

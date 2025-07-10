@@ -16,7 +16,7 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
     *meter = (GooeyMeter){
         .core = {
             .type = WIDGET_METER,
-            .sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, width + 80, height + 80),
+            .sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, width + 40, height + 40),
             .is_visible = true,
             .x = x,
             .y = y,

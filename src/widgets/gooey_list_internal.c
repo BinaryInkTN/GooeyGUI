@@ -1,5 +1,5 @@
 #include "widgets/gooey_list_internal.h"
-#if (ENABLE_LIST)
+#if(ENABLE_LIST)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
@@ -12,30 +12,27 @@ void GooeyList_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->list_count; ++i)
     {
         GooeyList *list = win->lists[i];
-        if (!list->core.is_visible)
-        {
-            //active_backend->IsSpriteVisible(list->core.sprite, false);
+        if(!list->core.is_visible)
             continue;
-        }
         active_backend->FillRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            win->active_theme->widget_base, win->creation_id, false, 0.0f, list->core.sprite);
+            win->active_theme->widget_base, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->DrawRectangle(
             list->core.x, list->core.y,
             list->core.width, list->core.height,
-            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f, list->core.sprite);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->FillRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            win->active_theme->widget_base, win->creation_id, false, 0.0f, list->core.sprite);
+            win->active_theme->widget_base, win->creation_id, false, 0.0f,list->core.sprite);
 
         active_backend->DrawRectangle(
             list->core.x + list->core.width, list->core.y,
             list->thumb_width, list->core.height,
-            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f, list->core.sprite);
+            win->active_theme->neutral, 0.1f, win->creation_id, false, 0.0f,list->core.sprite);
 
         int total_content_height = list->item_count * list->item_spacing;
         int visible_height = list->core.height;
@@ -59,7 +56,7 @@ void GooeyList_Draw(GooeyWindow *win)
             active_backend->FillRectangle(
                 list->core.x + list->core.width, list->thumb_y,
                 list->thumb_width, list->thumb_height,
-                win->active_theme->primary, win->creation_id, true, 2.0f, list->core.sprite);
+                win->active_theme->primary, win->creation_id, true, 2.0f,list->core.sprite);
         }
 
         for (size_t j = 0; j < list->item_count; ++j)
@@ -95,7 +92,7 @@ void GooeyList_Draw(GooeyWindow *win)
                         list->core.x, line_separator_y,
                         list->core.x + list->core.width,
                         line_separator_y, win->active_theme->neutral,
-                        win->creation_id, list->core.sprite);
+                        win->creation_id,list->core.sprite);
             }
 
             current_y_offset += list->item_spacing;
@@ -168,7 +165,7 @@ bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
 
             int selected_index = adjusted_y / list->item_spacing;
 
-            if (selected_index >= 0 && (unsigned long)selected_index < list->item_count)
+            if (selected_index >= 0 && (unsigned long) selected_index < list->item_count)
             {
                 if (list->callback)
                 {

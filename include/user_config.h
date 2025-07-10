@@ -16,7 +16,6 @@
 #define MAX_TABS 50          /** Maximum number of tabs. */
 #define MAX_CONTAINER 50     /** Maximum number of Containers. */
 #define MAX_SWITCHES 50
-
 // ENABLE/DISABLE WIDGETS
 #define ENABLE_BUTTON 1
 #define ENABLE_CANVAS 1
@@ -42,9 +41,8 @@
 #define ENABLE_SWITCH 1
 
 // ESP32 CONFIGURATION
-#define TFT_ESPI_ENABLED ESP32
+#define TFT_ESPI_ENABLED 0
 #define TFT_SCREEN_ROTATION 3
 #define ENABLE_VIRTUAL_KEYBOARD 1
-
 
 #endif

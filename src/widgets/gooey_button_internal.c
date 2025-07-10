@@ -10,10 +10,7 @@ void GooeyButton_Draw(GooeyWindow *win)
     {
         GooeyButton *button = win->buttons[i];
         if (!button->core.is_visible)
-        {
-            active_backend->IsSpriteVisible(button->core.sprite, false);
             continue;
-        }
 
         unsigned long button_color = win->active_theme->widget_base;
 
@@ -61,21 +58,20 @@ bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
         button->hover = is_within_bounds;
 
-        if (is_within_bounds)
-        {
+        if (is_within_bounds) {
             hover_over_button = true;
             break;
         }
     }
 
-    if (hover_over_button != was_hovered)
-    {
+    if (hover_over_button != was_hovered) {
         active_backend->CursorChange(hover_over_button ? GOOEY_CURSOR_HAND : GOOEY_CURSOR_ARROW);
         was_hovered = hover_over_button;
     }
 
     return hover_over_button;
 }
+
 
 bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 {
@@ -91,10 +87,10 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 
         if (is_within_bounds)
         {
-
+        
             button->clicked = !button->clicked;
             clicked_any_button = true;
-            active_backend->RedrawSprite(button->core.sprite);
+       
             if (button->callback)
             {
                 button->callback();

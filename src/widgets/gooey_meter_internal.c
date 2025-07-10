@@ -1,5 +1,5 @@
 #include "widgets/gooey_meter_internal.h"
-#if (ENABLE_METER)
+#if(ENABLE_METER)
 #include "common/gooey_common.h"
 #include "backends/gooey_backend_internal.h"
 
@@ -37,10 +37,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
     {
         GooeyMeter *meter = win->meters[i];
         if (!meter || !meter->core.is_visible)
-        {
-            //active_backend->IsSpriteVisible(meter->core.sprite, false);
             continue;
-        }
 
         GooeyMeter_RecalculateLayout(meter);
 
@@ -53,6 +50,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
         const int arc_center_x = meter->core.x + padding + meter->core.width / 2;
         const int arc_center_y = meter->core.y + padding * 2 + meter->core.height / 2;
 
+
         active_backend->FillRectangle(
             meter->core.x,
             meter->core.y,
@@ -60,6 +58,8 @@ void GooeyMeter_Draw(GooeyWindow *win)
             card_height,
             win->active_theme->widget_base,
             win->creation_id, true, 10.0f, meter->core.sprite);
+
+       
 
         const char *label_text = meter->label;
         const int label_text_width = active_backend->GetTextWidth(
@@ -76,19 +76,17 @@ void GooeyMeter_Draw(GooeyWindow *win)
             meter->core.height,
             0,
             180,
-            win->creation_id, meter->core.sprite);
+            win->creation_id,meter->core.sprite);
 
         unsigned long color = win->active_theme->primary;
-        if (meter->value < 50)
+        if(meter->value < 50)
         {
             color = win->active_theme->danger;
         }
-        else if (meter->value > 75)
+        else if(meter->value > 75)
         {
             color = win->active_theme->success;
-        }
-        else
-        {
+        } else {
             color = win->active_theme->primary;
         }
         active_backend->SetForeground(color);
@@ -98,8 +96,8 @@ void GooeyMeter_Draw(GooeyWindow *win)
             meter->core.width,
             meter->core.height,
             0,
-            180 * ((float)meter->value / 100),
-            win->creation_id, meter->core.sprite);
+            180 * ((float) meter->value/100),
+            win->creation_id,meter->core.sprite);
 
         active_backend->SetForeground(win->active_theme->widget_base);
         active_backend->FillArc(
@@ -119,7 +117,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             FONT_SCALE,
             win->creation_id);
         char value_text[20];
-        snprintf(value_text, sizeof(value_text), "%d%%", (int)meter->value);
+        snprintf(value_text, sizeof(value_text), "%d%%", (int) meter->value);
         const int value_text_width = active_backend->GetTextWidth(
             value_text,
             strlen(value_text));
@@ -133,8 +131,9 @@ void GooeyMeter_Draw(GooeyWindow *win)
             win->active_theme->neutral,
             FONT_SCALE,
             win->creation_id);
-
+        
         active_backend->DrawImage(meter->texture_id, meter->core.x + meter->core.width - 10, meter->core.y + meter->core.height - 10, 28, 28, win->creation_id);
-    }
+
+        }
 }
 #endif

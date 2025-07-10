@@ -13,10 +13,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
   {
     GooeyTextbox *textbox = (GooeyTextbox *)win->textboxes[index];
     if (!textbox->core.is_visible)
-    {
-    //  active_backend->IsSpriteVisible(textbox->core.sprite, false);
       continue;
-    }
 
     active_backend->FillRectangle(textbox->core.x, textbox->core.y,
                                   textbox->core.width, textbox->core.height,
@@ -93,7 +90,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
 
     switch (event->key_press.keycode)
     {
-    case 22:
+    case 22: 
       if (len > 0)
       {
         int abs_pos = (int)len + win->textboxes[i]->cursor_pos;
@@ -111,17 +108,17 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
       }
       break;
 
-    case 36:
+    case 36: 
       win->textboxes[i]->focused = false;
       if (win->vk)
         GooeyVK_Internal_Hide(win->vk);
       break;
 
-    case 66:
+    case 66: 
       is_capslock_on = !is_capslock_on;
       break;
 
-    case 65:
+    case 65: 
       if (len < text_max)
       {
         int abs_pos = (int)len + win->textboxes[i]->cursor_pos;
@@ -137,15 +134,15 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
       }
       break;
 
-    case 23:
+    case 23: 
       break;
 
-    case 113:
+    case 113: 
       if (win->textboxes[i]->cursor_pos > -(int)len)
         win->textboxes[i]->cursor_pos--;
       break;
 
-    case 114:
+    case 114: 
       if (win->textboxes[i]->cursor_pos < 0)
         win->textboxes[i]->cursor_pos++;
       break;
@@ -198,10 +195,11 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
     {
       textbox->focused = true;
 
+      
       if (win->vk && !win->vk->is_shown)
       {
-        GooeyVK_Internal_Show(win->vk, i);
-
+        GooeyVK_Internal_Show(win->vk);
+        
         GooeyVK_Internal_SetText(win->vk, textbox->text);
       }
 
@@ -213,6 +211,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
       return true;
     }
 
+    
     for (size_t j = 0; j < win->textboxes_count; j++)
     {
       if (j != i)
@@ -222,18 +221,16 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
   return false;
 }
 
-void GooeyTextbox_Internal_HandleVK(GooeyWindow *win)
+void GooeyTextbox_Internal_HandleVK(GooeyWindow* win)
 {
-  if (!win || !win->vk)
-    return;
+  if(!win || !win->vk) return;
   for (size_t i = 0; i < win->textboxes_count; ++i)
   {
     GooeyTextbox *textbox = win->textboxes[i];
     if (!textbox || !textbox->core.is_visible)
       continue;
 
-    // attribute VK output to Focused textbox
-    if (win->vk->text_widget_id == i)
+      // attribute VK output to Focused textbox
       strncpy(textbox->text, GooeyVK_Internal_GetText(win->vk), sizeof(textbox->text));
   }
 }
@@ -264,4 +261,4 @@ void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y)
   }
 }
 
-#endif
+#endif 

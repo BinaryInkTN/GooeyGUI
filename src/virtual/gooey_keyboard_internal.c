@@ -10,28 +10,23 @@ char vk_preview_buffer[128] = {0};
 static const char *keyboard_layout_lower[][12] = {
     {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "DEL"},
     {"q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "ENT"},
-    {"a", "s", "d", "f", "g", "h", "j", "k", "l"},
-    {"z", "c", "v", "b", "n", "m", "ST"},
-
+    {"a", "s", "d", "f", "g", "h", "j", "k", "l", "ST"},
     {"123", "SPACE", "ENTER"}};
-static const int keyboard_layout_lower_sizes[] = {11, 11, 9, 7, 3};
+static const int keyboard_layout_lower_sizes[] = {11, 11, 10, 3};
 
 static const char *keyboard_layout_upper[][12] = {
     {"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "DEL"},
     {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "ENT"},
-    {"A", "S", "D", "F", "G", "H", "J", "K", "L"},
-    {"Z", "C", "V", "B", "N", "M", "ST"},
+    {"A", "S", "D", "F", "G", "H", "J", "K", "L", "ST"},
     {"123", "SPACE", "ENTER"}};
-static const int keyboard_layout_upper_sizes[] = {11, 11, 9, 7, 3};
+static const int keyboard_layout_upper_sizes[] = {11, 11, 10, 3};
 
 static const char *keyboard_layout_symbols[][12] = {
     {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "DEL"},
     {"-", "/", ":", ";", "(", ")", "$", "&", "@", "\"", "ENT"},
-    {"[", "]", "{", "}", "#", "%", "'", "=", "+"},
-    {"", "", "", "", "", "", "ST"},
-
+    {"[", "]", "{", "}", "#", "%", "'", "=", "+", "ST"},
     {"ABC", "SPACE", "ENTER"}};
-static const int keyboard_layout_symbols_sizes[] = {11, 11, 9, 7, 3};
+static const int keyboard_layout_symbols_sizes[] = {11, 11, 10, 3};
 
 static int vk_layout_state = 0;
 
@@ -89,7 +84,7 @@ static void render_keyboard_buttons(GooeyWindow *win, int y_offset)
     if (!win)
         return;
 
-    const int rows = 5;
+    const int rows = 4;
     const int row_height = (win->height - y_offset) / rows;
 
     const char *(*layout)[12];
@@ -169,7 +164,7 @@ void GooeyVK_Internal_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
         return;
 
     int y_offset = preview_height;
-    const int rows = 5;
+    const int rows = 4;
     const int row_height = (win->height - y_offset) / rows;
 
     const char *(*layout)[12];
@@ -222,7 +217,7 @@ void GooeyVK_Internal_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
                     if (strcmp(key, "ENTER") == 0 || strcmp(key, "ENT") == 0)
                     {
                         win->vk->is_shown = false;
-                        GooeyEvent *event = (GooeyEvent *)win->current_event;
+                        GooeyEvent* event = (GooeyEvent*) win->current_event;
                         event->type = GOOEY_EVENT_VK_ENTER;
                         active_backend->ForceCallRedraw();
                         return;
@@ -262,9 +257,8 @@ void GooeyVK_Internal_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
     }
 }
 
-void GooeyVK_Internal_Show(GooeyVK *vk, size_t textbox_id)
+void GooeyVK_Internal_Show(GooeyVK *vk)
 {
-    vk->text_widget_id = textbox_id;
     vk->is_shown = true;
 }
 
@@ -273,14 +267,16 @@ void GooeyVK_Internal_Hide(GooeyVK *vk)
     vk->is_shown = false;
 }
 
-char *GooeyVK_Internal_GetText(GooeyVK *vk)
+char* GooeyVK_Internal_GetText(GooeyVK *vk)
 {
     return vk_preview_buffer;
 }
 
-void GooeyVK_Internal_SetText(GooeyVK *vk, const char *text)
+void GooeyVK_Internal_SetText(GooeyVK* vk, const char* text)
 {
     strncpy(vk_preview_buffer, text, sizeof(vk_preview_buffer));
 }
+
+
 
 #endif

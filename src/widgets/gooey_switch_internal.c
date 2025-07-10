@@ -24,6 +24,7 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y)
 
             gswitch->is_toggled = !gswitch->is_toggled;
             clicked_any_gswitch = true;
+            active_backend->RedrawSprite(gswitch->core.sprite);
 
             if (gswitch->callback)
             {
@@ -77,7 +78,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             gswitch_color,
             win->creation_id,
             true,
-            GOOEY_SWITCH_DEFAULT_RADIUS,gswitch->core.sprite);
+            GOOEY_SWITCH_DEFAULT_RADIUS, gswitch->core.sprite);
 
         const int thumb_y = (track_y + track_height) - track_height / 2;
 

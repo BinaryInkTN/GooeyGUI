@@ -41,6 +41,8 @@ void GooeyButton_Draw(GooeyWindow *win)
             active_backend->DrawRectangle(button->core.x,
                                           button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
         }
+        if (button->core.sprite->needs_redraw)
+            active_backend->ResetRedrawSprite(button->core.sprite);
     }
 }
 bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
@@ -58,20 +60,21 @@ bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
         button->hover = is_within_bounds;
 
-        if (is_within_bounds) {
+        if (is_within_bounds)
+        {
             hover_over_button = true;
             break;
         }
     }
 
-    if (hover_over_button != was_hovered) {
+    if (hover_over_button != was_hovered)
+    {
         active_backend->CursorChange(hover_over_button ? GOOEY_CURSOR_HAND : GOOEY_CURSOR_ARROW);
         was_hovered = hover_over_button;
     }
 
     return hover_over_button;
 }
-
 
 bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 {
@@ -84,13 +87,13 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
             continue;
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
-
         if (is_within_bounds)
         {
-        
+
             button->clicked = !button->clicked;
             clicked_any_button = true;
-       
+            active_backend->RedrawSprite(button->core.sprite);
+
             if (button->callback)
             {
                 button->callback();

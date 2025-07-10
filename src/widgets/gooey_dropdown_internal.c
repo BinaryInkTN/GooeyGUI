@@ -1,5 +1,5 @@
 #include "widgets/gooey_dropdown_internal.h"
-#if(ENABLE_DROPDOWN)
+#if (ENABLE_DROPDOWN)
 #include "backends/gooey_backend_internal.h"
 
 void GooeyDropdown_Draw(GooeyWindow *win)
@@ -31,10 +31,10 @@ void GooeyDropdown_Draw(GooeyWindow *win)
 
             active_backend->FillRectangle(submenu_x, submenu_y,
                                           submenu_width, submenu_height,
-                                          win->active_theme->widget_base, win->creation_id, true, 2.0f,dropdown->core.sprite);
+                                          win->active_theme->widget_base, win->creation_id, true, 2.0f, dropdown->core.sprite);
             active_backend->DrawRectangle(submenu_x, submenu_y,
                                           submenu_width, submenu_height,
-                                          win->active_theme->primary, 0.5f, win->creation_id, true, 2.0f,dropdown->core.sprite);
+                                          win->active_theme->primary, 0.5f, win->creation_id, true, 2.0f, dropdown->core.sprite);
 
             for (int j = 0; j < dropdown->num_options; j++)
             {
@@ -46,7 +46,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                 {
                     active_backend->FillRectangle(submenu_x, element_y,
                                                   submenu_width, 25,
-                                                  win->active_theme->primary, win->creation_id, false, 0.0f,dropdown->core.sprite);
+                                                  win->active_theme->primary, win->creation_id, false, 0.0f, dropdown->core.sprite);
                 }
 
                 active_backend->DrawText(submenu_x + 5, element_y + 18,
@@ -58,10 +58,12 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                 {
                     active_backend->DrawLine(submenu_x, element_y + 24,
                                              submenu_x + submenu_width, element_y + 24,
-                                             win->active_theme->neutral, win->creation_id,dropdown->core.sprite);
+                                             win->active_theme->neutral, win->creation_id, dropdown->core.sprite);
                 }
             }
         }
+        if (dropdown->core.sprite->needs_redraw)
+            active_backend->ResetRedrawSprite(dropdown->core.sprite);
     }
 }
 
@@ -130,6 +132,8 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
         if (x >= dropdown->core.x && x <= dropdown->core.x + dropdown->core.width &&
             y >= dropdown->core.y && y <= dropdown->core.y + dropdown->core.height)
         {
+            active_backend->RedrawSprite(dropdown->core.sprite);
+
             dropdown->is_open = !dropdown->is_open;
             click_handled = true;
             continue;
@@ -147,6 +151,8 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
                 if (x >= submenu_x && x <= submenu_x + submenu_width &&
                     y >= element_y && y <= element_y + 25)
                 {
+                    active_backend->RedrawSprite(dropdown->core.sprite);
+
                     dropdown->selected_index = j;
                     if (dropdown->callback)
                     {

@@ -88,6 +88,7 @@ typedef struct GooeyBackend
     // Arduino
     GooeyTFT_Sprite *(*CreateSpriteForWidget)(int x, int y, int width, int height);
     void (*RedrawSprite)(GooeyTFT_Sprite *sprite);
+    void (*ResetRedrawSprite)(GooeyTFT_Sprite * sprite);
 } GooeyBackend;
 
 /**

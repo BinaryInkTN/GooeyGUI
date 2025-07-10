@@ -785,7 +785,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
   GooeyAppbar_Internal_Draw(win);
 #endif
 
-  active_backend->Render(win);
+  //active_backend->Render(win);
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)

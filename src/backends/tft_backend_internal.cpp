@@ -77,6 +77,7 @@ void tft_setup_shared()
     ctx.tft->fillScreen(TFT_BLACK);
     ctx.tft->setFreeFont(&FreeMono9pt7b);
     ctx.tft->setTextSize(1);
+
     if (!loadTouchCalibration(cal))
     {
         ctx.tft->fillScreen(TFT_BLACK);
@@ -87,6 +88,7 @@ void tft_setup_shared()
         saveTouchCalibration(cal);
     }
     ctx.tft->setTouch(cal);
+    ctx.tft->fillRect(0, 0, 480, 320, TFT_WHITE);
 }
 void tft_setup_separate_vao(int window_id)
 {
@@ -97,31 +99,33 @@ void tft_draw_rectangle(int x, int y, int width, int height,
 {
     uint16_t rgb565 = rgb888_to_rgb565(color);
 
-    if (sprite && sprite->needs_redraw)
+    if (sprite)
     {
-        TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
-        tft_sprite->fillSprite(TFT_BLACK);
+        if (sprite->needs_redraw)
+        {
+            TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
+            tft_sprite->fillSprite(TFT_BLACK);
 
-        if (isRounded)
-        {
-            tft_sprite->drawRoundRect(x - sprite->x, y - sprite->y, width, height, (int)cornerRadius, rgb565);
+            if (isRounded)
+            {
+                tft_sprite->drawRoundRect(x - sprite->x, y - sprite->y, width, height, (int)cornerRadius, rgb565);
+            }
+            else
+            {
+                tft_sprite->drawRect(x - sprite->x, y - sprite->y, width, height, rgb565);
+            }
+            tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
         }
-        else
-        {
-            tft_sprite->drawRect(x - sprite->x, y - sprite->y, width, height, rgb565);
-        }
-        sprite->needs_redraw = true;
-        tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
     }
     else
     {
         if (isRounded)
         {
-            ctx.tft->drawRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
+            //     ctx.tft->drawRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
         }
         else
         {
-            ctx.tft->drawRect(x, y, width, height, rgb565);
+            //    ctx.tft->drawRect(x, y, width, height, rgb565);
         }
     }
 }
@@ -143,23 +147,25 @@ void tft_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id
 {
     uint16_t rgb565 = rgb888_to_rgb565(color);
 
-    if (sprite && sprite->needs_redraw)
+    if (sprite)
     {
-        TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
-        tft_sprite->fillSprite(TFT_BLACK);
+        if (sprite->needs_redraw)
+        {
+            TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
+            tft_sprite->fillSprite(TFT_BLACK);
 
-        int sx1 = x1 - sprite->x;
-        int sy1 = y1 - sprite->y;
-        int sx2 = x2 - sprite->x;
-        int sy2 = y2 - sprite->y;
+            int sx1 = x1 - sprite->x;
+            int sy1 = y1 - sprite->y;
+            int sx2 = x2 - sprite->x;
+            int sy2 = y2 - sprite->y;
 
-        tft_sprite->drawLine(sx1, sy1, sx2, sy2, rgb565);
-        tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
-        sprite->needs_redraw = true;
+            tft_sprite->drawLine(sx1, sy1, sx2, sy2, rgb565);
+            tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
+        }
     }
     else
     {
-        ctx.tft->drawLine(x1, y1, x2, y2, rgb565);
+        //   ctx.tft->drawLine(x1, y1, x2, y2, rgb565);
     }
 }
 void tft_fill_arc(int x_center, int y_center, int width, int height,
@@ -246,35 +252,39 @@ void tft_fill_rectangle(int x, int y, int width, int height,
 {
     uint16_t rgb565 = rgb888_to_rgb565(color);
 
-    if (sprite && sprite->needs_redraw)
+    if (sprite)
     {
-        TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
-        tft_sprite->fillSprite(TFT_BLACK);
-
-        if (isRounded)
+        if (sprite->needs_redraw)
         {
-            tft_sprite->fillRoundRect(x - sprite->x, y - sprite->y, width, height, (int)cornerRadius, rgb565);
+            TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
+            tft_sprite->fillSprite(TFT_BLACK);
 
-            Serial.printf("fillRect: sprite pos=(%d, %d), draw at x=%d y=%d\n",
-                          sprite->x, sprite->y, x, y);
-        }
-        else
-        {
-            tft_sprite->fillRect(x - sprite->x, y - sprite->y, width, height, rgb565);
-        }
+            if (isRounded)
+            {
+                tft_sprite->fillRoundRect(x - sprite->x, y - sprite->y, width, height, (int)cornerRadius, rgb565);
 
-        tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
-        sprite->needs_redraw = true;
+                Serial.printf("fillRect: sprite pos=(%d, %d), draw at x=%d y=%d\n",
+                              sprite->x, sprite->y, x, y);
+            }
+            else
+            {
+                tft_sprite->fillRect(x - sprite->x, y - sprite->y, width, height, rgb565);
+            }
+
+            tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
+            //  sprite->needs_redraw = true;
+        }
+        //  sprite->needs_redraw = false;
     }
     else
     {
         if (isRounded)
         {
-            ctx.tft->fillRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
+            // ctx.tft->fillRoundRect(x, y, width, height, (int)cornerRadius, rgb565);
         }
         else
         {
-            ctx.tft->fillRect(x, y, width, height, rgb565);
+            // ctx.tft->fillRect(x, y, width, height, rgb565);
         }
     }
 }
@@ -393,7 +403,7 @@ void tft_clear(GooeyWindow *win)
 {
     if (win && win->active_theme)
     {
-        ctx.tft->fillScreen(rgb888_to_rgb565(win->active_theme->base));
+        // ctx.tft->fillRect(0, 0, 480, 320, rgb888_to_rgb565(win->active_theme->base));
     }
 }
 
@@ -410,7 +420,7 @@ void tft_update_background(GooeyWindow *win)
 {
     if (win && win->active_theme)
     {
-        ctx.tft->fillScreen(rgb888_to_rgb565(win->active_theme->base));
+        // ctx.tft->fillScreen(rgb888_to_rgb565(win->active_theme->base));
     }
 }
 
@@ -474,6 +484,9 @@ void tft_run()
             event->click.y = y;
             event->type = GOOEY_EVENT_CLICK_PRESS;
             ctx.ReDrawCallback(0, ctx.windows);
+
+            // Simulate release
+            event->type = GOOEY_EVENT_CLICK_RELEASE;
         }
     }
 }
@@ -544,7 +557,7 @@ GooeyTFT_Sprite *tft_create_widget_sprite(int x, int y, int width, int height)
     g_sprite->y = y;
     g_sprite->width = width;
     g_sprite->height = height;
-    g_sprite->needs_redraw = false;
+    g_sprite->needs_redraw = true;
 
     sprite->fillSprite(TFT_BLACK);
     sprite->setTextColor(TFT_WHITE, TFT_BLACK);
@@ -556,12 +569,19 @@ void tft_redraw_sprite(GooeyTFT_Sprite *sprite)
 {
     if (sprite && sprite->sprite_ptr)
     {
-       // sprite->needs_redraw = true;
-      //  ctx.ReDrawCallback(0, ctx.windows);
         TFT_eSprite *tft_sprite = (TFT_eSprite *)sprite->sprite_ptr;
+        // clear old content
+        tft_sprite->fillSprite(TFT_WHITE);
+        delay(20);
         tft_sprite->pushSprite(sprite->x, sprite->y, TFT_BLACK);
-        sprite->needs_redraw = false;
+        sprite->needs_redraw = true;
     }
+}
+
+void tft_reset_sprite_redraw(GooeyTFT_Sprite *sprite)
+{
+    // stop sprite redrawing
+    sprite->needs_redraw = false;
 }
 
 extern "C"
@@ -614,5 +634,6 @@ extern "C"
         .StopCursorReset = tft_stop_cursor_reset,
         .ForceCallRedraw = tft_force_redraw,
         .CreateSpriteForWidget = tft_create_widget_sprite,
-        .RedrawSprite = tft_redraw_sprite};
+        .RedrawSprite = tft_redraw_sprite,
+        .ResetRedrawSprite = tft_reset_sprite_redraw};
 }

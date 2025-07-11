@@ -98,7 +98,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                     tab->tab_name,
                     win->active_theme->neutral,
                     TAB_TEXT_SCALE,
-                    win->creation_id);
+                    win->creation_id,  tabs->core.sprite);
 
                 // Handle widget visibility
                 for (size_t k = 0; k < tab->widget_count; ++k)
@@ -163,7 +163,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                         tab->tab_name,
                         win->active_theme->neutral,
                         TAB_TEXT_SCALE,
-                        win->creation_id);
+                        win->creation_id,tabs->core.sprite);
 
                    
                 }

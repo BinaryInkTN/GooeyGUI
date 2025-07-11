@@ -52,7 +52,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
 
     active_backend->DrawText(text_x, text_y, display_text,
                              win->active_theme->neutral, 0.27f,
-                             win->creation_id);
+                             win->creation_id, textbox->core.sprite);
 
     if (textbox->focused)
     {
@@ -66,7 +66,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
     {
       active_backend->DrawText(text_x, text_y, textbox->placeholder,
                                win->active_theme->neutral, 0.27f,
-                               win->creation_id);
+                               win->creation_id, textbox->core.sprite);
     }
   }
 }

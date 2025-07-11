@@ -85,7 +85,7 @@ static void DrawProgressPercentage(GooeyProgressBar *progressbar, GooeyWindow *w
         display_percentage,
         win->active_theme->neutral,
         0.27f,
-        win->creation_id);
+        win->creation_id, progressbar->core.sprite);
 }
 
 void GooeyProgressBar_Draw(GooeyWindow *win)

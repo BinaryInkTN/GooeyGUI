@@ -27,7 +27,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
 
         active_backend->DrawText(x_offset, 15, child->title,
                                  child->is_open ? win->active_theme->base : win->active_theme->neutral,
-                                 0.27f, win->creation_id);
+                                 0.27f, win->creation_id, NULL);
 
         if (child->is_open && child->menu_elements_count > 0)
         {
@@ -52,7 +52,7 @@ void GooeyMenu_Draw(GooeyWindow *win)
 
                 active_backend->DrawText(submenu_x + 5, element_y + 18, child->menu_elements[j],
                                          is_hovered ? win->active_theme->base : win->active_theme->neutral,
-                                         0.27f, win->creation_id);
+                                         0.27f, win->creation_id, NULL);
 
                 if (j < child->menu_elements_count - 1)
                 {

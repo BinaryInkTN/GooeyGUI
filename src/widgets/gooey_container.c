@@ -7,15 +7,14 @@
 #include "widgets/gooey_window_internal.h"
 #include "backends/gooey_backend_internal.h"
 
-
-GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
+GooeyContainers *GooeyContainer_Create(int x, int y, int width, int height)
 {
-  
 
     GooeyContainers *container_widget = calloc(1, sizeof(GooeyContainers));
-    if (container_widget == NULL ){
+    if (container_widget == NULL)
+    {
         LOG_ERROR("Unable to allocate memory to tabs widget");
-        return NULL ; 
+        return NULL;
     }
     *container_widget = (GooeyContainers){0};
     container_widget->core.type = WIDGET_CONTAINER;
@@ -23,7 +22,7 @@ GooeyContainers* GooeyContainer_Create(int x, int y, int width, int height)
     container_widget->core.y = y;
     container_widget->core.width = width;
     container_widget->core.height = height;
-    container_widget->container = malloc(sizeof(GooeyContainer)* MAX_CONTAINER);
+    container_widget->container = malloc(sizeof(GooeyContainer) * MAX_CONTAINER);
     container_widget->container_count = 0;
     container_widget->active_container_id = 0; // default active tab is the first one.
     container_widget->core.is_visible = true;
@@ -47,25 +46,23 @@ void GooeyContainer_InsertContainer(GooeyContainers *container)
     cont->widget_count = 0;
 }
 
-void GooeyContainer_AddWidget(GooeyWindow* window, GooeyContainers* container, size_t container_id, void *widget)
+void GooeyContainer_AddWidget(GooeyWindow *window, GooeyContainers *container, size_t container_id, void *widget)
 {
-    GooeyContainer* selected_cont = (GooeyContainer*) &container->container[container_id];
+    GooeyContainer *selected_cont = (GooeyContainer *)&container->container[container_id];
     if (!container || !selected_cont || !widget)
     {
         LOG_ERROR("Couldn't add widget.");
         return;
     }
 
-
-    GooeyWidget *core = (GooeyWidget*) widget;
+    GooeyWidget *core = (GooeyWidget *)widget;
     core->x = core->x + container->core.x;
-    core->y = core->y + container->core.y ;
+    core->y = core->y + container->core.y;
 
     selected_cont->widgets[selected_cont->widget_count++] = widget;
 
     // Register widget to window implicitly
     GooeyWindow_Internal_RegisterWidget(window, widget);
-    
 }
 
 void GooeyContainer_SetActiveContainer(GooeyContainers *container, size_t container_id)
@@ -77,6 +74,6 @@ void GooeyContainer_SetActiveContainer(GooeyContainers *container, size_t contai
 
         return;
     }
-
     container->active_container_id = container_id;
+  
 }

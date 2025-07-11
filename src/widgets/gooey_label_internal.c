@@ -19,7 +19,7 @@ void GooeyLabel_Draw(GooeyWindow *win)
             label->text, 
             label->is_using_custom_color ? label->color : win->active_theme->neutral, 
             label->font_size, 
-            win->creation_id
+            win->creation_id, label->core.sprite
         );
     }
 }

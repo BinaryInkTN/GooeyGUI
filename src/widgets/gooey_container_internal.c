@@ -4,6 +4,7 @@
 
 #include "widgets/gooey_container_internal.h"
 #include "logger/pico_logger_internal.h"
+#include "backends/gooey_backend_internal.h"
 #if (ENABLE_CONTAINER)
 
 void GooeyContainer_Draw(GooeyWindow *window)
@@ -16,12 +17,12 @@ void GooeyContainer_Draw(GooeyWindow *window)
 
     for (size_t i = 0; i < window->container_count; ++i)
     {
-        GooeyContainers *container = window->containers[i];
+        GooeyContainers *container = (GooeyContainers *)window->containers[i];
         if (!container)
         {
             continue;
         }
-
+        
         for (size_t j = 0; j < container->container_count; j++)
         {
             GooeyContainer *cont = &container->container[j];
@@ -33,7 +34,6 @@ void GooeyContainer_Draw(GooeyWindow *window)
                 // Widgets
                 if (container->active_container_id == cont->id)
                 {
-
                     core->is_visible = container->core.is_visible;
                 }
                 else

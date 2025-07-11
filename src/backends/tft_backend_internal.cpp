@@ -351,8 +351,9 @@ int tft_get_current_clicked_window(void)
     return 0;
 }
 
-void tft_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id)
+void tft_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite)
 {
+
     ctx.tft->setTextColor(rgb888_to_rgb565(color), TFT_BLACK);
     ctx.tft->setCursor(x, y);
     ctx.tft->print(text);

@@ -115,7 +115,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             label_text,
             win->active_theme->neutral,
             FONT_SCALE,
-            win->creation_id);
+            win->creation_id, meter->core.sprite);
         char value_text[20];
         snprintf(value_text, sizeof(value_text), "%d%%", (int) meter->value);
         const int value_text_width = active_backend->GetTextWidth(
@@ -130,7 +130,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             value_text,
             win->active_theme->neutral,
             FONT_SCALE,
-            win->creation_id);
+            win->creation_id, meter->core.sprite);
         
         active_backend->DrawImage(meter->texture_id, meter->core.x + meter->core.width - 10, meter->core.y + meter->core.height - 10, 28, 28, win->creation_id);
 

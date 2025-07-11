@@ -55,7 +55,7 @@ static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
         plot->data->title,
         win->active_theme->primary,
         0.28f,
-        win->creation_id);
+        win->creation_id, plot->core.sprite);
 }
 
 static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_x_value, float x_value_spacing, uint32_t x_tick_count, float *plot_x_grid_coords)
@@ -85,7 +85,7 @@ static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_x_val
             x_value_str,
             win->active_theme->neutral,
             0.28f,
-            win->creation_id);
+            win->creation_id,plot->core.sprite);
 
         x_default_value += plot->data->x_step;
     }
@@ -118,7 +118,7 @@ static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_y_val
             y_value_str,
             win->active_theme->neutral,
             0.28f,
-            win->creation_id);
+            win->creation_id, plot->core.sprite);
 
         y_default_value += plot->data->y_step;
     }
@@ -226,7 +226,7 @@ static void draw_data_points(GooeyPlot *plot, GooeyWindow *win, float min_x_valu
                     label,
                     win->active_theme->neutral,
                     0.28f,
-                    win->creation_id);
+                    win->creation_id, plot->core.sprite);
             }
         }
         break;

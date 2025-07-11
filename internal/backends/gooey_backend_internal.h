@@ -59,7 +59,7 @@ typedef struct GooeyBackend
     void (*Clear)(GooeyWindow *win);                                                       /**< Clears the contents of a window. */
     void (*Render)(GooeyWindow *win);                                                      /**< Renders the contents of a window. */
     void (*SetForeground)(uint32_t color);                                                 /**< Sets the foreground color for rendering. */
-    void (*DrawText)(int x, int y, const char *text, uint32_t color, float font_size, int window_id); /**< Draws text on a window. */
+    void (*DrawText)(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite* sprite); /**< Draws text on a window. */
     unsigned int (*LoadImage)(const char *image_path);                                      /**< Loads an image from a file. */
     unsigned int (*LoadImageFromBin)(unsigned char *data, size_t binary_len);               /**< Loads an image from binary data. */
     void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id); /**< Draws an image on a window. */

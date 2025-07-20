@@ -1108,6 +1108,18 @@ void glps_redraw_sprite(GooeyTFT_Sprite *sprite)
 {
 }
 
+
+
+void glps_clear_area(int x, int y, int width, int height)
+{
+}
+
+
+void glps_clear_old_widget(GooeyTFT_Sprite *sprite)
+{
+}
+
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
@@ -1154,6 +1166,8 @@ GooeyBackend glps_backend = {
     .ForceCallRedraw = glps_force_redraw,
     .CreateSpriteForWidget = glps_create_widget_sprite,
     .RedrawSprite = glps_redraw_sprite
+    .ClearArea = glps_clear_area,
+    .ClearOldWidget = glps_clear_old_widget
 
 };
 #endif

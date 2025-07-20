@@ -22,7 +22,7 @@ void GooeyContainer_Draw(GooeyWindow *window)
         {
             continue;
         }
-        
+
         for (size_t j = 0; j < container->container_count; j++)
         {
             GooeyContainer *cont = &container->container[j];
@@ -38,7 +38,9 @@ void GooeyContainer_Draw(GooeyWindow *window)
                 }
                 else
                 {
+                    
                     core->is_visible = false;
+                    if(core->sprite) active_backend->ClearOldWidget(core->sprite);
                 }
             }
         }

@@ -24,7 +24,14 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "logger/pico_logger_internal.h"
 #include <EEPROM.h>
 #include <string>
-
+static int clamp(int val, int min_val, int max_val)
+{
+    if (val < min_val)
+        return min_val;
+    if (val > max_val)
+        return max_val;
+    return val;
+}
 static uint16_t rgb888_to_rgb565(uint32_t color)
 {
     return ((color & 0xF80000) >> 8) | ((color & 0xFC00) >> 5) | ((color & 0xF8) >> 3);
@@ -338,6 +345,7 @@ int tft_init_ft()
 
 int tft_init()
 {
+    Serial.begin(9600);
     ctx.inhibit_reset = false;
     ctx.selected_color = TFT_WHITE;
     ctx.active_window_count = 1;
@@ -354,11 +362,18 @@ int tft_get_current_clicked_window(void)
 void tft_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite)
 {
 
-    ctx.tft->setTextColor(rgb888_to_rgb565(color), TFT_BLACK);
-    ctx.tft->setCursor(x, y);
-    ctx.tft->print(text);
-}
+    TFT_eSprite* tft_sprite = (TFT_eSprite*) sprite;
+    if (sprite == nullptr) {
+        ctx.tft->setTextColor(rgb888_to_rgb565(color), TFT_BLACK);
+        ctx.tft->setCursor(x, y);
+        ctx.tft->print(text);
+        return;
+    }
 
+    tft_sprite->setTextColor(rgb888_to_rgb565(color), TFT_BLACK);
+    tft_sprite->setCursor(x, y);
+    tft_sprite->print(text);
+}
 void tft_unload_image(unsigned int texture_id)
 {
 }
@@ -402,10 +417,10 @@ void tft_destroy_windows()
 
 void tft_clear(GooeyWindow *win)
 {
-    if (win && win->active_theme)
-    {
-        // ctx.tft->fillRect(0, 0, 480, 320, rgb888_to_rgb565(win->active_theme->base));
-    }
+    // if (win && win->active_theme)
+    //  {
+    ctx.tft->fillRect(0, 0, 480, 320, TFT_WHITE);
+    // }
 }
 
 void tft_cleanup()
@@ -543,11 +558,33 @@ double tft_get_window_framerate(int window_id)
 }
 GooeyTFT_Sprite *tft_create_widget_sprite(int x, int y, int width, int height)
 {
+    if (width <= 0 || height <= 0)
+    {
+        Serial.printf("INVALID SPRITE SIZE %d %d\n", width, height);
+        return NULL;
+    }
+
+    x = clamp(x, 0, 480 - width);
+    y = clamp(y, 0, 320 - height);
+
     TFT_eSprite *sprite = new TFT_eSprite(ctx.tft);
+    if (!sprite)
+    {
+        Serial.println("Failed to allocate TFT_eSprite");
+        return NULL;
+    }
+
     GooeyTFT_Sprite *g_sprite = (GooeyTFT_Sprite *)calloc(1, sizeof(GooeyTFT_Sprite));
+    if (!g_sprite)
+    {
+        Serial.println("Failed to allocate GooeyTFT_Sprite");
+        delete sprite;
+        return NULL;
+    }
 
     if (!sprite->createSprite(width, height))
     {
+        Serial.printf("INVALID SPRITE %d %d\n", width, height);
         delete sprite;
         free(g_sprite);
         return NULL;
@@ -565,7 +602,6 @@ GooeyTFT_Sprite *tft_create_widget_sprite(int x, int y, int width, int height)
 
     return g_sprite;
 }
-
 void tft_redraw_sprite(GooeyTFT_Sprite *sprite)
 {
     if (sprite && sprite->sprite_ptr)
@@ -581,8 +617,27 @@ void tft_redraw_sprite(GooeyTFT_Sprite *sprite)
 
 void tft_reset_sprite_redraw(GooeyTFT_Sprite *sprite)
 {
-    // stop sprite redrawing
     sprite->needs_redraw = false;
+}
+
+void tft_clear_area(int x, int y, int width, int height)
+{
+    const int chunk_height = 64;
+    int remaining_height = height;
+    int current_y = y;
+
+    while (remaining_height > 0)
+    {
+        int h = remaining_height > chunk_height ? chunk_height : remaining_height;
+        ctx.tft->fillRect(x, current_y, width, h, TFT_WHITE);
+        current_y += h;
+        remaining_height -= h;
+    }
+}
+
+void tft_clear_old_widget(GooeyTFT_Sprite* sprite)
+{
+    ctx.tft->fillRect(sprite->x, sprite->y, sprite->width, sprite->height, TFT_WHITE);
 }
 
 extern "C"
@@ -636,5 +691,7 @@ extern "C"
         .ForceCallRedraw = tft_force_redraw,
         .CreateSpriteForWidget = tft_create_widget_sprite,
         .RedrawSprite = tft_redraw_sprite,
-        .ResetRedrawSprite = tft_reset_sprite_redraw};
+        .ResetRedrawSprite = tft_reset_sprite_redraw,
+        .ClearArea = tft_clear_area,
+        .ClearOldWidget = tft_clear_old_widget};
 }

@@ -707,10 +707,14 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 {
   if (win == NULL)
     return;
-
+#if (!TFT_ESPI_ENABLED)
   active_backend->Clear(win);
+#endif
 #if (ENABLE_VIRTUAL_KEYBOARD)
   GooeyVK_Internal_Draw(win);
+#endif
+#if (ENABLE_CONTAINER)
+  GooeyContainer_Draw(win);
 #endif
   if (win->vk->is_shown)
   {
@@ -778,14 +782,12 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_DEBUG_OVERLAY)
   GooeyDebugOverlay_Draw(win);
 #endif
-#if (ENABLE_CONTAINER)
-  GooeyContainer_Draw(win);
-#endif
+
 #if (ENABLE_APPBAR)
   GooeyAppbar_Internal_Draw(win);
 #endif
 
-  //active_backend->Render(win);
+  // active_backend->Render(win);
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)

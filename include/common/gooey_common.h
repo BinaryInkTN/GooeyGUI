@@ -65,11 +65,12 @@ typedef struct
  */
 typedef struct
 {
+    GooeyTFT_Sprite *sprite;
+
     WIDGET_TYPE type;  /**< Type of the widget */
     bool is_visible;   /**< Visibility of the widget */
     int x, y;          /**< Position of the widget (top-left corner) */
     int width, height; /**< Dimensions of the widget */
-    GooeyTFT_Sprite *sprite;
 } GooeyWidget;
 
 /**

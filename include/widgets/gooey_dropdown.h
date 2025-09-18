@@ -41,6 +41,8 @@ GooeyDropdown *GooeyDropdown_Create(
     void (*callback)(int selected_index)
 );
 
+void GooeyDropdown_Update(GooeyDropdown *dropdown, const char **new_options, int new_num_options);
+
 #endif // ENABLE_DROPDOWN
 
 #ifdef __cplusplus

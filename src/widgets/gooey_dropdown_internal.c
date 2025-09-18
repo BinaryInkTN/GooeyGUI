@@ -62,7 +62,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                 }
             }
         }
-        if (dropdown->core.sprite->needs_redraw)
+        if (dropdown->core.sprite && dropdown->core.sprite->needs_redraw)
             active_backend->ResetRedrawSprite(dropdown->core.sprite);
     }
 }

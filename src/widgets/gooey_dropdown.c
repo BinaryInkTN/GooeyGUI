@@ -53,5 +53,25 @@ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
     dropdown->is_open = false;
     return dropdown;
 }
+void GooeyDropdown_Update(GooeyDropdown *dropdown, const char **new_options, int new_num_options)
+{
+    if (!dropdown)
+        return;
+
+    dropdown->options = new_options;
+    dropdown->num_options = new_num_options;
+    dropdown->selected_index = 0;
+    dropdown->element_hovered_over = -1;
+    dropdown->is_open = false;
+
+    //if (dropdown->core.sprite)
+   // {
+    //    active_backend->DestroySprite(dropdown->core.sprite);
+    //}
+    //dropdown->core.sprite = active_backend->CreateSpriteForWidget(dropdown->core.x, dropdown->core.y, dropdown->core.width, dropdown->core.height + 200); // todo make it dynamic
+
+    LOG_INFO("Dropdown updated with new number of options: %d", new_num_options);
+}
+
 #endif
 

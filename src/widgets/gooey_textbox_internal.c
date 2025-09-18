@@ -24,7 +24,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
                                   textbox->core.width, textbox->core.height,
                                   textbox->focused ? win->active_theme->primary
                                                    : win->active_theme->neutral,
-                                  1.0f, win->creation_id, false, 0.0f, textbox->core.sprite);
+                                  0.5f, win->creation_id, false, 0.0f, textbox->core.sprite);
 
     int text_x = textbox->core.x + 5;
     int text_y = textbox->core.y + (textbox->core.height / 2) + 5;
@@ -110,7 +110,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
 
     case 36: 
       win->textboxes[i]->focused = false;
-      if (win->vk)
+      if (win->vk && ENABLE_VIRTUAL_KEYBOARD)
         GooeyVK_Internal_Hide(win->vk);
       break;
 
@@ -195,8 +195,8 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
     {
       textbox->focused = true;
 
-      
-      if (win->vk && !win->vk->is_shown)
+
+      if (win->vk && !win->vk->is_shown && ENABLE_VIRTUAL_KEYBOARD)
       {
         GooeyVK_Internal_Show(win->vk);
         
@@ -223,7 +223,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
 
 void GooeyTextbox_Internal_HandleVK(GooeyWindow* win)
 {
-  if(!win || !win->vk) return;
+  if(!win || !win->vk || !ENABLE_VIRTUAL_KEYBOARD) return;
   for (size_t i = 0; i < win->textboxes_count; ++i)
   {
     GooeyTextbox *textbox = win->textboxes[i];

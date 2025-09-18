@@ -7,3 +7,9 @@
 [submodule "third_party/glps"]
 	path = third_party/glps
 	url = https://github.com/GooeyUI/GLPS.git
+[submodule "third_party/cef"]
+	path = third_party/cef
+	url = https://bitbucket.org/chromiumembedded/cef.git
+[submodule "third_party/ultralight"]
+	path = third_party/ultralight
+	url = https://github.com/ultralight-ux/Ultralight.git

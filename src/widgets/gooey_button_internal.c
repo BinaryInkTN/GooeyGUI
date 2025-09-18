@@ -41,7 +41,7 @@ void GooeyButton_Draw(GooeyWindow *win)
             active_backend->DrawRectangle(button->core.x,
                                           button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
         }
-        if (button->core.sprite->needs_redraw)
+        if (button->core.sprite && button->core.sprite->needs_redraw)
             active_backend->ResetRedrawSprite(button->core.sprite);
     }
 }

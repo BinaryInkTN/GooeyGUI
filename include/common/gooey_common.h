@@ -41,6 +41,7 @@ typedef enum
     WIDGET_METER,
     WIDGET_CONTAINER,
     WIDGET_SWITCH,
+    WIDGET_WEBVIEW,
     WIDGET_TABS
 } WIDGET_TYPE;
 
@@ -526,6 +527,13 @@ typedef struct
     size_t text_widget_id;
 } GooeyVK;
 
+typedef struct
+{
+    GooeyWidget core;
+    char url[256];
+    bool needs_refresh;
+} GooeyWebview;
+
 /**
  * @brief Enumeration for window types in the Gooey framework.
  */
@@ -573,7 +581,10 @@ typedef struct
     GooeyMeter **meters;
     GooeyContainers **containers;
     GooeySwitch **switches;
+    GooeyWebview **webviews;
 
+
+    size_t webview_count;
     size_t container_count;
     size_t switch_count;
     size_t meter_count;

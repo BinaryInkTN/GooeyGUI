@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 
+
 typedef struct
 {
     //  glpscursor *cursor;
@@ -43,6 +44,7 @@ typedef struct
     size_t timer_count;
     bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
     unsigned int selected_color;
+   
 } GooeyBackendContext;
 ;
 
@@ -122,7 +124,7 @@ void glps_setup_seperate_vao(int window_id)
 }
 
 void glps_draw_rectangle(int x, int y, int width, int height,
-                         long unsigned int color, float thickness,
+                         uint32_t color, float thickness,
                          int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
@@ -171,7 +173,7 @@ void glps_draw_rectangle(int x, int y, int width, int height,
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
-void glps_set_foreground(long unsigned int color)
+void glps_set_foreground(uint32_t color)
 {
     ctx.selected_color = color;
 }
@@ -182,7 +184,7 @@ void glps_window_dim(int *width, int *height, int window_id)
     get_window_size(ctx.wm, window_id,
                     width, height);
 }
-void glps_draw_line(int x1, int y1, int x2, int y2, long unsigned int color, int window_id, GooeyTFT_Sprite *sprite)
+void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite)
 {
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
@@ -368,7 +370,7 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
 }
 
 void glps_fill_rectangle(int x, int y, int width, int height,
-                         long unsigned int color, int window_id,
+                         uint32_t color, int window_id,
                          bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
 
@@ -586,7 +588,6 @@ int glps_init_ft()
     FT_Done_FreeType(ft);
     return 0;
 }
-
 int glps_init()
 {
 
@@ -599,6 +600,8 @@ int glps_init()
     ctx.wm = glps_wm_init();
     ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer));
     ctx.timer_count = 0;
+
+
     return 0;
 }
 
@@ -607,7 +610,7 @@ int glps_get_current_clicked_window(void)
     return -1;
 }
 
-void glps_draw_text(int x, int y, const char *text, unsigned long color, float font_size, int window_id)
+void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite)
 {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     vec3 color_rgb;
@@ -776,7 +779,7 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
 
 {
 
-    GooeyWindow *window = malloc(sizeof(GooeyWindow));
+    GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
 
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
     window->creation_id = window_id;
@@ -1017,7 +1020,7 @@ GooeyTimer *glps_create_timer()
 
     ctx.timers[ctx.timer_count++] = timer;
 
-    GooeyTimer *gooey_timer = calloc(1, sizeof(GooeyTimer));
+    GooeyTimer *gooey_timer = (GooeyTimer *)calloc(1, sizeof(GooeyTimer));
     gooey_timer->timer_ptr = timer;
 
     return gooey_timer;
@@ -1025,7 +1028,7 @@ GooeyTimer *glps_create_timer()
 
 void glps_stop_timer(GooeyTimer *timer)
 {
-    glps_timer_stop(timer->timer_ptr);
+    glps_timer_stop((glps_timer *)timer->timer_ptr);
 }
 
 void glps_destroy_timer(GooeyTimer *gooey_timer)
@@ -1057,7 +1060,7 @@ void glps_destroy_timer(GooeyTimer *gooey_timer)
 
 void glps_set_callback_for_timer(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data)
 {
-    glps_timer_start(timer->timer_ptr, time, callback, user_data);
+    glps_timer_start((glps_timer *)timer->timer_ptr, time, callback, user_data);
 }
 
 void glps_window_toggle_decorations(GooeyWindow *win, bool enable)
@@ -1108,66 +1111,80 @@ void glps_redraw_sprite(GooeyTFT_Sprite *sprite)
 {
 }
 
-
-
 void glps_clear_area(int x, int y, int width, int height)
 {
 }
-
 
 void glps_clear_old_widget(GooeyTFT_Sprite *sprite)
 {
 }
 
+void glps_create_view()
+{
+   
+}
 
+void glps_destroy_ultralight()
+{
+}
+void glps_draw_webview(GooeyWindow *win,void* webview, int x, int y, int width, int height, int window_id)
+{
+  
+}
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
-    .CreateWindow = glps_create_window,
-    .WindowToggleDecorations = glps_window_toggle_decorations,
-    .GetWinFramerate = glps_get_window_framerate,
-    .GetActiveWindowCount = glps_get_active_window_count,
-    .GetTotalWindowCount = glps_get_total_window_count,
+    .Cleanup = glps_cleanup,
+
     .SetupCallbacks = glps_setup_callbacks,
     .RequestRedraw = glps_request_redraw,
     .SetViewport = glps_set_viewport,
-    .GetWinDim = glps_window_dim,
+    .GetActiveWindowCount = glps_get_active_window_count,
+    .GetTotalWindowCount = glps_get_total_window_count,
+    .CreateWindow = glps_create_window,
+    .MakeWindowVisible = glps_make_window_visible,
+    .MakeWindowResizable = glps_set_window_resizable,
+    .WindowToggleDecorations = glps_window_toggle_decorations,
+    .GetCurrentClickedWindow = glps_get_current_clicked_window,
+
     .DestroyWindows = glps_destroy_windows,
     .DestroyWindowFromId = glps_destroy_window_from_id,
-    .MakeWindowResizable = glps_set_window_resizable,
-    .GetCurrentClickedWindow = glps_get_current_clicked_window,
     .HideCurrentChild = glps_hide_current_child,
-    .MakeWindowVisible = glps_make_window_visible,
     .UpdateBackground = glps_update_background,
-    .Cleanup = glps_cleanup,
+    .Clear = glps_clear,
+
     .Render = glps_render,
-    .ResetEvents = glps_reset_events,
-    .DrawImage = glps_draw_image,
-    .LoadImageFromBin = glps_load_image_from_bin,
+    .SetForeground = glps_set_foreground,
+    .DrawText = glps_draw_text,
     .LoadImage = glps_load_image,
-    .UnloadImage = glps_unload_image,
-    .FillArc = glps_fill_arc,
+    .LoadImageFromBin = glps_load_image_from_bin,
+    .DrawImage = glps_draw_image,
     .FillRectangle = glps_fill_rectangle,
     .DrawRectangle = glps_draw_rectangle,
+    .FillArc = glps_fill_arc,
+    .GetKeyFromCode = glps_get_key_from_code,
+    .ResetEvents = glps_reset_events,
+    .GetWinDim = glps_window_dim,
+    .GetWinFramerate = glps_get_window_framerate,
     .DrawLine = glps_draw_line,
-    .SetForeground = glps_set_foreground,
     .GetTextWidth = glps_get_text_width,
     .GetTextHeight = glps_get_text_height,
-    .DrawText = glps_draw_text,
-    .GetKeyFromCode = glps_get_key_from_code,
     .SetCursor = glps_set_cursor,
+    .UnloadImage = glps_unload_image,
     .CreateTimer = glps_create_timer,
     .SetTimerCallback = glps_set_callback_for_timer,
-    .DestroyTimer = glps_destroy_timer,
     .StopTimer = glps_stop_timer,
-    .Clear = glps_clear,
+    .DestroyTimer = glps_destroy_timer,
     .CursorChange = glps_set_cursor,
     .StopCursorReset = glps_stop_cursor_reset,
     .ForceCallRedraw = glps_force_redraw,
-    .CreateSpriteForWidget = glps_create_widget_sprite,
-    .RedrawSprite = glps_redraw_sprite
-    .ClearArea = glps_clear_area,
-    .ClearOldWidget = glps_clear_old_widget
 
-};
+    .CreateSpriteForWidget = glps_create_widget_sprite,
+    .RedrawSprite = glps_redraw_sprite,
+    .ClearArea = glps_clear_area,
+    .ClearOldWidget = glps_clear_old_widget,
+    .CreateView = glps_create_view,
+    .DestroyUltralight = glps_destroy_ultralight,
+    .DrawWebview = glps_draw_webview};
+
 #endif

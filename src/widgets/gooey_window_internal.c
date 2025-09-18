@@ -51,6 +51,12 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->textboxes[win->textboxes_count++] = (GooeyTextbox *)widget;
         break;
     }
+    case WIDGET_WEBVIEW:
+    {
+        win->webviews[win->webview_count++] = (GooeyWebview *)widget;
+        break;
+    }
+
     case WIDGET_DROPDOWN:
     {
         win->dropdowns[win->dropdown_count++] = (GooeyDropdown *)widget;

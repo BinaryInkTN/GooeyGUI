@@ -90,6 +90,12 @@ extern "C"
         void (*ResetRedrawSprite)(GooeyTFT_Sprite *sprite);
         void (*ClearArea)(int x, int y, int width, int height);
         void (*ClearOldWidget)(GooeyTFT_Sprite *sprite);
+        
+
+        // Webview specific
+        void (*CreateView)(void);
+        void (*DestroyUltralight)(void);
+        void (*DrawWebview)(int x, int y, int width, int height, int window_id, GooeyTFT_Sprite *sprite);
     } GooeyBackend;
 
     /**

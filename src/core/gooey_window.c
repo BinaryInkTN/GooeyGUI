@@ -44,6 +44,7 @@
 #include "widgets/gooey_textbox_internal.h"
 #include "widgets/gooey_window_internal.h"
 #include "virtual/gooey_keyboard_internal.h"
+#include "widgets/gooey_webview_internal.h"
 #include <stdarg.h>
 #include <string.h>
 
@@ -770,9 +771,6 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_PLOT)
   GooeyPlot_Draw(win);
 #endif
-#if (ENABLE_DROPDOWN)
-  GooeyDropdown_Draw(win);
-#endif
 #if (ENABLE_LABEL)
   GooeyLabel_Draw(win);
 #endif
@@ -782,12 +780,14 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_DEBUG_OVERLAY)
   GooeyDebugOverlay_Draw(win);
 #endif
-
-#if (ENABLE_APPBAR)
+#if (ENABLE_DROPDOWN)
+  GooeyDropdown_Draw(win);
+#endif
+#if (ENABLE_APPBAR) 
   GooeyAppbar_Internal_Draw(win);
 #endif
 
-  // active_backend->Render(win);
+  active_backend->Render(win);
 }
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
@@ -995,7 +995,9 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
     LOG_CRITICAL("Backend is not initialized");
     return;
   }
-
+#if (ENABLE_WEBVIEW)
+  GooeyWebview_Internal_Draw(NULL);
+#endif
   va_list args;
   GooeyWindow *windows[num_windows];
   va_start(args, first_win);

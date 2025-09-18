@@ -49,7 +49,7 @@ void GooeySlider_Draw(GooeyWindow *win)
                                          slider->core.y + 25, value, win->active_theme->neutral, 0.27f, win->creation_id,  slider->core.sprite);
         }
         active_backend->SetForeground(win->active_theme->neutral);
-        if (slider->core.sprite->needs_redraw)
+        if (slider->core.sprite && slider->core.sprite->needs_redraw)
             active_backend->ResetRedrawSprite(slider->core.sprite);
     }
 }

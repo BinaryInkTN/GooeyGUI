@@ -58,6 +58,9 @@ void GooeyButton_SetText(GooeyButton *button, const char *text);
  */
 void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted);
 
+void GooeyButton_SetEnabled(GooeyButton *button, bool is_enabled);
+
+
 #endif // ENABLE_BUTTON
 
 #ifdef __cplusplus

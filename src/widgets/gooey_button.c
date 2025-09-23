@@ -51,6 +51,7 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
     button->core.width = active_backend->GetTextWidth(label, strlen(label)) + 30;
     button->core.height = height;
     button->core.is_visible = true;
+    button->is_disabled = false;
     strcpy(button->label, label);
     button->callback = callback;
     button->hover = false;
@@ -65,5 +66,13 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
 void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
 {
     button->is_highlighted = true;
+}
+
+void GooeyButton_SetEnabled(GooeyButton *button, bool is_enabled) {
+    if(!button) {
+        LOG_ERROR("Widget<Button> Cannot be null \n");
+        return;
+    }
+    button->is_disabled = !is_enabled;
 }
 #endif

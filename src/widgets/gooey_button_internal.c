@@ -14,7 +14,7 @@ void GooeyButton_Draw(GooeyWindow *win)
 
         unsigned long button_color = win->active_theme->widget_base;
 
-        if (button->hover)
+        if (button->is_disabled || button->hover)
         {
             button_color = ((button_color & 0x7E7E7E) >> 1) | (button_color & 0x808080) >> 1; // A little darker
         }
@@ -47,13 +47,14 @@ void GooeyButton_Draw(GooeyWindow *win)
 }
 bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
 {
+    
     static bool was_hovered = false;
     bool hover_over_button = false;
 
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = win->buttons[i];
-        if (!button || !button->core.is_visible) // Safety check
+        if (!button || button->is_disabled || !button->core.is_visible) // Safety check
             continue;
 
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
@@ -83,7 +84,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = win->buttons[i];
-        if (!button || !button->core.is_visible)
+        if (!button || button->is_disabled || !button->core.is_visible)
             continue;
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
@@ -94,7 +95,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
             clicked_any_button = true;
             active_backend->RedrawSprite(button->core.sprite);
 
-            if (button->callback)
+            if (!button->is_disabled && button->callback)
             {
                 button->callback();
             }

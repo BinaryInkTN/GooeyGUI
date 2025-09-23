@@ -119,6 +119,7 @@ typedef struct
     bool hover;          /**< State of the button (hovered or not) */
     bool is_highlighted; /**< Whether the button is highlighted */
     int click_timer;     /**< Timer for click effect */
+    bool is_disabled;    /**< Whether the button is disabled */
 } GooeyButton;
 /**
  * @brief Container widget.

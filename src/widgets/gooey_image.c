@@ -16,8 +16,9 @@ GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, i
     }
 
     *image = (GooeyImage){0};
-
+    LOG_PERFORMANCE(NULL);
     image->texture_id = active_backend->LoadImage(image_path);
+    LOG_PERFORMANCE("Image Load: ");
     image->core.type = WIDGET_IMAGE;
     image->core.x = x;
     image->core.y = y;

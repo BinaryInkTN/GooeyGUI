@@ -1,6 +1,7 @@
 #include "widgets/gooey_image_internal.h"
 #if(ENABLE_IMAGE)
 #include "backends/gooey_backend_internal.h"
+#include "logger/pico_logger_internal.h"
 #include <fcntl.h>
 #include <unistd.h>
 
@@ -39,7 +40,9 @@ void GooeyImage_Draw(GooeyWindow *win)
             active_backend->LoadImage(image->image_path);
             image->needs_refresh = false;
         }
+        LOG_PERFORMANCE(NULL);
         active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
+        LOG_PERFORMANCE("Image Draw: ");
     }
 }
 #endif

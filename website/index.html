@@ -4,151 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gooey - Cross-Platform GUI Library</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4E86EE;
-            --primary-dark: #3D6DCC;
-            --secondary: #6CACE4;
-            --accent: #FF6B6B;
-            --success: #5CD85A;
-            --warning: #FFC94D;
-            --error: #FF6B6B;
-            
-            --text-primary: #1C1C1E;
-            --text-secondary: #5E5E60;
-            --text-tertiary: #8E8E93;
+            --google-blue: #1a73e8;
+            --google-blue-dark: #1557b0;
+            --google-blue-light: #e8f0fe;
+            --google-gray-100: #f8f9fa;
+            --google-gray-200: #e8eaed;
+            --google-gray-300: #dadce0;
+            --google-gray-700: #5f6368;
+            --google-gray-800: #3c4043;
+            --google-gray-900: #202124;
+            --google-green: #34a853;
+            --google-yellow: #f9ab00;
+            --google-red: #ea4335;
+
+            --primary: var(--google-blue);
+            --primary-dark: var(--google-blue-dark);
+            --primary-light: var(--google-blue-light);
+            --text-primary: var(--google-gray-900);
+            --text-secondary: var(--google-gray-700);
+            --text-tertiary: var(--google-gray-300);
             --text-on-primary: #FFFFFF;
-            
             --background: #FFFFFF;
-            --surface: #F7F7F7;
-            --surface-dark: #EBEBEB;
-            --border: #D1D1D6;
-            
-            --code-background: #F2F2F7;
-            --code-text: #1C1C1E;
-            
-            --elevation-1: 0 1px 3px rgba(0,0,0,0.08);
-            --elevation-2: 0 4px 12px rgba(0,0,0,0.12);
-            --elevation-3: 0 8px 24px rgba(0,0,0,0.16);
-            
+            --surface: var(--google-gray-100);
+            --surface-dark: var(--google-gray-200);
+            --border: var(--google-gray-300);
+            --code-background: var(--google-gray-100);
+            --code-text: var(--google-gray-900);
+
+            --elevation-1: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+            --elevation-2: 0 1px 2px rgba(60,64,67,0.3), 0 2px 6px 2px rgba(60,64,67,0.15);
+            --elevation-3: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
+
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
-            
+
             --transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
         }
-        
+
         .dark-mode {
-            --primary: #4E86EE;
-            --primary-dark: #3D6DCC;
-            --secondary: #6CACE4;
-            --accent: #FF6B6B;
-            --success: #5CD85A;
-            --warning: #FFC94D;
-            --error: #FF6B6B;
-            
-            --text-primary: #F5F5F7;
-            --text-secondary: #AEAEB2;
-            --text-tertiary: #636366;
-            --text-on-primary: #FFFFFF;
-            
-            --background: #1C1C1E;
-            --surface: #2C2C2E;
-            --surface-dark: #3A3A3C;
-            --border: #48484A;
-            
-            --code-background: #2C2C2E;
-            --code-text: #F5F5F7;
+            --primary: #8ab4f8;
+            --primary-dark: #aecbfa;
+            --primary-light: #1e3a5f;
+            --text-primary: #e8eaed;
+            --text-secondary: #9aa0a6;
+            --text-tertiary: #5f6368;
+            --text-on-primary: #202124;
+            --background: #202124;
+            --surface: #2d2e30;
+            --surface-dark: #3c4043;
+            --border: #5f6368;
+            --code-background: #2d2e30;
+            --code-text: #e8eaed;
         }
-        .platforms {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            margin-top: 60px;
-            flex-wrap: wrap;
-        }
-        
-        .platform {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0.8;
-            transition: var(--transition);
-        }
-        
-        .platform:hover {
-            opacity: 1;
-            transform: translateY(-2px);
-        }
-        
-        .platform-logo {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            margin-bottom: 12px;
-        }
-        
-        .platform-name {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             color: var(--text-primary);
             background-color: var(--background);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             transition: background-color 0.3s ease;
         }
-        
+
         h1, h2, h3, h4, h5, h6 {
-            font-weight: 600;
+            font-weight: 500;
             margin: 0 0 16px;
             color: var(--text-primary);
+            letter-spacing: -0.02em;
         }
-        
+
         h1 {
             font-size: 48px;
             line-height: 1.2;
-            letter-spacing: -0.02em;
+            font-weight: 400;
         }
-        
+
         h2 {
             font-size: 36px;
             line-height: 1.25;
-            letter-spacing: -0.01em;
         }
-        
+
         h3 {
             font-size: 24px;
             line-height: 1.3;
         }
-        
+
         p {
             color: var(--text-secondary);
             margin: 0 0 16px;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.6;
         }
-        
+
         a {
             color: var(--primary);
             text-decoration: none;
             transition: var(--transition);
         }
-        
+
         a:hover {
             color: var(--primary-dark);
             text-decoration: underline;
         }
-        
+
         .container {
             width: 100%;
             max-width: 1200px;
@@ -156,8 +122,8 @@
             padding: 0 24px;
             box-sizing: border-box;
         }
-        
-        /* App Bar */
+
+        /* App Bar - Google Style */
         .app-bar {
             position: fixed;
             top: 0;
@@ -167,39 +133,39 @@
             display: flex;
             align-items: center;
             padding: 0 24px;
-            background-color: var(--surface);
-            box-shadow: var(--elevation-1);
+            background-color: var(--background);
+            box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
             z-index: 1000;
             transition: all 0.3s ease;
         }
-        
+
         .app-bar__title {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 500;
             margin: 0;
             color: var(--text-primary);
             display: flex;
             align-items: center;
         }
-        
+
         .app-bar__title i {
             margin-right: 12px;
             color: var(--primary);
             font-size: 24px;
         }
-        
+
         .app-bar__actions {
             margin-left: auto;
             display: flex;
             align-items: center;
             gap: 16px;
         }
-        
+
         .app-bar__nav {
             display: flex;
             margin-left: 48px;
         }
-        
+
         .app-bar__nav-item {
             padding: 8px 16px;
             color: var(--text-secondary);
@@ -208,82 +174,90 @@
             border-radius: var(--radius-sm);
             transition: var(--transition);
         }
-        
+
         .app-bar__nav-item:hover {
             color: var(--primary);
-            background-color: var(--surface-dark);
+            background-color: var(--surface);
             text-decoration: none;
         }
-        
+
         .app-bar__nav-item--active {
             color: var(--primary);
-            background-color: var(--surface-dark);
+            background-color: var(--surface);
         }
-        
+
         .theme-toggle {
             background: none;
             border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
         }
-        
+
         .theme-toggle:hover {
-            background-color: var(--surface-dark);
+            background-color: var(--surface);
             color: var(--text-primary);
         }
-        
+
         .badge {
             display: inline-flex;
             align-items: center;
-            padding: 4px 12px;
+            padding: 6px 12px;
             border-radius: 16px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
-            background-color: var(--surface-dark);
+            background-color: var(--surface);
             color: var(--text-primary);
+            border: 1px solid var(--border);
         }
-        
+
         .badge i {
             margin-right: 6px;
-            font-size: 12px;
+            font-size: 14px;
+            color: var(--google-yellow);
         }
-        
-        /* Hero Section */
+
+        /* Hero Section - Google Style with SVG Background */
         .hero {
-            padding: 160px 0 60px;
+            padding: 160px 0 100px;
             text-align: center;
             position: relative;
             background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
-            
+            overflow: hidden;
         }
-     .hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 1024' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='blueGradient' x1='0%' y1='0%' x2='100%' y2='100%'%3E%3Cstop offset='0%' stop-color='%230066cc' stop-opacity='0.25'/%3E%3Cstop offset='100%' stop-color='%23ffffff' stop-opacity='0.1'/%3E%3C/linearGradient%3E%3CradialGradient id='lightBlob' cx='50%' cy='50%' r='50%'%3E%3Cstop offset='0%' stop-color='%230099ff' stop-opacity='0.15'/%3E%3Cstop offset='100%' stop-color='%23002255' stop-opacity='0.05'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='200' cy='300' r='160' fill='url(%23blueGradient)' /%3E%3Ccircle cx='1250' cy='200' r='100' fill='url(%23blueGradient)'/%3E%3Cellipse cx='700' cy='600' rx='280' ry='180' fill='url(%23lightBlob)'/%3E%3Cpath d='M600,400 a80,80 0 1,0 160,0 a80,80 0 1,0 -160,0' fill='none' stroke='%230066cc' stroke-width='2' stroke-opacity='0.05'/%3E%3Cpath d='M300,800 a40,40 0 1,0 80,0 a40,40 0 1,0 -80,0' fill='none' stroke='%230099ff' stroke-width='1.5' stroke-opacity='0.05'/%3E%3Cpolygon points='1300,800 1320,830 1300,860 1270,860 1250,830 1270,800' fill='%230066cc' fill-opacity='0.03'/%3E%3Cpolygon points='200,950 220,980 200,1010 170,1010 150,980 170,950' fill='%230099ff' fill-opacity='0.04'/%3E%3Cpath d='M0,900 C400,1020 1000,800 1440,960 L1440,1024 L0,1024 Z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E");
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-}
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='1440' height='1024' viewBox='0 0 1440 1024' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg opacity='0.05'%3E%3Ccircle cx='200' cy='200' r='100' fill='%231a73e8'/%3E%3Ccircle cx='1200' cy='300' r='150' fill='%2334a853'/%3E%3Ccircle cx='800' cy='600' r='120' fill='%23f9ab00'/%3E%3Ccircle cx='400' cy='800' r='80' fill='%23ea4335'/%3E%3Crect x='1000' y='700' width='200' height='200' rx='20' fill='%231a73e8'/%3E%3Crect x='200' y='500' width='150' height='150' rx='15' fill='%2334a853'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            background-repeat: no-repeat;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
 
         .hero__title {
-            font-weight: 700;
+            font-weight: 400;
             margin-bottom: 24px;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
-        
+
         .hero__subtitle {
             font-size: 20px;
             font-weight: 400;
@@ -291,15 +265,15 @@
             margin: 0 auto 40px;
             color: var(--text-secondary);
         }
-        
+
         .hero__buttons {
             display: flex;
             gap: 16px;
             justify-content: center;
             margin-top: 32px;
         }
-        
-        /* Button Styles */
+
+        /* Button Styles - Google Style */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -307,70 +281,182 @@
             padding: 0 24px;
             height: 48px;
             border-radius: var(--radius-md);
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
             border: none;
             outline: none;
+            letter-spacing: 0.025em;
         }
-        
+
         .btn--primary {
             background-color: var(--primary);
             color: var(--text-on-primary);
             box-shadow: var(--elevation-1);
         }
-        
+
         .btn--primary:hover {
-            color: white;
+            background-color: var(--primary-dark);
             box-shadow: var(--elevation-2);
             transform: translateY(-1px);
+            text-decoration: none;
         }
-        
+
         .btn--secondary {
-            background-color: var(--surface);
+            background-color: var(--background);
             color: var(--text-primary);
             border: 1px solid var(--border);
         }
-        
+
         .btn--secondary:hover {
-            background-color: var(--surface-dark);
+            background-color: var(--surface);
             border-color: var(--text-tertiary);
             transform: translateY(-1px);
+            text-decoration: none;
         }
-        
+
         .btn i {
             margin-right: 8px;
             font-size: 16px;
         }
-        
+
+        /* TFT Demo Section */
+        .tft-demo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 80px 0;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .tft-device {
+            position: relative;
+            width: 320px;
+            height: 480px;
+            background: #2c2c2c;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            padding: 20px;
+            border: 10px solid #1a1a1a;
+        }
+
+        .tft-screen {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tft-content {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a4da2 0%, #1a73e8 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Google Sans', sans-serif;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .tft-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .tft-subtitle {
+            font-size: 14px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .tft-button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tft-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .tft-stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .tft-stat {
+            text-align: center;
+        }
+
+        .tft-stat-value {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .tft-stat-label {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .tft-info {
+            max-width: 500px;
+        }
+
+        .tft-info h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .tft-info p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
         /* Features Section */
         .section {
             padding: 100px 0;
         }
-        
+
         .section--alt {
             background-color: var(--surface);
         }
-        
+
         .section-title {
             text-align: center;
             margin-bottom: 16px;
         }
-        
+
         .section-subtitle {
             text-align: center;
             max-width: 700px;
             margin: 0 auto 48px;
         }
-        
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
             margin-top: 48px;
         }
-        
+
         .card {
             background-color: var(--background);
             border-radius: var(--radius-md);
@@ -379,18 +465,18 @@
             transition: var(--transition);
             border: 1px solid var(--border);
         }
-        
+
         .card:hover {
             box-shadow: var(--elevation-2);
             transform: translateY(-4px);
             border-color: var(--primary);
         }
-        
+
         .card__icon {
             width: 48px;
             height: 48px;
             border-radius: var(--radius-md);
-            background-color: rgba(var(--primary), 0.1);
+            background-color: var(--primary-light);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -398,18 +484,18 @@
             color: var(--primary);
             font-size: 20px;
         }
-        
+
         .card__title {
             font-size: 20px;
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 16px;
         }
-        
+
         .card__description {
             color: var(--text-secondary);
             font-size: 16px;
         }
-        
+
         /* Code Preview Section */
         .code-window {
             background-color: var(--code-background);
@@ -419,7 +505,7 @@
             margin: 48px auto;
             border: 1px solid var(--border);
         }
-        
+
         .code-header {
             height: 48px;
             background-color: var(--surface);
@@ -428,66 +514,66 @@
             align-items: center;
             padding: 0 16px;
         }
-        
+
         .code-dots {
             display: flex;
             gap: 8px;
             margin-right: 16px;
         }
-        
+
         .code-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
         }
-        
+
         .code-dot--red {
-            background-color: var(--error);
+            background-color: var(--google-red);
         }
-        
+
         .code-dot--yellow {
-            background-color: var(--warning);
+            background-color: var(--google-yellow);
         }
-        
+
         .code-dot--green {
-            background-color: var(--success);
+            background-color: var(--google-green);
         }
-        
+
         .code-title {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Roboto Mono', monospace;
             font-size: 14px;
             color: var(--text-secondary);
         }
-        
+
         .code-content {
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Roboto Mono', monospace;
             font-size: 14px;
             line-height: 1.6;
             color: var(--code-text);
             padding: 24px;
             overflow-x: auto;
         }
-        
+
         .code-line {
             margin-bottom: 8px;
         }
-        
+
         .code-comment {
             color: var(--text-tertiary);
         }
-        
+
         .code-keyword {
             color: var(--primary);
         }
-        
+
         .code-string {
-            color: var(--success);
+            color: var(--google-green);
         }
-        
+
         .code-number {
-            color: var(--accent);
+            color: var(--google-yellow);
         }
-        
+
         /* Screenshot */
         .screenshot {
             width: 100%;
@@ -496,12 +582,12 @@
             border: 1px solid var(--border);
             transition: var(--transition);
         }
-        
+
         .screenshot:hover {
             transform: translateY(-4px);
             box-shadow: var(--elevation-3);
         }
-        
+
         /* Contributors Section */
         .contributors-grid {
             display: grid;
@@ -509,7 +595,7 @@
             gap: 24px;
             margin-top: 48px;
         }
-        
+
         .contributor-card {
             background-color: var(--background);
             border-radius: var(--radius-md);
@@ -519,13 +605,13 @@
             transition: var(--transition);
             border: 1px solid var(--border);
         }
-        
+
         .contributor-card:hover {
             box-shadow: var(--elevation-2);
             transform: translateY(-4px);
             border-color: var(--primary);
         }
-        
+
         .contributor-avatar {
             width: 80px;
             height: 80px;
@@ -534,26 +620,26 @@
             margin: 0 auto 16px;
             border: 3px solid var(--primary);
         }
-        
+
         .contributor-name {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 4px;
         }
-        
+
         .contributor-login {
             color: var(--text-secondary);
             font-size: 14px;
             margin-bottom: 16px;
         }
-        
+
         .contributor-stats {
             display: flex;
             justify-content: center;
             gap: 8px;
             margin-top: 16px;
         }
-        
+
         .contributor-stat {
             background-color: var(--surface);
             padding: 4px 12px;
@@ -561,28 +647,28 @@
             font-size: 12px;
             color: var(--text-secondary);
         }
-        
+
         /* Footer */
         .footer {
             padding: 80px 0 40px;
             background-color: var(--surface);
             border-top: 1px solid var(--border);
         }
-        
+
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 48px;
             margin-bottom: 48px;
         }
-        
+
         .footer-column-title {
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             margin-bottom: 20px;
             color: var(--text-primary);
         }
-        
+
         .footer-link {
             display: block;
             color: var(--text-secondary);
@@ -590,12 +676,12 @@
             font-size: 14px;
             transition: var(--transition);
         }
-        
+
         .footer-link:hover {
             color: var(--primary);
             text-decoration: none;
         }
-        
+
         .footer-bottom {
             display: flex;
             justify-content: space-between;
@@ -603,30 +689,30 @@
             padding-top: 32px;
             border-top: 1px solid var(--border);
         }
-        
+
         .footer-logo {
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 500;
             color: var(--text-primary);
             display: flex;
             align-items: center;
         }
-        
+
         .footer-logo i {
             margin-right: 8px;
             color: var(--primary);
         }
-        
+
         .footer-copyright {
             color: var(--text-secondary);
             font-size: 14px;
         }
-        
+
         .footer-social {
             display: flex;
             gap: 16px;
         }
-        
+
         .social-link {
             width: 36px;
             height: 36px;
@@ -638,13 +724,55 @@
             color: var(--text-secondary);
             transition: var(--transition);
         }
-        
+
         .social-link:hover {
             background-color: var(--primary);
             color: var(--text-on-primary);
             text-decoration: none;
         }
-        
+
+        /* Platform Logos */
+        .platforms {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .platform {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .platform:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .platform-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        .platform-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* Hero Python Section */
+        .hero_python {
+            padding-top: 100px;
+            text-align: center;
+        }
+
         /* Loading Spinner */
         .loading-spinner {
             display: none;
@@ -656,119 +784,122 @@
             animation: spin 1s linear infinite;
             margin: 40px auto;
         }
-        
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
+
         .fade-in {
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             opacity: 0;
         }
-        
+
         .delay-1 { animation-delay: 0.1s; }
         .delay-2 { animation-delay: 0.2s; }
         .delay-3 { animation-delay: 0.3s; }
         .delay-4 { animation-delay: 0.4s; }
         .delay-5 { animation-delay: 0.5s; }
-        
+
         /* Utility Classes */
         .text-center {
             text-align: center;
         }
-        
+
         .mt-1 { margin-top: 8px; }
         .mt-2 { margin-top: 16px; }
         .mt-3 { margin-top: 24px; }
         .mt-4 { margin-top: 32px; }
         .mt-5 { margin-top: 40px; }
-        
+
         .mb-1 { margin-bottom: 8px; }
         .mb-2 { margin-bottom: 16px; }
         .mb-3 { margin-bottom: 24px; }
         .mb-4 { margin-bottom: 32px; }
         .mb-5 { margin-bottom: 40px; }
-        
+
         /* Responsive Adjustments */
         @media (max-width: 960px) {
             h1 {
                 font-size: 40px;
             }
-            
+
             h2 {
                 font-size: 32px;
             }
-            
+
             .hero {
                 padding: 140px 0 100px;
             }
+
+            .tft-demo {
+                flex-direction: column;
+                text-align: center;
+            }
         }
-        
+
         @media (max-width: 768px) {
             .app-bar {
                 height: 56px;
                 padding: 0 16px;
             }
-            
+
             .app-bar__nav {
                 display: none;
             }
-            
+
             h1 {
                 font-size: 36px;
             }
-            
+
             h2 {
                 font-size: 28px;
             }
-            
+
             .hero {
                 padding: 120px 0 80px;
             }
-            
+
             .hero__subtitle {
                 font-size: 18px;
             }
-            
+
             .hero__buttons {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .section {
                 padding: 80px 0;
             }
         }
-        
+
         @media (max-width: 480px) {
             h1 {
                 font-size: 32px;
             }
-            
+
             h2 {
                 font-size: 24px;
             }
-            
+
             p {
                 font-size: 16px;
             }
-            
+
             .hero {
                 padding: 100px 0 60px;
             }
-        }
 
-        .hero_python {
-
-            padding-top: 100px;
-            text-align: center;
-
+            .tft-device {
+                width: 280px;
+                height: 420px;
+            }
         }
     </style>
 </head>
@@ -776,18 +907,18 @@
     <!-- App Bar -->
     <header class="app-bar">
         <h1 class="app-bar__title">
-           
             Gooey
         </h1>
-        
+
         <nav class="app-bar__nav">
             <a href="#features" class="app-bar__nav-item">Features</a>
             <a href="#examples" class="app-bar__nav-item">Examples</a>
+            <a href="#tft-demo" class="app-bar__nav-item">TFT Demo</a>
             <a href="#download" class="app-bar__nav-item">Download</a>
             <a href="docs/files.html" class="app-bar__nav-item">Documentation</a>
             <a href="quickstart.html" class="app-bar__nav-item">Quickstart</a>
         </nav>
-        
+
         <div class="app-bar__actions">
             <div class="badge">
                 <i class="fas fa-star"></i>
@@ -798,45 +929,91 @@
             </button>
         </div>
     </header>
-    
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1 class="hero__title fade-in">Build beautiful, cross-platform GUIs with Gooey</h1>
-            <p class="hero__subtitle fade-in delay-1">Create native-feeling applications for Web, Linux, and Windows with a single codebase.</p>
-            <div class="hero__buttons fade-in delay-2">
-                <a href="quickstart.html" class="btn btn--primary">Get Started</a>
-                <a href="builder.html" class="btn btn--secondary">
-                    <i class="fas fa-sliders-h"></i>
-                    Drag & Drop Builder
-                </a>
-            </div>
-            <div class="hero_python fade-in">
-                <p>Looking to develop with Python? <a href="https://github.com/GooeyUI/GooeyGUI-Python">Check out Python Bindings for Gooey</a></p>
+            <div class="hero-content">
+                <h1 class="hero__title fade-in">Build beautiful, cross-platform GUIs with Gooey</h1>
+                <p class="hero__subtitle fade-in delay-1">Create native-feeling applications for Web, Linux, and Windows with a single codebase.</p>
+                <div class="hero__buttons fade-in delay-2">
+                    <a href="quickstart.html" class="btn btn--primary">Get Started</a>
+                    <a href="builder.html" class="btn btn--secondary">
+                        <i class="fas fa-sliders-h"></i>
+                        Drag & Drop Builder
+                    </a>
+                </div>
+                <div class="hero_python fade-in">
+                    <p>Looking to develop with Python? <a href="https://github.com/GooeyUI/GooeyGUI-Python">Check out Python Bindings for Gooey</a></p>
+                </div>
             </div>
         </div>
-
     </section>
-    <div class="platforms fade-in delay-3">
-        <div class="platform">
-            <img class="platform-logo" src="wl_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
-            <span class="platform-name">Wayland</span>
-        </div>
-        <div class="platform">
-            <img class="platform-logo" src="x11_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
-            <span class="platform-name">X11</span>
-        </div>
-        <div class="platform">
-            <img class="platform-logo" src="win32_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
-            <span class="platform-name">Win32</span>
+
+    <div class="container">
+        <div class="platforms fade-in delay-3">
+            <div class="platform">
+                <img class="platform-logo" src="wl_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
+                <span class="platform-name">Wayland</span>
+            </div>
+            <div class="platform">
+                <img class="platform-logo" src="x11_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
+                <span class="platform-name">X11</span>
+            </div>
+            <div class="platform">
+                <img class="platform-logo" src="win32_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
+                <span class="platform-name">Win32</span>
+            </div>
         </div>
     </div>
+
+    <!-- TFT Demo Section -->
+    <section class="section" id="tft-demo">
+        <div class="container">
+            <h2 class="section-title fade-in">Gooey on Embedded Systems</h2>
+            <p class="section-subtitle fade-in delay-1">See how Gooey performs on resource-constrained devices with TFT displays</p>
+
+            <div class="tft-demo fade-in delay-2">
+                <div class="tft-device">
+                    <div class="tft-screen">
+                        <div class="tft-content">
+                            <div class="tft-title">Gooey IoT Dashboard</div>
+                            <div class="tft-subtitle">Connected to MQTT Broker</div>
+                            <button class="tft-button">Toggle LED</button>
+                            <button class="tft-button">Read Sensor</button>
+                            <div class="tft-stats">
+                                <div class="tft-stat">
+                                    <div class="tft-stat-value">72°F</div>
+                                    <div class="tft-stat-label">Temperature</div>
+                                </div>
+                                <div class="tft-stat">
+                                    <div class="tft-stat-value">45%</div>
+                                    <div class="tft-stat-label">Humidity</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tft-info">
+                    <h3>Optimized for Embedded Devices</h3>
+                    <p>Gooey is designed from the ground up to run efficiently on resource-constrained embedded systems with TFT displays. With minimal memory footprint and optimized rendering, it delivers smooth UI experiences even on low-power devices.</p>
+                    <p>Whether you're building IoT dashboards, industrial control panels, or consumer electronics interfaces, Gooey provides the performance and flexibility you need.</p>
+                    <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="btn btn--primary">
+                        <i class="fas fa-code"></i>
+                        View Embedded Example
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Features Section -->
     <section class="section" id="features">
         <div class="container">
             <h2 class="section-title fade-in">Designed for Developers</h2>
             <p class="section-subtitle fade-in delay-1">Gooey provides everything you need to create beautiful, native-feeling applications across platforms.</p>
-            
+
             <div class="features-grid">
                 <div class="card fade-in">
                     <div class="card__icon">
@@ -845,7 +1022,7 @@
                     <h3 class="card__title">Cross-Platform</h3>
                     <p class="card__description">Write once, build anywhere. Gooey applications work seamlessly on Windows, Linux and embedded systems with native performance.</p>
                 </div>
-                
+
                 <div class="card fade-in delay-1">
                     <div class="card__icon">
                         <i class="fas fa-bolt"></i>
@@ -853,7 +1030,7 @@
                     <h3 class="card__title">Lightweight</h3>
                     <p class="card__description">Minimal footprint with maximum functionality. Gooey is designed to be fast and efficient without bloat, perfect for resource-constrained environments.</p>
                 </div>
-                
+
                 <div class="card fade-in delay-2">
                     <div class="card__icon">
                         <i class="fas fa-palette"></i>
@@ -861,7 +1038,7 @@
                     <h3 class="card__title">Customizable</h3>
                     <p class="card__description">Tailor every aspect of your UI. From themes to custom widgets, Gooey gives you complete control over the look and feel.</p>
                 </div>
-                
+
                 <div class="card fade-in delay-3">
                     <div class="card__icon">
                         <i class="fas fa-layer-group"></i>
@@ -869,7 +1046,7 @@
                     <h3 class="card__title">Minimal Dependencies</h3>
                     <p class="card__description">Built with minimal external dependencies for maximum portability and ease of integration.</p>
                 </div>
-                
+
                 <div class="card fade-in delay-4">
                     <div class="card__icon">
                         <i class="fas fa-code"></i>
@@ -877,7 +1054,7 @@
                     <h3 class="card__title">Pure C</h3>
                     <p class="card__description">Written in portable C for maximum compatibility. Perfect for embedded solutions and systems with limited resources.</p>
                 </div>
-                
+
                 <div class="card fade-in delay-5">
                     <div class="card__icon">
                         <i class="fas fa-users"></i>
@@ -888,18 +1065,16 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Code Preview Section -->
     <section class="section section--alt" id="examples">
         <div class="container">
             <h2 class="section-title fade-in">Secure IoT MQTT Dashboard</h2>
             <p class="section-subtitle fade-in delay-1">See how easy it is to create a secure MQTT Dashboard with Gooey.</p>
-             <div class="text-center fade-in delay-3">
-                    <img src="example_screenshot-landscape.png" alt="Gooey Login Example" width="1000px">
-        
-   
-            </div>
             <div class="text-center fade-in delay-3">
+                <img src="example_screenshot-landscape.png" alt="Gooey Login Example" width="1000px" class="screenshot">
+            </div>
+            <div class="text-center fade-in delay-3 mt-4">
                 <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/blob/main/dashboard/IoT_dashboard.c" class="btn btn--secondary">
                     <i class="fas fa-code"></i>
                     View Full Example
@@ -907,13 +1082,13 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Apps Made With Section -->
     <section class="section" id="apps-made-with">
         <div class="container">
             <h2 class="section-title fade-in">Apps made with Gooey</h2>
             <p class="section-subtitle fade-in delay-1">The apps that talented developers have built with our framework</p>
-            
+
             <div class="features-grid">
                 <div class="card fade-in">
                     <div class="card__icon">
@@ -928,7 +1103,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="card fade-in">
                     <div class="card__icon">
                         <i class="fa-brands fa-php"></i>
@@ -942,7 +1117,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="card fade-in">
                     <div class="card__icon">
                         <i class="fa-solid fa-question"></i>
@@ -959,19 +1134,19 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Contributors Section -->
     <section class="section section--alt" id="contributors">
         <div class="container">
             <h2 class="section-title fade-in">Our Contributors</h2>
             <p class="section-subtitle fade-in delay-1">The team and community that helps make Gooey better</p>
-            
+
             <div id="contributors-loading" class="loading-spinner"></div>
             <div id="contributors-container" class="contributors-grid fade-in delay-2">
                 <!-- Contributors will be loaded here dynamically -->
             </div>
             <div id="contributors-error" class="error-message" style="display: none;"></div>
-            
+
             <div class="text-center mt-5 fade-in delay-3">
                 <p>Want to contribute to Gooey?</p>
                 <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn--secondary">
@@ -981,19 +1156,19 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Downloads Section -->
     <section class="section" id="download">
         <div class="container">
             <h2 class="section-title fade-in">Download Gooey</h2>
             <p class="section-subtitle fade-in delay-1">Get the latest version or browse previous releases</p>
-            
+
             <div id="releases-loading" class="loading-spinner"></div>
             <div id="releases-container" class="features-grid fade-in delay-2">
                 <!-- Releases will be loaded here dynamically -->
             </div>
             <div id="releases-error" class="error-message" style="display: none;"></div>
-            
+
             <div class="text-center mt-5 fade-in delay-3">
                 <p>Looking for older versions or source code?</p>
                 <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="btn btn--secondary">
@@ -1003,7 +1178,7 @@
             </div>
         </div>
     </section>
-    
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -1012,11 +1187,12 @@
                     <h3 class="footer-column-title">Gooey</h3>
                     <a href="#features" class="footer-link">Features</a>
                     <a href="#examples" class="footer-link">Examples</a>
+                    <a href="#tft-demo" class="footer-link">TFT Demo</a>
                     <a href="#download" class="footer-link">Download</a>
                     <a href="docs/files.html" class="footer-link">Documentation</a>
                     <a href="quickstart.html" class="footer-link">Quickstart</a>
                 </div>
-                
+
                 <div>
                     <h3 class="footer-column-title">Resources</h3>
                     <a href="https://github.com/GooeyUI/GooeyGUI" class="footer-link">GitHub Repository</a>
@@ -1025,18 +1201,17 @@
                     <a href="builder.html" class="footer-link">UI Builder</a>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <div class="footer-logo">
                     Gooey
                 </div>
-                
+
                 <div class="footer-copyright">
                     © 2025 GooeyGUI. All rights reserved.
                 </div>
-                
+
                 <div class="footer-social">
-                 
                     <a href="https://github.com/GooeyUI/GooeyGUI" class="social-link">
                         <i class="fab fa-github"></i>
                     </a>
@@ -1044,7 +1219,7 @@
             </div>
         </div>
     </footer>
-    
+
     <script>
         // Initialize Material Components
         document.addEventListener('DOMContentLoaded', function() {
@@ -1053,13 +1228,13 @@
             const themeIcon = document.getElementById('themeIcon');
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
             const currentTheme = localStorage.getItem('theme');
-            
+
             if (currentTheme === 'dark' || (!currentTheme && prefersDarkScheme.matches)) {
                 document.body.classList.add('dark-mode');
                 themeIcon.classList.remove('fa-moon');
                 themeIcon.classList.add('fa-sun');
             }
-            
+
             themeToggle.addEventListener('click', function() {
                 if (document.body.classList.contains('dark-mode')) {
                     document.body.classList.remove('dark-mode');
@@ -1073,7 +1248,7 @@
                     localStorage.setItem('theme', 'dark');
                 }
             });
-            
+
             // Animation on scroll
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1082,60 +1257,71 @@
                     }
                 });
             }, { threshold: 0.1 });
-            
+
             document.querySelectorAll('.fade-in').forEach(el => {
                 observer.observe(el);
             });
-            
+
+            // TFT Demo Animation
+            const tftButtons = document.querySelectorAll('.tft-button');
+            tftButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+
             // Load stargazers count
             async function loadStargazers() {
                 try {
                     let stars_page = 1;
                     let hasMore_stars = true;
                     let stargazers = [];
-                    
+
                     while (hasMore_stars) {
                         const response = await fetch(`https://api.github.com/repos/GooeyUI/GooeyGUI/stargazers?per_page=100&page=${stars_page}`);
-                        
+
                         if (!response.ok) {
                             throw new Error(`GitHub API error: ${response.status}`);
                         }
-                        
+
                         const data = await response.json();
                         stargazers = [...stargazers, ...data];
-                        
+
                         const linkHeader = response.headers.get('Link');
                         hasMore_stars = linkHeader && linkHeader.includes('rel="next"');
                         stars_page++;
                     }
-                    
+
                     document.getElementById('stargazer-count').textContent = stargazers.length.toLocaleString();
                 } catch (error) {
                     console.error('Error loading stargazers:', error);
                     document.getElementById('stargazer-count').textContent = '1K+';
                 }
             }
-            
+
             // Load contributors
             async function loadContributors() {
                 const loadingElement = document.getElementById('contributors-loading');
                 const containerElement = document.getElementById('contributors-container');
                 const errorElement = document.getElementById('contributors-error');
-                
+
                 loadingElement.style.display = 'block';
                 containerElement.innerHTML = '';
                 errorElement.style.display = 'none';
-                
+
                 try {
                     const response = await fetch('https://api.github.com/repos/GooeyUI/GooeyGUI/contributors');
-                    
+
                     if (!response.ok) {
                         throw new Error(`GitHub API error: ${response.status}`);
                     }
-                    
+
                     const contributors = await response.json();
                     loadingElement.style.display = 'none';
-                    
+
                     if (!contributors || contributors.length === 0) {
                         containerElement.innerHTML = `
                             <div class="card" style="grid-column: 1 / -1; text-align: center;">
@@ -1145,13 +1331,13 @@
                         `;
                         return;
                     }
-                    
+
                     // Display top 6 contributors
                     contributors.slice(0, 6).forEach(contributor => {
                         const contributorHTML = `
                             <div class="contributor-card">
-                                <img src="${contributor.avatar_url}" 
-                                     alt="${contributor.login}" 
+                                <img src="${contributor.avatar_url}"
+                                     alt="${contributor.login}"
                                      class="contributor-avatar"
                                      loading="lazy">
                                 <h4 class="contributor-name">${contributor.login}</h4>
@@ -1162,9 +1348,9 @@
                                     </span>
                                 </div>
                                 <div class="mt-2">
-                                    <a href="${contributor.html_url}" 
-                                       target="_blank" 
-                                       rel="noopener noreferrer" 
+                                    <a href="${contributor.html_url}"
+                                       target="_blank"
+                                       rel="noopener noreferrer"
                                        class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
                                         <i class="fas fa-user"></i>
                                         Profile
@@ -1181,7 +1367,7 @@
                         <div class="card" style="grid-column: 1 / -1; text-align: center;">
                             <h3 class="card__title">Error loading contributors</h3>
                             <p class="card__description">Please try again later or view them on GitHub</p>
-                            <a href="https://github.com/GooeyUI/GooeyGUI/graphs/contributors" 
+                            <a href="https://github.com/GooeyUI/GooeyGUI/graphs/contributors"
                                class="btn btn--secondary">
                                 View on GitHub
                             </a>
@@ -1190,27 +1376,27 @@
                     console.error('Error loading contributors:', error);
                 }
             }
-            
+
             // Load releases
             async function loadReleases() {
                 const loadingElement = document.getElementById('releases-loading');
                 const containerElement = document.getElementById('releases-container');
                 const errorElement = document.getElementById('releases-error');
-                
+
                 loadingElement.style.display = 'block';
                 containerElement.innerHTML = '';
                 errorElement.style.display = 'none';
-                
+
                 try {
                     const response = await fetch('https://api.github.com/repos/GooeyUI/GooeyGUI/releases');
-                    
+
                     if (!response.ok) {
                         throw new Error(`GitHub API error: ${response.status}`);
                     }
-                    
+
                     const releases = await response.json();
                     loadingElement.style.display = 'none';
-                    
+
                     if (!releases || releases.length === 0) {
                         containerElement.innerHTML = `
                             <div class="card" style="grid-column: 1 / -1; text-align: center;">
@@ -1220,7 +1406,7 @@
                         `;
                         return;
                     }
-                    
+
                     // Display latest 3 releases
                     releases.slice(0, 3).forEach(release => {
                         const releaseDate = new Date(release.published_at).toLocaleDateString('en-US', {
@@ -1228,11 +1414,11 @@
                             month: 'long',
                             day: 'numeric'
                         });
-                        
+
                         const assetsHTML = release.assets.map(asset => `
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <span style="font-size: 14px; color: var(--text-secondary);">${asset.name}</span>
-                                <a href="${asset.browser_download_url}" 
+                                <a href="${asset.browser_download_url}"
                                    class="btn btn--secondary"
                                    style="padding: 0 12px; height: 32px; font-size: 12px;">
                                     <i class="fas fa-download"></i>
@@ -1240,7 +1426,7 @@
                                 </a>
                             </div>
                         `).join('');
-                        
+
                         const releaseHTML = `
                             <div class="card">
                                 <div class="card__icon">
@@ -1248,11 +1434,11 @@
                                 </div>
                                 <h3 class="card__title">${release.name || release.tag_name}</h3>
                                 <p class="card__description">Published on ${releaseDate}</p>
-                                
+
                                 ${assetsHTML || '<p style="color: var(--text-secondary); font-size: 14px;">No download assets available</p>'}
-                                
+
                                 <div class="mt-3">
-                                    <a href="${release.html_url}" 
+                                    <a href="${release.html_url}"
                                        class="btn btn--secondary"
                                        target="_blank">
                                         <i class="fas fa-file-alt"></i>
@@ -1270,7 +1456,7 @@
                         <div class="card" style="grid-column: 1 / -1; text-align: center;">
                             <h3 class="card__title">Error loading releases</h3>
                             <p class="card__description">Please try again later or view them on GitHub</p>
-                            <a href="https://github.com/GooeyUI/GooeyGUI/releases" 
+                            <a href="https://github.com/GooeyUI/GooeyGUI/releases"
                                class="btn btn--secondary">
                                 View on GitHub
                             </a>
@@ -1279,7 +1465,7 @@
                     console.error('Error loading releases:', error);
                 }
             }
-            
+
             // Load all data
             loadStargazers();
             loadContributors();

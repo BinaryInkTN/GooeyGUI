@@ -104,7 +104,7 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     current_y += line_height;
 
     char fps_text[64];
-    snprintf(fps_text, sizeof(fps_text), "FPS: %.1f",
+    snprintf(fps_text, sizeof(fps_text), "FPS: %.1f", 
              active_backend->GetWinFramerate(win->creation_id));
     active_backend->DrawText(x_pos + padding, current_y, fps_text,
                              win->active_theme->neutral, 0.27f, win->creation_id, NULL);

@@ -22,7 +22,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "backends/utils/stb_image/stb_image.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
-
+#include <time.h>
 
 typedef struct
 {
@@ -44,7 +44,7 @@ typedef struct
     size_t timer_count;
     bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
     unsigned int selected_color;
-   
+
 } GooeyBackendContext;
 ;
 
@@ -601,7 +601,6 @@ int glps_init()
     ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer));
     ctx.timer_count = 0;
 
-
     return 0;
 }
 
@@ -1095,11 +1094,36 @@ void glps_set_viewport(size_t window_id, int width, int height)
 {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     glps_set_projection(window_id, width, height);
-}
-
-double glps_get_window_framerate(int window_id)
+}double glps_get_window_framerate(int window_id)
 {
-    return glps_wm_get_fps(ctx.wm, window_id);
+    static struct timespec last_time[MAX_WINDOWS] = {0};
+    static double last_fps[MAX_WINDOWS] = {0};
+    static struct timespec now;
+
+    // Initialize if first call
+    if (last_time[window_id].tv_sec == 0 && last_time[window_id].tv_nsec == 0)
+    {
+        clock_gettime(CLOCK_MONOTONIC, &last_time[window_id]);
+        last_fps[window_id] = glps_wm_get_fps(ctx.wm, window_id);
+        return last_fps[window_id];
+    }
+
+    clock_gettime(CLOCK_MONOTONIC, &now);
+
+    // Calculate exact time difference
+    double elapsed = (now.tv_sec - last_time[window_id].tv_sec) +
+                    (now.tv_nsec - last_time[window_id].tv_nsec) / 1000000000.0;
+
+    // Only update FPS if at least 1 second has passed
+    if (elapsed >= 1.0)
+    {
+        last_fps[window_id] = glps_wm_get_fps(ctx.wm, window_id);
+        last_time[window_id] = now;
+        
+        LOG_INFO("Elapsed: %.3fs, FPS: %.2f", elapsed, last_fps[window_id]);
+    }
+
+    return last_fps[window_id];
 }
 
 GooeyTFT_Sprite *glps_create_widget_sprite(int x, int y, int width, int height)
@@ -1121,15 +1145,13 @@ void glps_clear_old_widget(GooeyTFT_Sprite *sprite)
 
 void glps_create_view()
 {
-   
 }
 
 void glps_destroy_ultralight()
 {
 }
-void glps_draw_webview(GooeyWindow *win,void* webview, int x, int y, int width, int height, int window_id)
+void glps_draw_webview(GooeyWindow *win, void *webview, int x, int y, int width, int height, int window_id)
 {
-  
 }
 GooeyBackend glps_backend = {
     .Init = glps_init,

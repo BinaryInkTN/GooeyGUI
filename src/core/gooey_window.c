@@ -309,47 +309,39 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     free(win->meters);
     win->meters = NULL;
   }
-
-  if (win->containers)
+if (win->containers)
+{
+  for (size_t container_index = 0; container_index < win->container_count;
+       ++container_index)
   {
-    for (size_t container_index = 0; container_index < win->container_count;
-         ++container_index)
+    GooeyContainers *container = win->containers[container_index];
+    if (container && container->container)
     {
-      GooeyContainers *container = win->containers[container_index];
-      if (container)
+      for (size_t cont_index = 0; cont_index < container->container_count;
+           ++cont_index)
       {
-        // Free widgets in each container
-        for (size_t cont_index = 0; cont_index < container->container_count;
-             ++cont_index)
+        GooeyContainer *cont = &container->container[cont_index];
+        if (cont && cont->widgets)
         {
-          GooeyContainer *cont =
-              &container->container[cont_index]; // Changed from
-                                                 // &container->container
-          if (cont)
-          {
-
-            // Free widgets array
-            free(cont->widgets);
-            cont->widgets = NULL;
-          }
+          free(cont->widgets);
+          cont->widgets = NULL;
+          cont->widget_count = 0;
         }
-
-        // Free containers array
-        free(container->container); // Changed from container->container
-        container->container = NULL;
-
-        // Free the container itself
-        free(container);
-        win->containers[container_index] = NULL; // Actually set in array
       }
+
+      free(container->container);
+      container->container = NULL;
+      container->container_count = 0;
     }
 
-    // Free the containers array
-    free(win->containers);
-    win->containers = NULL;
-    win->container_count = 0; // Important to reset count
+    free(container);
+    win->containers[container_index] = NULL;
   }
 
+  free(win->containers);
+  win->containers = NULL;
+  win->container_count = 0;
+}
   if (win->tabs)
   {
     for (size_t tab_container_index = 0; tab_container_index < win->tab_count;
@@ -744,8 +736,8 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #if (ENABLE_DROP_SURFACE)
   GooeyDropSurface_Draw(win);
 #endif
-#if (ENABLE_IMAGE)
-  GooeyImage_Draw(win);
+#if (ENABLE_IMAGE)  
+GooeyImage_Draw(win);
 #endif
 #if (ENABLE_LIST)
   GooeyList_Draw(win);

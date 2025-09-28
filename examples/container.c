@@ -1,5 +1,4 @@
-#include <Gooey/gooey.h>
-#include <Gooey/widgets/gooey_container.h> 
+#include <gooey.h>
 GooeyContainers *mainContainer; 
 int i =0 ; 
 // Callback functions

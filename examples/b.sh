@@ -1,4 +1,11 @@
 #!/bin/bash
+set -e
+file_name=$1 
+if [[ -z ${file_name} ]];then
+	echo "Error Usage: ./b.sh <file_name>" 
+	exit 1
+fi
+# remove extention
+file_name=$(echo "${file_name%.*}")
 
-# cd .. && cmake -S . -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cd build && make -j 12 && sudo make install && cd .. && cd examples && gcc image_example.c  -o bin/IoT_dashboard -L/usr/local/lib/ -lfreetype -lGooeyGUI -lpaho-mqtt3cs -I/usr/local/include/ -I/usr/local/include/Gooey/ -I/usr/local/include/GLPS/ -lGLPS  -lm && ./bin/IoT_dashboard
-cd .. && cmake -S . -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 && cd build && make -j 12 && sudo make install && cd .. && cd examples &&  gcc image_example.c  -o canvas_test -L/usr/local/lib/ -lcjson -lfreetype -lGooeyGUI-1 -lcurl -I/usr/local/include/ -g  -I/usr/local/include/GLPS/ -lGLPS  -fsanitize=address  -lm && ./canvas_test
+cd .. && cmake -S . -B build -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -D BUILD_TESTING=OFF && cd build && make -j 12 && sudo make install && cd .. && cd examples &&  gcc $file_name.c  -o $file_name -L/usr/local/lib/ -lcjson -lfreetype -lGooeyGUI-1 -lcurl -I/usr/local/include/ -g  -I/usr/local/include/GLPS/ -lGLPS  -fsanitize=address  -lm && ./$file_name

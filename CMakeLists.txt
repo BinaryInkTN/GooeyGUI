@@ -25,7 +25,8 @@ endif()
 
 # Enable AddressSanitizer for Debug builds
 option(ENABLE_ASAN "Enable AddressSanitizer for Debug builds" OFF)
-
+# Disable Testing 
+set(BUILD_TESTING  OFF )
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")

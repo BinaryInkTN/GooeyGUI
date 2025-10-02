@@ -2,7 +2,7 @@
 #define USER_CONFIG_H
 
 // DEBUG/PROD
-#define PROJECT_BRANCH 1 // 0=debug 1=prod TODO
+#define PROJECT_BRANCH 0 // 0=prod 1=debug 
 
 #define APPBAR_HEIGHT 50
 // MAX
@@ -40,6 +40,7 @@
 #define ENABLE_APPBAR 1
 #define ENABLE_SWITCH 1
 #define ENABLE_WEBVIEW 1
+#define ENABLE_FDIALOG 1
 
 // ESP32 CONFIGURATION
 #define TFT_ESPI_ENABLED ESP32

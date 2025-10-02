@@ -1,16 +1,16 @@
 /**
- * @file gooey_contextmenu_internal.h
- * @brief Internal functions for drawing and handling context menus in Gooey GUI library.
+ * @file gooey_fdialog_internal.h
+ * @brief Internal functions for drawing and handling file dialogs in Gooey GUI library.
  *        These functions are not part of the public API and are meant for internal rendering
- *        and interaction processing of context menus within a GooeyWindow.
+ *        and interaction processing of file dialogs within a GooeyWindow.
  * @author
  * Yassine Ahmed Ali
  * @copyright
  * GNU General Public License v3.0
  */
 
-#ifndef GOOEY_CONTEXTMENU_INTERNAL_H
-#define GOOEY_CONTEXTMENU_INTERNAL_H
+#ifndef GOOEY_FDIALOG_INTERNAL_H
+#define GOOEY_FDIALOG_INTERNAL_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,14 +18,14 @@ extern "C" {
 
 #include "common/gooey_common.h"
 
-#if (ENABLE_CONTEXTMENU)
+#if (ENABLE_FDIALOG)
 
 /**
  * @brief Draws the context menu on the specified window.
  *
  * @param win Pointer to the GooeyWindow containing the context menu.
  */
-void GooeyContextMenu_Draw(GooeyWindow* win);
+void GooeyFDialog_Draw(GooeyWindow* win);
 
 /**
  * @brief Handles a click event related to the context menu.
@@ -35,12 +35,12 @@ void GooeyContextMenu_Draw(GooeyWindow* win);
  *
  * @param win Pointer to the GooeyWindow containing the context menu.
  */
-void GooeyContextMenu_HandleClick(GooeyWindow* win);
+void GooeyFDialog_HandleClick(GooeyWindow* win);
 
-#endif // ENABLE_CONTEXTMENU
+#endif // ENABLE_FDIALOG
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // GOOEY_CONTEXTMENU_INTERNAL_H
+#endif // GOOEY_FDIALOG_INTERNAL_H

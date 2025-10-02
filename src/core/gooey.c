@@ -30,6 +30,6 @@ int Gooey_Init()
     active_backend = &glps_backend;
 #endif
 
-    active_backend->Init();
+    active_backend->Init(PROJECT_BRANCH);
     return 0;
 }

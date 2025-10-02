@@ -45,7 +45,7 @@
 #include "widgets/gooey_container.h"
 #include "widgets/gooey_switch.h"
 #include "widgets/gooey_webview.h"
-
+#include "widgets/gooey_fdialog.h"
 // Threads
 #if (TFT_ESPI_ENABLED==0)
 #include "glps_thread.h"

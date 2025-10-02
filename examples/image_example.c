@@ -1,6 +1,6 @@
-#include <Gooey/gooey.h>
+#include <gooey.h>
 #include <GLPS/glps_thread.h>
-#include <Gooey/animations/gooey_animations.h>
+#include <animations/gooey_animations.h>
 
 
 int main()

@@ -47,6 +47,7 @@ typedef struct
     size_t palette_size;
     GooeyWindow **windows;
     void (*ReDrawCallback)(size_t window_id, void *data);
+    bool is_running;
 
 } GooeyBackendContext;
 
@@ -343,12 +344,14 @@ int tft_init_ft()
     return 0;
 }
 
-int tft_init()
+int tft_init(int project_branch)
 {
+    (void)project_branch;
     Serial.begin(9600);
     ctx.inhibit_reset = false;
     ctx.selected_color = TFT_WHITE;
     ctx.active_window_count = 1;
+    ctx.is_running = true;
     tft_setup_shared();
 
     return 0;
@@ -489,7 +492,7 @@ void tft_setup_callbacks(void (*callback)(size_t window_id, void *data), void *d
 
 void tft_run()
 {
-    while (1)
+    while (ctx.is_running)
     {
         uint16_t x, y;
         if (ctx.tft->getTouch(&x, &y))
@@ -640,6 +643,11 @@ void tft_clear_old_widget(GooeyTFT_Sprite* sprite)
     ctx.tft->fillRect(sprite->x, sprite->y, sprite->width, sprite->height, TFT_WHITE);
 }
 
+void tft_request_close()
+{
+    ctx.is_running = false;
+}
+
 extern "C"
 {
     __attribute__((used, visibility("default"))) GooeyBackend tft_backend = {
@@ -689,6 +697,7 @@ extern "C"
         .CursorChange = NULL,
         .StopCursorReset = tft_stop_cursor_reset,
         .ForceCallRedraw = tft_force_redraw,
+        .RequestClose = tft_request_close,
         .CreateSpriteForWidget = tft_create_widget_sprite,
         .RedrawSprite = tft_redraw_sprite,
         .ResetRedrawSprite = tft_reset_sprite_redraw,

@@ -13,3 +13,6 @@
 [submodule "third_party/ultralight"]
 	path = third_party/ultralight
 	url = https://github.com/ultralight-ux/Ultralight.git
+[submodule "third_party/native_fdialog"]
+	path = third_party/native_fdialog
+	url = https://github.com/btzy/nativefiledialog-extended

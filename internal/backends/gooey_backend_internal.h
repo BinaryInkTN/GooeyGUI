@@ -37,7 +37,7 @@ extern "C"
      */
     typedef struct GooeyBackend
     {
-        int (*Init)();                                                                                                                                                           /**< Initializes the backend. */
+        int (*Init)(int project_branch);                                                                                                                                                           /**< Initializes the backend. */
         void (*Run)();                                                                                                                                                           /**< Starts the main loop of the backend. */
         void (*Cleanup)();                                                                                                                                                       /**< Cleans up resources used by the backend. */
         void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);                                                                                      /**< Sets up event callbacks. */
@@ -83,6 +83,7 @@ extern "C"
         void (*CursorChange)(GOOEY_CURSOR cursor);                                                                                                                               /**< Changes the cursor. */
         void (*StopCursorReset)(bool state);                                                                                                                                     /**< Stops cursor reset. */
         void (*ForceCallRedraw)(void);
+        void (*RequestClose)(size_t window_id);
 
         // Arduino
         GooeyTFT_Sprite *(*CreateSpriteForWidget)(int x, int y, int width, int height);
@@ -96,6 +97,10 @@ extern "C"
         void (*CreateView)(void);
         void (*DestroyUltralight)(void);
         void (*DrawWebview)(int x, int y, int width, int height, int window_id, GooeyTFT_Sprite *sprite);
+        
+        // Native File dialog
+        void (*OpenFileDialog)(const char *start_path, void *filters, size_t filter_count, void (*on_file_selected)(const char *file_path));
+
     } GooeyBackend;
 
     /**

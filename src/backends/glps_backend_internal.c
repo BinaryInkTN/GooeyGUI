@@ -23,6 +23,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <time.h>
+#include <nfd.h>
 
 typedef struct
 {
@@ -44,6 +45,7 @@ typedef struct
     size_t timer_count;
     bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
     unsigned int selected_color;
+    bool is_running;
 
 } GooeyBackendContext;
 ;
@@ -588,9 +590,12 @@ int glps_init_ft()
     FT_Done_FreeType(ft);
     return 0;
 }
-int glps_init()
+int glps_init(int project_branch)
 {
+    // File dialog init
+    NFD_Init();
 
+    set_logging_enabled(project_branch);
     ctx.inhibit_reset = 0;
     ctx.selected_color = 0x000000;
     ctx.active_window_count = 0;
@@ -600,7 +605,7 @@ int glps_init()
     ctx.wm = glps_wm_init();
     ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer));
     ctx.timer_count = 0;
-
+    ctx.is_running = true;
     return 0;
 }
 
@@ -867,6 +872,7 @@ void glps_cleanup()
         free(ctx.text_programs);
         ctx.text_programs = NULL;
     }
+    NFD_Quit();
 
     glDeleteShader(ctx.text_vertex_shader);
     glDeleteShader(ctx.text_fragment_shader);
@@ -1003,7 +1009,7 @@ void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *
 
 void glps_run()
 {
-    while (!glps_wm_should_close(ctx.wm))
+    while (!glps_wm_should_close(ctx.wm) && ctx.is_running)
     {
         for (size_t i = 0; i < ctx.active_window_count; ++i)
             glps_wm_window_update(ctx.wm, i);
@@ -1011,6 +1017,8 @@ void glps_run()
         for (size_t i = 0; i < ctx.timer_count; ++i)
             glps_timer_check_and_call(ctx.timers[i]);
     }
+
+    
 }
 
 GooeyTimer *glps_create_timer()
@@ -1153,6 +1161,41 @@ void glps_destroy_ultralight()
 void glps_draw_webview(GooeyWindow *win, void *webview, int x, int y, int width, int height, int window_id)
 {
 }
+
+void glps_request_close()
+{
+    ctx.is_running = false;
+}
+
+void glps_init_fdialog()
+{
+}
+void glps_open_fdialog(const char *start_path, nfdu8filteritem_t *filters, size_t filter_count, void (*on_file_selected)(const char *file_path))
+{
+    nfdu8char_t *outPath = NULL;
+    nfdopendialogu8args_t args = {0};
+    args.filterList = (nfdu8filteritem_t *)filters;
+    args.filterCount = filter_count;
+    args.defaultPath = start_path;
+
+    nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
+    if (result == NFD_OKAY)
+    {
+        if (on_file_selected && outPath)
+            on_file_selected((const char *)outPath);
+
+        NFD_FreePathU8(outPath);
+    }
+    else if (result == NFD_CANCEL)
+    {
+        puts("User pressed cancel.");
+    }
+    else 
+    {
+        printf("Error: %s\n", NFD_GetError());
+    }
+}
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
@@ -1200,13 +1243,15 @@ GooeyBackend glps_backend = {
     .CursorChange = glps_set_cursor,
     .StopCursorReset = glps_stop_cursor_reset,
     .ForceCallRedraw = glps_force_redraw,
-
+    .RequestClose = glps_request_close,
     .CreateSpriteForWidget = glps_create_widget_sprite,
     .RedrawSprite = glps_redraw_sprite,
     .ClearArea = glps_clear_area,
     .ClearOldWidget = glps_clear_old_widget,
     .CreateView = glps_create_view,
     .DestroyUltralight = glps_destroy_ultralight,
-    .DrawWebview = glps_draw_webview};
+    .DrawWebview = glps_draw_webview,
+    .OpenFileDialog = glps_open_fdialog,
+};
 
 #endif

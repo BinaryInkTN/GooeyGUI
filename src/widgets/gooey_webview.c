@@ -14,7 +14,7 @@ GooeyWebview* GooeyWebview_Create(GooeyWindow* window, const char* url, int x, i
     if(window->webview_count >= MAX_WIDGETS)
     {
         LOG_ERROR("GooeyWebview_Create: Maximum number of webviews reached");
-        return;
+        return NULL;
     }
 
     GooeyWebview* webview = (GooeyWebview*)calloc(1, sizeof(GooeyWebview));

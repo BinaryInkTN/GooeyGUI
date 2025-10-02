@@ -121,6 +121,17 @@ typedef struct
     int click_timer;     /**< Timer for click effect */
     bool is_disabled;    /**< Whether the button is disabled */
 } GooeyButton;
+
+typedef struct 
+{
+    GooeyWidget core;
+    char *current_path;
+    char **file_list;
+    int file_count;
+    int selected_index;
+    void (*on_file_selected)(const char *file_path);
+} GooeyFDialog;
+
 /**
  * @brief Container widget.
  */

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(GooeyGUI VERSION 1.0.2 LANGUAGES C)
-# set project version 
+
+# Set project version
 set(PROJECT_VERSION_MAJOR 1)
 set(PROJECT_VERSION_MINOR 0)
 set(PROJECT_VERSION_PATCH 2)
@@ -22,11 +23,26 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
+# Enable AddressSanitizer for Debug builds
+option(ENABLE_ASAN "Enable AddressSanitizer for Debug builds" OFF)
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 if(WIN32)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_CRT_SECURE_NO_WARNINGS")
+endif()
+
+# Add AddressSanitizer flags for Debug builds if enabled
+if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -g")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-frame-pointer -g")
+        set(CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+        message(STATUS "AddressSanitizer enabled for Debug build")
+    else()
+        message(WARNING "AddressSanitizer is not supported by the current compiler (${CMAKE_C_COMPILER_ID})")
+    endif()
 endif()
 
 # ----------------------------
@@ -35,70 +51,84 @@ endif()
 add_subdirectory(third_party/cjson)
 add_subdirectory(third_party/glps)
 add_subdirectory(third_party/freetype)
+add_subdirectory(third_party/native_fdialog)
+
+# Apply ASan flags to dependencies if enabled
+if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(cjson PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+    target_link_options(cjson PRIVATE -fsanitize=address)
+    target_compile_options(GLPS PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+    target_link_options(GLPS PRIVATE -fsanitize=address)
+    target_compile_options(freetype PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+    target_link_options(freetype PRIVATE -fsanitize=address)
+    target_compile_options(nfd PRIVATE -fsanitize=address -fno-omit-frame-pointer -DNFD_PORTAL=1)
+    target_link_options(nfd PRIVATE -fsanitize=address)
+endif()
 
 # ----------------------------
 # Sources
 # ----------------------------
 set(SOURCES
-        src/core/gooey.c
-        src/core/gooey_window.c
-        src/core/gooey_widget.c
-        src/core/gooey_timers.c
-        src/theme/gooey_theme.c
-        src/widgets/gooey_drop_surface.c
-        src/widgets/gooey_switch.c
-        src/widgets/gooey_button.c
-        src/widgets/gooey_canvas.c
-        src/widgets/gooey_checkbox.c
-        src/widgets/gooey_dropdown.c
-        src/widgets/gooey_messagebox.c
-        src/widgets/gooey_label.c
-        src/widgets/gooey_layout.c
-        src/widgets/gooey_list.c
-        src/widgets/gooey_menu.c
-        src/widgets/gooey_radiobutton.c
-        src/widgets/gooey_slider.c
-        src/widgets/gooey_textbox.c
-        src/widgets/gooey_plot.c
-        src/widgets/gooey_progressbar.c
-        src/widgets/gooey_image.c
-        src/widgets/gooey_tabs.c
-        src/widgets/gooey_container.c
-        src/widgets/gooey_meter.c
-        src/signals/gooey_signals.c
-        src/animations/gooey_animations.c
-        src/widgets/gooey_appbar.c
-        src/core/gooey_timers_internal.c
-        src/widgets/gooey_appbar_internal.c
-        src/core/gooey_widget_internal.c
-        src/widgets/gooey_layout_internal.c
-        src/widgets/gooey_drop_surface_internal.c
-        src/widgets/gooey_button_internal.c
-        src/widgets/gooey_canvas_internal.c
-        src/widgets/gooey_checkbox_internal.c
-        src/widgets/gooey_dropdown_internal.c
-        src/widgets/gooey_label_internal.c
-        src/widgets/gooey_switch_internal.c
-        src/widgets/gooey_list_internal.c
-        src/widgets/gooey_menu_internal.c
-        src/widgets/gooey_radiobutton_internal.c
-        src/widgets/gooey_slider_internal.c
-        src/widgets/gooey_textbox_internal.c
-        src/widgets/gooey_plot_internal.c
-        src/widgets/gooey_image_internal.c
-        src/widgets/gooey_tabs_internal.c
-        src/widgets/gooey_container_internal.c
-        src/widgets/gooey_progressbar_internal.c
-        src/widgets/gooey_debug_overlay_internal.c
-        src/virtual/gooey_keyboard_internal.c
-        internal/backends/utils/glad/glad.c
-        src/widgets/gooey_window_internal.c
-        internal/backends/utils/backend_utils_internal.c
-        src/backends/glps_backend_internal.c
-        src/logger/pico_logger_internal.c
-        src/widgets/gooey_meter_internal.c
-        src/widgets/gooey_webview.c
-        src/widgets/gooey_webview_internal.c
+    src/core/gooey.c
+    src/core/gooey_window.c
+    src/core/gooey_widget.c
+    src/core/gooey_timers.c
+    src/theme/gooey_theme.c
+    src/widgets/gooey_drop_surface.c
+    src/widgets/gooey_switch.c
+    src/widgets/gooey_button.c
+    src/widgets/gooey_canvas.c
+    src/widgets/gooey_checkbox.c
+    src/widgets/gooey_dropdown.c
+    src/widgets/gooey_messagebox.c
+    src/widgets/gooey_label.c
+    src/widgets/gooey_layout.c
+    src/widgets/gooey_list.c
+    src/widgets/gooey_menu.c
+    src/widgets/gooey_radiobutton.c
+    src/widgets/gooey_slider.c
+    src/widgets/gooey_textbox.c
+    src/widgets/gooey_plot.c
+    src/widgets/gooey_progressbar.c
+    src/widgets/gooey_image.c
+    src/widgets/gooey_tabs.c
+    src/widgets/gooey_container.c
+    src/widgets/gooey_meter.c
+    src/signals/gooey_signals.c
+    src/animations/gooey_animations.c
+    src/widgets/gooey_appbar.c
+    src/core/gooey_timers_internal.c
+    src/widgets/gooey_appbar_internal.c
+    src/core/gooey_widget_internal.c
+    src/widgets/gooey_layout_internal.c
+    src/widgets/gooey_drop_surface_internal.c
+    src/widgets/gooey_button_internal.c
+    src/widgets/gooey_canvas_internal.c
+    src/widgets/gooey_checkbox_internal.c
+    src/widgets/gooey_dropdown_internal.c
+    src/widgets/gooey_label_internal.c
+    src/widgets/gooey_switch_internal.c
+    src/widgets/gooey_list_internal.c
+    src/widgets/gooey_menu_internal.c
+    src/widgets/gooey_radiobutton_internal.c
+    src/widgets/gooey_slider_internal.c
+    src/widgets/gooey_textbox_internal.c
+    src/widgets/gooey_plot_internal.c
+    src/widgets/gooey_image_internal.c
+    src/widgets/gooey_tabs_internal.c
+    src/widgets/gooey_container_internal.c
+    src/widgets/gooey_progressbar_internal.c
+    src/widgets/gooey_debug_overlay_internal.c
+    src/virtual/gooey_keyboard_internal.c
+    internal/backends/utils/glad/glad.c
+    src/widgets/gooey_window_internal.c
+    internal/backends/utils/backend_utils_internal.c
+    src/backends/glps_backend_internal.c
+    src/logger/pico_logger_internal.c
+    src/widgets/gooey_meter_internal.c
+    src/widgets/gooey_webview.c
+    src/widgets/gooey_webview_internal.c
+    src/widgets/gooey_fdialog.c
 )
 
 # ----------------------------
@@ -106,25 +136,43 @@ set(SOURCES
 # ----------------------------
 add_library(GooeyGUI SHARED ${SOURCES})
 
-# Set library properties 
+# Set library properties with RPATH
 set_target_properties(GooeyGUI PROPERTIES
     VERSION ${PROJECT_VERSION}
     SOVERSION ${PROJECT_VERSION_MAJOR}
     OUTPUT_NAME "GooeyGUI-${PROJECT_VERSION_MAJOR}"
-)    
+    BUILD_WITH_INSTALL_RPATH OFF
+    SKIP_BUILD_RPATH OFF
+)
+
+# Set RPATH for Unix-like systems
+if(UNIX AND NOT APPLE)
+    set_target_properties(GooeyGUI PROPERTIES
+        BUILD_RPATH "\$ORIGIN"
+        INSTALL_RPATH "\$ORIGIN"
+    )
+elseif(APPLE)
+    set_target_properties(GooeyGUI PROPERTIES
+        BUILD_RPATH "@loader_path"
+        INSTALL_RPATH "@loader_path"
+    )
+endif()
+
 # Include directories
 # ----------------------------
 target_include_directories(GooeyGUI PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_include_directories(GooeyGUI PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/internal
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cjson
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/internal
-        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/internal
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cjson
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/internal
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/native_fdialog/src/
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/native_fdialog/src/include
 )
 
 # ----------------------------
@@ -134,7 +182,30 @@ target_link_libraries(GooeyGUI PRIVATE
     cjson
     GLPS
     freetype
+    nfd
 )
+
+# ----------------------------
+# Copy shared libraries to output directory
+# ----------------------------
+# Function to copy shared libraries
+function(copy_shared_library target lib_target)
+    get_target_property(lib_type ${lib_target} TYPE)
+    if(lib_type STREQUAL "SHARED_LIBRARY")
+        add_custom_command(TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:${lib_target}>
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+            COMMENT "Copying ${lib_target} to output directory"
+        )
+    endif()
+endfunction()
+
+# Copy all shared library dependencies
+copy_shared_library(GooeyGUI nfd)
+copy_shared_library(GooeyGUI cjson)
+copy_shared_library(GooeyGUI freetype)
+copy_shared_library(GooeyGUI GLPS)
 
 # ----------------------------
 # Ultralight Configuration
@@ -147,7 +218,7 @@ if(EXISTS ${ULTRALIGHT_INCLUDE_DIR} AND EXISTS ${ULTRALIGHT_BIN_DIR})
     message(STATUS "Ultralight found, enabling webview support")
     
     target_include_directories(GooeyGUI PRIVATE ${ULTRALIGHT_INCLUDE_DIR})
-     set(ULTRALIGHT_RESOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ultralight/resources)
+    set(ULTRALIGHT_RESOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ultralight/resources)
     if(EXISTS ${ULTRALIGHT_RESOURCES_DIR})
         add_custom_command(TARGET GooeyGUI POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -196,10 +267,26 @@ if(EXISTS ${ULTRALIGHT_INCLUDE_DIR} AND EXISTS ${ULTRALIGHT_BIN_DIR})
             ${ULTRALIGHT_BIN_DIR}/libWebCore.so
         )
         
-        # Set RPATH for runtime
-        set_target_properties(GooeyGUI PROPERTIES
-            BUILD_RPATH "${ULTRALIGHT_BIN_DIR}"
-            INSTALL_RPATH "${ULTRALIGHT_BIN_DIR}"
+        # Copy Ultralight libraries
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libUltralight.so
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.so
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libAppCore.so
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libWebCore.so
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         )
         
     elseif(APPLE)
@@ -211,10 +298,26 @@ if(EXISTS ${ULTRALIGHT_INCLUDE_DIR} AND EXISTS ${ULTRALIGHT_BIN_DIR})
             ${ULTRALIGHT_BIN_DIR}/libWebCore.dylib
         )
         
-        # Set RPATH for macOS
-        set_target_properties(GooeyGUI PROPERTIES
-            BUILD_RPATH "@loader_path/../Frameworks"
-            INSTALL_RPATH "@loader_path/../Frameworks"
+        # Copy Ultralight libraries
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libUltralight.dylib
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.dylib
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libAppCore.dylib
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
+        )
+        add_custom_command(TARGET GooeyGUI POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            ${ULTRALIGHT_BIN_DIR}/libWebCore.dylib
+            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
         )
     endif()
     
@@ -237,16 +340,26 @@ else()
 endif()
 
 # ----------------------------
+# Make all dependencies exportable
+# ----------------------------
+# Set export properties for all dependency targets
+set_target_properties(cjson PROPERTIES EXPORT_NAME cjson)
+set_target_properties(GLPS PROPERTIES EXPORT_NAME GLPS)
+set_target_properties(freetype PROPERTIES EXPORT_NAME freetype)
+set_target_properties(nfd PROPERTIES EXPORT_NAME native_fdialog)
+
+# ----------------------------
 # Install rules
 # ----------------------------
 include(GNUInstallDirs)
 
-install(TARGETS GooeyGUI
-        EXPORT GooeyGUITargets
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+# Install ALL targets that are linked (including dependencies)
+install(TARGETS GooeyGUI cjson GLPS freetype nfd
+    EXPORT GooeyGUITargets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
@@ -254,26 +367,36 @@ install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 # ----------------------------
 # Package config
 # ----------------------------
-configure_package_config_file(
+# Create a simple config file if the .in file doesn't exist
+if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GooeyGUIConfig.cmake.in)
+    file(WRITE ${CMAKE_BINARY_DIR}/GooeyGUIConfig.cmake
+        "@PACKAGE_INIT@\n\n"
+        "include(\"\${CMAKE_CURRENT_LIST_DIR}/GooeyGUITargets.cmake\")\n"
+        "check_required_components(GooeyGUI)\n"
+    )
+    message(STATUS "Created basic GooeyGUIConfig.cmake")
+else()
+    configure_package_config_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/GooeyGUIConfig.cmake.in
         ${CMAKE_BINARY_DIR}/GooeyGUIConfig.cmake
         INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GooeyGUI
-)
+    )
+endif()
 
 write_basic_package_version_file(
-        ${CMAKE_BINARY_DIR}/GooeyGUIConfigVersion.cmake
-        VERSION ${PROJECT_VERSION}
-        COMPATIBILITY AnyNewerVersion
+    ${CMAKE_BINARY_DIR}/GooeyGUIConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
 )
 
 install(EXPORT GooeyGUITargets
-        FILE GooeyGUITargets.cmake
-        NAMESPACE GooeyGUI::
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GooeyGUI
+    FILE GooeyGUITargets.cmake
+    NAMESPACE GooeyGUI::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GooeyGUI
 )
 
 install(FILES
-        ${CMAKE_BINARY_DIR}/GooeyGUIConfig.cmake
-        ${CMAKE_BINARY_DIR}/GooeyGUIConfigVersion.cmake
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GooeyGUI
+    ${CMAKE_BINARY_DIR}/GooeyGUIConfig.cmake
+    ${CMAKE_BINARY_DIR}/GooeyGUIConfigVersion.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/GooeyGUI
 )

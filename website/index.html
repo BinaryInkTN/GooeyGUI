@@ -45,6 +45,12 @@
             --radius-xl: 16px;
 
             --transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+            
+            /* Advanced UI variables */
+            --sidebar-width: 280px;
+            --header-height: 64px;
+            --animation-duration: 0.3s;
+            --blur-intensity: 10px;
         }
 
         .dark-mode {
@@ -72,6 +78,7 @@
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
             transition: background-color 0.3s ease;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -123,20 +130,27 @@
             box-sizing: border-box;
         }
 
-        /* App Bar - Google Style */
+        /* Advanced App Bar with blur effect */
         .app-bar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: 64px;
+            height: var(--header-height);
             display: flex;
             align-items: center;
             padding: 0 24px;
-            background-color: var(--background);
+            background-color: rgba(var(--background), 0.85);
+            backdrop-filter: blur(var(--blur-intensity));
+            -webkit-backdrop-filter: blur(var(--blur-intensity));
             box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
             z-index: 1000;
-            transition: all 0.3s ease;
+            transition: all var(--animation-duration) ease;
+        }
+
+        .app-bar--scrolled {
+            height: 56px;
+            background-color: rgba(var(--background), 0.95);
         }
 
         .app-bar__title {
@@ -173,6 +187,7 @@
             font-weight: 500;
             border-radius: var(--radius-sm);
             transition: var(--transition);
+            position: relative;
         }
 
         .app-bar__nav-item:hover {
@@ -184,6 +199,18 @@
         .app-bar__nav-item--active {
             color: var(--primary);
             background-color: var(--surface);
+        }
+
+        .app-bar__nav-item--active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: var(--primary);
         }
 
         .theme-toggle {
@@ -221,6 +248,80 @@
             margin-right: 6px;
             font-size: 14px;
             color: var(--google-yellow);
+        }
+
+        /* Advanced Sidebar */
+        .sidebar {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background-color: var(--surface);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform var(--animation-duration) ease;
+            z-index: 999;
+            padding: 24px;
+            box-sizing: border-box;
+        }
+
+        .sidebar--open {
+            transform: translateX(0);
+        }
+
+        .sidebar__section {
+            margin-bottom: 32px;
+        }
+
+        .sidebar__title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar__link {
+            display: block;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            transition: var(--transition);
+        }
+
+        .sidebar__link:hover {
+            background-color: var(--surface-dark);
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .sidebar__link--active {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        .sidebar-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            margin-right: 16px;
+        }
+
+        .sidebar-toggle:hover {
+            background-color: var(--surface);
+            color: var(--text-primary);
         }
 
         /* Hero Section - Google Style with SVG Background */
@@ -288,6 +389,8 @@
             border: none;
             outline: none;
             letter-spacing: 0.025em;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn--primary {
@@ -319,6 +422,30 @@
         .btn i {
             margin-right: 8px;
             font-size: 16px;
+        }
+
+        /* Advanced Button with Ripple Effect */
+        .btn--ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn--ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn--ripple:active::after {
+            width: 300px;
+            height: 300px;
         }
 
         /* TFT Demo Section */
@@ -464,6 +591,8 @@
             box-shadow: var(--elevation-1);
             transition: var(--transition);
             border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
@@ -577,15 +706,11 @@
         /* Screenshot */
         .screenshot {
             width: 100%;
-            border-radius: var(--radius-md);
-            box-shadow: var(--elevation-2);
-            border: 1px solid var(--border);
             transition: var(--transition);
         }
 
         .screenshot:hover {
             transform: translateY(-4px);
-            box-shadow: var(--elevation-3);
         }
 
         /* Contributors Section */
@@ -789,6 +914,236 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Advanced Downloads Section */
+        .downloads-section {
+            padding: 100px 0;
+        }
+
+        .downloads-filters {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            background-color: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn--active {
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            border-color: var(--primary);
+        }
+
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .download-card {
+            background-color: var(--background);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--elevation-1);
+            transition: var(--transition);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .download-card:hover {
+            box-shadow: var(--elevation-2);
+            transform: translateY(-4px);
+            border-color: var(--primary);
+        }
+
+        .download-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .download-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .download-badge {
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .download-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .download-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .download-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+            text-decoration: none;
+        }
+
+        .download-btn--secondary {
+            background-color: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .download-btn--secondary:hover {
+            background-color: var(--surface-dark);
+        }
+
+        /* Advanced Visibility Controls */
+        .visibility-controls {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .visibility-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--elevation-2);
+            transition: var(--transition);
+        }
+
+        .visibility-btn:hover {
+            transform: scale(1.1);
+            background-color: var(--primary-dark);
+        }
+
+        .visibility-panel {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            background-color: var(--background);
+            border-radius: var(--radius-md);
+            box-shadow: var(--elevation-3);
+            padding: 20px;
+            width: 280px;
+            z-index: 99;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--animation-duration) ease;
+            border: 1px solid var(--border);
+        }
+
+        .visibility-panel--open {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .visibility-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .visibility-label {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--surface-dark);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--background);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -841,16 +1196,20 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .sidebar-toggle {
+                display: flex;
+            }
+
+            .app-bar__nav {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
             .app-bar {
                 height: 56px;
                 padding: 0 16px;
-            }
-
-            .app-bar__nav {
-                display: none;
             }
 
             h1 {
@@ -877,6 +1236,10 @@
             .section {
                 padding: 80px 0;
             }
+
+            .downloads-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -900,12 +1263,21 @@
                 width: 280px;
                 height: 420px;
             }
+
+            .visibility-panel {
+                width: calc(100vw - 48px);
+                right: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- App Bar -->
     <header class="app-bar">
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
         <h1 class="app-bar__title">
             Gooey
         </h1>
@@ -914,7 +1286,7 @@
             <a href="#features" class="app-bar__nav-item">Features</a>
             <a href="#examples" class="app-bar__nav-item">Examples</a>
             <a href="#tft-demo" class="app-bar__nav-item">TFT Demo</a>
-            <a href="#download" class="app-bar__nav-item">Download</a>
+            <a href="#downloads" class="app-bar__nav-item app-bar__nav-item--active">Downloads</a>
             <a href="docs/files.html" class="app-bar__nav-item">Documentation</a>
             <a href="quickstart.html" class="app-bar__nav-item">Quickstart</a>
         </nav>
@@ -930,6 +1302,35 @@
         </div>
     </header>
 
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar__section">
+            <h3 class="sidebar__title">Navigation</h3>
+            <a href="#features" class="sidebar__link">Features</a>
+            <a href="#examples" class="sidebar__link">Examples</a>
+            <a href="#tft-demo" class="sidebar__link">TFT Demo</a>
+            <a href="#downloads" class="sidebar__link sidebar__link--active">Downloads</a>
+            <a href="docs/files.html" class="sidebar__link">Documentation</a>
+            <a href="quickstart.html" class="sidebar__link">Quickstart</a>
+        </div>
+
+        <div class="sidebar__section">
+            <h3 class="sidebar__title">Resources</h3>
+            <a href="https://github.com/GooeyUI/GooeyGUI" class="sidebar__link">GitHub Repository</a>
+            <a href="https://github.com/GooeyUI/GooeyGUI/issues" class="sidebar__link">Issue Tracker</a>
+            <a href="https://github.com/GooeyUI/GooeyGUI/discussions" class="sidebar__link">Community</a>
+            <a href="builder.html" class="sidebar__link">UI Builder</a>
+        </div>
+
+        <div class="sidebar__section">
+            <h3 class="sidebar__title">Platforms</h3>
+            <a href="#" class="sidebar__link">Windows</a>
+            <a href="#" class="sidebar__link">Linux</a>
+            <a href="#" class="sidebar__link">Embedded</a>
+            <a href="#" class="sidebar__link">Web</a>
+        </div>
+    </aside>
+
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
@@ -937,8 +1338,8 @@
                 <h1 class="hero__title fade-in">Build beautiful, cross-platform GUIs with Gooey</h1>
                 <p class="hero__subtitle fade-in delay-1">Create native-feeling applications for Web, Linux, and Windows with a single codebase.</p>
                 <div class="hero__buttons fade-in delay-2">
-                    <a href="quickstart.html" class="btn btn--primary">Get Started</a>
-                    <a href="builder.html" class="btn btn--secondary">
+                    <a href="quickstart.html" class="btn btn--primary btn--ripple">Get Started</a>
+                    <a href="builder.html" class="btn btn--secondary btn--ripple">
                         <i class="fas fa-sliders-h"></i>
                         Drag & Drop Builder
                     </a>
@@ -999,10 +1400,7 @@
                     <h3>Optimized for Embedded Devices</h3>
                     <p>Gooey is designed from the ground up to run efficiently on resource-constrained embedded systems with TFT displays. With minimal memory footprint and optimized rendering, it delivers smooth UI experiences even on low-power devices.</p>
                     <p>Whether you're building IoT dashboards, industrial control panels, or consumer electronics interfaces, Gooey provides the performance and flexibility you need.</p>
-                    <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="btn btn--primary">
-                        <i class="fas fa-code"></i>
-                        View Embedded Example
-                    </a>
+              
                 </div>
             </div>
         </div>
@@ -1075,7 +1473,7 @@
                 <img src="example_screenshot-landscape.png" alt="Gooey Login Example" width="1000px" class="screenshot">
             </div>
             <div class="text-center fade-in delay-3 mt-4">
-                <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/blob/main/dashboard/IoT_dashboard.c" class="btn btn--secondary">
+                <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/blob/main/dashboard/IoT_dashboard.c" class="btn btn--secondary btn--ripple">
                     <i class="fas fa-code"></i>
                     View Full Example
                 </a>
@@ -1097,7 +1495,7 @@
                     <h3 class="card__title">IoT Dashboard</h3>
                     <p class="card__description">A beautiful MQTTS control panel for factory automation systems.</p>
                     <div class="mt-3">
-                        <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                        <a href="https://github.com/YASSINE-AA/projet_esp_mqtt/tree/main/dashboard" class="btn btn--secondary btn--ripple" style="padding: 0 16px; height: 36px; font-size: 14px;">
                             <i class="fas fa-external-link-alt"></i>
                             View Project
                         </a>
@@ -1111,7 +1509,7 @@
                     <h3 class="card__title">AMP Control Panel</h3>
                     <p class="card__description">An easy to use AMP Control panel for PHP development.</p>
                     <div class="mt-3">
-                        <a href="#" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                        <a href="#" class="btn btn--secondary btn--ripple" style="padding: 0 16px; height: 36px; font-size: 14px;">
                             <i class="fas fa-external-link-alt"></i>
                             Coming soon
                         </a>
@@ -1125,7 +1523,7 @@
                     <h3 class="card__title">Want to share your project?</h3>
                     <p class="card__description">Want to have your project featured here? Hit us up!</p>
                     <div class="mt-3">
-                        <a href="https://www.linkedin.com/in/med-yassine-ahmed-ali/" class="btn btn--secondary" style="padding: 0 16px; height: 36px; font-size: 14px;">
+                        <a href="https://www.linkedin.com/in/med-yassine-ahmed-ali/" class="btn btn--secondary btn--ripple" style="padding: 0 16px; height: 36px; font-size: 14px;">
                             <i class="fas fa-external-link-alt"></i>
                             Contact
                         </a>
@@ -1135,8 +1533,38 @@
         </div>
     </section>
 
+    <!-- Downloads Section -->
+    <section class="section section--alt" id="downloads">
+        <div class="container">
+            <h2 class="section-title fade-in">Download Gooey</h2>
+            <p class="section-subtitle fade-in delay-1">Get the latest version or browse previous releases</p>
+
+            <div class="downloads-filters fade-in delay-2">
+                <button class="filter-btn filter-btn--active" data-filter="all">All Platforms</button>
+                <button class="filter-btn" data-filter="windows">Windows</button>
+                <button class="filter-btn" data-filter="linux">Linux</button>
+                <button class="filter-btn" data-filter="embedded">Embedded</button>
+                <button class="filter-btn" data-filter="source">Source Code</button>
+            </div>
+
+            <div id="releases-loading" class="loading-spinner"></div>
+            <div id="releases-container" class="downloads-grid fade-in delay-3">
+                <!-- Releases will be loaded here dynamically -->
+            </div>
+            <div id="releases-error" class="error-message" style="display: none;"></div>
+
+            <div class="text-center mt-5 fade-in delay-4">
+                <p>Looking for older versions or source code?</p>
+                <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="btn btn--secondary btn--ripple">
+                    <i class="fas fa-history"></i>
+                    View all releases
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Contributors Section -->
-    <section class="section section--alt" id="contributors">
+    <section class="section" id="contributors">
         <div class="container">
             <h2 class="section-title fade-in">Our Contributors</h2>
             <p class="section-subtitle fade-in delay-1">The team and community that helps make Gooey better</p>
@@ -1149,31 +1577,9 @@
 
             <div class="text-center mt-5 fade-in delay-3">
                 <p>Want to contribute to Gooey?</p>
-                <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn--secondary">
+                <a href="https://github.com/GooeyUI/GooeyGUI" class="btn btn--secondary btn--ripple">
                     <i class="fab fa-github"></i>
                     Join us on GitHub
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Downloads Section -->
-    <section class="section" id="download">
-        <div class="container">
-            <h2 class="section-title fade-in">Download Gooey</h2>
-            <p class="section-subtitle fade-in delay-1">Get the latest version or browse previous releases</p>
-
-            <div id="releases-loading" class="loading-spinner"></div>
-            <div id="releases-container" class="features-grid fade-in delay-2">
-                <!-- Releases will be loaded here dynamically -->
-            </div>
-            <div id="releases-error" class="error-message" style="display: none;"></div>
-
-            <div class="text-center mt-5 fade-in delay-3">
-                <p>Looking for older versions or source code?</p>
-                <a href="https://github.com/GooeyUI/GooeyGUI/releases" class="btn btn--secondary">
-                    <i class="fas fa-history"></i>
-                    View all releases
                 </a>
             </div>
         </div>
@@ -1188,7 +1594,7 @@
                     <a href="#features" class="footer-link">Features</a>
                     <a href="#examples" class="footer-link">Examples</a>
                     <a href="#tft-demo" class="footer-link">TFT Demo</a>
-                    <a href="#download" class="footer-link">Download</a>
+                    <a href="#downloads" class="footer-link">Downloads</a>
                     <a href="docs/files.html" class="footer-link">Documentation</a>
                     <a href="quickstart.html" class="footer-link">Quickstart</a>
                 </div>
@@ -1220,6 +1626,44 @@
         </div>
     </footer>
 
+    <!-- Advanced Visibility Controls -->
+    <div class="visibility-controls">
+        <button class="visibility-btn" id="visibilityToggle">
+            <i class="fas fa-eye"></i>
+        </button>
+        <div class="visibility-panel" id="visibilityPanel">
+            <h3 style="margin-top: 0; margin-bottom: 16px;">Visibility Controls</h3>
+            <div class="visibility-option">
+                <span class="visibility-label">Show Images</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggleImages" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="visibility-option">
+                <span class="visibility-label">Show Animations</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggleAnimations" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="visibility-option">
+                <span class="visibility-label">High Contrast</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggleContrast">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            <div class="visibility-option">
+                <span class="visibility-label">Reduce Motion</span>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="toggleMotion">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Initialize Material Components
         document.addEventListener('DOMContentLoaded', function() {
@@ -1249,6 +1693,31 @@
                 }
             });
 
+            // Sidebar toggle functionality
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.getElementById('sidebar');
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('sidebar--open');
+            });
+
+            // Close sidebar when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && sidebar.classList.contains('sidebar--open')) {
+                    sidebar.classList.remove('sidebar--open');
+                }
+            });
+
+            // App bar scroll effect
+            const appBar = document.querySelector('.app-bar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    appBar.classList.add('app-bar--scrolled');
+                } else {
+                    appBar.classList.remove('app-bar--scrolled');
+                }
+            });
+
             // Animation on scroll
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
@@ -1272,6 +1741,105 @@
                     }, 150);
                 });
             });
+
+            // Button ripple effect
+            const buttons = document.querySelectorAll('.btn--ripple');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const x = e.clientX - e.target.getBoundingClientRect().left;
+                    const y = e.clientY - e.target.getBoundingClientRect().top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    ripple.classList.add('ripple-effect');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Visibility controls
+            const visibilityToggle = document.getElementById('visibilityToggle');
+            const visibilityPanel = document.getElementById('visibilityPanel');
+            const toggleImages = document.getElementById('toggleImages');
+            const toggleAnimations = document.getElementById('toggleAnimations');
+            const toggleContrast = document.getElementById('toggleContrast');
+            const toggleMotion = document.getElementById('toggleMotion');
+
+            visibilityToggle.addEventListener('click', function() {
+                visibilityPanel.classList.toggle('visibility-panel--open');
+            });
+
+            // Close visibility panel when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!visibilityPanel.contains(event.target) && !visibilityToggle.contains(event.target) && visibilityPanel.classList.contains('visibility-panel--open')) {
+                    visibilityPanel.classList.remove('visibility-panel--open');
+                }
+            });
+
+            // Toggle images
+            toggleImages.addEventListener('change', function() {
+                const images = document.querySelectorAll('img');
+                images.forEach(img => {
+                    img.style.display = this.checked ? 'block' : 'none';
+                });
+            });
+
+            // Toggle animations
+            toggleAnimations.addEventListener('change', function() {
+                document.body.style.animationPlayState = this.checked ? 'running' : 'paused';
+                const animatedElements = document.querySelectorAll('*');
+                animatedElements.forEach(el => {
+                    if (getComputedStyle(el).animationName !== 'none') {
+                        el.style.animationPlayState = this.checked ? 'running' : 'paused';
+                    }
+                });
+            });
+
+            // Toggle high contrast
+            toggleContrast.addEventListener('change', function() {
+                document.body.classList.toggle('high-contrast', this.checked);
+            });
+
+            // Toggle reduced motion
+            toggleMotion.addEventListener('change', function() {
+                document.body.classList.toggle('reduce-motion', this.checked);
+            });
+
+            // Downloads filtering
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('filter-btn--active'));
+                    // Add active class to clicked button
+                    this.classList.add('filter-btn--active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    filterDownloads(filter);
+                });
+            });
+
+            function filterDownloads(filter) {
+                const downloadCards = document.querySelectorAll('.download-card');
+                
+                downloadCards.forEach(card => {
+                    if (filter === 'all') {
+                        card.style.display = 'flex';
+                    } else {
+                        const platform = card.getAttribute('data-platform');
+                        if (platform === filter) {
+                            card.style.display = 'flex';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            }
 
             // Load stargazers count
             async function loadStargazers() {
@@ -1407,20 +1975,30 @@
                         return;
                     }
 
-                    // Display latest 3 releases
-                    releases.slice(0, 3).forEach(release => {
+                    // Display latest 6 releases with platform categorization
+                    releases.slice(0, 6).forEach(release => {
                         const releaseDate = new Date(release.published_at).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
                         });
 
+                        // Categorize releases by platform
+                        let platform = 'source';
+                        if (release.name && release.name.toLowerCase().includes('windows')) {
+                            platform = 'windows';
+                        } else if (release.name && release.name.toLowerCase().includes('linux')) {
+                            platform = 'linux';
+                        } else if (release.name && release.name.toLowerCase().includes('embedded')) {
+                            platform = 'embedded';
+                        }
+
                         const assetsHTML = release.assets.map(asset => `
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <span style="font-size: 14px; color: var(--text-secondary);">${asset.name}</span>
                                 <a href="${asset.browser_download_url}"
-                                   class="btn btn--secondary"
-                                   style="padding: 0 12px; height: 32px; font-size: 12px;">
+                                   class="download-btn"
+                                   target="_blank">
                                     <i class="fas fa-download"></i>
                                     Download
                                 </a>
@@ -1428,18 +2006,20 @@
                         `).join('');
 
                         const releaseHTML = `
-                            <div class="card">
-                                <div class="card__icon">
-                                    <i class="fas fa-download"></i>
+                            <div class="download-card" data-platform="${platform}">
+                                <div class="download-header">
+                                    <h3 class="download-title">${release.name || release.tag_name}</h3>
+                                    <span class="download-badge">${platform.charAt(0).toUpperCase() + platform.slice(1)}</span>
                                 </div>
-                                <h3 class="card__title">${release.name || release.tag_name}</h3>
-                                <p class="card__description">Published on ${releaseDate}</p>
-
+                                <p class="download-description">${release.body ? release.body.substring(0, 120) + '...' : 'No description available'}</p>
+                                <div class="download-meta">
+                                    <span><i class="fas fa-calendar"></i> ${releaseDate}</span>
+                                    <span><i class="fas fa-download"></i> ${release.assets.reduce((acc, asset) => acc + asset.download_count, 0)} downloads</span>
+                                </div>
                                 ${assetsHTML || '<p style="color: var(--text-secondary); font-size: 14px;">No download assets available</p>'}
-
-                                <div class="mt-3">
+                                <div class="download-actions">
                                     <a href="${release.html_url}"
-                                       class="btn btn--secondary"
+                                       class="download-btn download-btn--secondary"
                                        target="_blank">
                                         <i class="fas fa-file-alt"></i>
                                         Release Notes

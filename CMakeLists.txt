@@ -154,6 +154,8 @@ set(SOURCES
     src/widgets/gooey_webview.c
     src/widgets/gooey_webview_internal.c
     src/widgets/gooey_fdialog.c
+    src/widgets/gooey_ctxmenu.c
+    src/widgets/gooey_ctxmenu_internal.c
 )
 
 # ----------------------------

@@ -10,9 +10,5 @@ void GooeyFDialog_Open(
 {
     active_backend->OpenFileDialog(path, filters, filter_count, callback);
 }
-void GooeyFDialog_Close(GooeyWindow *win)
-{
-    // active_backend->CloseFileDialog(win);
-}
 
 #endif

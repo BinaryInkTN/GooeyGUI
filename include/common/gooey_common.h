@@ -24,25 +24,26 @@
  */
 typedef enum
 {
-    WIDGET_LABEL,       /**< Label widget */
-    WIDGET_SLIDER,      /**< Slider widget */
-    WIDGET_RADIOBUTTON, /**< Radio button widget */
-    WIDGET_CHECKBOX,    /**< Checkbox widget */
-    WIDGET_BUTTON,      /**< Button widget */
-    WIDGET_TEXTBOX,     /**< Textbox widget */
-    WIDGET_DROPDOWN,    /**< Dropdown widget */
-    WIDGET_CANVAS,      /**< Canvas widget */
-    WIDGET_LAYOUT,      /**< Layout widget */
-    WIDGET_PLOT,        /**< Plot widget */
-    WIDGET_DROP_SURFACE,
-    WIDGET_IMAGE,
-    WIDGET_LIST,
-    WIDGET_PROGRESSBAR,
-    WIDGET_METER,
-    WIDGET_CONTAINER,
-    WIDGET_SWITCH,
-    WIDGET_WEBVIEW,
-    WIDGET_TABS
+    WIDGET_LABEL,        /**< Label widget */
+    WIDGET_SLIDER,       /**< Slider widget */
+    WIDGET_RADIOBUTTON,  /**< Radio button widget */
+    WIDGET_CHECKBOX,     /**< Checkbox widget */
+    WIDGET_BUTTON,       /**< Button widget */
+    WIDGET_TEXTBOX,      /**< Textbox widget */
+    WIDGET_DROPDOWN,     /**< Dropdown widget */
+    WIDGET_CANVAS,       /**< Canvas widget */
+    WIDGET_LAYOUT,       /**< Layout widget */
+    WIDGET_PLOT,         /**< Plot widget */
+    WIDGET_DROP_SURFACE, /**< Drop surface widget */
+    WIDGET_IMAGE,        /**< Image widget */
+    WIDGET_LIST,         /**< List widget */
+    WIDGET_PROGRESSBAR,  /**< Progress bar widget */
+    WIDGET_METER,        /**< Meter widget */
+    WIDGET_CONTAINER,    /**< Container widget */
+    WIDGET_SWITCH,       /**< Switch widget */
+    WIDGET_WEBVIEW,      /**< WebView widget */
+    WIDGET_CTXMENU,      /**< Context menu widget */
+    WIDGET_TABS,         /**< Tabs widget */
 } WIDGET_TYPE;
 
 typedef struct
@@ -122,15 +123,29 @@ typedef struct
     bool is_disabled;    /**< Whether the button is disabled */
 } GooeyButton;
 
-typedef struct 
+typedef struct
+{
+    GooeyWidget core;    /**< Core widget properties */
+    char *current_path;  /**< Current path in the file dialog */
+    char **file_list;    /**< List of files in the dialog */
+    int file_count;      /**< Number of files in the dialog */
+    int selected_index;  /**< Index of the selected file */
+    void (*on_file_selected)(const char *file_path); /**< Callback when a file is selected */
+} GooeyFDialog;
+
+typedef struct
+{
+    char label[256];
+    void (*callback)();
+} GooeyCtxMenuItem;
+
+typedef struct
 {
     GooeyWidget core;
-    char *current_path;
-    char **file_list;
-    int file_count;
-    int selected_index;
-    void (*on_file_selected)(const char *file_path);
-} GooeyFDialog;
+    GooeyCtxMenuItem menu_items[GOOEY_CTXMENU_MAX_ITEMS];
+    size_t menu_item_count;
+    bool is_open;
+} GooeyCtxMenu;
 
 /**
  * @brief Container widget.
@@ -141,6 +156,7 @@ typedef struct
     void **widgets;
     size_t widget_count;
 } GooeyContainer;
+
 typedef struct
 {
 
@@ -567,6 +583,7 @@ typedef struct
     bool visibility; /**< Whether the window is visible */
     bool enable_debug_overlay;
     bool continuous_redraw;
+    GooeyCtxMenu *ctx_menu;
     GooeyAppbar *appbar;
     GooeyVK *vk;
     GooeyButton **buttons;                       /**< List of buttons in the window */
@@ -594,7 +611,6 @@ typedef struct
     GooeyContainers **containers;
     GooeySwitch **switches;
     GooeyWebview **webviews;
-
 
     size_t webview_count;
     size_t container_count;

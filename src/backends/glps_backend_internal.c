@@ -592,9 +592,7 @@ int glps_init_ft()
 }
 int glps_init(int project_branch)
 {
-    // File dialog init
     NFD_Init();
-
     set_logging_enabled(project_branch);
     ctx.inhibit_reset = 0;
     ctx.selected_color = 0x000000;
@@ -993,17 +991,13 @@ static void drag_n_drop_callback(size_t origin_window_id, char *mime, char *buff
 
 void glps_setup_callbacks(void (*callback)(size_t window_id, void *data), void *data)
 {
-
-    // glps_wm_start_drag_n_drop(ctx.wm, window_id, drag_n_drop_callback, data);
     glps_wm_set_keyboard_callback(ctx.wm, keyboard_callback, data);
     glps_wm_set_mouse_move_callback(ctx.wm, mouse_move_callback, data);
     glps_wm_set_mouse_click_callback(ctx.wm, mouse_click_callback, data);
     glps_wm_set_scroll_callback(ctx.wm, mouse_scroll_callback, data);
     glps_wm_window_set_resize_callback(ctx.wm, window_resize_callback,
                                        data);
-
     glps_wm_window_set_close_callback(ctx.wm, window_close_callback, data);
-
     glps_wm_window_set_frame_update_callback(ctx.wm, callback, data);
 }
 
@@ -1017,8 +1011,6 @@ void glps_run()
         for (size_t i = 0; i < ctx.timer_count; ++i)
             glps_timer_check_and_call(ctx.timers[i]);
     }
-
-    
 }
 
 GooeyTimer *glps_create_timer()
@@ -1102,7 +1094,8 @@ void glps_set_viewport(size_t window_id, int width, int height)
 {
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     glps_set_projection(window_id, width, height);
-}double glps_get_window_framerate(int window_id)
+}
+double glps_get_window_framerate(int window_id)
 {
     static struct timespec last_time[MAX_WINDOWS] = {0};
     static double last_fps[MAX_WINDOWS] = {0};
@@ -1120,14 +1113,14 @@ void glps_set_viewport(size_t window_id, int width, int height)
 
     // Calculate exact time difference
     double elapsed = (now.tv_sec - last_time[window_id].tv_sec) +
-                    (now.tv_nsec - last_time[window_id].tv_nsec) / 1000000000.0;
+                     (now.tv_nsec - last_time[window_id].tv_nsec) / 1000000000.0;
 
     // Only update FPS if at least 1 second has passed
     if (elapsed >= 1.0)
     {
         last_fps[window_id] = glps_wm_get_fps(ctx.wm, window_id);
         last_time[window_id] = now;
-        
+
         LOG_INFO("Elapsed: %.3fs, FPS: %.2f", elapsed, last_fps[window_id]);
     }
 
@@ -1170,13 +1163,26 @@ void glps_request_close()
 void glps_init_fdialog()
 {
 }
+
+static nfdwindowhandle_t nfd_get_window_type()
+{
+    nfdwindowhandle_t parentWindow = {
+        .type = glps_wm_get_platform(),
+        .handle = glps_wm_window_get_native_ptr(ctx.wm, 0)};
+    // TODO SUPPORT MULTI WINDOW;
+    return parentWindow;
+}
+
 void glps_open_fdialog(const char *start_path, nfdu8filteritem_t *filters, size_t filter_count, void (*on_file_selected)(const char *file_path))
 {
+    nfdwindowhandle_t parentWindow = nfd_get_window_type();
+
     nfdu8char_t *outPath = NULL;
     nfdopendialogu8args_t args = {0};
-    args.filterList = (nfdu8filteritem_t *)filters;
+    args.filterList = filters;
     args.filterCount = filter_count;
     args.defaultPath = start_path;
+    args.parentWindow = parentWindow;
 
     nfdresult_t result = NFD_OpenDialogU8_With(&outPath, &args);
     if (result == NFD_OKAY)
@@ -1190,7 +1196,7 @@ void glps_open_fdialog(const char *start_path, nfdu8filteritem_t *filters, size_
     {
         puts("User pressed cancel.");
     }
-    else 
+    else
     {
         printf("Error: %s\n", NFD_GetError());
     }

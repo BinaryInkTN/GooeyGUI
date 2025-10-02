@@ -47,12 +47,36 @@ if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 # ----------------------------
-# Dependencies: cJSON, GLPS, FreeType
+# CRITICAL: Force ALL dependencies to build as STATIC libraries
+# ----------------------------
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries" FORCE)
+
+# Force specific dependencies to build as static
+set(CJSON_BUILD_SHARED_LIBS OFF CACHE BOOL "Build cJSON shared library" FORCE)
+set(FT_DISABLE_ZLIB ON CACHE BOOL "Disable ZLIB for freetype" FORCE)
+set(FT_REQUIRE_ZLIB OFF CACHE BOOL "Require ZLIB for freetype" FORCE)
+
+# For GLPS and nfd, we may need to modify their CMakeLists or use other methods
+# Let's check if they respect BUILD_SHARED_LIBS
+
+# ----------------------------
+# Dependencies: cJSON, GLPS, FreeType - will now build as STATIC
 # ----------------------------
 add_subdirectory(third_party/cjson)
 add_subdirectory(third_party/glps)
 add_subdirectory(third_party/freetype)
 add_subdirectory(third_party/native_fdialog)
+
+# Verify that dependencies are built as static
+get_target_property(cjson_type cjson TYPE)
+get_target_property(glps_type GLPS TYPE) 
+get_target_property(freetype_type freetype TYPE)
+get_target_property(nfd_type nfd TYPE)
+
+message(STATUS "cjson build type: ${cjson_type}")
+message(STATUS "GLPS build type: ${glps_type}")
+message(STATUS "freetype build type: ${freetype_type}")
+message(STATUS "nfd build type: ${nfd_type}")
 
 # Apply ASan flags to dependencies if enabled
 if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
@@ -133,7 +157,7 @@ set(SOURCES
 )
 
 # ----------------------------
-# Main library
+# Main library - SINGLE SHARED LIBRARY
 # ----------------------------
 add_library(GooeyGUI SHARED ${SOURCES})
 
@@ -160,7 +184,6 @@ elseif(APPLE)
 endif()
 
 # Include directories
-# ----------------------------
 target_include_directories(GooeyGUI PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
@@ -177,8 +200,9 @@ target_include_directories(GooeyGUI PRIVATE
 )
 
 # ----------------------------
-# Link dependencies
+# Link dependencies STATICALLY into the single shared library
 # ----------------------------
+# First link normally
 target_link_libraries(GooeyGUI PRIVATE
     cjson
     GLPS
@@ -186,148 +210,31 @@ target_link_libraries(GooeyGUI PRIVATE
     nfd
 )
 
-# ----------------------------
-# Copy shared libraries to output directory
-# ----------------------------
-# Function to copy shared libraries
-function(copy_shared_library target lib_target)
-    get_target_property(lib_type ${lib_target} TYPE)
-    if(lib_type STREQUAL "SHARED_LIBRARY")
-        add_custom_command(TARGET ${target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:${lib_target}>
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-            COMMENT "Copying ${lib_target} to output directory"
-        )
-    endif()
-endfunction()
-
-# Copy all shared library dependencies
-copy_shared_library(GooeyGUI nfd)
-copy_shared_library(GooeyGUI cjson)
-copy_shared_library(GooeyGUI freetype)
-copy_shared_library(GooeyGUI GLPS)
-
-# ----------------------------
-# Ultralight Configuration
-# ----------------------------
-set(ULTRALIGHT_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ultralight/include)
-set(ULTRALIGHT_BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ultralight/bin)
-
-# Check if Ultralight directory exists
-if(EXISTS ${ULTRALIGHT_INCLUDE_DIR} AND EXISTS ${ULTRALIGHT_BIN_DIR})
-    message(STATUS "Ultralight found, enabling webview support")
-    
-    target_include_directories(GooeyGUI PRIVATE ${ULTRALIGHT_INCLUDE_DIR})
-    set(ULTRALIGHT_RESOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/third_party/ultralight/resources)
-    if(EXISTS ${ULTRALIGHT_RESOURCES_DIR})
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${ULTRALIGHT_RESOURCES_DIR}
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources
-        )
-        message(STATUS "Ultralight resources will be copied to output directory")
-    endif()
-    if(WIN32)
-        # Windows configuration
-        target_link_libraries(GooeyGUI PRIVATE
-            ${ULTRALIGHT_BIN_DIR}/Ultralight.lib
-            ${ULTRALIGHT_BIN_DIR}/UltralightCore.lib
-            ${ULTRALIGHT_BIN_DIR}/AppCore.lib
-            ${ULTRALIGHT_BIN_DIR}/WebCore.lib
-        )
-        
-        # Copy DLLs to output directory
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/Ultralight.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/UltralightCore.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/AppCore.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/WebCore.dll
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        
-    elseif(UNIX AND NOT APPLE)
-        # Linux configuration
-        target_link_libraries(GooeyGUI PRIVATE
-            ${ULTRALIGHT_BIN_DIR}/libUltralight.so
-            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.so
-            ${ULTRALIGHT_BIN_DIR}/libAppCore.so
-            ${ULTRALIGHT_BIN_DIR}/libWebCore.so
-        )
-        
-        # Copy Ultralight libraries
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libUltralight.so
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.so
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libAppCore.so
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libWebCore.so
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        
-    elseif(APPLE)
-        # macOS configuration
-        target_link_libraries(GooeyGUI PRIVATE
-            ${ULTRALIGHT_BIN_DIR}/libUltralight.dylib
-            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.dylib
-            ${ULTRALIGHT_BIN_DIR}/libAppCore.dylib
-            ${ULTRALIGHT_BIN_DIR}/libWebCore.dylib
-        )
-        
-        # Copy Ultralight libraries
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libUltralight.dylib
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libUltralightCore.dylib
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libAppCore.dylib
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-        add_custom_command(TARGET GooeyGUI POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-            ${ULTRALIGHT_BIN_DIR}/libWebCore.dylib
-            ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
-        )
-    endif()
-    
-    # Add Ultralight definition
-    target_compile_definitions(GooeyGUI PRIVATE -DULTRALIGHT_ENABLED=1)
-else()
-    message(WARNING "Ultralight not found, webview support will be disabled")
-    target_compile_definitions(GooeyGUI PRIVATE -DULTRALIGHT_ENABLED=0)
+# Then use whole-archive to force inclusion of all symbols from static libraries
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+    target_link_options(GooeyGUI PRIVATE
+        "LINKER:--whole-archive"
+        "LINKER:$<TARGET_FILE:cjson>"
+        "LINKER:$<TARGET_FILE:GLPS>"
+        "LINKER:$<TARGET_FILE:freetype>"
+        "LINKER:$<TARGET_FILE:nfd>"
+        "LINKER:--no-whole-archive"
+    )
+elseif(MSVC)
+    target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:cjson>")
+    target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:GLPS>")
+    target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:freetype>")
+    target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:nfd>")
 endif()
+
+# ----------------------------
+# REMOVE shared library copying - no longer needed since dependencies are static
+# ----------------------------
+# COMMENT OUT or DELETE these lines:
+# copy_shared_library(GooeyGUI nfd)
+# copy_shared_library(GooeyGUI cjson)
+# copy_shared_library(GooeyGUI freetype)
+# copy_shared_library(GooeyGUI GLPS)
 
 # ----------------------------
 # System libraries
@@ -341,27 +248,21 @@ else()
 endif()
 
 # ----------------------------
-# Make all dependencies exportable
-# ----------------------------
-# Set export properties for all dependency targets
-set_target_properties(cjson PROPERTIES EXPORT_NAME cjson)
-set_target_properties(GLPS PROPERTIES EXPORT_NAME GLPS)
-set_target_properties(freetype PROPERTIES EXPORT_NAME freetype)
-set_target_properties(nfd PROPERTIES EXPORT_NAME native_fdialog)
-
-# ----------------------------
-# Install rules
+# Install rules - ONLY install the main library
 # ----------------------------
 include(GNUInstallDirs)
 
-# Install ALL targets that are linked (including dependencies)
-install(TARGETS GooeyGUI cjson GLPS freetype nfd
+# Install ONLY the main GooeyGUI library (dependencies are statically linked)
+install(TARGETS GooeyGUI
     EXPORT GooeyGUITargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+# Remove dependency targets from installation
+# install(TARGETS cjson GLPS freetype nfd ...) # COMMENT THIS OUT
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 

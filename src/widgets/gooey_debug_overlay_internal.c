@@ -15,7 +15,7 @@
  along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 #include "widgets/gooey_debug_overlay_internal.h"
-#if(ENABLE_DEBUG_OVERLAY)
+#if (ENABLE_DEBUG_OVERLAY)
 #include "backends/gooey_backend_internal.h"
 #include "event/gooey_event_internal.h"
 #include "common/gooey_common.h"
@@ -46,7 +46,7 @@ static void get_memory_footprint(size_t *total_kb)
 #elif defined(_WIN32)
 static void get_memory_footprint(size_t *total_kb)
 {
- //TODO: implement in GLPS
+    // TODO: implement in GLPS
 }
 #else
 static void get_memory_footprint(size_t *total_kb)
@@ -54,6 +54,8 @@ static void get_memory_footprint(size_t *total_kb)
     *total_kb = 0;
 }
 #endif
+
+
 
 static size_t get_window_widget_count(GooeyWindow *win)
 {
@@ -87,7 +89,7 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     active_backend->GetWinDim(&window_width, &window_height, win->creation_id);
 
     const int overlay_width = 300;
-    const int overlay_height = 150;
+    const int overlay_height = 180;
     const int x_pos = window_width - overlay_width - 10;
     const int y_pos = window_height - overlay_height - 10;
     const int line_height = 18;
@@ -104,7 +106,7 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     current_y += line_height;
 
     char fps_text[64];
-    snprintf(fps_text, sizeof(fps_text), "FPS: %.1f", 
+    snprintf(fps_text, sizeof(fps_text), "FPS: %.1f",
              active_backend->GetWinFramerate(win->creation_id));
     active_backend->DrawText(x_pos + padding, current_y, fps_text,
                              win->active_theme->neutral, 0.27f, win->creation_id, NULL);
@@ -142,6 +144,19 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
 
     active_backend->DrawText(x_pos + padding, current_y, "Renderer: OpenGL [GLPS]",
                              win->active_theme->neutral, 0.27f, win->creation_id, NULL);
+    current_y += line_height;
+    static char platform_name[1024] = {0};
+    static int platform_name_initialized = 0;
+    if (!platform_name_initialized) {
+        active_backend->GetPlatformName(platform_name, sizeof(platform_name));
+        platform_name_initialized = 1;
+    }
+
+    char platform_text[1050];
+    snprintf(platform_text, sizeof(platform_text), "Platform: %s", platform_name);
+    active_backend->DrawText(x_pos + padding, current_y, platform_text,
+                             win->active_theme->neutral, 0.27f, win->creation_id, NULL);
+
     current_y += line_height;
 
     time_t now = time(NULL);

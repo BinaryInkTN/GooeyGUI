@@ -66,7 +66,7 @@ void GooeyCanvas_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
         GooeyCanvas *canvas = win->canvas[i];
-        if (!canvas || !canvas->core.is_visible)
+        if (!canvas)
         {
             LOG_ERROR("Canvas is invalid.");
             continue;

@@ -19,7 +19,6 @@
 #define GOOEY_H
 
 #include "common/gooey_common.h"
-
 #include "widgets/gooey_tabs.h"
 #include "widgets/gooey_drop_surface.h"
 #include "core/gooey_window.h"
@@ -46,6 +45,7 @@
 #include "widgets/gooey_switch.h"
 #include "widgets/gooey_webview.h"
 #include "widgets/gooey_fdialog.h"
+#include "widgets/gooey_ctxmenu.h"
 // Threads
 #if (TFT_ESPI_ENABLED==0)
 #include "glps_thread.h"

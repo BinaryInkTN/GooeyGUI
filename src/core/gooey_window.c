@@ -358,8 +358,6 @@ static void __free_lists(GooeyWindow *win)
     win->lists = NULL;
 }
 
-
-
 void GooeyWindow_FreeResources(GooeyWindow *win)
 {
     if (!win)
@@ -388,7 +386,6 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     __free_tabs(win);
     __free_plots(win);
     __free_lists(win);
-    __free_ctxmenu(win);
     __free_widget_array((void **)win->drop_surface, win->drop_surface_count);
     __free_widget_array((void **)win->images, win->image_count);
     __free_widget_array((void **)win->progressbars, win->progressbar_count);
@@ -518,7 +515,6 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bo
     return win;
 }
 
-/* Macro to simplify widget drawing calls */
 #define DRAW_WIDGET_IF_ENABLED(feature, draw_func) \
     do                                             \
     {                                              \
@@ -574,7 +570,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     DRAW_WIDGET_IF_ENABLED(ENABLE_DEBUG_OVERLAY, GooeyDebugOverlay_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_DROPDOWN, GooeyDropdown_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_APPBAR, GooeyAppbar_Internal_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_CTXMENU, GooeyCtxMenu_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_CTXMENU, GooeyCtxMenu_Internal_Draw);
 
     active_backend->Render(win);
 }
@@ -670,6 +666,10 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_LIST, GooeyList_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_IMAGE, GooeyImage_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_TABS, GooeyTabs_HandleClick, window, mouse_click_x, mouse_click_y);
+
+#if (ENABLE_CTXMENU)
+        GooeyCtxMenu_Internal_HandleClick(window, mouse_click_x, mouse_click_y);
+#endif
 
 #if (ENABLE_CANVAS)
         GooeyCanvas_HandleClick(window, mouse_click_x, mouse_click_y);

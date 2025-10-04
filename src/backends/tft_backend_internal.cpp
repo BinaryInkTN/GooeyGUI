@@ -702,5 +702,7 @@ extern "C"
         .RedrawSprite = tft_redraw_sprite,
         .ResetRedrawSprite = tft_reset_sprite_redraw,
         .ClearArea = tft_clear_area,
-        .ClearOldWidget = tft_clear_old_widget};
+        .ClearOldWidget = tft_clear_old_widget,
+        .GetPlatformName = NULL
+    };
 }

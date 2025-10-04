@@ -27,7 +27,7 @@
  * 0 = Production mode (optimized, minimal logging)
  * 1 = Debug mode (verbose logging, additional checks)
  */
-#define PROJECT_BRANCH 0
+#define PROJECT_BRANCH 1
 
 /**
  * Enable debug overlay for development
@@ -166,7 +166,7 @@
 #define TFT_SCREEN_ROTATION 3
 
 /** Enable virtual keyboard for touch input (ESP32 only) */
-#define ENABLE_VIRTUAL_KEYBOARD 0
+#define ENABLE_VIRTUAL_KEYBOARD 1
 
 
 /*******************************************************************************

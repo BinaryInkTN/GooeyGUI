@@ -1110,18 +1110,13 @@ double glps_get_window_framerate(int window_id)
     }
 
     clock_gettime(CLOCK_MONOTONIC, &now);
-
-    // Calculate exact time difference
     double elapsed = (now.tv_sec - last_time[window_id].tv_sec) +
                      (now.tv_nsec - last_time[window_id].tv_nsec) / 1000000000.0;
 
-    // Only update FPS if at least 1 second has passed
     if (elapsed >= 1.0)
     {
         last_fps[window_id] = glps_wm_get_fps(ctx.wm, window_id);
         last_time[window_id] = now;
-
-        LOG_INFO("Elapsed: %.3fs, FPS: %.2f", elapsed, last_fps[window_id]);
     }
 
     return last_fps[window_id];
@@ -1202,6 +1197,38 @@ void glps_open_fdialog(const char *start_path, nfdu8filteritem_t *filters, size_
     }
 }
 
+void glps_get_platform_name(char *platform, size_t max_length)
+{
+    const uint8_t platform_type = glps_wm_get_platform();
+    char platform_name[1024];
+    switch (platform_type)
+    {
+    case 0:
+    {
+        strncpy(platform_name, "Windows", sizeof(platform_name));
+        break;
+    }
+    case 3:
+    {
+        strncpy(platform_name, "Linux X11", sizeof(platform_name));
+        break;
+    }
+    case 1:
+    {
+        strncpy(platform_name, "Linux Wayland", sizeof(platform_name));
+        break;
+    }
+    default:
+    {
+        strncpy(platform_name, "Unknown", sizeof(platform_name));
+        break;
+    }
+    }
+
+    strncpy(platform, platform_name, max_length - 1);
+    platform[max_length - 1] = '\0';
+}
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
@@ -1258,6 +1285,7 @@ GooeyBackend glps_backend = {
     .DestroyUltralight = glps_destroy_ultralight,
     .DrawWebview = glps_draw_webview,
     .OpenFileDialog = glps_open_fdialog,
+    .GetPlatformName = glps_get_platform_name,
 };
 
 #endif

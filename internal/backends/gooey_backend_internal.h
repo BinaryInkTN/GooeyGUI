@@ -100,7 +100,9 @@ extern "C"
         
         // Native File dialog
         void (*OpenFileDialog)(const char *start_path, void *filters, size_t filter_count, void (*on_file_selected)(const char *file_path));
-
+        
+        // Performance & Debug
+        void (*GetPlatformName)(char *platform, size_t max_length);
     } GooeyBackend;
 
     /**

@@ -550,13 +550,15 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     }
 
     /* Draw all UI components */
+    DRAW_WIDGET_IF_ENABLED(ENABLE_CANVAS, GooeyCanvas_Draw);
+
     DRAW_WIDGET_IF_ENABLED(ENABLE_CONTAINER, GooeyContainer_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_TABS, GooeyTabs_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_CANVAS, GooeyCanvas_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_METER, GooeyMeter_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_PROGRESSBAR, GooeyProgressBar_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_DROP_SURFACE, GooeyDropSurface_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_IMAGE, GooeyImage_Draw);
+
     DRAW_WIDGET_IF_ENABLED(ENABLE_LIST, GooeyList_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_BUTTON, GooeyButton_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_SWITCH, GooeySwitch_Draw);

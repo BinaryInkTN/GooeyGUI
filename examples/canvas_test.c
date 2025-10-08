@@ -21,7 +21,7 @@ void open_fd()
 int main()
 {
     Gooey_Init();
-    GooeyWindow* win = GooeyWindow_Create("Raw fill test", 800, 1000, true);
+    GooeyWindow* win = GooeyWindow_Create("Raw fill test", 800, 600, true);
     GooeyContainers* container = GooeyContainer_Create(0, 0, 800, 600);
     GooeyWindow_RegisterWidget(win, container);
     GooeyContainer_InsertContainer(container);

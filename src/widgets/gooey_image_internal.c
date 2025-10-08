@@ -33,6 +33,12 @@ void GooeyImage_Draw(GooeyWindow *win)
         GooeyImage *image = win->images[i];
         if (!image->core.is_visible)
             continue;
+        
+        if(!image->is_loaded)
+        {
+            image->texture_id = active_backend->LoadImage(image->image_path);
+            image->is_loaded = true;
+        }
 
         if (image->needs_refresh)
         {

@@ -434,6 +434,7 @@ typedef struct
 {
     GooeyWidget core;
     unsigned int texture_id;
+    bool is_loaded;
     void (*callback)(void);
     bool needs_refresh;
     char __padding1[3];

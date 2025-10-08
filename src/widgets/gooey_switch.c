@@ -1,18 +1,15 @@
 
 #include "widgets/gooey_switch.h"
-#if(ENABLE_SWITCH)
+#if (ENABLE_SWITCH)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
 #define SWITCH_WIDTH 80
 #define SWITCH_HEIGHT 35
-GooeySwitch *GooeySwitch_Create( int x, int y, bool IsToggled,
-                              bool show_hints,
-                             void (*callback)(bool value))
+GooeySwitch *GooeySwitch_Create(int x, int y, bool IsToggled,
+                                bool show_hints,
+                                void (*callback)(bool value, void *user_data), void *user_data)
 {
- 
-
-    
 
     GooeySwitch *gswitch = calloc(1, sizeof(GooeySwitch));
 
@@ -23,17 +20,16 @@ GooeySwitch *GooeySwitch_Create( int x, int y, bool IsToggled,
     gswitch->core.width = SWITCH_WIDTH;
     gswitch->core.height = SWITCH_HEIGHT;
     gswitch->core.is_visible = true;
-    
+
     gswitch->is_toggled = IsToggled;
     gswitch->show_hints = show_hints;
     gswitch->callback = callback;
-        gswitch->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, SWITCH_WIDTH + 40, SWITCH_HEIGHT + 40);
-
-
+    gswitch->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, SWITCH_WIDTH + 40, SWITCH_HEIGHT + 40);
+    gswitch->user_data = user_data;
     return gswitch;
 }
 
-bool GooeySwitch_GetState(GooeySwitch* gswitch)
+bool GooeySwitch_GetState(GooeySwitch *gswitch)
 {
     if (!gswitch)
     {
@@ -52,6 +48,6 @@ void GooeySwitch_Toggle(GooeySwitch *gswitch)
         return;
     }
 
-    gswitch->is_toggled= ! gswitch->is_toggled;
+    gswitch->is_toggled = !gswitch->is_toggled;
 }
 #endif

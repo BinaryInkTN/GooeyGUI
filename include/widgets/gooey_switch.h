@@ -26,7 +26,7 @@ extern "C" {
  * @return Pointer to the created GooeySlider.
  */
 GooeySwitch *GooeySwitch_Create(int x, int y, bool IsToggled, bool show_hints,
-                                void (*callback)(bool value));
+                                void (*callback)(bool value, void* user_data), void* user_data);
 
 /**
  * @brief Retrieves the current value of the slider.

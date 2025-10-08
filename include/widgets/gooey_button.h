@@ -35,7 +35,7 @@ extern "C" {
  * @return A pointer to the newly created GooeyButton object.
  */
 GooeyButton *GooeyButton_Create(const char *label, int x, int y,
-                                int width, int height, void (*callback)());
+                                int width, int height, void (*callback)(void* user_data), void* user_data);
 
 /**
  * @brief Sets the text of the button.

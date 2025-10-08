@@ -42,7 +42,7 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y)
         {
             checkbox->checked = !checkbox->checked;
             if (checkbox->callback)
-                checkbox->callback(checkbox->checked);
+                checkbox->callback(checkbox->checked, checkbox->user_data);
             return true;
         }
     }

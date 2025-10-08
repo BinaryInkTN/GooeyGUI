@@ -39,7 +39,7 @@ GooeyRadioButtonGroup *GooeyRadioButtonGroup_Create()
     return group;
 }
 
-GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioButtonGroup *group, int x, int y, const char *label, void (*callback)(bool))
+GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioButtonGroup *group, int x, int y, const char *label, void (*callback)(bool, void* user_data), void* user_data)
 {
     if (group->button_count >= MAX_RADIO_BUTTONS)
     {
@@ -52,6 +52,7 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
     button->core.y = y;
     button->core.is_visible = true;
     button->core.type = WIDGET_RADIOBUTTON;
+    button->user_data = user_data;
     button->selected = false;
         button->core.sprite = active_backend->CreateSpriteForWidget(x, y, 40, 40);
 
@@ -67,7 +68,7 @@ GooeyRadioButton *GooeyRadioButtonGroup_AddChild(GooeyWindow *win, GooeyRadioBut
 
 GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
                                           char *label,
-                                          void (*callback)(bool selected))
+                                          void (*callback)(bool selected, void* user_data), void* user_data)
 {
     GooeyRadioButton *radio_button = (GooeyRadioButton *)calloc(1, sizeof(GooeyRadioButton));
 
@@ -98,6 +99,7 @@ GooeyRadioButton *GooeyRadioButton_Create(int x, int y,
     radio_button->radius = RADIO_BUTTON_RADIUS;
     radio_button->selected = false;
     radio_button->callback = callback;
+    radio_button->user_data = user_data;
 
     return radio_button;
 }

@@ -23,7 +23,7 @@
 GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
                                     int height, const char **options,
                                     int num_options,
-                                    void (*callback)(int selected_index))
+                                    void (*callback)(int selected_index, void* user_data), void* user_data)
 {
     GooeyDropdown *dropdown = (GooeyDropdown *)calloc(1, sizeof(GooeyDropdown));
     
@@ -47,7 +47,7 @@ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
     dropdown->element_hovered_over = -1;
     dropdown->callback = callback;
     dropdown->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height + 200); // todo make it dynamic
-
+    dropdown->user_data = user_data;
     LOG_INFO("Dropdown added with dimensions x=%d, y=%d, w=%d, h=%d", x, y, width, height);
 
     dropdown->is_open = false;

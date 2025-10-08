@@ -62,7 +62,7 @@ bool GooeyRadioButtonGroup_HandleClick(GooeyWindow *win, int x, int y)
 
                 if (button->callback)
                 {
-                    button->callback(true);
+                    button->callback(true, button->user_data);
                 }
                 return true;
             }
@@ -83,7 +83,7 @@ bool GooeyRadioButton_HandleClick(GooeyWindow *win, int x, int y)
         {
             radio_button->selected = !radio_button->selected;
             if (radio_button->callback)
-                radio_button->callback(radio_button->selected);
+                radio_button->callback(radio_button->selected, radio_button->user_data);
             state = true;
         }
         else

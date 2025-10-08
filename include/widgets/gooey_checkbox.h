@@ -32,7 +32,7 @@ extern "C" {
  * @return A pointer to the newly created GooeyCheckbox.
  */
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
-                                    void (*callback)(bool checked));
+                                    void (*callback)(bool checked, void *user_data), void *user_data);
 
 #endif // ENABLE_CHECKBOX
 

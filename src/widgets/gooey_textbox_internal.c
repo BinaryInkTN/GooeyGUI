@@ -103,7 +103,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
             win->textboxes[i]->scroll_offset--;
 
           if (win->textboxes[i]->callback)
-            win->textboxes[i]->callback(win->textboxes[i]->text);
+            win->textboxes[i]->callback(win->textboxes[i]->text, win->textboxes[i]->user_data);
         }
       }
       break;
@@ -129,7 +129,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
           win->textboxes[i]->text[abs_pos] = ' ';
 
           if (win->textboxes[i]->callback)
-            win->textboxes[i]->callback(win->textboxes[i]->text);
+            win->textboxes[i]->callback(win->textboxes[i]->text, win->textboxes[i]->user_data);
         }
       }
       break;
@@ -168,7 +168,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
           len = strnlen(win->textboxes[i]->text, text_max);
 
           if (win->textboxes[i]->callback)
-            win->textboxes[i]->callback(win->textboxes[i]->text);
+            win->textboxes[i]->callback(win->textboxes[i]->text, win->textboxes[i]->user_data);
 
           int text_width = active_backend->GetTextWidth(win->textboxes[i]->text, len + 1);
           int max_text_width = win->textboxes[i]->core.width - 10;

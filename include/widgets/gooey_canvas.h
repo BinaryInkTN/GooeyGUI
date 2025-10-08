@@ -33,7 +33,7 @@ extern "C" {
  * @return A pointer to the newly created GooeyCanvas.
  */
 GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
-                                int height, void (*callback)(int x, int y));
+                                int height, void (*callback)(int x, int y, void* user_data), void* user_data);
 
 /**
  * @brief Draws a rectangle onto the user-defined canvas.

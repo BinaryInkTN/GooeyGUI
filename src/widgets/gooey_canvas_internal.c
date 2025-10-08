@@ -83,7 +83,7 @@ void GooeyCanvas_HandleClick(GooeyWindow *win, int x, int y)
 
             if (canvas->callback)
             {
-                canvas->callback(x - CANVAS_X, y - CANVAS_Y);
+                canvas->callback(x - CANVAS_X, y - CANVAS_Y, canvas->user_data);
             }
         }
     }

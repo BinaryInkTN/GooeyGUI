@@ -34,17 +34,17 @@ void GooeyButton_SetText(GooeyButton *button, const char *text)
 }
 
 GooeyButton *GooeyButton_Create(const char *label, int x, int y,
-                                int width, int height, void (*callback)())
+                                int width, int height, void (*callback)(void *user_data), void *user_data)
 {
-    GooeyButton *button = (GooeyButton*) calloc(1, sizeof(GooeyButton));
-    
-    if(!button) 
+    GooeyButton *button = (GooeyButton *)calloc(1, sizeof(GooeyButton));
+
+    if (!button)
     {
         LOG_ERROR("Couldn't allocated memory for button");
         return NULL;
     }
 
-    *button = (GooeyButton) {0};
+    *button = (GooeyButton){0};
     button->core.type = WIDGET_BUTTON;
     button->core.x = x;
     button->core.y = y;
@@ -57,8 +57,8 @@ GooeyButton *GooeyButton_Create(const char *label, int x, int y,
     button->hover = false;
     button->clicked = false;
     button->is_highlighted = false;
-    button->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y-20, width+40, height+40);
-
+    button->core.sprite = active_backend->CreateSpriteForWidget(x - 20, y - 20, width + 40, height + 40);
+    button->user_data = user_data;
     LOG_INFO("Button added with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
     return button;
 }
@@ -68,8 +68,10 @@ void GooeyButton_SetHighlight(GooeyButton *button, bool is_highlighted)
     button->is_highlighted = true;
 }
 
-void GooeyButton_SetEnabled(GooeyButton *button, bool is_enabled) {
-    if(!button) {
+void GooeyButton_SetEnabled(GooeyButton *button, bool is_enabled)
+{
+    if (!button)
+    {
         LOG_ERROR("Widget<Button> Cannot be null \n");
         return;
     }

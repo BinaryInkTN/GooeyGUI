@@ -158,7 +158,7 @@ bool GooeyMenu_HandleClick(GooeyWindow *win, int x, int y)
 
                     if (child->callbacks[j])
                     {
-                        child->callbacks[j]();
+                        child->callbacks[j](child->user_data);
                     }
                     handled = true;
                 }

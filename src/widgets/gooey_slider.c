@@ -24,7 +24,7 @@
 #define SLIDER_HEIGHT 5
 GooeySlider *GooeySlider_Create( int x, int y, int width,
                              long min_value, long max_value, bool show_hints,
-                             void (*callback)(long value))
+                             void (*callback)(long value, void* user_data), void* user_data)
 {
  
 
@@ -49,8 +49,7 @@ GooeySlider *GooeySlider_Create( int x, int y, int width,
     slider->show_hints = show_hints;
     slider->callback = callback;
     slider->core.sprite = active_backend->CreateSpriteForWidget(x, y - 10, width + 10, SLIDER_HEIGHT + 20);
-
-
+    slider->user_data = user_data;
     return slider;
 }
 

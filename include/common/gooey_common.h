@@ -50,7 +50,7 @@ typedef struct
     int width;
     int height;
     bool needs_redraw;
-    char __padding[7];
+    char __padding[3]; // Reduced from 7 to 3
 } GooeyTFT_Sprite;
 
 typedef struct
@@ -99,14 +99,15 @@ typedef struct
 {
     GooeyWidget core;
     char label[256];
-    void (*callback)();
+    void (*callback)(void *user_data);
+    void *user_data;
+
     bool clicked;
     bool hover;
     bool is_highlighted;
     bool is_disabled;
     char __padding1[4];
     int click_timer;
-    char __padding2[4];
 } GooeyButton;
 
 typedef struct
@@ -116,15 +117,16 @@ typedef struct
     char **file_list;
     int file_count;
     int selected_index;
-    char __padding1[8];
-    void (*on_file_selected)(const char *file_path);
+    void (*on_file_selected)(const char *file_path, void *user_data);
+    void *user_data;
 } GooeyFDialog;
 
 typedef struct
 {
     char label[256];
-    void (*callback)();
-    char __padding[8];
+    void (*callback)(void *user_data);
+    void *user_data;
+
 } GooeyCtxMenuItem;
 
 typedef struct
@@ -142,7 +144,6 @@ typedef struct
     size_t id;
     void **widgets;
     size_t widget_count;
-    char __padding[8];
 } GooeyContainer;
 
 typedef struct
@@ -151,7 +152,6 @@ typedef struct
     GooeyContainer *container;
     size_t container_count;
     size_t active_container_id;
-    char __padding[8];
 } GooeyContainers;
 
 typedef enum
@@ -167,13 +167,13 @@ typedef struct
     GooeyWidget core;
     char text[256];
     char placeholder[256];
-    void (*callback)(char *text);
+    void (*callback)(char *text, void *user_data);
+    void *user_data;
     bool focused;
     bool is_password;
     char __padding1[2];
     int cursor_pos;
     int scroll_offset;
-    char __padding2[4];
 } GooeyTextbox;
 
 typedef struct
@@ -191,8 +191,8 @@ typedef struct
     GooeyWidget core;
     bool checked;
     char label[256];
-    char __padding1[7];
-    void (*callback)(bool checked);
+    void (*callback)(bool checked, void *user_data);
+    void *user_data;
 } GooeyCheckbox;
 
 typedef struct
@@ -213,9 +213,9 @@ typedef struct
     size_t item_count;
     bool show_separator;
     char __padding1[7];
-    void (*callback)(int index);
+    void (*callback)(int index, void *user_data);
+    void *user_data;
     int element_hovered_over;
-    char __padding2[4];
 } GooeyList;
 
 typedef struct
@@ -224,15 +224,14 @@ typedef struct
     bool selected;
     char label[256];
     int radius;
-    char __padding1[4];
-    void (*callback)(bool selected);
+    void (*callback)(bool selected, void *user_data);
+    void *user_data;
 } GooeyRadioButton;
 
 typedef struct
 {
     GooeyRadioButton buttons[MAX_RADIO_BUTTONS];
     int button_count;
-    char __padding[4];
 } GooeyRadioButtonGroup;
 
 typedef struct
@@ -243,16 +242,15 @@ typedef struct
     long max_value;
     bool show_hints;
     char __padding1[7];
-    void (*callback)(long value);
+    void (*callback)(long value, void *user_data);
+    void *user_data;
     SLIDER_ORIENTATION orientation;
-    char __padding2[4];
 } GooeySlider;
 
 typedef struct
 {
     GooeyWidget core;
     long value;
-    char __padding[4];
 } GooeyProgressBar;
 
 typedef struct
@@ -263,9 +261,9 @@ typedef struct
     int num_options;
     bool is_open;
     char __padding1[3];
-    void (*callback)(int selected_index);
+    void (*callback)(int selected_index, void *user_data);
+    void *user_data;
     int element_hovered_over;
-    char __padding2[4];
 } GooeyDropdown;
 
 typedef struct
@@ -273,11 +271,11 @@ typedef struct
     char title[128];
     char *menu_elements[MAX_MENU_CHILDREN];
     void (*callbacks[MAX_MENU_CHILDREN])();
+    void *user_data[MAX_MENU_CHILDREN];
     int menu_elements_count;
     bool is_open;
     char __padding1[3];
     int element_hovered_over;
-    char __padding2[4];
 } GooeyMenuChild;
 
 typedef struct
@@ -303,16 +301,13 @@ typedef struct
     int margin;
     int rows;
     int cols;
-    char __padding1[4];
     void *widgets[MAX_WIDGETS];
     int widget_count;
-    char __padding2[4];
 } GooeyLayout;
 
 typedef struct
 {
     CANVA_DRAW_OP operation;
-    char __padding[4];
     void *args;
 } CanvaElement;
 
@@ -321,8 +316,8 @@ typedef struct
     GooeyWidget core;
     CanvaElement *elements;
     int element_count;
-    char __padding[4];
-    void (*callback)(int x, int y);
+    void (*callback)(int x, int y, void *user_data);
+    void *user_data;
 } GooeyCanvas;
 
 typedef struct
@@ -337,7 +332,6 @@ typedef struct
     char __padding1[2];
     float thickness;
     float corner_radius;
-    char __padding2[4];
 } CanvasDrawRectangleArgs;
 
 typedef struct
@@ -347,7 +341,6 @@ typedef struct
     int x2;
     int y2;
     unsigned long color;
-    char __padding[4];
 } CanvasDrawLineArgs;
 
 typedef struct
@@ -358,13 +351,11 @@ typedef struct
     int height;
     int angle1;
     int angle2;
-    char __padding[4];
 } CanvasDrawArcArgs;
 
 typedef struct
 {
     unsigned long color;
-    char __padding[4];
 } CanvasSetFGArgs;
 
 typedef enum
@@ -420,14 +411,12 @@ typedef struct
     float min_y_value;
     const char **bar_labels;
     GOOEY_PLOT_TYPE plot_type;
-    char __padding[4];
 } GooeyPlotData;
 
 typedef struct
 {
     GooeyWidget core;
     GooeyPlotData *data;
-    char __padding[8];
 } GooeyPlot;
 
 typedef struct
@@ -435,32 +424,30 @@ typedef struct
     GooeyWidget core;
     unsigned int texture_id;
     bool is_loaded;
-    void (*callback)(void);
+    void (*callback)(void *user_data);
+    void *user_data;
     bool needs_refresh;
     char __padding1[3];
     const char *image_path;
-    char __padding2[8];
 } GooeyImage;
 
 typedef struct
 {
     GooeyWidget core;
-    void (*callback)(char *mime, char *file_path);
+    void (*callback)(char *mime, char *file_path, void *user_data);
+    void *user_data;
     char default_message[64];
     bool is_file_dropped;
     char __padding1[3];
     unsigned long file_icon_texture_id;
-    char __padding2[4];
 } GooeyDropSurface;
 
 typedef struct
 {
     char tab_name[64];
     size_t tab_id;
-    char __padding1[8];
     void **widgets;
     size_t widget_count;
-    char __padding2[8];
 } GooeyTab;
 
 typedef struct
@@ -480,23 +467,21 @@ typedef struct
     bool is_toggled;
     bool show_hints;
     char __padding1[6];
-    void (*callback)(bool state);
+    void (*callback)(bool state, void *user_data);
+    void *user_data;
 } GooeySwitch;
 
 typedef struct
 {
     const char *appname;
-    char __padding[8];
 } GooeyAppbar;
 
 typedef struct
 {
     GooeyWidget core;
     long value;
-    char __padding1[4];
     const char *label;
     unsigned long texture_id;
-    char __padding2[8];
 } GooeyMeter;
 
 typedef struct
@@ -505,7 +490,6 @@ typedef struct
     bool is_shown;
     char __padding1[7];
     size_t text_widget_id;
-    char __padding2[8];
 } GooeyVK;
 
 typedef struct
@@ -526,7 +510,6 @@ typedef struct
 {
     WINDOW_TYPE type;
     int creation_id;
-    char __padding1[4];
     int width;
     int height;
     bool visibility;
@@ -583,7 +566,6 @@ typedef struct
     size_t plot_count;
     size_t progressbar_count;
     size_t widget_count;
-    char __padding3[8];
 } GooeyWindow;
 
 #endif

@@ -97,7 +97,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
 
             if (!button->is_disabled && button->callback)
             {
-                button->callback();
+                button->callback(button->user_data);
             }
         }
         else

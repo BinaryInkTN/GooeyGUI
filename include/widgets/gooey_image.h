@@ -36,7 +36,7 @@ extern "C" {
  */
 GooeyImage *GooeyImage_Create(
     const char *image_path, int x, int y, int width, int height,
-    void (*callback)(void)
+    void (*callback)(void* user_data), void* user_data
 );
 
 /**

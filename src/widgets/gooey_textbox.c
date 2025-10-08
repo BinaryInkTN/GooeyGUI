@@ -22,7 +22,7 @@
 #include "logger/pico_logger_internal.h"
 
 GooeyTextbox *GooeyTextBox_Create(int x, int y, int width,
-                                  int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text))
+                                  int height, char *placeholder, bool is_password, void (*onTextChanged)(char *text, void *user_data), void *user_data)
 {
     GooeyTextbox *textBox = calloc(1, sizeof(GooeyTextbox));
     if (textBox == NULL)
@@ -44,7 +44,7 @@ GooeyTextbox *GooeyTextBox_Create(int x, int y, int width,
     textBox->scroll_offset = 0;
     textBox->text[0] = '\0';
     textBox->core.sprite = active_backend->CreateSpriteForWidget(x - 40, y - 40, width + 40, height + 40);
-
+    textBox->user_data = user_data;
     strcpy(textBox->placeholder, placeholder);
 
     // GooeyWindow_RegisterWidget(win, (GooeyWidget *)&win->textboxes[win->textboxes_count].core);

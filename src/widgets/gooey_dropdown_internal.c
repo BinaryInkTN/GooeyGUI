@@ -156,7 +156,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
                     dropdown->selected_index = j;
                     if (dropdown->callback)
                     {
-                        dropdown->callback(j);
+                        dropdown->callback(j, dropdown->user_data);
                     }
                     click_handled = true;
                     break;

@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void))
+GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, int height, void (*callback)(void *user_data), void *user_data)
 {
     GooeyImage *image = (GooeyImage *)calloc(1, sizeof(GooeyImage));
 
@@ -27,7 +27,7 @@ GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, i
     image->callback = callback;
     image->needs_refresh = false;
     image->image_path = image_path;
-
+    image->user_data = user_data;
     image->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
 
     return image;

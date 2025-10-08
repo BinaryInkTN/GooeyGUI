@@ -16,7 +16,7 @@ bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
         {
             if (image->callback)
             {
-                image->callback();
+                image->callback(image->user_data);
             }
 
             return true;

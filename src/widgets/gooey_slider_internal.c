@@ -66,7 +66,7 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *drag_event)
 
         if (active_slider->callback)
         {
-            active_slider->callback(active_slider->value);
+            active_slider->callback(active_slider->value, active_slider->user_data);
         }
 
         active_slider = NULL;

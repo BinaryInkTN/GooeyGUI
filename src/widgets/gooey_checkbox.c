@@ -22,7 +22,7 @@
 #define CHECKBOX_SIZE 20 /** Size of a checkbox widget. */
 
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
-                                    void (*callback)(bool checked))
+                                    void (*callback)(bool checked, void* user_data), void* user_data)
 {
     GooeyCheckbox *checkbox = (GooeyCheckbox *)calloc(1, sizeof(GooeyCheckbox));
     *checkbox = (GooeyCheckbox){0};

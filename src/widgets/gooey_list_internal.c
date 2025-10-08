@@ -169,7 +169,7 @@ bool GooeyList_HandleClick(GooeyWindow *window, int mouse_x, int mouse_y)
             {
                 if (list->callback)
                 {
-                    list->callback(selected_index);
+                    list->callback(selected_index, list->user_data);
                 }
 
                 return true;

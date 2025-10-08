@@ -33,7 +33,7 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY)
 
             if (drop_surface->callback)
             {
-                drop_surface->callback(event->drop_data.mime, event->drop_data.file_path);
+                drop_surface->callback(event->drop_data.mime, event->drop_data.file_path, drop_surface->user_data);
             }
 
             return true;

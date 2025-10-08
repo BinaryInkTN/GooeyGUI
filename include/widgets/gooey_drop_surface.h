@@ -38,7 +38,7 @@ extern "C" {
 GooeyDropSurface *GooeyDropSurface_Create(
     int x, int y, int width, int height,
     char *default_message,
-    void (*callback)(char *mime, char *file_path)
+    void (*callback)(char *mime, char *file_path, void* user_data), void *user_data
 );
 
 /**

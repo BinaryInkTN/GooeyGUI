@@ -28,7 +28,7 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y)
 
             if (gswitch->callback)
             {
-                gswitch->callback(gswitch->is_toggled);
+                gswitch->callback(gswitch->is_toggled, gswitch->user_data);
             }
         }
         else

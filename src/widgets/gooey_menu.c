@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_menu.h"
-#if(ENABLE_MENU)
+#if (ENABLE_MENU)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -26,11 +26,11 @@ GooeyMenu *GooeyMenu_Set(GooeyWindow *win)
     win->menu->children_count = 0;
     win->menu->is_busy = 0;
     LOG_INFO("Set menu for window.");
-    
+
     return win->menu;
 }
 
-GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title)
+GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title, void *user_data)
 {
     if (!win->menu || win->menu->children_count >= MAX_MENU_CHILDREN)
     {
@@ -38,8 +38,11 @@ GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title)
         return NULL;
     }
 
-    win->menu->children[win->menu->children_count] = (GooeyMenuChild) {0};
+    win->menu->children[win->menu->children_count] = (GooeyMenuChild){0};
+
     GooeyMenuChild *child = &win->menu->children[win->menu->children_count++];
+    child->user_data[win->menu->children_count - 1] = user_data;
+
     strcpy(child->title, title);
     child->menu_elements_count = 0;
     child->is_open = false;
@@ -50,10 +53,12 @@ GooeyMenuChild *GooeyMenu_AddChild(GooeyWindow *win, char *title)
 }
 
 void GooeyMenuChild_AddElement(GooeyMenuChild *child, char *title,
-                               void (*callback)())
+                               void (*callback)(void *user_data), void *user_data)
 {
     child->menu_elements[child->menu_elements_count] = title;
     child->callbacks[child->menu_elements_count] = callback;
+    child->user_data[child->menu_elements_count] = user_data;
+
     child->menu_elements_count++;
     LOG_INFO("Element added to menu child with title=\"%s\"", title);
 }

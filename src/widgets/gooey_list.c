@@ -16,7 +16,7 @@
  */
 
 #include "widgets/gooey_list.h"
-#if(ENABLE_LIST)
+#if (ENABLE_LIST)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
@@ -24,7 +24,7 @@
 #define DEFAULT_ITEM_SPACING 40
 #define DEFAULT_SCROLL_OFFSET 1
 
-GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index))
+GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback)(int index, void *user_data), void *user_data)
 {
     GooeyList *list = (GooeyList *)calloc(1, sizeof(GooeyList));
     if (!list)
@@ -50,7 +50,7 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
     list->show_separator = true;
     list->element_hovered_over = -1;
     list->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
-
+    list->user_data = user_data;
     return list;
 }
 

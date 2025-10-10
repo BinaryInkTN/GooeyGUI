@@ -138,6 +138,8 @@ void GooeyWindow_SetContinuousRedraw(GooeyWindow *win);
 
 void GooeyWindow_RequestCleanup(GooeyWindow *win);
 
+void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void* widget);
+
 #ifdef __cplusplus
 }
 #endif

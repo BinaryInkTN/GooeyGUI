@@ -263,9 +263,6 @@ install(TARGETS GooeyGUI
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Remove dependency targets from installation
-# install(TARGETS cjson GLPS freetype nfd ...) # COMMENT THIS OUT
-
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 # ----------------------------

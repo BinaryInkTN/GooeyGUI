@@ -786,6 +786,332 @@ void GooeyWindow_RequestRedraw(GooeyWindow *win)
     active_backend->RequestRedraw(win);
 }
 
+void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void *widget)
+{
+    if (!win || !widget)
+    {
+        LOG_CRITICAL("Window and/or widget NULL.");
+        return;
+    }
+
+    GooeyWidget *core = (GooeyWidget *)widget;
+    WIDGET_TYPE type = core->type;
+    
+    switch (type)
+    {
+    case WIDGET_LABEL:
+    {
+        for (int i = 0; i < win->label_count; i++)
+        {
+            if (win->labels[i] == (GooeyLabel *)widget)
+            {
+                // Shift remaining elements left
+                for (int j = i; j < win->label_count - 1; j++)
+                {
+                    win->labels[j] = win->labels[j + 1];
+                }
+                win->label_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_SLIDER:
+    {
+        for (int i = 0; i < win->slider_count; i++)
+        {
+            if (win->sliders[i] == (GooeySlider *)widget)
+            {
+                for (int j = i; j < win->slider_count - 1; j++)
+                {
+                    win->sliders[j] = win->sliders[j + 1];
+                }
+                win->slider_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_SWITCH:
+    {
+        for (int i = 0; i < win->switch_count; i++)
+        {
+            if (win->switches[i] == (GooeySwitch *)widget)
+            {
+                for (int j = i; j < win->switch_count - 1; j++)
+                {
+                    win->switches[j] = win->switches[j + 1];
+                }
+                win->switch_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_RADIOBUTTON:
+    {
+        for (int i = 0; i < win->radio_button_count; i++)
+        {
+            if (win->radio_button_groups[i] == (GooeyRadioButtonGroup *)widget)
+            {
+                for (int j = i; j < win->radio_button_count - 1; j++)
+                {
+                    win->radio_button_groups[j] = win->radio_button_groups[j + 1];
+                }
+                win->radio_button_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_CHECKBOX:
+    {
+        for (int i = 0; i < win->checkbox_count; i++)
+        {
+            if (win->checkboxes[i] == (GooeyCheckbox *)widget)
+            {
+                for (int j = i; j < win->checkbox_count - 1; j++)
+                {
+                    win->checkboxes[j] = win->checkboxes[j + 1];
+                }
+                win->checkbox_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_BUTTON:
+    {
+        for (int i = 0; i < win->button_count; i++)
+        {
+            if (win->buttons[i] == (GooeyButton *)widget)
+            {
+                for (int j = i; j < win->button_count - 1; j++)
+                {
+                    win->buttons[j] = win->buttons[j + 1];
+                }
+                win->button_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_TEXTBOX:
+    {
+        for (int i = 0; i < win->textboxes_count; i++)
+        {
+            if (win->textboxes[i] == (GooeyTextbox *)widget)
+            {
+                for (int j = i; j < win->textboxes_count - 1; j++)
+                {
+                    win->textboxes[j] = win->textboxes[j + 1];
+                }
+                win->textboxes_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_WEBVIEW:
+    {
+        for (int i = 0; i < win->webview_count; i++)
+        {
+            if (win->webviews[i] == (GooeyWebview *)widget)
+            {
+                for (int j = i; j < win->webview_count - 1; j++)
+                {
+                    win->webviews[j] = win->webviews[j + 1];
+                }
+                win->webview_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_DROPDOWN:
+    {
+        for (int i = 0; i < win->dropdown_count; i++)
+        {
+            if (win->dropdowns[i] == (GooeyDropdown *)widget)
+            {
+                for (int j = i; j < win->dropdown_count - 1; j++)
+                {
+                    win->dropdowns[j] = win->dropdowns[j + 1];
+                }
+                win->dropdown_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_CANVAS:
+    {
+        for (int i = 0; i < win->canvas_count; i++)
+        {
+            if (win->canvas[i] == (GooeyCanvas *)widget)
+            {
+                for (int j = i; j < win->canvas_count - 1; j++)
+                {
+                    win->canvas[j] = win->canvas[j + 1];
+                }
+                win->canvas_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_LAYOUT:
+    {
+        for (int i = 0; i < win->layout_count; i++)
+        {
+            if (win->layouts[i] == (GooeyLayout *)widget)
+            {
+                for (int j = i; j < win->layout_count - 1; j++)
+                {
+                    win->layouts[j] = win->layouts[j + 1];
+                }
+                win->layout_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_PLOT:
+    {
+        for (int i = 0; i < win->plot_count; i++)
+        {
+            if (win->plots[i] == (GooeyPlot *)widget)
+            {
+                for (int j = i; j < win->plot_count - 1; j++)
+                {
+                    win->plots[j] = win->plots[j + 1];
+                }
+                win->plot_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_DROP_SURFACE:
+    {
+        for (int i = 0; i < win->drop_surface_count; i++)
+        {
+            if (win->drop_surface[i] == (GooeyDropSurface *)widget)
+            {
+                for (int j = i; j < win->drop_surface_count - 1; j++)
+                {
+                    win->drop_surface[j] = win->drop_surface[j + 1];
+                }
+                win->drop_surface_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_IMAGE:
+    {
+        for (int i = 0; i < win->image_count; i++)
+        {
+            if (win->images[i] == (GooeyImage *)widget)
+            {
+                for (int j = i; j < win->image_count - 1; j++)
+                {
+                    win->images[j] = win->images[j + 1];
+                }
+                win->image_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_LIST:
+    {
+        for (int i = 0; i < win->list_count; i++)
+        {
+            if (win->lists[i] == (GooeyList *)widget)
+            {
+                for (int j = i; j < win->list_count - 1; j++)
+                {
+                    win->lists[j] = win->lists[j + 1];
+                }
+                win->list_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_PROGRESSBAR:
+    {
+        for (int i = 0; i < win->progressbar_count; i++)
+        {
+            if (win->progressbars[i] == (GooeyProgressBar *)widget)
+            {
+                for (int j = i; j < win->progressbar_count - 1; j++)
+                {
+                    win->progressbars[j] = win->progressbars[j + 1];
+                }
+                win->progressbar_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_METER:
+    {
+        for (int i = 0; i < win->meter_count; i++)
+        {
+            if (win->meters[i] == (GooeyMeter *)widget)
+            {
+                for (int j = i; j < win->meter_count - 1; j++)
+                {
+                    win->meters[j] = win->meters[j + 1];
+                }
+                win->meter_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_CONTAINER:
+    {
+        for (int i = 0; i < win->container_count; i++)
+        {
+            if (win->containers[i] == (GooeyContainers *)widget)
+            {
+                for (int j = i; j < win->container_count - 1; j++)
+                {
+                    win->containers[j] = win->containers[j + 1];
+                }
+                win->container_count--;
+                break;
+            }
+        }
+        break;
+    }
+    case WIDGET_TABS:
+    {
+        for (int i = 0; i < win->tab_count; i++)
+        {
+            if (win->tabs[i] == (GooeyTabs *)widget)
+            {
+                for (int j = i; j < win->tab_count - 1; j++)
+                {
+                    win->tabs[j] = win->tabs[j + 1];
+                }
+                win->tab_count--;
+                break;
+            }
+        }
+        break;
+    }
+    default:
+        LOG_ERROR("Invalid widget type.");
+        break;
+    }
+
+    active_backend->RequestRedraw(win);
+}
+
 void GooeyWindow_SetContinuousRedraw(GooeyWindow *win)
 {
     // win->continuous_redraw = true;

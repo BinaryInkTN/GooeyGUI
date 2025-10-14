@@ -40,13 +40,12 @@ void GooeyImage_SetImage(GooeyImage *image, const char *image_path)
         LOG_ERROR("Image widget is NULL");
         return;
     }
-    printf("%u \n", image->texture_id);
 
     image->image_path = image_path;
 }
 
 void GooeyImage_Damage(GooeyImage *image)
 {
-    image->needs_refresh = access(image->image_path, F_OK) == 0;
+    image->needs_refresh = true;
 }
 #endif

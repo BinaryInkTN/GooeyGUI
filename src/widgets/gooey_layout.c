@@ -87,6 +87,29 @@ void GooeyLayout_AddChild(GooeyWindow* window, GooeyLayout *layout, void *widget
     GooeyWindow_Internal_RegisterWidget(window, widget);
 }
 
+void GooeyLayout_SetColumns(GooeyLayout *layout, int cols)
+{
+    if (!layout)
+    {
+        LOG_ERROR("Null layout pointer");
+        return;
+    }
+
+    if (layout->layout_type != LAYOUT_GRID)
+    {
+        LOG_ERROR("Attempted to set columns on non-grid layout");
+        return;
+    }
+
+    if (cols <= 0)
+    {
+        LOG_ERROR("Invalid number of columns: %d", cols);
+        return;
+    }
+
+    layout->cols = cols;
+}
+
 
 void GooeyLayout_Destroy(GooeyLayout *layout)
 {

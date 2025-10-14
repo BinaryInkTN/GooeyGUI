@@ -16,6 +16,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 #define STB_IMAGE_IMPLEMENTATION
+#define NANOSVG_IMPLEMENTATION
+#include "backends/utils/nanosvg/nanosvg.h"
+#define NANOSVGRAST_IMPLEMENTATION
+#include "backends/utils/nanosvg/nanosvgrast.h"
 
 #include "backends/utils/backend_utils_internal.h"
 #if (TFT_ESPI_ENABLED == 0)
@@ -717,6 +721,27 @@ void glps_unload_image(unsigned int texture_id)
     glDeleteTextures(1, &texture_id);
 }
 
+static int is_stb_supported_image_format(const char *path)
+{
+    if (!path)
+        return 0;
+
+    const char *ext = strrchr(path, '.');
+    if (!ext)
+        return 0;
+
+    ext++;
+
+    if (strcasecmp(ext, "png") == 0 ||
+        strcasecmp(ext, "jpg") == 0 ||
+        strcasecmp(ext, "jpeg") == 0)
+    {
+        return 1;
+    }
+
+    return 0;
+}
+
 unsigned int glps_load_image(const char *image_path)
 {
 
@@ -728,10 +753,31 @@ unsigned int glps_load_image(const char *image_path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_set_flip_vertically_on_load(1);
+    unsigned char *data = NULL;
     int img_width, img_height, nrChannels;
-    unsigned char *data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
+
+    if (!is_stb_supported_image_format(image_path))
+    {
+        // try loading svg
+
+
+        NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
+        // Create rasterizer
+        NSVGrasterizer *rast = nsvgCreateRasterizer();
+        // Rasterize to bitmap
+        img_width = (int)image->width;
+        img_height = (int)image->height;
+        nrChannels = 4;
+        data = malloc(img_width * img_height * 4);
+        nsvgRasterize(rast, image, 0, 0, 1, data, img_width, img_height, img_width * 4);
+    }
+    else
+    {
+        // Load with STB
+        stbi_set_flip_vertically_on_load(1);
+
+        data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
+    }
 
     if (!data)
     {

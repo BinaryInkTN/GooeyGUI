@@ -1,5 +1,5 @@
 #include "widgets/gooey_layout_internal.h"
-#if(ENABLE_LAYOUT)
+#if (ENABLE_LAYOUT)
 #include "logger/pico_logger_internal.h"
 
 void GooeyLayout_Build(GooeyLayout *layout)
@@ -20,7 +20,6 @@ void GooeyLayout_Build(GooeyLayout *layout)
     int current_x = layout->core.x;
     int current_y = layout->core.y;
 
-    // Calculate available width per widget
     const float max_widget_width = (layout->layout_type == LAYOUT_HORIZONTAL)
                                        ? (layout->core.width - (spacing * (layout->widget_count - 1))) / layout->widget_count
                                        : layout->core.width;
@@ -60,16 +59,53 @@ void GooeyLayout_Build(GooeyLayout *layout)
             break;
 
         case LAYOUT_GRID:
-            // Implement grid layout logic here
-            LOG_WARNING("Grid layout not yet implemented");
-            break;
+        {
+
+            const int grid_cols = layout->cols > 0 ? layout->cols : 2;
+            const int grid_rows = (layout->widget_count + grid_cols - 1) / grid_cols;
+
+            const int cell_width = (layout->core.width - (spacing * (grid_cols - 1))) / grid_cols;
+            const int cell_height = (layout->core.height - (spacing * (grid_rows - 1))) / grid_rows;
+
+            const int row = i / grid_cols;
+            const int col = i % grid_cols;
+
+            widget->x = layout->core.x + col * (cell_width + spacing);
+            widget->y = layout->core.y + row * (cell_height + spacing);
+
+            if (widget->type == WIDGET_IMAGE)
+            {
+
+                const float aspect_ratio = (float)widget->width / widget->height;
+                if (aspect_ratio > 1.0f)
+                {
+
+                    widget->width = cell_width;
+                    widget->height = (int)(cell_width / aspect_ratio);
+                }
+                else
+                {
+
+                    widget->height = cell_height;
+                    widget->width = (int)(cell_height * aspect_ratio);
+                }
+            }
+            else if (widget->type != WIDGET_CHECKBOX)
+            {
+
+                widget->width = cell_width;
+            }
+
+            widget->x += (cell_width - widget->width) / 2;
+            widget->y += (cell_height - widget->height) / 2;
+        }
+        break;
 
         default:
             LOG_ERROR("Unsupported layout type: %d", layout->layout_type);
             return;
         }
 
-        // Recursively build child layouts
         if (widget->type == WIDGET_LAYOUT)
         {
             GooeyLayout_Build((GooeyLayout *)widget);

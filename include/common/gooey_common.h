@@ -411,6 +411,8 @@ typedef struct
     float min_y_value;
     const char **bar_labels;
     GOOEY_PLOT_TYPE plot_type;
+    float custom_x_step; // Custom X-axis step size (0.0 = auto)
+    float custom_y_step; // Custom Y-axis step size (0.0 = auto)
 } GooeyPlotData;
 
 typedef struct

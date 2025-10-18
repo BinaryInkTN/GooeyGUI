@@ -18,12 +18,10 @@ bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
             {
                 image->callback(image->user_data);
             }
-
-            return true;
         }
     }
 
-    return false;
+    return true;
 }
 
 void GooeyImage_Draw(GooeyWindow *win)

@@ -73,24 +73,7 @@ void GooeyLayout_Build(GooeyLayout *layout)
             widget->x = layout->core.x + col * (cell_width + spacing);
             widget->y = layout->core.y + row * (cell_height + spacing);
 
-            if (widget->type == WIDGET_IMAGE)
-            {
-
-                const float aspect_ratio = (float)widget->width / widget->height;
-                if (aspect_ratio > 1.0f)
-                {
-
-                    widget->width = cell_width;
-                    widget->height = (int)(cell_width / aspect_ratio);
-                }
-                else
-                {
-
-                    widget->height = cell_height;
-                    widget->width = (int)(cell_height * aspect_ratio);
-                }
-            }
-            else if (widget->type != WIDGET_CHECKBOX)
+            if (widget->type != WIDGET_CHECKBOX)
             {
 
                 widget->width = cell_width;

@@ -338,8 +338,7 @@ static void __free_plots(GooeyWindow *win)
     for (size_t i = 0; i < win->plot_count; ++i)
     {
         GooeyPlotData *data = win->plots[i]->data;
-        free(data->x_data);
-        free(data->y_data);
+        
     }
     free(win->plots);
     win->plots = NULL;

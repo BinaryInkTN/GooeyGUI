@@ -50,33 +50,12 @@ GooeyTabs *GooeyTabs_Create(int x, int y, int width, int height, bool is_sidebar
 
 void GooeyTabs_Sidebar_Open(GooeyTabs *tabs_widget)
 {
-    if (tabs_widget->is_open)
-        return;
-    for (size_t i = 0; i < tabs_widget->tab_count; i++)
-    {
-
-        for (size_t j = 0; j < tabs_widget->tabs[i].widget_count; j++)
-        {
-            GooeyWidget *widget = (GooeyWidget *)tabs_widget->tabs[i].widgets[j];
-            widget->x += TAB_WIDTH;
-        }
-    }
-    tabs_widget->is_open = true;
+    //TODO
 }
 
 void GooeyTabs_Sidebar_Close(GooeyTabs *tabs_widget)
 {
-    if (!tabs_widget->is_open)
-        return;
-    for (size_t i = 0; i < tabs_widget->tab_count; i++)
-    {
-        for (size_t j = 0; j < tabs_widget->tabs[i].widget_count; j++)
-        {
-            GooeyWidget *widget = (GooeyWidget *)tabs_widget->tabs[i].widgets[j];
-            widget->x -= TAB_WIDTH;
-        }
-    }
-    tabs_widget->is_open = false;
+    //TODO
 }
 
 void GooeyTabs_InsertTab(GooeyTabs *tab_widget, char *tab_name)

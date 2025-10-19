@@ -117,8 +117,6 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
 
         int toggle_width = 15;
         int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
-                                LOG_CRITICAL("%d", current_sidebar_width);
-
         if (mouse_x >= tabs->core.x &&
             mouse_x < tabs->core.x + current_sidebar_width + toggle_width &&
             mouse_y >= tabs->core.y &&
@@ -203,7 +201,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
         const int visible_area_h = tabs->core.height - TAB_HEIGHT;
 
         const int tab_width = tabs->core.width / (int)tabs->tab_count;
-
+        
         for (size_t j = 0; j < tabs->tab_count; ++j)
         {
             GooeyTab *tab = &tabs->tabs[j];

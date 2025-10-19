@@ -22,6 +22,7 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
             .y = y,
             .width = width,
             .height = height,
+            .disable_input = false
         },
         .value = initial_value,
         .label = label,

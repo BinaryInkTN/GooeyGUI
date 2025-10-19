@@ -28,7 +28,7 @@ GooeyDropSurface *GooeyDropSurface_Create(int x, int y, int width, int height, c
     drop_surface->user_data = user_data;
     strncpy(drop_surface->default_message, default_message, sizeof(drop_surface->default_message) - 1);
     drop_surface->default_message[sizeof(drop_surface->default_message) - 1] = '\0';
-
+    drop_surface->core.disable_input = false;
     return drop_surface;
 }
 

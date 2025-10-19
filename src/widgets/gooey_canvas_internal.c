@@ -66,7 +66,7 @@ void GooeyCanvas_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->canvas_count; ++i)
     {
         GooeyCanvas *canvas = win->canvas[i];
-        if (!canvas)
+        if (!canvas || canvas->core.disable_input)
         {
             LOG_ERROR("Canvas is invalid.");
             continue;
@@ -77,7 +77,7 @@ void GooeyCanvas_HandleClick(GooeyWindow *win, int x, int y)
         const int CANVAS_WIDTH = canvas->core.width;
         const int CANVAS_HEIGHT = canvas->core.height;
 
-        if (x >= CANVAS_X && x <= CANVAS_X + CANVAS_WIDTH && y >= CANVAS_Y && y <= CANVAS_Y + CANVAS_HEIGHT)
+        if ( x >= CANVAS_X && x <= CANVAS_X + CANVAS_WIDTH && y >= CANVAS_Y && y <= CANVAS_Y + CANVAS_HEIGHT)
         {
             active_backend->RedrawSprite(canvas->core.sprite);
 

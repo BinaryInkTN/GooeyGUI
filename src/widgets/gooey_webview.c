@@ -3,23 +3,23 @@
 
 #if (ENABLE_WEBVIEW)
 
-GooeyWebview* GooeyWebview_Create(GooeyWindow* window, const char* url, int x, int y, int width, int height)
+GooeyWebview *GooeyWebview_Create(GooeyWindow *window, const char *url, int x, int y, int width, int height)
 {
-    if(!window)
+    if (!window)
     {
         LOG_ERROR("GooeyWebview_Create: window is NULL");
         return NULL;
-    }   
+    }
 
-    if(window->webview_count >= MAX_WIDGETS)
+    if (window->webview_count >= MAX_WIDGETS)
     {
         LOG_ERROR("GooeyWebview_Create: Maximum number of webviews reached");
         return NULL;
     }
 
-    GooeyWebview* webview = (GooeyWebview*)calloc(1, sizeof(GooeyWebview));
+    GooeyWebview *webview = (GooeyWebview *)calloc(1, sizeof(GooeyWebview));
 
-    if(!webview)
+    if (!webview)
     {
         LOG_ERROR("GooeyWebview_Create: Failed to allocate memory for webview");
         return NULL;
@@ -31,6 +31,8 @@ GooeyWebview* GooeyWebview_Create(GooeyWindow* window, const char* url, int x, i
     webview->core.width = width;
     webview->core.height = height;
     webview->core.is_visible = true;
+    webview->core.disable_input = false;
+
     strncpy(webview->url, url, sizeof(webview->url) - 1);
     webview->needs_refresh = true;
     webview->core.sprite = NULL; // Initialize sprite to NULL, will be created during drawing

@@ -46,6 +46,7 @@ GooeyTextbox *GooeyTextBox_Create(int x, int y, int width,
     textBox->core.sprite = active_backend->CreateSpriteForWidget(x - 40, y - 40, width + 40, height + 40);
     textBox->user_data = user_data;
     strcpy(textBox->placeholder, placeholder);
+    textBox->core.disable_input = false;
 
     // GooeyWindow_RegisterWidget(win, (GooeyWidget *)&win->textboxes[win->textboxes_count].core);
     LOG_INFO("Textbox added with dimensions x=%d, y=%d, w=%d, h=%d", x, y, width, height);

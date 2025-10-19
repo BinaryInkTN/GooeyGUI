@@ -34,7 +34,7 @@ bool GooeyCheckbox_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->checkbox_count; ++i)
     {
         GooeyCheckbox *checkbox = win->checkboxes[i];
-                if(!checkbox || !checkbox->core.is_visible) continue;
+                if(!checkbox || !checkbox->core.is_visible || checkbox->core.disable_input) continue;
 
         if (x >= checkbox->core.x && x <= checkbox->core.x + checkbox->core.width &&
             y >= checkbox->core.y &&

@@ -24,7 +24,7 @@ bool GooeyDropSurface_HandleFileDrop(GooeyWindow *win, int mouseX, int mouseY)
     for (size_t i = 0; i < win->drop_surface_count; ++i)
     {
         GooeyDropSurface *drop_surface = win->drop_surface[i];
-        if (!drop_surface || !drop_surface->core.is_visible)
+        if (!drop_surface || !drop_surface->core.is_visible || drop_surface->core.disable_input)
             continue;
 
         if (mouseX > drop_surface->core.x && mouseX < drop_surface->core.x + drop_surface->core.width && mouseY > drop_surface->core.y && mouseY < drop_surface->core.y + drop_surface->core.height)

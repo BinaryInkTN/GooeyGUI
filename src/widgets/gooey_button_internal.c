@@ -61,7 +61,7 @@ bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
         button->hover = is_within_bounds;
 
-        if (is_within_bounds)
+        if (is_within_bounds && !button->core.disable_input)
         {
             hover_over_button = true;
             break;
@@ -88,7 +88,7 @@ bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)
             continue;
         bool is_within_bounds = (x >= button->core.x && x <= button->core.x + button->core.width) &&
                                 (y >= button->core.y && y <= button->core.y + button->core.height);
-        if (is_within_bounds)
+        if (is_within_bounds && !button->core.disable_input)
         {
 
             button->clicked = !button->clicked;

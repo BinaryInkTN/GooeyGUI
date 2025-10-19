@@ -49,6 +49,7 @@ GooeySlider *GooeySlider_Create( int x, int y, int width,
     slider->show_hints = show_hints;
     slider->callback = callback;
     slider->core.sprite = active_backend->CreateSpriteForWidget(x, y - 10, width + 10, SLIDER_HEIGHT + 20);
+    slider->core.disable_input = false;
     slider->user_data = user_data;
     return slider;
 }

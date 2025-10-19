@@ -14,7 +14,7 @@ bool GooeySwitch_HandleClick(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->switch_count; ++i)
     {
         GooeySwitch *gswitch = win->switches[i];
-        if (!gswitch || !gswitch->core.is_visible)
+        if (!gswitch || !gswitch->core.is_visible || gswitch->core.disable_input)
             continue;
         bool is_within_bounds = (x >= gswitch->core.x && x <= gswitch->core.x + gswitch->core.width) &&
                                 (y >= gswitch->core.y && y <= gswitch->core.y + gswitch->core.height);

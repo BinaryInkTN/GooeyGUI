@@ -20,6 +20,7 @@ GooeySwitch *GooeySwitch_Create(int x, int y, bool IsToggled,
     gswitch->core.width = SWITCH_WIDTH;
     gswitch->core.height = SWITCH_HEIGHT;
     gswitch->core.is_visible = true;
+    gswitch->core.disable_input = false;
 
     gswitch->is_toggled = IsToggled;
     gswitch->show_hints = show_hints;

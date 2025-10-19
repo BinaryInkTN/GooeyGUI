@@ -10,7 +10,7 @@ bool GooeyImage_HandleClick(GooeyWindow *win, int mouseX, int mouseY)
     for (size_t i = 0; i < win->image_count; ++i)
     {
         GooeyImage *image = win->images[i];
-        if (!image || !image->core.is_visible)
+        if (!image || !image->core.is_visible || image->core.disable_input)
             continue;
         if (mouseX > image->core.x && mouseX < image->core.x + image->core.width && mouseY > image->core.y && mouseY < image->core.y + image->core.height)
         {
@@ -43,7 +43,7 @@ void GooeyImage_Draw(GooeyWindow *win)
             active_backend->UnloadImage(image->texture_id);
             active_backend->LoadImage(image->image_path);
             image->needs_refresh = false;
-            active_backend->RequestRedraw(win->creation_id);
+            active_backend->RequestRedraw(win);
         }
         active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
     }

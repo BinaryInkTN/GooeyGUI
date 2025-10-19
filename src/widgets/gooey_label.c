@@ -38,7 +38,7 @@ GooeyLabel *GooeyLabel_Create(const char *text, float font_size, int x, int y)
     label->font_size = font_size;
     label->is_using_custom_color = false;
     label->core.sprite = active_backend->CreateSpriteForWidget(x, y, 20, 20);
-
+    label->core.disable_input = false;
     strncpy(label->text, text, sizeof(label->text) - 1);
     label->text[sizeof(label->text) - 1] = '\0';
     LOG_INFO("Label added with dimensions x=%d, y=%d", x, y);

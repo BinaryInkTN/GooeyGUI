@@ -109,7 +109,7 @@ bool GooeyList_HandleScroll(GooeyWindow *window, void *scroll_event)
     {
         GooeyList *list = window->lists[i];
         {
-            if (!list->core.is_visible)
+            if (!list->core.is_visible || list->core.disable_input)
                 continue;
             int mouse_x = event->mouse_move.x;
             int mouse_y = event->mouse_move.y;

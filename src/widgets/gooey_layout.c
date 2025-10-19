@@ -45,7 +45,9 @@ GooeyLayout *GooeyLayout_Create(GooeyLayoutType layout_type,
             .y = y,
             .width = width,
             .height = height,
-            .is_visible = true},
+            .is_visible = true,
+            .disable_input = false
+        },
         .layout_type = layout_type,
         .widget_count = 0,
         .widgets = {0}};

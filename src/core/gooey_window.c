@@ -552,7 +552,6 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     DRAW_WIDGET_IF_ENABLED(ENABLE_CANVAS, GooeyCanvas_Draw);
 
     DRAW_WIDGET_IF_ENABLED(ENABLE_CONTAINER, GooeyContainer_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_TABS, GooeyTabs_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_METER, GooeyMeter_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_PROGRESSBAR, GooeyProgressBar_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_DROP_SURFACE, GooeyDropSurface_Draw);
@@ -572,6 +571,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
     DRAW_WIDGET_IF_ENABLED(ENABLE_DROPDOWN, GooeyDropdown_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_APPBAR, GooeyAppbar_Internal_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_CTXMENU, GooeyCtxMenu_Internal_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_TABS, GooeyTabs_Draw);
 
     active_backend->Render(win);
 }

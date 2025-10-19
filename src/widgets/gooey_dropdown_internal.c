@@ -77,7 +77,7 @@ bool GooeyDropdown_HandleHover(GooeyWindow *win, int x, int y)
     for (size_t i = 0; i < win->dropdown_count; i++)
     {
         GooeyDropdown *dropdown = win->dropdowns[i];
-        if (!dropdown || !dropdown->core.is_visible)
+        if (!dropdown || !dropdown->core.is_visible || dropdown->core.disable_input)
             continue;
 
         if (x >= dropdown->core.x && x <= dropdown->core.x + dropdown->core.width &&

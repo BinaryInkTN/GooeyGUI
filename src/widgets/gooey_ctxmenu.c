@@ -13,7 +13,7 @@ void GooeyCtxMenu_Set(GooeyWindow* window)
     window->ctx_menu->core.is_visible = true;
     window->ctx_menu->is_open = false;
     window->ctx_menu->menu_item_count = 2;
-
+    window->ctx_menu->core.disable_input = false;
     // Default menu items
     window->ctx_menu->menu_items[0].callback = NULL;
     window->ctx_menu->menu_items[1].callback = NULL;

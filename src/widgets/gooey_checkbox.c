@@ -16,13 +16,13 @@
  */
 
 #include "widgets/gooey_checkbox.h"
-#if(ENABLE_CHECKBOX)
+#if (ENABLE_CHECKBOX)
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 #define CHECKBOX_SIZE 20 /** Size of a checkbox widget. */
 
 GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
-                                    void (*callback)(bool checked, void* user_data), void* user_data)
+                                    void (*callback)(bool checked, void *user_data), void *user_data)
 {
     GooeyCheckbox *checkbox = (GooeyCheckbox *)calloc(1, sizeof(GooeyCheckbox));
     *checkbox = (GooeyCheckbox){0};
@@ -39,6 +39,8 @@ GooeyCheckbox *GooeyCheckbox_Create(int x, int y, char *label,
     checkbox->core.height = CHECKBOX_SIZE;
     checkbox->core.is_visible = true;
     checkbox->core.sprite = active_backend->CreateSpriteForWidget(x, y, CHECKBOX_SIZE, CHECKBOX_SIZE);
+    checkbox->core.disable_input = false;
+
     if (label)
     {
         strncpy(checkbox->label, label, sizeof(checkbox->label) - 1);

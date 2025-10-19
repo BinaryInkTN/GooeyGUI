@@ -30,6 +30,8 @@ GooeyContainers *GooeyContainer_Create(int x, int y, int width, int height)
     container_widget->active_container_id = 0;
     container_widget->core.is_visible = true;
     container_widget->core.sprite = NULL;
+      container_widget->core.disable_input = false;
+
     return container_widget;
 }
 

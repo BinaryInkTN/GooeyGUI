@@ -47,7 +47,9 @@ GooeyProgressBar *GooeyProgressBar_Create(int x, int y, int width, int height, l
         .core.is_visible = true,
         .core.width = width,
         .core.height = height,
-        .value = initial_value};
+        .value = initial_value,
+        .core.disable_input = false
+    };
 
     return progressbar;
 }

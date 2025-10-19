@@ -29,7 +29,7 @@ GooeyImage *GooeyImage_Create(const char *image_path, int x, int y, int width, i
     image->image_path = image_path;
     image->user_data = user_data;
     image->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
-
+    image->core.disable_input = false;
     return image;
 }
 

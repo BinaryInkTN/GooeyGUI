@@ -121,6 +121,7 @@ set(SOURCES
     src/widgets/gooey_meter.c
     src/signals/gooey_signals.c
     src/animations/gooey_animations.c
+    src/animations/gooey_animations_internal.c
     src/widgets/gooey_appbar.c
     src/core/gooey_timers_internal.c
     src/widgets/gooey_appbar_internal.c

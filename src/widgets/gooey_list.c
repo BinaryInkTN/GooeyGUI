@@ -51,6 +51,7 @@ GooeyList *GooeyList_Create(int x, int y, int width, int height, void (*callback
     list->element_hovered_over = -1;
     list->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
     list->user_data = user_data;
+    list->core.disable_input = false;
     return list;
 }
 

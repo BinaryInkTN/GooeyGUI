@@ -216,7 +216,7 @@ GooeyPlot *GooeyPlot_Create(GOOEY_PLOT_TYPE plot_type, GooeyPlotData *data, int 
     plot->data = data;
     plot->data->plot_type = plot_type;
     plot->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
-
+    plot->core.disable_input = false;
     if (plot_type != GOOEY_PLOT_BAR)
         plot->data->bar_labels = NULL;
 

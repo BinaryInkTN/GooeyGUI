@@ -43,6 +43,7 @@ GooeyTabs *GooeyTabs_Create(int x, int y, int width, int height, bool is_sidebar
     tabs_widget->is_sidebar = is_sidebar;
     tabs_widget->is_open = false;
     tabs_widget->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
+    tabs_widget->core.disable_input = false;
 
     return tabs_widget;
 }

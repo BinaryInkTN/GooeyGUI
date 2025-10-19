@@ -11,7 +11,7 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
         for (int j = 0; j < group->button_count; ++j)
         {
             GooeyRadioButton *button = &group->buttons[j];
-            if (!button->core.is_visible)
+            if (!button->core.is_visible || button->core.disable_input)
                 continue;
             int button_center_x = button->core.x + RADIO_BUTTON_RADIUS;
             int button_center_y = button->core.y + RADIO_BUTTON_RADIUS;

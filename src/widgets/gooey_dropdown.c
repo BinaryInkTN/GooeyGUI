@@ -48,6 +48,7 @@ GooeyDropdown *GooeyDropdown_Create(int x, int y, int width,
     dropdown->callback = callback;
     dropdown->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height + 200); // todo make it dynamic
     dropdown->user_data = user_data;
+    dropdown->core.disable_input = false;
     LOG_INFO("Dropdown added with dimensions x=%d, y=%d, w=%d, h=%d", x, y, width, height);
 
     dropdown->is_open = false;

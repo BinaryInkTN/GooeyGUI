@@ -66,6 +66,8 @@ typedef struct
     char __padding1[3];
     int x, y;
     int width, height;
+    bool disable_input;
+
 } GooeyWidget;
 
 typedef enum
@@ -461,6 +463,12 @@ typedef struct
     bool is_sidebar;
     bool is_open;
     char __padding[6];
+    // Animation state
+    int sidebar_offset;
+    int target_offset;
+    int current_step;
+    GooeyTimer *animation_timer;
+    bool is_animating;
 } GooeyTabs;
 
 typedef struct

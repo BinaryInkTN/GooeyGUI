@@ -4,8 +4,9 @@
 #include "common/gooey_common.h"
 
 #if (ENABLE_TABS)
+
 #define SIDEBAR_ANIMATION_SPEED 1 // ms per frame
-#define SIDEBAR_ANIMATION_STEPS 15 // total animation frames
+#define SIDEBAR_ANIMATION_STEPS 10 // total animation frames
 
 /* Tab UI element dimensions */
 #define TAB_HEIGHT           40

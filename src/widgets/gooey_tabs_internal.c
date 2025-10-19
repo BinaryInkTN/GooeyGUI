@@ -11,10 +11,7 @@ static void update_sidebar_widget_visibility(GooeyTabs *tabs)
         return;
 
     int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
-    const int visible_area_x = tabs->core.x + current_sidebar_width;
-    const int visible_area_y = tabs->core.y;
-    const int visible_area_w = tabs->core.width - current_sidebar_width;
-    const int visible_area_h = tabs->core.height;
+
 
     for (size_t j = 0; j < tabs->tab_count; ++j)
     {
@@ -25,17 +22,14 @@ static void update_sidebar_widget_visibility(GooeyTabs *tabs)
                 continue;
 
             GooeyWidget *widget = (GooeyWidget *)tab->widgets[k];
-
             widget->is_visible = (tabs->active_tab_id == tab->tab_id);
-            widget->disable_input = true;
-
+            widget->disable_input = tabs->is_open;
         }
     }
 }
 
 static void sidebar_animation_callback(void *user_data)
 {
-    LOG_INFO("ttest!");
     GooeyTabs *tabs = (GooeyTabs *)user_data;
     if (!tabs || !tabs->is_animating)
         return;
@@ -47,7 +41,7 @@ static void sidebar_animation_callback(void *user_data)
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
         tabs->is_open = (tabs->target_offset == TAB_WIDTH);
-
+        
         if (tabs->animation_timer)
         {
             GooeyTimer_Stop_Internal(tabs->animation_timer);
@@ -120,8 +114,10 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
         if (!tabs || !tabs->is_sidebar)
             continue;
 
+
         int toggle_width = 15;
         int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
+                                LOG_CRITICAL("%d", current_sidebar_width);
 
         if (mouse_x >= tabs->core.x &&
             mouse_x < tabs->core.x + current_sidebar_width + toggle_width &&

@@ -12,7 +12,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
   for (size_t index = 0; index < win->textboxes_count; ++index)
   {
     GooeyTextbox *textbox = (GooeyTextbox *)win->textboxes[index];
-    if (!textbox->core.is_visible || textbox->core.disable_input)
+    if (!textbox->core.is_visible)
       continue;
 
     active_backend->FillRectangle(textbox->core.x, textbox->core.y,
@@ -187,7 +187,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)
   for (size_t i = 0; i < win->textboxes_count; i++)
   {
     GooeyTextbox *textbox = win->textboxes[i];
-    if (!textbox || !textbox->core.is_visible)
+    if (!textbox || !textbox->core.is_visible || textbox->core.disable_input)
       continue;
 
     if (x >= textbox->core.x && x <= textbox->core.x + textbox->core.width &&

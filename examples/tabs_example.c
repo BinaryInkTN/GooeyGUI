@@ -24,12 +24,11 @@ int main()
 {
     Gooey_Init();
     GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 800, 600, true);
-    GooeyAppbar_Set(win, "test");
     GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
     GooeyWindow_SetTheme(win, dark_mode);
 
     // Create main tabs container
-    mainTabs = GooeyTabs_Create(10, 10, 780, 580, true);
+    mainTabs = GooeyTabs_Create(0, 0, 780, 580, true);
     mainTabs->is_sidebar = 1;
     // Tab 1: Controls Demo
     GooeyTabs_InsertTab(mainTabs, "Controls");

@@ -10,7 +10,7 @@ void GooeySlider_Draw(GooeyWindow *win)
     for (size_t i = 0; i < win->slider_count; ++i)
     {
         GooeySlider *slider = win->sliders[i];
-        if (!slider->core.is_visible || slider->core.disable_input)
+        if (!slider || !slider->core.is_visible)
             continue;
         active_backend->FillRectangle(slider->core.x,
                                       slider->core.y, slider->core.width, slider->core.height, win->active_theme->widget_base, win->creation_id, false, 0.0f, slider->core.sprite);
@@ -76,7 +76,7 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *drag_event)
     for (size_t i = 0; i < win->slider_count; ++i)
     {
         GooeySlider *slider = win->sliders[i];
-        if (!slider || !slider->core.is_visible)
+        if (!slider || !slider->core.is_visible || slider->core.disable_input)
             continue;
         bool within_bounds =
             (mouse_y >= slider->core.y - comfort_margin && mouse_y <= slider->core.y + slider->core.height + comfort_margin) &&

@@ -5,6 +5,10 @@
 
 #if (ENABLE_TABS)
 
+#define TABLINE_ANIMATION_SPEED 1 // ms per frame
+#define TABLINE_ANIMATION_STEPS 100 // total animation frames
+
+
 #define SIDEBAR_ANIMATION_SPEED 1 // ms per frame
 #define SIDEBAR_ANIMATION_STEPS 10 // total animation frames
 

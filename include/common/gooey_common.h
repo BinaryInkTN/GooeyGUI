@@ -266,6 +266,13 @@ typedef struct
     void (*callback)(int selected_index, void *user_data);
     void *user_data;
     int element_hovered_over;
+    GooeyTimer *animation_timer;
+    bool is_animating;
+    int animation_height;
+    int target_height;
+    int animation_step;
+    int start_height; 
+
 } GooeyDropdown;
 
 typedef struct

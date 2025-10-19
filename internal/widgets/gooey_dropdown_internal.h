@@ -19,6 +19,8 @@ extern "C" {
 #include "common/gooey_common.h"
 
 #if (ENABLE_DROPDOWN)
+#define DROPDOWN_ANIMATION_SPEED 1 // ms per frame
+#define DROPDOWN_ANIMATION_STEPS 20 // total animation frames
 
 /**
  * @brief Handles click events for dropdown menus within the specified window.

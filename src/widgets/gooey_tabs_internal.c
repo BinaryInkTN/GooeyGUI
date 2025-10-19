@@ -4,6 +4,17 @@
 #include "widgets/gooey_window_internal.h"
 #include "core/gooey_timers_internal.h"
 #include "logger/pico_logger_internal.h"
+#include "animations/gooey_animations_internal.h"
+
+static float ease_out_quad(float t)
+{
+    return 1.0f - (1.0f - t) * (1.0f - t);
+}
+
+static float ease_in_out_quad(float t)
+{
+    return t < 0.5f ? 2.0f * t * t : 1.0f - (-2.0f * t + 2.0f) * (-2.0f * t + 2.0f) / 2.0f;
+}
 
 static void update_sidebar_widget_visibility(GooeyTabs *tabs)
 {
@@ -11,7 +22,6 @@ static void update_sidebar_widget_visibility(GooeyTabs *tabs)
         return;
 
     int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
-
 
     for (size_t j = 0; j < tabs->tab_count; ++j)
     {
@@ -41,7 +51,7 @@ static void sidebar_animation_callback(void *user_data)
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
         tabs->is_open = (tabs->target_offset == TAB_WIDTH);
-        
+
         if (tabs->animation_timer)
         {
             GooeyTimer_Stop_Internal(tabs->animation_timer);
@@ -52,9 +62,10 @@ static void sidebar_animation_callback(void *user_data)
     }
 
     float progress = (float)tabs->current_step / (float)SIDEBAR_ANIMATION_STEPS;
+    float eased_progress = ease_out_quad(progress);
     int start_offset = tabs->target_offset == TAB_WIDTH ? 0 : TAB_WIDTH;
     int distance = tabs->target_offset - start_offset;
-    tabs->sidebar_offset = start_offset + (int)(distance * progress);
+    tabs->sidebar_offset = start_offset + (int)(distance * eased_progress);
 
     update_sidebar_widget_visibility(tabs);
 
@@ -62,6 +73,75 @@ static void sidebar_animation_callback(void *user_data)
     {
         GooeyTimer_SetCallback_Internal(SIDEBAR_ANIMATION_SPEED, tabs->animation_timer, sidebar_animation_callback, tabs);
     }
+}
+
+static void tab_line_animation_callback(void *user_data)
+{
+    GooeyTabs *tabs = (GooeyTabs *)user_data;
+    if (!tabs)
+        return;
+
+    if (!tabs->is_sidebar && tabs->is_animating)
+    {
+        tabs->current_step++;
+
+        if (tabs->current_step >= TABLINE_ANIMATION_STEPS)
+        {
+            tabs->sidebar_offset = tabs->target_offset;
+            tabs->is_animating = false;
+
+            if (tabs->animation_timer)
+            {
+                GooeyTimer_Stop_Internal(tabs->animation_timer);
+            }
+            return;
+        }
+
+        float progress = (float)tabs->current_step / (float)TABLINE_ANIMATION_STEPS;
+        float eased_progress = ease_in_out_quad(progress);
+
+        int start_x = tabs->is_open ? tabs->sidebar_offset : tabs->target_offset;
+        int target_x = tabs->target_offset;
+        int x_distance = target_x - start_x;
+        tabs->sidebar_offset = start_x + (int)(x_distance * eased_progress);
+
+        if (tabs->animation_timer && tabs->is_animating)
+        {
+            GooeyTimer_SetCallback_Internal(TABLINE_ANIMATION_SPEED, tabs->animation_timer, tab_line_animation_callback, tabs);
+        }
+    }
+}
+
+static void start_tab_line_animation(GooeyTabs *tabs, int target_tab_index)
+{
+    if (!tabs || tabs->is_sidebar)
+        return;
+
+    int tab_width = tabs->core.width / (int)tabs->tab_count;
+    int target_x = tabs->core.x + tab_width * target_tab_index;
+
+    tabs->target_offset = target_x;
+    tabs->current_step = 0;
+    tabs->is_animating = true;
+
+    if (!tabs->is_open)
+    {
+        tabs->is_open = true;
+    }
+
+    if (!tabs->animation_timer)
+    {
+        tabs->animation_timer = GooeyTimer_Create_Internal();
+        if (!tabs->animation_timer)
+        {
+
+            tabs->sidebar_offset = target_x;
+            tabs->is_animating = false;
+            return;
+        }
+    }
+
+    GooeyTimer_SetCallback_Internal(TABLINE_ANIMATION_SPEED, tabs->animation_timer, tab_line_animation_callback, tabs);
 }
 
 void GooeyTabs_ToggleSidebar(GooeyTabs *tabs)
@@ -113,7 +193,6 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
         GooeyTabs *tabs = win->tabs[i];
         if (!tabs || !tabs->is_sidebar)
             continue;
-
 
         int toggle_width = 15;
         int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
@@ -169,6 +248,7 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
                 mouse_y >= tab_y && mouse_y < tab_y + tab_height)
             {
                 tabs->active_tab_id = tabs->tabs[j].tab_id;
+                start_tab_line_animation(tabs, (int)j);
                 return true;
             }
         }
@@ -201,20 +281,43 @@ void GooeyTabs_Draw(GooeyWindow *win)
         const int visible_area_h = tabs->core.height - TAB_HEIGHT;
 
         const int tab_width = tabs->core.width / (int)tabs->tab_count;
-        
+
+        int line_x;
+
+        if (tabs->is_animating)
+        {
+
+            line_x = tabs->sidebar_offset;
+        }
+        else
+        {
+
+            for (size_t j = 0; j < tabs->tab_count; ++j)
+            {
+                if (tabs->tabs[j].tab_id == tabs->active_tab_id)
+                {
+                    line_x = tabs->core.x + tab_width * (int)j;
+
+                    tabs->sidebar_offset = line_x;
+                    tabs->target_offset = line_x;
+                    break;
+                }
+            }
+        }
+
+        active_backend->DrawLine(
+            line_x,
+            tabs->core.y + TAB_HEIGHT,
+            line_x + tab_width,
+            tabs->core.y + TAB_HEIGHT,
+            win->active_theme->primary,
+            win->creation_id, tabs->core.sprite);
+
         for (size_t j = 0; j < tabs->tab_count; ++j)
         {
             GooeyTab *tab = &tabs->tabs[j];
             const int tab_x = tabs->core.x + tab_width * (int)j;
             const int tab_y = tabs->core.y;
-
-            active_backend->DrawLine(
-                tab_x,
-                tab_y + TAB_HEIGHT,
-                tab_x + tab_width,
-                tab_y + TAB_HEIGHT,
-                (tabs->active_tab_id == tab->tab_id) ? win->active_theme->primary : win->active_theme->widget_base,
-                win->creation_id, tabs->core.sprite);
 
             const int text_width = active_backend->GetTextWidth(tab->tab_name, strlen(tab->tab_name));
             const int text_height = active_backend->GetTextHeight(tab->tab_name, strlen(tab->tab_name));

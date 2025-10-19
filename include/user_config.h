@@ -1,23 +1,6 @@
 #ifndef USER_CONFIG_H
 #define USER_CONFIG_H
 
-/*
-
-   /$$$$$$                                          /$$   /$$ /$$$$$$
- /$$__  $$                                        | $$  | $$|_  $$_/
-| $$  \__/  /$$$$$$   /$$$$$$   /$$$$$$  /$$   /$$| $$  | $$  | $$  
-| $$ /$$$$ /$$__  $$ /$$__  $$ /$$__  $$| $$  | $$| $$  | $$  | $$  
-| $$|_  $$| $$  \ $$| $$  \ $$| $$$$$$$$| $$  | $$| $$  | $$  | $$  
-| $$  \ $$| $$  | $$| $$  | $$| $$_____/| $$  | $$| $$  | $$  | $$  
-|  $$$$$$/|  $$$$$$/|  $$$$$$/|  $$$$$$$|  $$$$$$$|  $$$$$$/ /$$$$$$
- \______/  \______/  \______/  \_______/ \____  $$ \______/ |______/
-                                         /$$  | $$                  
-                                        |  $$$$$$/                  
-                                         \______/                   
-                                                                                                                                                                           
-* Gooey - A lightweight GUI library for C/C++ applications
-*/
-
 /*******************************************************************************
  *                              DEVELOPMENT SETTINGS                           *
  ******************************************************************************/
@@ -35,14 +18,12 @@
  */
 #define ENABLE_DEBUG_OVERLAY 1
 
-
 /*******************************************************************************
  *                             APPLICATION LAYOUT                              *
  ******************************************************************************/
 
 /** Height of the application title bar in pixels */
 #define APPBAR_HEIGHT 50
-
 
 /*******************************************************************************
  *                          SYSTEM RESOURCE LIMITS                             *
@@ -77,7 +58,7 @@
 
 /*******************************************************************************
  *                          WIDGET FEATURE TOGGLES                             *
- * 
+ *
  * Enable or disable specific widgets to reduce memory footprint or exclude
  * unused functionality. Disable widgets you don't need to improve performance.
  ******************************************************************************/
@@ -92,7 +73,7 @@
 #define ENABLE_CHECKBOX 1
 
 /** Context menu widget - Right-click context menus */
-#define ENABLE_CTXMENU 1 
+#define ENABLE_CTXMENU 1
 
 /** Drop surface widget - Area for drag-and-drop operations */
 #define ENABLE_DROP_SURFACE 1
@@ -151,11 +132,24 @@
 /** File dialog widget - Native file open/save dialogs */
 #define ENABLE_FDIALOG 1
 
+/*******************************************************************************
+ *                                WIDGET ANIMATION                             *
+ *
+ * Tweak speed and total frames to get your desired animation feel.
+ ******************************************************************************/
 
+#define TABLINE_ANIMATION_SPEED 1
+#define TABLINE_ANIMATION_STEPS 100
+
+#define SIDEBAR_ANIMATION_SPEED 1
+#define SIDEBAR_ANIMATION_STEPS 10
+
+#define DROPDOWN_ANIMATION_SPEED 1
+#define DROPDOWN_ANIMATION_STEPS 20
 
 /*******************************************************************************
  *                           ESP32 SPECIFIC CONFIGURATION                      *
- * 
+ *
  * These settings are specific to ESP32 deployments with TFT displays
  ******************************************************************************/
 
@@ -168,14 +162,13 @@
 /** Enable virtual keyboard for touch input (ESP32 only) */
 #define ENABLE_VIRTUAL_KEYBOARD 1
 
-
 /*******************************************************************************
  *                            PERFORMANCE NOTES                                *
- * 
+ *
  * - Disable unused widgets to reduce memory consumption and improve startup time
  * - In production (PROJECT_BRANCH=0), consider disabling ENABLE_DEBUG_OVERLAY
  * - Adjust resource limits based on your application's needs to optimize memory
  * - ESP32 builds may need lower limits due to constrained memory resources
  ******************************************************************************/
 
-#endif /* USER_CONFIG_H */
+#endif

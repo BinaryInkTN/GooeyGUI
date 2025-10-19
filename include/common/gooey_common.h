@@ -18,6 +18,8 @@
 #include "../user_config.h"
 #include "theme/gooey_theme.h"
 
+#pragma pack(push, 1)
+
 typedef enum
 {
     WIDGET_LABEL,
@@ -50,7 +52,7 @@ typedef struct
     int width;
     int height;
     bool needs_redraw;
-    char __padding[3]; // Reduced from 7 to 3
+    char __padding[3];
 } GooeyTFT_Sprite;
 
 typedef struct
@@ -63,11 +65,10 @@ typedef struct
     GooeyTFT_Sprite *sprite;
     WIDGET_TYPE type;
     bool is_visible;
-    char __padding1[3];
+    bool disable_input;
+    char __padding[2];
     int x, y;
     int width, height;
-    bool disable_input;
-
 } GooeyWidget;
 
 typedef enum
@@ -103,12 +104,10 @@ typedef struct
     char label[256];
     void (*callback)(void *user_data);
     void *user_data;
-
     bool clicked;
     bool hover;
     bool is_highlighted;
     bool is_disabled;
-    char __padding1[4];
     int click_timer;
 } GooeyButton;
 
@@ -128,7 +127,6 @@ typedef struct
     char label[256];
     void (*callback)(void *user_data);
     void *user_data;
-
 } GooeyCtxMenuItem;
 
 typedef struct
@@ -137,7 +135,7 @@ typedef struct
     size_t menu_item_count;
     bool is_open;
     bool is_hovered;
-    char __padding1[6];
+    char __padding[6];
     GooeyCtxMenuItem menu_items[GOOEY_CTXMENU_MAX_ITEMS];
 } GooeyCtxMenu;
 
@@ -173,7 +171,6 @@ typedef struct
     void *user_data;
     bool focused;
     bool is_password;
-    char __padding1[2];
     int cursor_pos;
     int scroll_offset;
 } GooeyTextbox;
@@ -214,7 +211,7 @@ typedef struct
     int item_spacing;
     size_t item_count;
     bool show_separator;
-    char __padding1[7];
+    char __padding[7];
     void (*callback)(int index, void *user_data);
     void *user_data;
     int element_hovered_over;
@@ -243,7 +240,7 @@ typedef struct
     long min_value;
     long max_value;
     bool show_hints;
-    char __padding1[7];
+    char __padding[7];
     void (*callback)(long value, void *user_data);
     void *user_data;
     SLIDER_ORIENTATION orientation;
@@ -262,17 +259,16 @@ typedef struct
     const char **options;
     int num_options;
     bool is_open;
-    char __padding1[3];
+    bool is_animating;
+    char __padding[2];
     void (*callback)(int selected_index, void *user_data);
     void *user_data;
     int element_hovered_over;
     GooeyTimer *animation_timer;
-    bool is_animating;
     int animation_height;
     int target_height;
     int animation_step;
-    int start_height; 
-
+    int start_height;
 } GooeyDropdown;
 
 typedef struct
@@ -283,7 +279,7 @@ typedef struct
     void *user_data[MAX_MENU_CHILDREN];
     int menu_elements_count;
     bool is_open;
-    char __padding1[3];
+    char __padding[3];
     int element_hovered_over;
 } GooeyMenuChild;
 
@@ -338,7 +334,7 @@ typedef struct
     unsigned long color;
     bool is_filled;
     bool is_rounded;
-    char __padding1[2];
+    char __padding[2];
     float thickness;
     float corner_radius;
 } CanvasDrawRectangleArgs;
@@ -420,8 +416,8 @@ typedef struct
     float min_y_value;
     const char **bar_labels;
     GOOEY_PLOT_TYPE plot_type;
-    float custom_x_step; // Custom X-axis step size (0.0 = auto)
-    float custom_y_step; // Custom Y-axis step size (0.0 = auto)
+    float custom_x_step;
+    float custom_y_step;
 } GooeyPlotData;
 
 typedef struct
@@ -435,10 +431,10 @@ typedef struct
     GooeyWidget core;
     unsigned int texture_id;
     bool is_loaded;
+    bool needs_refresh;
+    char __padding[2];
     void (*callback)(void *user_data);
     void *user_data;
-    bool needs_refresh;
-    char __padding1[3];
     const char *image_path;
 } GooeyImage;
 
@@ -449,7 +445,7 @@ typedef struct
     void *user_data;
     char default_message[64];
     bool is_file_dropped;
-    char __padding1[3];
+    char __padding[3];
     unsigned long file_icon_texture_id;
 } GooeyDropSurface;
 
@@ -469,13 +465,12 @@ typedef struct
     size_t active_tab_id;
     bool is_sidebar;
     bool is_open;
-    char __padding[6];
-    // Animation state
+    bool is_animating;
+    char __padding[5];
     int sidebar_offset;
     int target_offset;
     int current_step;
     GooeyTimer *animation_timer;
-    bool is_animating;
 } GooeyTabs;
 
 typedef struct
@@ -483,7 +478,7 @@ typedef struct
     GooeyWidget core;
     bool is_toggled;
     bool show_hints;
-    char __padding1[6];
+    char __padding[6];
     void (*callback)(bool state, void *user_data);
     void *user_data;
 } GooeySwitch;
@@ -505,7 +500,7 @@ typedef struct
 {
     GooeyWidget core;
     bool is_shown;
-    char __padding1[7];
+    char __padding[7];
     size_t text_widget_id;
 } GooeyVK;
 
@@ -532,7 +527,7 @@ typedef struct
     bool visibility;
     bool enable_debug_overlay;
     bool continuous_redraw;
-    char __padding2[5];
+    char __padding[5];
     GooeyCtxMenu *ctx_menu;
     GooeyAppbar *appbar;
     GooeyVK *vk;
@@ -584,5 +579,7 @@ typedef struct
     size_t progressbar_count;
     size_t widget_count;
 } GooeyWindow;
+
+#pragma pack(pop)
 
 #endif

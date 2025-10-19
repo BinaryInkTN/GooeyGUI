@@ -6,6 +6,7 @@ The elegant way to build cross-platform applications with native performance.
 ## What's new?
 
 We're currently working on implementing animations for widgets.
+
 <img src="animation_preview.gif" style="max-width:400px;"/>
 
 

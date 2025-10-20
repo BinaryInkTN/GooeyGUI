@@ -481,6 +481,13 @@ typedef struct
     char __padding[6];
     void (*callback)(bool state, void *user_data);
     void *user_data;
+
+       bool is_animating;
+    int animation_step;
+    int thumb_position;
+    int start_position;
+    int target_position;
+    GooeyTimer *animation_timer;
 } GooeySwitch;
 
 typedef struct
@@ -494,6 +501,7 @@ typedef struct
     long value;
     const char *label;
     unsigned long texture_id;
+    
 } GooeyMeter;
 
 typedef struct

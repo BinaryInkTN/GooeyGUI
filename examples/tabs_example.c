@@ -7,17 +7,10 @@ void dropdown_callback(int selected_index)
 }
 bool state = true;
 GooeyTabs *mainTabs;
-void button_callback()
+void button_callback(void *user_data)
 {
-    if (state)
-    {
-        GooeyTabs_Sidebar_Open(mainTabs);
-    } else {
-        GooeyTabs_Sidebar_Close(mainTabs);
-    }
-
-    state = !state;
-        
+    GooeyMeter *meter = (GooeyMeter *)user_data;
+    GooeyMeter_Update(meter, 90);
 }
 
 int main()
@@ -34,10 +27,12 @@ int main()
     GooeyTabs_InsertTab(mainTabs, "Controls");
 
     // Widgets for Controls tab
-    GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 30, 100, 30, button_callback, NULL);
+    GooeyMeter *meter = GooeyMeter_Create(30, 200, 100, 100, 50, "test", "logo.png");
+
+    GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 340, 100, 30, button_callback, meter);
     GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80, "Enable Feature", NULL, NULL);
     GooeySlider *slider = GooeySlider_Create(30, 130, 200, 0, 100, true, NULL, NULL);
-
+    GooeySwitch *switch_ = GooeySwitch_Create(30, 150, false, true, NULL, NULL);
     // Tab 2: Dropdowns and Options
     GooeyTabs_InsertTab(mainTabs, "Options");
 
@@ -70,6 +65,8 @@ int main()
     GooeyTabs_AddWidget(win, mainTabs, 0, btn1);
     GooeyTabs_AddWidget(win, mainTabs, 0, checkbox);
     GooeyTabs_AddWidget(win, mainTabs, 0, slider);
+    GooeyTabs_AddWidget(win, mainTabs, 0, switch_);
+    GooeyTabs_AddWidget(win, mainTabs, 0, meter);
 
     GooeyButton *button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL, NULL);
 

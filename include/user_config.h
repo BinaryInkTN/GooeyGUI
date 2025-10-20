@@ -147,6 +147,13 @@
 #define DROPDOWN_ANIMATION_SPEED 1
 #define DROPDOWN_ANIMATION_STEPS 20
 
+#define SWITCH_ANIMATION_STEPS 10
+#define SWITCH_ANIMATION_SPEED 16 
+
+
+#define METER_ANIMATION_STEPS 1
+#define METER_ANIMATION_SPEED 100 
+
 /*******************************************************************************
  *                           ESP32 SPECIFIC CONFIGURATION                      *
  *

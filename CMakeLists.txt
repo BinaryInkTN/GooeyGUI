@@ -26,7 +26,7 @@ endif()
 # Enable AddressSanitizer for Debug builds
 option(ENABLE_ASAN "Enable AddressSanitizer for Debug builds" OFF)
 # Disable Testing 
-set(BUILD_TESTING  OFF )
+set(BUILD_TESTING OFF)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
@@ -56,9 +56,6 @@ set(CJSON_BUILD_SHARED_LIBS OFF CACHE BOOL "Build cJSON shared library" FORCE)
 set(FT_DISABLE_ZLIB ON CACHE BOOL "Disable ZLIB for freetype" FORCE)
 set(FT_REQUIRE_ZLIB OFF CACHE BOOL "Require ZLIB for freetype" FORCE)
 
-# For GLPS and nfd, we may need to modify their CMakeLists or use other methods
-# Let's check if they respect BUILD_SHARED_LIBS
-
 # ----------------------------
 # Dependencies: cJSON, GLPS, FreeType - will now build as STATIC
 # ----------------------------
@@ -78,7 +75,7 @@ message(STATUS "GLPS build type: ${glps_type}")
 message(STATUS "freetype build type: ${freetype_type}")
 message(STATUS "nfd build type: ${nfd_type}")
 
-# Apply ASan flags to dependencies if enabled
+# Apply ASan flags to dependencies ONLY if ASan is enabled
 if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(cjson PRIVATE -fsanitize=address -fno-omit-frame-pointer)
     target_link_options(cjson PRIVATE -fsanitize=address)
@@ -229,15 +226,6 @@ elseif(MSVC)
     target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:freetype>")
     target_link_options(GooeyGUI PRIVATE "/WHOLEARCHIVE:$<TARGET_FILE:nfd>")
 endif()
-
-# ----------------------------
-# REMOVE shared library copying - no longer needed since dependencies are static
-# ----------------------------
-# COMMENT OUT or DELETE these lines:
-# copy_shared_library(GooeyGUI nfd)
-# copy_shared_library(GooeyGUI cjson)
-# copy_shared_library(GooeyGUI freetype)
-# copy_shared_library(GooeyGUI GLPS)
 
 # ----------------------------
 # System libraries

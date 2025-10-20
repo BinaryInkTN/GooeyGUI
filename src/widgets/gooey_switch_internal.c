@@ -169,6 +169,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             win->creation_id,
             true,
             GOOEY_SWITCH_DEFAULT_RADIUS, gswitch->core.sprite);
+        
 
         const int thumb_y = (track_y + track_height) - track_height / 2;
 

@@ -4,8 +4,8 @@
 #include "backends/gooey_backend_internal.h"
 #include "logger/pico_logger_internal.h"
 
-#define SWITCH_WIDTH 80
-#define SWITCH_HEIGHT 35
+#define SWITCH_WIDTH 68
+#define SWITCH_HEIGHT 33
 GooeySwitch *GooeySwitch_Create(int x, int y, bool IsToggled,
                                 bool show_hints,
                                 void (*callback)(bool value, void *user_data), void *user_data)

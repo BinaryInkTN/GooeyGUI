@@ -17,6 +17,7 @@ int main()
 {
     Gooey_Init();
     GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 800, 600, true);
+    GooeyWindow_EnableDebugOverlay(win, 1);
     GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
     GooeyWindow_SetTheme(win, dark_mode);
     win->vk = NULL;
@@ -28,7 +29,7 @@ int main()
 
     // Widgets for Controls tab
     GooeyMeter *meter = GooeyMeter_Create(30, 200, 100, 100, 50, "test", "logo.png");
-
+    GooeyLabel *label1 = GooeyLabel_Create("test", 0.6f, 200, 100);
     GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 340, 100, 30, button_callback, meter);
     GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80, "Enable Feature", NULL, NULL);
     GooeySlider *slider = GooeySlider_Create(30, 130, 200, 0, 100, true, NULL, NULL);
@@ -62,6 +63,8 @@ int main()
 
     // Add widgets to their respective tabs
     // Tab 0: Controls
+        GooeyTabs_AddWidget(win, mainTabs, 0, label1);
+
     GooeyTabs_AddWidget(win, mainTabs, 0, btn1);
     GooeyTabs_AddWidget(win, mainTabs, 0, checkbox);
     GooeyTabs_AddWidget(win, mainTabs, 0, slider);

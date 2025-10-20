@@ -20,8 +20,13 @@
 
 #include "backends/gooey_backend_internal.h"
 #if (TFT_ESPI_ENABLED == 0)
+
+#define FT_CONFIG_OPTION_SUBPIXEL_RENDERING
+#define FT_CONFIG_OPTION_USE_LCD_FILTER
 #include <freetype/freetype.h>
 #include FT_FREETYPE_H
+#include FT_LCD_FILTER_H 
+
 #include "glps_window_manager.h"
 #include "glps_timer.h"
 #include "backends/utils/linmath/linmath.h"

@@ -550,7 +550,9 @@ int glps_init_ft()
         return -1;
     }
 
-    FT_Set_Pixel_Sizes(face, 0, 48);
+    FT_Library_SetLcdFilter(ft, FT_LCD_FILTER_DEFAULT);
+
+    FT_Set_Char_Size(face, 0, 28 * 28, 300, 300);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -759,7 +761,6 @@ unsigned int glps_load_image(const char *image_path)
     if (!is_stb_supported_image_format(image_path))
     {
         // try loading svg
-
 
         NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
         // Create rasterizer

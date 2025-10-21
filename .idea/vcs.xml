@@ -4,8 +4,8 @@
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/cjson" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/freetype" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/third_party/freetype/subprojects/dlg" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/third_party/glps" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/third_party/native_fdialog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/website" vcs="Git" />
   </component>
 </project>

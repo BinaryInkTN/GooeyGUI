@@ -20,26 +20,35 @@
 #define NODE_HEADER_HEIGHT 25
 #define SOCKET_RADIUS 5
 #define SOCKET_MARGIN 10
+#define SOCKET_VERTICAL_SPACING 20
+#define MIN_NODE_WIDTH 100
+#define MIN_NODE_HEIGHT 80
 
 static int node_id_counter = 0;
 
-GooeyNodeEditor* GooeyNodeEditor_Create(int x, int y, int width, int height, void (*callback)(void *user_data), void *user_data)
+GooeyNodeEditor* GooeyNodeEditor_Create(int x, int y, int width, int height,
+                                      void (*callback)(void *user_data), void *user_data)
 {
-    GooeyNodeEditor* editor = (GooeyNodeEditor*)calloc(1, sizeof(GooeyNodeEditor));
+    if (width <= 0 || height <= 0) {
+        LOG_ERROR("Invalid node editor dimensions: %dx%d", width, height);
+        return NULL;
+    }
 
-    if (!editor)
-    {
+    GooeyNodeEditor* editor = (GooeyNodeEditor*)calloc(1, sizeof(GooeyNodeEditor));
+    if (!editor) {
         LOG_ERROR("Couldn't allocate memory for node editor");
         return NULL;
     }
 
-    *editor = (GooeyNodeEditor){0};
+    // Initialize all fields
     editor->core.type = WIDGET_NODE_EDITOR;
     editor->core.x = x;
     editor->core.y = y;
     editor->core.width = width;
     editor->core.height = height;
     editor->core.is_visible = true;
+    editor->core.disable_input = false;
+
     editor->grid_size = 20;
     editor->show_grid = true;
     editor->zoom_level = 1.0f;
@@ -47,20 +56,46 @@ GooeyNodeEditor* GooeyNodeEditor_Create(int x, int y, int width, int height, voi
     editor->pan_y = 0;
     editor->callback = callback;
     editor->user_data = user_data;
-    editor->core.disable_input = false;
+
+    editor->nodes = NULL;
+    editor->node_count = 0;
+    editor->connections = NULL;
+    editor->connection_count = 0;
+    editor->dragging_socket = NULL;
+    editor->is_panning = false;
 
     editor->core.sprite = active_backend->CreateSpriteForWidget(x, y, width, height);
-    LOG_INFO("NodeEditor added with dimensions x=%d, y=%d, w=%d, h=%d.", x, y, width, height);
+    if (!editor->core.sprite) {
+        LOG_WARNING("Failed to create sprite for node editor");
+    }
+
+    LOG_INFO("NodeEditor created at (%d, %d) with dimensions %dx%d", x, y, width, height);
     return editor;
 }
 
 GooeyNodeSocket* GooeyNode_AddSocket(GooeyNode* node, const char* name, GooeySocketType type, GooeyDataType data_type)
 {
-    if (!node) return NULL;
+    if (!node || !name) {
+        LOG_ERROR("Invalid parameters for AddSocket");
+        return NULL;
+    }
 
-    // Allocate or reallocate sockets array
-    GooeyNodeSocket* new_sockets = (GooeyNodeSocket*)realloc(node->sockets, sizeof(GooeyNodeSocket) * (node->socket_count + 1));
-    if (!new_sockets) return NULL;
+    // Calculate required height based on socket count
+    const int required_height = NODE_HEADER_HEIGHT + ((node->socket_count + 1) * SOCKET_VERTICAL_SPACING) + 20;
+    if (required_height > node->height) {
+        node->height = required_height;
+    }
+
+    // Reallocate sockets array
+    GooeyNodeSocket* new_sockets = (GooeyNodeSocket*)realloc(
+        node->sockets,
+        sizeof(GooeyNodeSocket) * (node->socket_count + 1)
+    );
+
+    if (!new_sockets) {
+        LOG_ERROR("Failed to reallocate sockets array");
+        return NULL;
+    }
 
     node->sockets = new_sockets;
     GooeyNodeSocket* socket = &node->sockets[node->socket_count];
@@ -68,28 +103,45 @@ GooeyNodeSocket* GooeyNode_AddSocket(GooeyNode* node, const char* name, GooeySoc
     // Initialize socket
     snprintf(socket->id, sizeof(socket->id), "socket_%d", node->socket_count);
     strncpy(socket->name, name, sizeof(socket->name) - 1);
+    socket->name[sizeof(socket->name) - 1] = '\0'; // Ensure null termination
+
     socket->type = type;
     socket->data_type = data_type;
     socket->is_connected = false;
     socket->parent_node = node;
 
-    // Position sockets vertically
+    // Position sockets - inputs on left, outputs on right
     socket->x = (type == GOOEY_SOCKET_TYPE_INPUT) ? 0 : node->width;
-    socket->y = NODE_HEADER_HEIGHT + (node->socket_count * 20) + 20;
+    socket->y = NODE_HEADER_HEIGHT + (node->socket_count * SOCKET_VERTICAL_SPACING) + 10;
 
     node->socket_count++;
+
+    LOG_INFO("Added socket '%s' to node '%s'", name, node->title);
     return socket;
 }
 
 void GooeyNodeEditor_AddNode(GooeyNodeEditor* editor, const char* title, int x, int y, int width, int height)
 {
-    if (!editor) return;
+    if (!editor || !title) {
+        LOG_ERROR("Invalid parameters for AddNode");
+        return;
+    }
+
+    // Validate dimensions
+    if (width < MIN_NODE_WIDTH) width = MIN_NODE_WIDTH;
+    if (height < MIN_NODE_HEIGHT) height = MIN_NODE_HEIGHT;
 
     GooeyNode* node = (GooeyNode*)calloc(1, sizeof(GooeyNode));
-    if (!node) return;
+    if (!node) {
+        LOG_ERROR("Failed to allocate memory for node");
+        return;
+    }
 
+    // Initialize node
     snprintf(node->node_id, sizeof(node->node_id), "node_%d", node_id_counter++);
     strncpy(node->title, title, sizeof(node->title) - 1);
+    node->title[sizeof(node->title) - 1] = '\0'; // Ensure null termination
+
     node->x = x;
     node->y = y;
     node->width = width;
@@ -99,48 +151,102 @@ void GooeyNodeEditor_AddNode(GooeyNodeEditor* editor, const char* title, int x, 
     node->sockets = NULL;
     node->socket_count = 0;
 
-    // Add to editor
-    editor->nodes = (GooeyNode**)realloc(editor->nodes, sizeof(GooeyNode*) * (editor->node_count + 1));
+    // Add to editor's node array
+    GooeyNode** new_nodes = (GooeyNode**)realloc(
+        editor->nodes,
+        sizeof(GooeyNode*) * (editor->node_count + 1)
+    );
+
+    if (!new_nodes) {
+        LOG_ERROR("Failed to reallocate nodes array");
+        free(node);
+        return;
+    }
+
+    editor->nodes = new_nodes;
     editor->nodes[editor->node_count] = node;
     editor->node_count++;
+
+    LOG_INFO("Added node '%s' at position (%d, %d)", title, x, y);
 }
 
 GooeyNodeConnection* GooeyNodeEditor_ConnectSockets(GooeyNodeEditor* editor, GooeyNodeSocket* from, GooeyNodeSocket* to)
 {
+    if (!editor || !from || !to) {
+        LOG_ERROR("Invalid parameters for ConnectSockets");
+        return NULL;
+    }
 
-    return  GooeyNodeEditor_Internal_ConnectSockets(editor, from, to);
+    GooeyNodeConnection* connection = GooeyNodeEditor_Internal_ConnectSockets(editor, from, to);
+    if (connection) {
+        LOG_INFO("Connected socket '%s' to '%s'", from->name, to->name);
+    } else {
+        LOG_WARNING("Failed to connect sockets '%s' and '%s'", from->name, to->name);
+    }
+
+    return connection;
 }
 
 void GooeyNodeEditor_RemoveNode(GooeyNodeEditor* editor, const char* node_id)
 {
-    if (!editor || !node_id) return;
+    if (!editor || !node_id) {
+        LOG_ERROR("Invalid parameters for RemoveNode");
+        return;
+    }
 
     for (int i = 0; i < editor->node_count; i++) {
         if (strcmp(editor->nodes[i]->node_id, node_id) == 0) {
-            // Remove connections to this node
+            GooeyNode* node_to_remove = editor->nodes[i];
+
+            LOG_INFO("Removing node '%s' (%s)", node_to_remove->title, node_id);
+
+            // Remove all connections associated with this node
             for (int j = 0; j < editor->connection_count; j++) {
                 GooeyNodeConnection* conn = editor->connections[j];
-                if (conn->from_socket->parent_node == editor->nodes[i] ||
-                    conn->to_socket->parent_node == editor->nodes[i]) {
+                if (conn->from_socket->parent_node == node_to_remove ||
+                    conn->to_socket->parent_node == node_to_remove) {
+
+                    // Mark sockets as disconnected
+                    conn->from_socket->is_connected = false;
+                    conn->to_socket->is_connected = false;
+
                     free(conn);
+
                     // Shift remaining connections
-                    for (int k = j; k < editor->connection_count - 1; k++) {
-                        editor->connections[k] = editor->connections[k + 1];
-                    }
+                    memmove(&editor->connections[j],
+                           &editor->connections[j + 1],
+                           sizeof(GooeyNodeConnection*) * (editor->connection_count - j - 1));
+
                     editor->connection_count--;
-                    j--;
+                    j--; // Recheck current position
                 }
             }
 
-            // Free node sockets
-            free(editor->nodes[i]->sockets);
-            free(editor->nodes[i]);
+            // Free node resources
+            free(node_to_remove->sockets);
+            free(node_to_remove);
 
             // Shift remaining nodes
-            for (int j = i; j < editor->node_count - 1; j++) {
-                editor->nodes[j] = editor->nodes[j + 1];
-            }
+            memmove(&editor->nodes[i],
+                   &editor->nodes[i + 1],
+                   sizeof(GooeyNode*) * (editor->node_count - i - 1));
+
             editor->node_count--;
+
+            // Reallocate to free memory
+            if (editor->node_count > 0) {
+                GooeyNode** shrunk_nodes = (GooeyNode**)realloc(
+                    editor->nodes,
+                    sizeof(GooeyNode*) * editor->node_count
+                );
+                if (shrunk_nodes) {
+                    editor->nodes = shrunk_nodes;
+                }
+            } else {
+                free(editor->nodes);
+                editor->nodes = NULL;
+            }
+
             break;
         }
     }
@@ -148,10 +254,16 @@ void GooeyNodeEditor_RemoveNode(GooeyNodeEditor* editor, const char* node_id)
 
 void GooeyNodeEditor_RemoveConnection(GooeyNodeEditor* editor, GooeyNodeConnection* connection)
 {
-    if (!editor || !connection) return;
+    if (!editor || !connection) {
+        LOG_ERROR("Invalid parameters for RemoveConnection");
+        return;
+    }
 
     for (int i = 0; i < editor->connection_count; i++) {
         if (editor->connections[i] == connection) {
+            LOG_INFO("Removing connection between '%s' and '%s'",
+                     connection->from_socket->name, connection->to_socket->name);
+
             // Mark sockets as disconnected
             connection->from_socket->is_connected = false;
             connection->to_socket->is_connected = false;
@@ -159,10 +271,26 @@ void GooeyNodeEditor_RemoveConnection(GooeyNodeEditor* editor, GooeyNodeConnecti
             free(connection);
 
             // Shift remaining connections
-            for (int j = i; j < editor->connection_count - 1; j++) {
-                editor->connections[j] = editor->connections[j + 1];
-            }
+            memmove(&editor->connections[i],
+                   &editor->connections[i + 1],
+                   sizeof(GooeyNodeConnection*) * (editor->connection_count - i - 1));
+
             editor->connection_count--;
+
+            // Reallocate to free memory
+            if (editor->connection_count > 0) {
+                GooeyNodeConnection** shrunk_connections = (GooeyNodeConnection**)realloc(
+                    editor->connections,
+                    sizeof(GooeyNodeConnection*) * editor->connection_count
+                );
+                if (shrunk_connections) {
+                    editor->connections = shrunk_connections;
+                }
+            } else {
+                free(editor->connections);
+                editor->connections = NULL;
+            }
+
             break;
         }
     }
@@ -170,19 +298,49 @@ void GooeyNodeEditor_RemoveConnection(GooeyNodeEditor* editor, GooeyNodeConnecti
 
 void GooeyNodeEditor_Clear(GooeyNodeEditor* editor)
 {
-   GooeyNodeEditor_Internal_Clear(editor);
+    if (!editor) {
+        LOG_ERROR("Invalid parameter for Clear");
+        return;
+    }
+
+    LOG_INFO("Clearing node editor with %d nodes and %d connections",
+             editor->node_count, editor->connection_count);
+
+    GooeyNodeEditor_Internal_Clear(editor);
 }
 
 void GooeyNodeEditor_SetGridSize(GooeyNodeEditor* editor, int grid_size)
 {
     if (!editor) return;
+
+    if (grid_size < 5) {
+        LOG_WARNING("Grid size too small, setting to minimum 5");
+        grid_size = 5;
+    }
+
     editor->grid_size = grid_size;
+    LOG_INFO("Set grid size to %d", grid_size);
 }
 
 void GooeyNodeEditor_SetShowGrid(GooeyNodeEditor* editor, bool show_grid)
 {
     if (!editor) return;
+
     editor->show_grid = show_grid;
+    LOG_INFO("%s grid display", show_grid ? "Enabling" : "Disabling");
+}
+
+// Additional utility function
+GooeyNode* GooeyNodeEditor_FindNodeById(GooeyNodeEditor* editor, const char* node_id)
+{
+    if (!editor || !node_id) return NULL;
+
+    for (int i = 0; i < editor->node_count; i++) {
+        if (strcmp(editor->nodes[i]->node_id, node_id) == 0) {
+            return editor->nodes[i];
+        }
+    }
+    return NULL;
 }
 
 #endif

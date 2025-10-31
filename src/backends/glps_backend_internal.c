@@ -1058,6 +1058,7 @@ void glps_run()
         for (size_t i = 0; i < ctx.timer_count; ++i)
             glps_timer_check_and_call(ctx.timers[i]);
 
+        usleep(500);
     }
 
 }

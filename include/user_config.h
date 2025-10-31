@@ -10,7 +10,7 @@
  * 0 = Production mode (optimized, minimal logging)
  * 1 = Debug mode (verbose logging, additional checks)
  */
-#define PROJECT_BRANCH 1
+#define PROJECT_BRANCH 0
 
 /**
  * Enable debug overlay for development
@@ -132,6 +132,9 @@
 /** File dialog widget - Native file open/save dialogs */
 #define ENABLE_FDIALOG 1
 
+/** Node Editor widget - An Interactive node editor widget */
+#define ENABLE_NODE_EDITOR 1
+
 /*******************************************************************************
  *                                WIDGET ANIMATION                             *
  *
@@ -150,9 +153,11 @@
 #define SWITCH_ANIMATION_STEPS 10
 #define SWITCH_ANIMATION_SPEED 16 
 
-
 #define METER_ANIMATION_STEPS 1
 #define METER_ANIMATION_SPEED 100 
+
+#define MENU_ANIMATION_STEPS 10
+#define MENU_ANIMATION_SPEED 16
 
 /*******************************************************************************
  *                           ESP32 SPECIFIC CONFIGURATION                      *

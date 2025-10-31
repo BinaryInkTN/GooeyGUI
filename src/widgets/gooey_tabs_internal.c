@@ -62,7 +62,7 @@ static void sidebar_animation_callback(void *user_data)
     }
 
     float progress = (float)tabs->current_step / (float)SIDEBAR_ANIMATION_STEPS;
-    float eased_progress = ease_out_quad(progress);
+    float eased_progress = ease_in_out_quad(progress);
     int start_offset = tabs->target_offset == TAB_WIDTH ? 0 : TAB_WIDTH;
     int distance = tabs->target_offset - start_offset;
     tabs->sidebar_offset = start_offset + (int)(distance * eased_progress);

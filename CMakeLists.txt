@@ -232,6 +232,11 @@ set(SOURCES
         src/widgets/gooey_fdialog.c
         src/widgets/gooey_ctxmenu.c
         src/widgets/gooey_ctxmenu_internal.c
+        include/core/gooey_event.h
+        src/widgets/gooey_node_editor.c
+        src/widgets/gooey_node_editor_internal.c
+        internal/widgets/gooey_node_editor_internal.h
+        include/widgets/gooey_node_editor.h
 )
 
 # ----------------------------

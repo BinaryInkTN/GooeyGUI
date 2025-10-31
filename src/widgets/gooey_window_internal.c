@@ -77,6 +77,11 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->plots[win->plot_count++] = (GooeyPlot *)widget;
         break;
     }
+
+            case WIDGET_NODE_EDITOR: {
+            win->node_editors[win->node_editor_count++] = (GooeyNodeEditor *)widget;
+            break;
+    }
     case WIDGET_DROP_SURFACE:
     {
         win->drop_surface[win->drop_surface_count++] = (GooeyDropSurface *)widget;

@@ -108,6 +108,9 @@ void GooeyTabs_AddWidget(GooeyWindow *window, GooeyTabs *tabs, size_t tab_id, vo
 
     selected_tab->widgets[selected_tab->widget_count++] = widget;
     GooeyWindow_Internal_RegisterWidget(window, widget);
+
+
+
 }
 
 void GooeyTabs_SetActiveTab(GooeyTabs *tabs, size_t tab_id)

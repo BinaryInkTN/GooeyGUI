@@ -46,6 +46,7 @@
 #include "widgets/gooey_webview_internal.h"
 #include "backends/gooey_backend_internal.h"
 #include "widgets/gooey_ctxmenu_internal.h"
+#include "widgets/gooey_node_editor_internal.h"
 #include <stdarg.h>
 #include <string.h>
 
@@ -55,14 +56,17 @@
 
 GooeyBackend *active_backend = NULL;
 
-/* Theme Management Functions */
+static GooeyTheme *cached_default_theme = NULL;
 
 static GooeyTheme *__default_theme(void)
 {
+    if (cached_default_theme) {
+        return cached_default_theme;
+    }
+
     GooeyTheme *theme = malloc(sizeof(GooeyTheme));
     if (!theme)
     {
-        LOG_ERROR("Failed to allocate memory for default theme");
         return NULL;
     }
 
@@ -75,6 +79,7 @@ static GooeyTheme *__default_theme(void)
         .info = 0x2196F3,
         .success = 0x00A152};
 
+    cached_default_theme = theme;
     return theme;
 }
 
@@ -82,7 +87,6 @@ GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path)
 {
     if (!theme_path)
     {
-        LOG_ERROR("Invalid theme path");
         return NULL;
     }
 
@@ -90,7 +94,6 @@ GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path)
     GooeyTheme *theme = malloc(sizeof(GooeyTheme));
     if (!theme)
     {
-        LOG_ERROR("Failed to allocate memory for theme");
         return NULL;
     }
 
@@ -98,7 +101,6 @@ GooeyTheme *GooeyTheme_LoadFromFile(const char *theme_path)
 
     if (!is_loaded)
     {
-        LOG_WARNING("Failed to load theme from %s", theme_path);
         free(theme);
         return NULL;
     }
@@ -112,7 +114,6 @@ GooeyTheme *GooeyTheme_LoadFromString(const char *styling)
     GooeyTheme *theme = malloc(sizeof(GooeyTheme));
     if (!theme)
     {
-        LOG_ERROR("Failed to allocate memory for theme");
         return NULL;
     }
 
@@ -120,7 +121,6 @@ GooeyTheme *GooeyTheme_LoadFromString(const char *styling)
 
     if (!is_loaded)
     {
-        LOG_WARNING("Failed to load theme from string");
         free(theme);
         return NULL;
     }
@@ -130,6 +130,9 @@ GooeyTheme *GooeyTheme_LoadFromString(const char *styling)
 
 static void __destroy_theme(GooeyTheme *theme)
 {
+    if (theme == cached_default_theme) {
+        cached_default_theme = NULL;
+    }
     free(theme);
 }
 
@@ -137,8 +140,6 @@ void GooeyTheme_Destroy(GooeyTheme *theme)
 {
     __destroy_theme(theme);
 }
-
-/* Window Functions */
 
 void GooeyWindow_RegisterWidget(GooeyWindow *win, void *widget)
 {
@@ -157,12 +158,13 @@ void GooeyWindow_MakeResizable(GooeyWindow *msgBoxWindow, bool is_resizable)
 
 bool GooeyWindow_HandleCursorChange(GooeyWindow *win, GOOEY_CURSOR *cursor, int x, int y)
 {
-    for (size_t i = 0; i < win->widget_count; ++i)
+    for (int i = (int)win->widget_count - 1; i >= 0; --i)
     {
-        if (x >= win->widgets[i]->x && x <= win->widgets[i]->x + win->widgets[i]->width &&
-            y >= win->widgets[i]->y && y <= win->widgets[i]->y + win->widgets[i]->height)
+        GooeyWidget *widget = win->widgets[i];
+        if ((x >= widget->x) & (x <= widget->x + widget->width) &
+            (y >= widget->y) & (y <= widget->y + widget->height))
         {
-            switch (win->widgets[i]->type)
+            switch (widget->type)
             {
             case WIDGET_TEXTBOX:
                 *cursor = GOOEY_CURSOR_TEXT;
@@ -184,13 +186,11 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
 {
     if (!win)
     {
-        LOG_ERROR("Invalid window pointer");
         return;
     }
 
     if (!theme)
     {
-        LOG_WARNING("NULL theme provided, using default");
         if (win->default_theme)
         {
             win->active_theme = win->default_theme;
@@ -198,56 +198,70 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme)
         return;
     }
 
-    if (win->active_theme && win->active_theme != win->default_theme)
+    if (win->active_theme != theme)
     {
-        __destroy_theme(win->active_theme);
+        if (win->active_theme && win->active_theme != win->default_theme)
+        {
+            __destroy_theme(win->active_theme);
+        }
+        win->active_theme = theme;
+        active_backend->RequestRedraw(win);
     }
-
-    win->active_theme = theme;
-    active_backend->RequestRedraw(win);
 }
 
 bool GooeyWindow_AllocateResources(GooeyWindow *win)
 {
-    const size_t widget_size = MAX_WIDGETS * sizeof(void *);
-    const size_t plot_size = MAX_PLOT_COUNT * sizeof(void *);
-    const size_t switch_size = MAX_SWITCHES * sizeof(void *);
+    const size_t total_widget_ptrs = MAX_WIDGETS * 19; // Increased for node_editors
+    const size_t total_byte_size = (total_widget_ptrs * sizeof(void *)) +
+                                  (MAX_PLOT_COUNT * sizeof(GooeyPlot *)) +
+                                  (MAX_SWITCHES * sizeof(GooeySwitch *)) +
+                                  sizeof(GooeyVK) + sizeof(GooeyEvent) + sizeof(GooeyCtxMenu);
 
-    if (!(win->tabs = calloc(MAX_WIDGETS, sizeof(GooeyTabs *))) ||
-        !(win->drop_surface = calloc(MAX_WIDGETS, sizeof(GooeyDropSurface *))) ||
-        !(win->images = calloc(MAX_WIDGETS, sizeof(GooeyImage *))) ||
-        !(win->buttons = calloc(MAX_WIDGETS, sizeof(GooeyButton *))) ||
-        !(win->current_event = calloc(1, sizeof(GooeyEvent))) ||
-        !(win->labels = calloc(MAX_WIDGETS, sizeof(GooeyLabel *))) ||
-        !(win->checkboxes = calloc(MAX_WIDGETS, sizeof(GooeyCheckbox *))) ||
-        !(win->radio_buttons = calloc(MAX_WIDGETS, sizeof(GooeyRadioButton *))) ||
-        !(win->radio_button_groups = calloc(MAX_WIDGETS, sizeof(GooeyRadioButtonGroup *))) ||
-        !(win->sliders = calloc(MAX_WIDGETS, sizeof(GooeySlider *))) ||
-        !(win->dropdowns = calloc(MAX_WIDGETS, sizeof(GooeyDropdown *))) ||
-        !(win->textboxes = calloc(MAX_WIDGETS, sizeof(GooeyTextbox *))) ||
-        !(win->layouts = calloc(MAX_WIDGETS, sizeof(GooeyLayout *))) ||
-        !(win->lists = calloc(MAX_WIDGETS, sizeof(GooeyList *))) ||
-        !(win->canvas = calloc(MAX_WIDGETS, sizeof(GooeyCanvas *))) ||
-        !(win->widgets = calloc(MAX_WIDGETS, sizeof(GooeyWidget *))) ||
-        !(win->plots = calloc(MAX_PLOT_COUNT, sizeof(GooeyPlot *))) ||
-        !(win->progressbars = calloc(MAX_PLOT_COUNT, sizeof(GooeyProgressBar *))) ||
-        !(win->meters = calloc(MAX_WIDGETS, sizeof(GooeyMeter *))) ||
-        !(win->containers = calloc(MAX_WIDGETS, sizeof(GooeyContainer *))) ||
-        !(win->switches = calloc(MAX_SWITCHES, sizeof(GooeySwitch *))) ||
-        !(win->vk = calloc(1, sizeof(GooeyVK))) ||
-        !(win->ctx_menu = calloc(1, sizeof(GooeyCtxMenu))))
+    void *memory_pool = malloc(total_byte_size);
+    if (!memory_pool)
     {
         return false;
     }
+
+    char *pool_ptr = (char *)memory_pool;
+
+    win->tabs = (GooeyTabs **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyTabs *);
+    win->drop_surface = (GooeyDropSurface **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyDropSurface *);
+    win->images = (GooeyImage **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyImage *);
+    win->buttons = (GooeyButton **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyButton *);
+    win->labels = (GooeyLabel **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyLabel *);
+    win->checkboxes = (GooeyCheckbox **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyCheckbox *);
+    win->radio_buttons = (GooeyRadioButton **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyRadioButton *);
+    win->radio_button_groups = (GooeyRadioButtonGroup **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyRadioButtonGroup *);
+    win->sliders = (GooeySlider **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeySlider *);
+    win->dropdowns = (GooeyDropdown **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyDropdown *);
+    win->textboxes = (GooeyTextbox **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyTextbox *);
+    win->layouts = (GooeyLayout **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyLayout *);
+    win->lists = (GooeyList **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyList *);
+    win->canvas = (GooeyCanvas **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyCanvas *);
+    win->widgets = (GooeyWidget **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyWidget *);
+    win->plots = (GooeyPlot **)pool_ptr; pool_ptr += MAX_PLOT_COUNT * sizeof(GooeyPlot *);
+    win->progressbars = (GooeyProgressBar **)pool_ptr; pool_ptr += MAX_PLOT_COUNT * sizeof(GooeyProgressBar *);
+    win->meters = (GooeyMeter **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyMeter *);
+    win->containers = (GooeyContainers **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyContainers *);
+    win->switches = (GooeySwitch **)pool_ptr; pool_ptr += MAX_SWITCHES * sizeof(GooeySwitch *);
+    win->node_editors = (GooeyNodeEditor **)pool_ptr; pool_ptr += MAX_WIDGETS * sizeof(GooeyNodeEditor *); // Added node_editors
+
+    win->current_event = (GooeyEvent *)pool_ptr; pool_ptr += sizeof(GooeyEvent);
+    win->vk = (GooeyVK *)pool_ptr; pool_ptr += sizeof(GooeyVK);
+    win->ctx_menu = (GooeyCtxMenu *)pool_ptr; pool_ptr += sizeof(GooeyCtxMenu);
+
+    memset(memory_pool, 0, total_byte_size);
 
     win->default_theme = __default_theme();
     if (!win->default_theme)
     {
-        LOG_ERROR("Failed to allocate memory for default theme");
+        free(memory_pool);
         return false;
     }
 
     win->active_theme = win->default_theme;
+    win->memory_pool = memory_pool;
     return true;
 }
 
@@ -260,7 +274,6 @@ static void __free_widget_array(void **array, size_t count)
     {
         free(array[i]);
     }
-    free(array);
 }
 
 static void __free_canvas_elements(GooeyWindow *win)
@@ -281,8 +294,6 @@ static void __free_canvas_elements(GooeyWindow *win)
         free(win->canvas[i]->elements);
         free(win->canvas[i]);
     }
-    free(win->canvas);
-    win->canvas = NULL;
 }
 
 static void __free_containers(GooeyWindow *win)
@@ -304,8 +315,6 @@ static void __free_containers(GooeyWindow *win)
         free(container->container);
         free(container);
     }
-    free(win->containers);
-    win->containers = NULL;
 }
 
 static void __free_tabs(GooeyWindow *win)
@@ -326,8 +335,6 @@ static void __free_tabs(GooeyWindow *win)
         free(tab_container->tabs);
         free(tab_container);
     }
-    free(win->tabs);
-    win->tabs = NULL;
 }
 
 static void __free_plots(GooeyWindow *win)
@@ -338,10 +345,8 @@ static void __free_plots(GooeyWindow *win)
     for (size_t i = 0; i < win->plot_count; ++i)
     {
         GooeyPlotData *data = win->plots[i]->data;
-        
+
     }
-    free(win->plots);
-    win->plots = NULL;
 }
 
 static void __free_lists(GooeyWindow *win)
@@ -353,8 +358,22 @@ static void __free_lists(GooeyWindow *win)
     {
         free(win->lists[i]->items);
     }
-    free(win->lists);
-    win->lists = NULL;
+}
+
+static void __free_node_editors(GooeyWindow *win)
+{
+    if (!win->node_editors)
+        return;
+
+    for (size_t i = 0; i < win->node_editor_count; ++i)
+    {
+        GooeyNodeEditor* editor = win->node_editors[i];
+        if (!editor) continue;
+
+        // Free all nodes and connections
+        GooeyNodeEditor_Internal_Clear(editor);
+        free(editor);
+    }
 }
 
 void GooeyWindow_FreeResources(GooeyWindow *win)
@@ -362,7 +381,6 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     if (!win)
         return;
 
-    /* Free themes */
     if (win->active_theme && win->active_theme != win->default_theme)
     {
         __destroy_theme(win->active_theme);
@@ -372,19 +390,15 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
         __destroy_theme(win->default_theme);
     }
 
-    /* Free individual resources */
     free(win->appbar);
-    free(win->vk);
-    free(win->current_event);
     free(win->menu);
-    free(win->ctx_menu);
 
-    /* Free widget arrays */
     __free_canvas_elements(win);
     __free_containers(win);
     __free_tabs(win);
     __free_plots(win);
     __free_lists(win);
+    __free_node_editors(win); // Added node editor cleanup
     __free_widget_array((void **)win->drop_surface, win->drop_surface_count);
     __free_widget_array((void **)win->images, win->image_count);
     __free_widget_array((void **)win->progressbars, win->progressbar_count);
@@ -400,9 +414,8 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     __free_widget_array((void **)win->layouts, win->layout_count);
     __free_widget_array((void **)win->meters, win->meter_count);
 
-    free(win->widgets);
+    free(win->memory_pool);
 
-    /* Reset counts */
     win->tab_count = 0;
     win->image_count = 0;
     win->drop_surface_count = 0;
@@ -423,6 +436,8 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     win->container_count = 0;
     win->widget_count = 0;
     win->switch_count = 0;
+    win->node_editor_count = 0; // Added node editor count reset
+    win->memory_pool = NULL;
 }
 
 GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibility)
@@ -430,7 +445,6 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     GooeyWindow *win = active_backend->CreateWindow(title, width, height);
     if (!win)
     {
-        LOG_CRITICAL("Failed to create window");
         return NULL;
     }
 
@@ -438,11 +452,9 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     if (!GooeyWindow_AllocateResources(win))
     {
         GooeyWindow_FreeResources(win);
-        LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
         exit(EXIT_FAILURE);
     }
 
-    /* Initialize window fields */
     win->menu = NULL;
     win->appbar = NULL;
     win->width = width;
@@ -454,7 +466,6 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     if (win->vk)
         win->vk->is_shown = false;
 
-    /* Initialize all counts to zero */
     win->tab_count = 0;
     win->image_count = 0;
     win->drop_surface_count = 0;
@@ -475,8 +486,8 @@ GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool v
     win->container_count = 0;
     win->widget_count = 0;
     win->switch_count = 0;
+    win->node_editor_count = 0; // Added node editor count initialization
 
-    LOG_INFO("Window created with dimensions (%d, %d).", width, height);
     return win;
 }
 
@@ -489,14 +500,12 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bo
     {
         GooeyWindow_FreeResources(&win);
         active_backend->DestroyWindowFromId(win.creation_id);
-        LOG_CRITICAL("Failed to allocate memory for GooeyWindow.");
         return (GooeyWindow){0};
     }
 
     win.menu = NULL;
     win.visibility = visibility;
 
-    /* Initialize counts to zero */
     win.canvas_count = 0;
     win.button_count = 0;
     win.label_count = 0;
@@ -509,26 +518,32 @@ GooeyWindow GooeyWindow_CreateChild(const char *title, int width, int height, bo
     win.layout_count = 0;
     win.list_count = 0;
     win.widget_count = 0;
+    win.node_editor_count = 0; // Added node editor count initialization
 
-    LOG_INFO("Window created with dimensions (%d, %d).", width, height);
     return win;
 }
 
+typedef struct {
+    int x, y, width, height;
+    bool needs_redraw;
+} DirtyRegion;
+
+static DirtyRegion window_dirty_region = {0};
+
 #define DRAW_WIDGET_IF_ENABLED(feature, draw_func) \
-    do                                             \
-    {                                              \
-        if (feature)                               \
-            draw_func(win);                        \
-    } while (0)
+    do { if (feature) draw_func(win); } while (0)
 
 void GooeyWindow_DrawUIElements(GooeyWindow *win)
 {
     if (!win)
         return;
 
+    if (!window_dirty_region.needs_redraw)
+    {
 #if (!TFT_ESPI_ENABLED)
-    active_backend->Clear(win);
+        active_backend->Clear(win);
 #endif
+    }
 
 #if (ENABLE_VIRTUAL_KEYBOARD)
     GooeyVK_Internal_Draw(win);
@@ -540,7 +555,6 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
         return;
     }
 
-    /* Draw layouts first */
     for (size_t i = 0; i < win->layout_count; ++i)
     {
 #if (ENABLE_LAYOUT)
@@ -548,58 +562,41 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
 #endif
     }
 
-    /* Draw all UI components */
     DRAW_WIDGET_IF_ENABLED(ENABLE_CANVAS, GooeyCanvas_Draw);
-
     DRAW_WIDGET_IF_ENABLED(ENABLE_CONTAINER, GooeyContainer_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_DROP_SURFACE, GooeyDropSurface_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_METER, GooeyMeter_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_PROGRESSBAR, GooeyProgressBar_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_DROP_SURFACE, GooeyDropSurface_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_PLOT, GooeyPlot_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_IMAGE, GooeyImage_Draw);
-
+    DRAW_WIDGET_IF_ENABLED(ENABLE_LABEL, GooeyLabel_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_LIST, GooeyList_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_BUTTON, GooeyButton_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_SWITCH, GooeySwitch_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_TEXTBOX, GooeyTextbox_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_SLIDER, GooeySlider_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_CHECKBOX, GooeyCheckbox_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_RADIOBUTTON, GooeyRadioButtonGroup_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_SLIDER, GooeySlider_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_PLOT, GooeyPlot_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_LABEL, GooeyLabel_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_MENU, GooeyMenu_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_DEBUG_OVERLAY, GooeyDebugOverlay_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_DROPDOWN, GooeyDropdown_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_APPBAR, GooeyAppbar_Internal_Draw);
-    DRAW_WIDGET_IF_ENABLED(ENABLE_CTXMENU, GooeyCtxMenu_Internal_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_SWITCH, GooeySwitch_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_TEXTBOX, GooeyTextbox_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_BUTTON, GooeyButton_Draw);
     DRAW_WIDGET_IF_ENABLED(ENABLE_TABS, GooeyTabs_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_APPBAR, GooeyAppbar_Internal_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_MENU, GooeyMenu_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_DROPDOWN, GooeyDropdown_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_CTXMENU, GooeyCtxMenu_Internal_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_DEBUG_OVERLAY, GooeyDebugOverlay_Draw);
+    DRAW_WIDGET_IF_ENABLED(ENABLE_NODE_EDITOR, GooeyNodeEditor_Draw); // Added node editor drawing
 
     active_backend->Render(win);
+    window_dirty_region.needs_redraw = false;
 }
 
-/* Fixed macros for event handling */
 #define HANDLE_EVENT_IF_ENABLED_BOOL(feature, handler, ...) \
-    do                                                      \
-    {                                                       \
-        if (feature)                                        \
-            needs_redraw |= handler(__VA_ARGS__);           \
-    } while (0)
+    (feature ? (needs_redraw |= handler(__VA_ARGS__)) : 0)
 
 #define HANDLE_EVENT_IF_ENABLED_VOID(feature, handler, ...) \
-    do                                                      \
-    {                                                       \
-        if (feature)                                        \
-        {                                                   \
-            handler(__VA_ARGS__);                           \
-            needs_redraw = true;                            \
-        }                                                   \
-    } while (0)
+    do { if (feature) { handler(__VA_ARGS__); needs_redraw = true; } } while (0)
 
 #define HANDLE_HOVER_IF_ENABLED(feature, handler, ...) \
-    do                                                 \
-    {                                                  \
-        if (feature)                                   \
-            handler(__VA_ARGS__);                      \
-    } while (0)
+    do { if (feature) handler(__VA_ARGS__); } while (0)
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
@@ -607,14 +604,12 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     if (!data || !active_backend)
     {
-        LOG_CRITICAL("Invalid data or backend in Redraw callback");
         return;
     }
 
     GooeyWindow **windows = (GooeyWindow **)data;
     if (window_id > active_backend->GetTotalWindowCount() || !windows[window_id])
     {
-        LOG_CRITICAL("Invalid window ID or window is NULL");
         return;
     }
 
@@ -626,16 +621,17 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     active_backend->SetViewport(window_id, width, height);
     active_backend->UpdateBackground(window);
 
-    /* Handle continuous updates */
     HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_SLIDER, GooeySlider_HandleDrag, window, event);
     HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_LIST, GooeyList_HandleThumbScroll, window, event);
 
 #if (!TFT_ESPI_ENABLED)
-    /* Handle hover effects */
     HANDLE_HOVER_IF_ENABLED(ENABLE_BUTTON, GooeyButton_HandleHover, window, event->mouse_move.x, event->mouse_move.y);
     HANDLE_HOVER_IF_ENABLED(ENABLE_MENU, GooeyMenu_HandleHover, window);
     HANDLE_HOVER_IF_ENABLED(ENABLE_DROPDOWN, GooeyDropdown_HandleHover, window, event->mouse_move.x, event->mouse_move.y);
     HANDLE_HOVER_IF_ENABLED(ENABLE_TEXTBOX, GooeyTextbox_HandleHover, window, event->mouse_move.x, event->mouse_move.y);
+    HANDLE_HOVER_IF_ENABLED(ENABLE_NODE_EDITOR, GooeyNodeEditor_HandleHover, window, event->mouse_move.x, event->mouse_move.y); // Added node editor hover
+    HANDLE_HOVER_IF_ENABLED(ENABLE_NODE_EDITOR, GooeyNodeEditor_HandleDrag, window, event->mouse_move.x, event->mouse_move.y,  event->mouse_move.x, event->mouse_move.y); // Added node editor hover
+
 #endif
 
     switch (event->type)
@@ -648,7 +644,10 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     case GOOEY_EVENT_REDRAWREQ:
         needs_redraw = true;
         break;
+        case GOOEY_EVENT_CLICK_RELEASE:
+            HANDLE_HOVER_IF_ENABLED(ENABLE_NODE_EDITOR, GooeyNodeEditor_HandleRelease, window, event->mouse_move.x, event->mouse_move.y); // Added node editor hover
 
+            break;
     case GOOEY_EVENT_KEY_PRESS:
         HANDLE_EVENT_IF_ENABLED_VOID(ENABLE_TEXTBOX, GooeyTextbox_HandleKeyPress, window, event);
         break;
@@ -667,6 +666,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_LIST, GooeyList_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_IMAGE, GooeyImage_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_TABS, GooeyTabs_HandleClick, window, mouse_click_x, mouse_click_y);
+        HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_NODE_EDITOR, GooeyNodeEditor_HandleClick, window, mouse_click_x, mouse_click_y);
 
 #if (ENABLE_CTXMENU)
         GooeyCtxMenu_Internal_HandleClick(window, mouse_click_x, mouse_click_y);
@@ -682,7 +682,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
     }
 
     case GOOEY_EVENT_VK_ENTER:
-        LOG_CRITICAL("Clicked enter");
 #if (ENABLE_TEXTBOX)
         GooeyTextbox_Internal_HandleVK(window);
 #endif
@@ -699,7 +698,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     default:
-        // LOG_INFO("Unhandled event type: %d", event->type);
         break;
     }
 
@@ -719,7 +717,6 @@ void GooeyWindow_Cleanup(int num_windows, GooeyWindow *first_win, ...)
 {
     if (!active_backend)
     {
-        LOG_CRITICAL("Backend is not initialized");
         return;
     }
 
@@ -751,7 +748,6 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
 {
     if (!active_backend)
     {
-        LOG_CRITICAL("Backend is not initialized");
         return;
     }
 
@@ -763,7 +759,6 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
     GooeyWindow *windows[num_windows];
 
     va_start(args, first_win);
-    LOG_INFO("Starting application");
 
     windows[0] = first_win;
     GooeyWindow_DrawUIElements(first_win);
@@ -781,7 +776,6 @@ void GooeyWindow_Run(int num_windows, GooeyWindow *first_win, ...)
 
 void GooeyWindow_RequestRedraw(GooeyWindow *win)
 {
-    LOG_CRITICAL("Window redraw req %ld", win->creation_id);
     active_backend->RequestRedraw(win);
 }
 
@@ -789,13 +783,12 @@ void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void *widget)
 {
     if (!win || !widget)
     {
-        LOG_CRITICAL("Window and/or widget NULL.");
         return;
     }
 
     GooeyWidget *core = (GooeyWidget *)widget;
     WIDGET_TYPE type = core->type;
-    
+
     switch (type)
     {
     case WIDGET_LABEL:
@@ -804,7 +797,6 @@ void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void *widget)
         {
             if (win->labels[i] == (GooeyLabel *)widget)
             {
-                // Shift remaining elements left
                 for (int j = i; j < win->label_count - 1; j++)
                 {
                     win->labels[j] = win->labels[j + 1];
@@ -1103,8 +1095,23 @@ void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void *widget)
         }
         break;
     }
+    case WIDGET_NODE_EDITOR:
+    {
+        for (int i = 0; i < win->node_editor_count; i++)
+        {
+            if (win->node_editors[i] == (GooeyNodeEditor *)widget)
+            {
+                for (int j = i; j < win->node_editor_count - 1; j++)
+                {
+                    win->node_editors[j] = win->node_editors[j + 1];
+                }
+                win->node_editor_count--;
+                break;
+            }
+        }
+        break;
+    }
     default:
-        LOG_ERROR("Invalid widget type.");
         break;
     }
 
@@ -1113,8 +1120,6 @@ void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void *widget)
 
 void GooeyWindow_SetContinuousRedraw(GooeyWindow *win)
 {
-    // win->continuous_redraw = true;
-    // removed for now
 }
 
 void GooeyWindow_EnableDebugOverlay(GooeyWindow *win, bool is_enabled)
@@ -1126,7 +1131,6 @@ void GooeyWindow_RequestCleanup(GooeyWindow *win)
 {
     if (!win || !active_backend)
     {
-        LOG_ERROR("Invalid window or backend");
         return;
     }
 

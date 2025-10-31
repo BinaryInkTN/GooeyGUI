@@ -41,7 +41,8 @@ typedef enum
     WIDGET_SWITCH,
     WIDGET_WEBVIEW,
     WIDGET_CTXMENU,
-    WIDGET_TABS,
+    WIDGET_NODE_EDITOR,
+    WIDGET_TABS
 } WIDGET_TYPE;
 
 typedef struct
@@ -281,6 +282,14 @@ typedef struct
     bool is_open;
     char __padding[3];
     int element_hovered_over;
+
+    // Animation fields
+    bool is_animating;
+    int animation_step;
+    int animation_height;
+    int start_height;
+    int target_height;
+    GooeyTimer *animation_timer;
 } GooeyMenuChild;
 
 typedef struct
@@ -501,7 +510,7 @@ typedef struct
     long value;
     const char *label;
     unsigned long texture_id;
-    
+
 } GooeyMeter;
 
 typedef struct
@@ -519,6 +528,73 @@ typedef struct
     bool needs_refresh;
     char __padding[7];
 } GooeyWebview;
+
+// Node Editor Structures
+typedef struct GooeyNodeEditor GooeyNodeEditor;
+typedef struct GooeyNode GooeyNode;
+typedef struct GooeyNodeSocket GooeyNodeSocket;
+typedef struct GooeyNodeConnection GooeyNodeConnection;
+
+typedef enum {
+    GOOEY_SOCKET_TYPE_INPUT,
+    GOOEY_SOCKET_TYPE_OUTPUT
+} GooeySocketType;
+
+typedef enum {
+    GOOEY_DATA_TYPE_FLOAT,
+    GOOEY_DATA_TYPE_INT,
+    GOOEY_DATA_TYPE_BOOL,
+    GOOEY_DATA_TYPE_STRING,
+    GOOEY_DATA_TYPE_CUSTOM
+} GooeyDataType;
+
+struct GooeyNodeSocket {
+    char id[32];
+    char name[32];
+    GooeySocketType type;
+    GooeyDataType data_type;
+    int x, y;
+    bool is_connected;
+    GooeyNode* parent_node;
+};
+
+struct GooeyNode {
+    char node_id[32];
+    char title[32];
+    int x, y;
+    int width, height;
+    GooeyNodeSocket* sockets;
+    int socket_count;
+    bool is_selected;
+    bool is_dragging;
+    int drag_offset_x, drag_offset_y;
+    void* user_data;
+};
+
+struct GooeyNodeConnection {
+    GooeyNodeSocket* from_socket;
+    GooeyNodeSocket* to_socket;
+    bool is_selected;
+    void* user_data;
+};
+
+struct GooeyNodeEditor {
+    GooeyWidget core;
+    GooeyNode** nodes;
+    GooeyNodeConnection** connections;
+    int node_count;
+    int connection_count;
+    int grid_size;
+    bool show_grid;
+    float zoom_level;
+    int pan_x, pan_y;
+    bool is_panning;
+    int pan_start_x, pan_start_y;
+    GooeyNodeSocket* dragging_socket;
+    GooeyNodeConnection* temp_connection;
+    void (*callback)(void *user_data);
+    void *user_data;
+};
 
 typedef enum
 {
@@ -564,6 +640,8 @@ typedef struct
     GooeyContainers **containers;
     GooeySwitch **switches;
     GooeyWebview **webviews;
+    GooeyNodeEditor **node_editors;
+    size_t node_editor_count;
     size_t webview_count;
     size_t container_count;
     size_t switch_count;
@@ -586,6 +664,7 @@ typedef struct
     size_t plot_count;
     size_t progressbar_count;
     size_t widget_count;
+    void* memory_pool;
 } GooeyWindow;
 
 #pragma pack(pop)

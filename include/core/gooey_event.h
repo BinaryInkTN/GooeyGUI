@@ -4,6 +4,5 @@
 
 #include "event/gooey_event_internal.h"
 
-Gooey
 
 #endif

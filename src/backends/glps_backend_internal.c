@@ -1287,10 +1287,9 @@ void glps_make_window_transparent(GooeyWindow *win, int blur_radius, float opaci
         return;
     }
 
-
-    glps_wm_set_window_blur(ctx.wm, win->creation_id, true, blur_radius);
-    glps_wm_set_window_opacity(ctx.wm, win->creation_id, opacity);
     glps_wm_set_window_background_transparent(ctx.wm, win->creation_id);
+    glps_wm_set_window_opacity(ctx.wm, win->creation_id, opacity);
+    glps_wm_set_window_blur(ctx.wm, win->creation_id, true, blur_radius);
 }
 
 GooeyBackend glps_backend = {

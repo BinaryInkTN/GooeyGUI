@@ -103,6 +103,10 @@ extern "C"
         
         // Performance & Debug
         void (*GetPlatformName)(char *platform, size_t max_length);
+
+
+        // Transparency effects.
+        void (*MakeWindowTransparent)(GooeyWindow *win, int blur_radius, float opacity);                                                                                          /**< Makes the window background transparent. */
     } GooeyBackend;
 
     /**

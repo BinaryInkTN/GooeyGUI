@@ -1051,7 +1051,8 @@ void glps_run()
 {
     while (!glps_wm_should_close(ctx.wm) && ctx.is_running)
     {
-        for (size_t i = 0; i < ctx.active_window_count; ++i) {
+        for (size_t i = 0; i < ctx.active_window_count; ++i)
+        {
             glps_wm_window_update(ctx.wm, i);
         }
 
@@ -1060,7 +1061,6 @@ void glps_run()
 
         usleep(500);
     }
-
 }
 
 GooeyTimer *glps_create_timer()
@@ -1279,6 +1279,20 @@ void glps_get_platform_name(char *platform, size_t max_length)
     platform[max_length - 1] = '\0';
 }
 
+void glps_make_window_transparent(GooeyWindow *win, int blur_radius, float opacity)
+{
+    if (!win)
+    {
+        LOG_ERROR("Window is null.");
+        return;
+    }
+
+
+    glps_wm_set_window_blur(ctx.wm, win->creation_id, true, blur_radius);
+    glps_wm_set_window_opacity(ctx.wm, win->creation_id, opacity);
+    glps_wm_set_window_background_transparent(ctx.wm, win->creation_id);
+}
+
 GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
@@ -1336,6 +1350,7 @@ GooeyBackend glps_backend = {
     .DrawWebview = glps_draw_webview,
     .OpenFileDialog = glps_open_fdialog,
     .GetPlatformName = glps_get_platform_name,
+    .MakeWindowTransparent = glps_make_window_transparent,
 };
 
 #endif

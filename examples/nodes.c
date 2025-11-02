@@ -1,4 +1,4 @@
-#include "gooey.h"
+#include "Gooey/gooey.h"
 
 // Node editor callback
 void node_editor_callback(void* user_data)
@@ -12,6 +12,7 @@ int main()
     Gooey_Init();
 
     GooeyWindow *win = GooeyWindow_Create("Node Editor Example", 800, 600, true);
+    GooeyWindow_MakeTransparent(win, 15, 0.9f);
     GooeyWindow_MakeResizable(win, true);
     GooeyNodeEditor* node_editor = GooeyNodeEditor_Create(50, 50, 700, 500, node_editor_callback, NULL);
     GooeyNodeEditor_AddNode(node_editor, "Input Node", 100, 100, 150, 100);

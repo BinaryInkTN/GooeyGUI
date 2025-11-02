@@ -140,6 +140,8 @@ void GooeyWindow_RequestCleanup(GooeyWindow *win);
 
 void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void* widget);
 
+void GooeyWindow_MakeTransparent(GooeyWindow* win, int blur_radius, float opacity);
+
 #ifdef __cplusplus
 }
 #endif

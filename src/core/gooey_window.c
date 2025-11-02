@@ -1189,3 +1189,8 @@ void GooeyWindow_RequestCleanup(GooeyWindow *win)
 
     active_backend->RequestClose(win->creation_id);
 }
+
+void GooeyWindow_MakeTransparent(GooeyWindow *win, int blur_radius, float opacity)
+{
+    active_backend->MakeWindowTransparent(win, blur_radius, opacity);
+}

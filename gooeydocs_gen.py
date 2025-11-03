@@ -597,29 +597,39 @@ class DocumentationGenerator:
         has_semicolon = ';' in line
         has_equals = '=' in line
 
-        return has_parens and has_semicolon and not has_equals
+        return has_parens and (has_semicolon or line.endswith(')')) and not has_equals
 
     def _parse_function_declaration(self, func_content: str, comment_content: str, filename: str) -> Optional[FunctionInfo]:
         func_content = re.sub(r'\s+', ' ', func_content).strip()
-
+        
+        # Enhanced function pattern to handle complex function pointers and multi-line declarations
         func_patterns = [
+            # Standard function with function pointer parameters
             r'^(.+?)\s+(\w+)\s*\(([^)]*)\)\s*;',
+            # Function with pointer return type
             r'^(.+?\s*\*+)\s+(\w+)\s*\(([^)]*)\)\s*;',
-            r'^(.+?)\s+(\*\w+)\s*\(([^)]*)\)\s*;'
+            # Function with pointer in name
+            r'^(.+?)\s+(\*\w+)\s*\(([^)]*)\)\s*;',
+            # Multi-line function declaration
+            r'^(.+?)\s+(\w+)\s*\((?:[^)]|\n)*\)\s*;'
         ]
 
         for pattern in func_patterns:
-            match = re.search(pattern, func_content)
+            match = re.search(pattern, func_content, re.DOTALL)
             if match:
                 return_type = match.group(1).strip()
                 func_name = match.group(2).strip()
                 params_str = match.group(3).strip() if match.group(3) else ""
+
+                # Clean up multi-line parameter strings
+                params_str = re.sub(r'\s+', ' ', params_str)
 
                 if not self.config['include_private'] and (func_name.startswith('_') or 'internal' in func_name.lower()):
                     return None
 
                 doc_info = self._parse_doxygen_comment(comment_content)
                 parameters = self._parse_function_parameters_advanced(params_str, doc_info.get('params', {}))
+                
                 return FunctionInfo(
                     name=func_name,
                     return_type=return_type,
@@ -634,12 +644,14 @@ class DocumentationGenerator:
     def _parse_function_parameters_advanced(self, params_str: str, param_docs: Dict[str, str]) -> List[FunctionParam]:
         if not params_str or params_str == 'void':
             return []
+        
         parameters = []
-        param_list = self._split_parameters(params_str)
+        param_list = self._split_parameters_advanced(params_str)
+        
         for param in param_list:
             if param.strip():
                 param_type, param_name = self._parse_parameter_advanced(param.strip())
-                if param_type and param_name:
+                if param_type:
                     parameters.append(FunctionParam(
                         type=param_type,
                         name=param_name,
@@ -647,31 +659,61 @@ class DocumentationGenerator:
                     ))
         return parameters
 
-    def _split_parameters(self, params_str: str) -> List[str]:
-        params, current_param, paren_depth, bracket_depth = [], "", 0, 0
-        for char in params_str:
-            if char == '(': paren_depth += 1
-            elif char == ')': paren_depth -= 1
-            elif char == '[': bracket_depth += 1
-            elif char == ']': bracket_depth -= 1
-            elif char == ',' and paren_depth == 0 and bracket_depth == 0:
+    def _split_parameters_advanced(self, params_str: str) -> List[str]:
+        params, current_param, paren_depth, bracket_depth, angle_depth = [], "", 0, 0, 0
+        
+        i = 0
+        while i < len(params_str):
+            char = params_str[i]
+            
+            if char == '(': 
+                paren_depth += 1
+            elif char == ')': 
+                paren_depth -= 1
+            elif char == '[': 
+                bracket_depth += 1
+            elif char == ']': 
+                bracket_depth -= 1
+            elif char == '<':
+                angle_depth += 1
+            elif char == '>':
+                angle_depth -= 1
+            elif char == ',' and paren_depth == 0 and bracket_depth == 0 and angle_depth == 0:
                 params.append(current_param.strip())
                 current_param = ""
+                i += 1
                 continue
+            
             current_param += char
+            i += 1
+        
         if current_param.strip():
             params.append(current_param.strip())
+        
         return params
 
     def _parse_parameter_advanced(self, param: str) -> Tuple[str, str]:
         param = param.strip()
-
-        if '(' in param and ')' in param and '*' in param:
-            function_ptr_match = re.search(r'^(.+?\(\s*\*\s*\w+\s*\))\s*(?:\[.*\])?\s*$', param)
-            if function_ptr_match:
-                return function_ptr_match.group(1), ""
-
-        pattern = r'^((?:const\s+|volatile\s+|static\s+|extern\s+)*\s*(?:struct\s+|enum\s+|union\s+)?\s*(?:unsigned\s+|signed\s+)?\s*(?:short\s+|long\s+)?\s*\w+(?:\s*\*+\s*)*)\s*(\w+(?:\s*\[\s*\d*\s*\])?)?$'
+        
+        # Handle function pointer parameters
+        func_ptr_pattern = r'^(.*?\(\s*\*\s*(\w*)\s*\)\s*\([^)]*\))\s*(?:\s*(\w+))?$'
+        func_ptr_match = re.match(func_ptr_pattern, param)
+        if func_ptr_match:
+            param_type = func_ptr_match.group(1).strip()
+            param_name = func_ptr_match.group(3) or ""
+            return param_type, param_name
+        
+        # Handle complex types with templates/pointers
+        if '<' in param and '>' in param:
+            # For template types, find the last word as parameter name
+            words = param.split()
+            if words and words[-1].isidentifier():
+                param_name = words[-1]
+                param_type = ' '.join(words[:-1])
+                return param_type, param_name
+        
+        # Standard parameter parsing
+        pattern = r'^((?:const\s+|volatile\s+|static\s+|extern\s+)*\s*(?:struct\s+|enum\s+|union\s+)?\s*(?:unsigned\s+|signed\s+)?\s*(?:short\s+|long\s+)?\s*\w+(?:\s*<\s*[^>]*\s*>)?(?:\s*\*+\s*|\s+const\s*|\s+volatile\s*)*)\s*(\w+(?:\s*\[\s*\d*\s*\])?)?$'
 
         match = re.match(pattern, param)
         if match:
@@ -679,13 +721,15 @@ class DocumentationGenerator:
             param_name = match.group(2).strip() if match.group(2) else ""
 
             if not param_name and param_type:
-                words = param.split()
-                if words and words[-1].isidentifier():
+                # Try to extract name from the end
+                words = param_type.split()
+                if words and words[-1].isidentifier() and not words[-1] in ['const', 'volatile', 'static', 'extern']:
                     param_name = words[-1]
                     param_type = ' '.join(words[:-1])
 
             return param_type, param_name
 
+        # Fallback: split on spaces and take last word as name
         words = param.split()
         if not words:
             return "", ""
@@ -1025,7 +1069,7 @@ class DocumentationGenerator:
 
         complete_html_content = self._generate_complete_html_content()
 
-        template = self._get_enhanced_template()
+        template = self._get_qt_style_template()
         sidebar_content = self._generate_sidebar_content()
         search_data = self._generate_search_data()
 
@@ -1111,87 +1155,67 @@ class DocumentationGenerator:
             <div class="hero-section">
                 <div class="hero-background"></div>
                 <div class="hero-content">
-                    <h1>Welcome to {self.config['project_name']}</h1>
+                    <h1>{self.config['project_name']} Documentation</h1>
                     <p class="hero-subtitle">Version {self.config['project_version']}</p>
                     <p class="hero-description">
-                        Generated with GooeyDocs at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+                        Complete API reference and developer guides
                     </p>
                     
                     <div class="action-buttons">
                         <a href="#api-reference" class="action-btn primary">
-                            <i class="fas fa-code"></i>
-                            Explore API Reference
+                            <i class="fas fa-book"></i>
+                            API Reference
                         </a>
                         <a href="#guides" class="action-btn secondary">
-                            <i class="fas fa-book"></i>
-                            Read Documentation
+                            <i class="fas fa-graduation-cap"></i>
+                            Getting Started
                         </a>
                     </div>
                 </div>
             </div>
             
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-file-code"></i>
                     </div>
-                    <h3>Header Files</h3>
-        
-                    <div class="feature-stat">{total_headers}</div>
+                    <div class="stat-content">
+                        <div class="stat-number">{total_headers}</div>
+                        <div class="stat-label">Header Files</div>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-code"></i>
                     </div>
-                    <h3>Functions</h3>
-                    <div class="feature-stat">{total_functions}</div>
+                    <div class="stat-content">
+                        <div class="stat-number">{total_functions}</div>
+                        <div class="stat-label">Functions</div>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-cube"></i>
                     </div>
-                    <h3>Data Types</h3>
-                    <div class="feature-stat">{total_data_types}</div>
+                    <div class="stat-content">
+                        <div class="stat-number">{total_data_types}</div>
+                        <div class="stat-label">Data Types</div>
+                    </div>
                 </div>
                 
-                <div class="feature-card">
-                    <div class="feature-icon">
+                <div class="stat-card">
+                    <div class="stat-icon">
                         <i class="fas fa-book"></i>
                     </div>
-                    <h3>Guides</h3>
-                    <div class="feature-stat">{total_pages}</div>
+                    <div class="stat-content">
+                        <div class="stat-number">{total_pages}</div>
+                        <div class="stat-label">Guides</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="quick-links">
-                <h2>Quick Navigation</h2>
-                <div class="links-grid">
-                    <a href="#api-reference" class="quick-link">
-                        <i class="fas fa-code"></i>
-                        <span>API Reference</span>
-                        <small>Browse all functions and data types</small>
-                    </a>
-                    <a href="#guides" class="quick-link">
-                        <i class="fas fa-book"></i>
-                        <span>Documentation</span>
-                        <small>Read guides and tutorials</small>
-                    </a>
-                    <a href="#search" class="quick-link" onclick="document.getElementById('searchInput').focus(); return false;">
-                        <i class="fas fa-search"></i>
-                        <span>Search</span>
-                        <small>Quickly find what you need</small>
-                    </a>
-                    <a href="#" class="quick-link" onclick="toggleTheme(); return false;">
-                        <i class="fas fa-palette"></i>
-                        <span>Theme</span>
-                        <small>Switch between light/dark mode</small>
-                    </a>
-                </div>
-            </div>
-
-         
         </section>
         """]
 
@@ -1249,16 +1273,18 @@ class DocumentationGenerator:
     def _generate_data_type_html(self, data_type: DataTypeInfo) -> str:
         members_html = ""
         if data_type.type == 'struct' and data_type.members:
-            members_html = "<div class='api-members'><h4>Members</h4><table class='member-table'><tr><th>Type</th><th>Name</th><th>Description</th></tr>"
+            members_html = "<div class='api-members'><h4>Members</h4><table class='member-table'><thead><tr><th>Type</th><th>Name</th><th>Description</th></tr></thead><tbody>"
             for member in data_type.members:
                 members_html += f"<tr><td><code>{html.escape(member.type)}</code></td><td><code>{html.escape(member.name)}</code></td><td>{html.escape(member.description)}</td></tr>"
-            members_html += "</table></div>"
+            members_html += "</tbody></table></div>"
 
         return f"""
         <section id="type-{data_type.name.lower()}" class="api-item" data-searchable="true">
-            <h3 class="api-name">{data_type.type} {data_type.name}</h3>
-            <span class="api-type">{data_type.type}</span>
-            {f"<p class='api-brief'><strong>{html.escape(data_type.brief_description)}</strong></p>" if data_type.brief_description else ""}
+            <div class="api-header">
+                <h3 class="api-name">{data_type.type} {data_type.name}</h3>
+                <span class="api-badge api-badge-type">{data_type.type}</span>
+            </div>
+            {f"<p class='api-brief'>{html.escape(data_type.brief_description)}</p>" if data_type.brief_description else ""}
             {f"<p class='api-description'>{html.escape(data_type.description)}</p>" if data_type.description else ""}
             {members_html}
             <div class="api-signature">
@@ -1277,25 +1303,24 @@ class DocumentationGenerator:
     def _generate_function_html(self, func: FunctionInfo) -> str:
         params_html = ""
         if func.parameters:
-            params_html = "<div class='api-params'><h4>Parameters</h4><table class='param-table'><tr><th>Name</th><th>Type</th><th>Description</th></tr>"
+            params_html = "<div class='api-params'><h4>Parameters</h4><table class='param-table'><thead><tr><th>Type</th><th>Name</th><th>Description</th></tr></thead><tbody>"
             for param in func.parameters:
-                params_html += f"<tr><td><code>{html.escape(param.name)}</code></td><td><code>{html.escape(param.type)}</code></td><td>{html.escape(param.description)}</td></tr>"
-            params_html += "</table></div>"
+                params_html += f"<tr><td><code>{html.escape(param.type)}</code></td><td><code>{html.escape(param.name)}</code></td><td>{html.escape(param.description)}</td></tr>"
+            params_html += "</tbody></table></div>"
 
         signature_parts = []
         for param in func.parameters:
-            if '(' in param.type and ')' in param.type and '*' in param.type:
-                signature_parts.append(param.type)
-            else:
-                signature_parts.append(f"{html.escape(param.type)} {html.escape(param.name)}")
+            signature_parts.append(f"{html.escape(param.type)} {html.escape(param.name)}")
 
         signature = f"{html.escape(func.return_type)} {func.name}({', '.join(signature_parts)});"
 
         return f"""
         <section id="api-{func.name.lower()}" class="api-item" data-searchable="true">
-            <h3 class="api-name">{func.name}</h3>
-            <span class="api-type">function</span>
-            {f"<p class='api-brief'><strong>{html.escape(func.brief_description)}</strong></p>" if func.brief_description else ""}
+            <div class="api-header">
+                <h3 class="api-name">{func.name}</h3>
+                <span class="api-badge api-badge-function">function</span>
+            </div>
+            {f"<p class='api-brief'>{html.escape(func.brief_description)}</p>" if func.brief_description else ""}
             {f"<p class='api-description'>{html.escape(func.description)}</p>" if func.description else ""}
             <div class="api-signature">
                 <div class="code-header">
@@ -1309,7 +1334,8 @@ class DocumentationGenerator:
             </div>
             {params_html}
             <div class="api-returns">
-                <strong>Returns:</strong> <code>{html.escape(func.return_type)}</code>
+                <h4>Return Value</h4>
+                <p><code>{html.escape(func.return_type)}</code></p>
             </div>
         </section>
         """
@@ -1470,59 +1496,59 @@ class DocumentationGenerator:
         except Exception as e:
             print(f"Error generating PDF documentation: {e}")
 
-    def _get_enhanced_template(self) -> str:
+    def _get_qt_style_template(self) -> str:
         return """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{project_name} - Documentation</title>
+    <title>{project_name} {project_version} Documentation</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link id="prism-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.9.0/prism-one-light.min.css"/>
+    <link id="prism-theme" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.9.0/prism.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
 
     <style>
         :root {{
-            --primary: #3B82F6;
-            --primary-dark: #2563EB;
-            --secondary: #10B981;
-            --accent: #F59E0B;
-            --error: #EF4444;
-            --bg: #FFFFFF;
-            --surface: #F8FAFC;
-            --surface-elevated: #FFFFFF;
-            --on-surface: #0F172A;
-            --text-primary: #1E293B;
-            --text-secondary: #64748B;
-            --text-tertiary: #94A3B8;
-            --border: #E2E8F0;
-            --border-light: #F1F5F9;
-            --radius: 12px;
-            --radius-sm: 8px;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --gooey-primary: #3c6382;
+            --gooey-primary-dark: #38ada9;
+            --gooey-secondary: #38ada9;
+            --gooey-accent: #FF9800;
+            --gooey-error: #F44336;
+            --gooey-bg: #FFFFFF;
+            --gooey-surface: #F5F5F5;
+            --gooey-surface-elevated: #FFFFFF;
+            --gooey-on-surface: #212121;
+            --gooey-text-primary: #424242;
+            --gooey-text-secondary: #757575;
+            --gooey-text-tertiary: #9E9E9E;
+            --gooey-border: #E0E0E0;
+            --gooey-border-light: #EEEEEE;
+            --gooey-radius: 8px;
+            --gooey-radius-sm: 4px;
+            --gooey-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            --gooey-shadow-md: 0 4px 8px rgba(0,0,0,0.12);
+            --gooey-shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
         }}
 
         .dark-theme {{
-            --primary: #60A5FA;
-            --primary-dark: #3B82F6;
-            --secondary: #34D399;
-            --accent: #FBBF24;
-            --error: #F87171;
-            --bg: #0F172A;
-            --surface: #1E293B;
-            --surface-elevated: #334155;
-            --on-surface: #F1F5F9;
-            --text-primary: #F8FAFC;
-            --text-secondary: #CBD5E1;
-            --text-tertiary: #64748B;
-            --border: #334155;
-            --border-light: #1E293B;
-            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+       --gooey-primary: #3c6382;
+            --gooey-primary-dark: #38ada9;
+            --gooey-secondary: #38ada9;
+            --gooey-accent: #FFB74D;
+            --gooey-error: #EF5350;
+            --gooey-bg: #121212;
+            --gooey-surface: #1E1E1E;
+            --gooey-surface-elevated: #2D2D2D;
+            --gooey-on-surface: #FFFFFF;
+            --gooey-text-primary: #E0E0E0;
+            --gooey-text-secondary: #9E9E9E;
+            --gooey-text-tertiary: #666666;
+            --gooey-border: #333333;
+            --gooey-border-light: #252525;
+            --gooey-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            --gooey-shadow-md: 0 4px 8px rgba(0,0,0,0.4);
+            --gooey-shadow-lg: 0 8px 16px rgba(0,0,0,0.5);
         }}
 
         * {{
@@ -1533,26 +1559,26 @@ class DocumentationGenerator:
 
         body {{
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--text-primary);
-            background: var(--bg);
+            color: var(--gooey-text-primary);
+            background: var(--gooey-bg);
             line-height: 1.6;
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 280px 1fr;
             min-height: 100vh;
             transition: all 0.3s ease;
         }}
 
-        /* Enhanced Hero Section */
+        /* gooey-style Hero Section */
         .hero-section {{
             position: relative;
-            padding: 120px 0 80px 0;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 80px 0 60px 0;
+            background: linear-gradient(135deg, var(--gooey-primary) 0%, var(--gooey-primary-dark) 100%);
             color: white;
             text-align: center;
             overflow: hidden;
             width: 100%;
-            color: white !important;
-            border-radius: var(--radius) !important;
+            border-radius: var(--gooey-radius);
+            margin-bottom: 40px;
         }}
 
         .hero-background {{
@@ -1574,25 +1600,22 @@ class DocumentationGenerator:
         }}
 
         .hero-section h1 {{
-            font-size: 3.5rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 16px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #F1F5F9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: white;
         }}
 
         .hero-subtitle {{
-            font-size: 1.5rem;
-            font-weight: 300;
+            font-size: 1.2rem;
+            font-weight: 400;
             margin-bottom: 16px;
             opacity: 0.9;
             color: white;
         }}
 
         .hero-description {{
-            font-size: 1.2rem;
+            font-size: 1rem;
             margin-bottom: 40px;
             opacity: 0.8;
             max-width: 600px;
@@ -1604,7 +1627,7 @@ class DocumentationGenerator:
 
         .action-buttons {{
             display: flex;
-            gap: 20px;
+            gap: 16px;
             justify-content: center;
             flex-wrap: wrap;
         }}
@@ -1612,26 +1635,26 @@ class DocumentationGenerator:
         .action-btn {{
             display: inline-flex;
             align-items: center;
-            gap: 12px;
-            padding: 16px 32px;
-            font-size: 1.1rem;
+            gap: 10px;
+            padding: 12px 24px;
+            font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            border-radius: var(--radius);
+            border-radius: var(--gooey-radius);
             transition: all 0.3s ease;
             border: 2px solid transparent;
         }}
 
         .action-btn.primary {{
             background: white;
-            color: var(--primary);
-            box-shadow: var(--shadow-lg);
+            color: var(--gooey-primary);
+            box-shadow: var(--gooey-shadow-lg);
         }}
 
         .action-btn.primary:hover {{
-            background: var(--surface);
+            background: var(--gooey-surface);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--gooey-shadow-lg), 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }}
 
         .action-btn.secondary {{
@@ -1646,143 +1669,78 @@ class DocumentationGenerator:
             transform: translateY(-2px);
         }}
 
-        /* Features Grid */
-        .features-grid {{
+        /* Stats Grid */
+        .stats-grid {{
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
         }}
 
-        .feature-card {{
-            background: var(--surface-elevated);
-            padding: 40px 30px;
-            border-radius: var(--radius);
+        .stat-card {{
+            background: var(--gooey-surface-elevated);
+            padding: 24px;
+            border-radius: var(--gooey-radius);
             text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            box-shadow: var(--gooey-shadow);
+            border: 1px solid var(--gooey-border);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 16px;
         }}
 
-        .feature-card:hover {{
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
+        .stat-card:hover {{
+            transform: translateY(-2px);
+            box-shadow: var(--gooey-shadow-md);
         }}
 
-        .feature-card::before {{
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-        }}
-
-        .feature-icon {{
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        .stat-icon {{
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gooey-primary) 0%, var(--gooey-primary-dark) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
             color: white;
-            font-size: 2rem;
+            font-size: 1.2rem;
+            flex-shrink: 0;
         }}
 
-        .feature-card h3 {{
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--on-surface);
+        .stat-content {{
+            text-align: left;
         }}
 
-        .feature-card p {{
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }}
-
-        .feature-stat {{
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: var(--primary);
-        }}
-
-        /* Quick Links */
-        .quick-links {{
-            margin: 80px 0;
-        }}
-
-        .quick-links h2 {{
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
+        .stat-number {{
+            font-size: 1.8rem;
             font-weight: 700;
-            color: var(--on-surface);
+            color: var(--gooey-primary);
+            line-height: 1;
         }}
 
-        .links-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }}
-
-        .quick-link {{
-            display: flex;
-            flex-direction: column;
-            padding: 30px 25px;
-            background: var(--surface-elevated);
-            border-radius: var(--radius);
-            text-decoration: none;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
-            text-align: center;
-        }}
-
-        .quick-link:hover {{
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-            color: var(--primary);
-        }}
-
-        .quick-link i {{
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-            color: var(--primary);
-        }}
-
-        .quick-link span {{
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }}
-
-        .quick-link small {{
-            color: var(--text-secondary);
+        .stat-label {{
             font-size: 0.9rem;
+            color: var(--gooey-text-secondary);
+            margin-top: 4px;
         }}
 
         /* Getting Started */
         .getting-started {{
-            margin: 80px 0;
+            margin: 60px 0;
         }}
 
         .getting-started h2 {{
             text-align: center;
-            margin-bottom: 50px;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--on-surface);
+            margin-bottom: 40px;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--gooey-on-surface);
         }}
 
         .steps {{
             display: grid;
-            gap: 40px;
+            gap: 24px;
             max-width: 800px;
             margin: 0 auto;
         }}
@@ -1790,58 +1748,58 @@ class DocumentationGenerator:
         .step {{
             display: flex;
             align-items: flex-start;
-            gap: 25px;
-            padding: 30px;
-            background: var(--surface-elevated);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+            gap: 20px;
+            padding: 24px;
+            background: var(--gooey-surface-elevated);
+            border-radius: var(--gooey-radius);
+            border: 1px solid var(--gooey-border);
         }}
 
         .step-number {{
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--gooey-primary) 0%, var(--gooey-primary-dark) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             font-weight: 700;
             flex-shrink: 0;
         }}
 
         .step-content h3 {{
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--on-surface);
+            margin-bottom: 8px;
+            color: var(--gooey-on-surface);
         }}
 
         .step-content p {{
-            color: var(--text-secondary);
+            color: var(--gooey-text-secondary);
             line-height: 1.6;
         }}
 
-        /* Rest of the existing styles... */
+        /* Code Styling */
         .code-header {{
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
+            background: var(--gooey-surface);
+            border-bottom: 1px solid var(--gooey-border);
             padding: 8px 16px;
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            border-radius: var(--gooey-radius-sm) var(--gooey-radius-sm) 0 0;
             font-size: 12px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--gooey-text-secondary);
         }}
 
         .copy-button {{
-            background: var(--primary);
+            background: var(--gooey-primary);
             color: white;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: var(--gooey-radius-sm);
             padding: 4px 8px;
             font-size: 11px;
             cursor: pointer;
@@ -1852,27 +1810,27 @@ class DocumentationGenerator:
         }}
 
         .copy-button:hover {{
-            background: var(--primary-dark);
+            background: var(--gooey-primary-dark);
             transform: translateY(-1px);
         }}
 
         .copy-button.copied {{
-            background: var(--secondary);
+            background: var(--gooey-secondary);
         }}
 
         .top-bar {{
             position: fixed;
             top: 0;
-            left: 300px;
+            left: 280px;
             right: 0;
-            background: var(--surface-elevated);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 40px;
+            background: var(--gooey-surface-elevated);
+            border-bottom: 1px solid var(--gooey-border);
+            padding: 12px 32px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             z-index: 999;
-            box-shadow: var(--shadow);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .top-bar-search {{
@@ -1884,24 +1842,24 @@ class DocumentationGenerator:
         .search-box {{
             display: flex;
             align-items: center;
-            background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
-            padding: 12px 16px;
+            background: var(--gooey-surface);
+            border: 1px solid var(--gooey-border);
+            border-radius: var(--gooey-radius);
+            padding: 10px 14px;
             width: 100%;
             transition: all 0.3s ease;
             position: relative;
         }}
 
         .search-box:focus-within {{
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: var(--gooey-primary);
+            box-shadow: 0 0 0 2px rgba(65, 205, 82, 0.1);
         }}
 
         .search-box input {{
             border: none;
             background: transparent;
-            color: var(--text-primary);
+            color: var(--gooey-text-primary);
             font-size: 14px;
             width: 100%;
             outline: none;
@@ -1909,26 +1867,26 @@ class DocumentationGenerator:
         }}
 
         .search-box input::placeholder {{
-            color: var(--text-tertiary);
+            color: var(--gooey-text-tertiary);
         }}
 
         .search-box i {{
-            color: var(--text-tertiary);
-            margin-right: 12px;
+            color: var(--gooey-text-tertiary);
+            margin-right: 10px;
             transition: color 0.3s ease;
         }}
 
         .search-shortcut {{
             position: absolute;
-            right: 12px;
+            right: 10px;
             top: 50%;
             transform: translateY(-50%);
-            background: var(--surface);
-            border: 1px solid var(--border);
+            background: var(--gooey-surface);
+            border: 1px solid var(--gooey-border);
             border-radius: 4px;
             padding: 2px 6px;
             font-size: 11px;
-            color: var(--text-tertiary);
+            color: var(--gooey-text-tertiary);
             font-family: 'JetBrains Mono', monospace;
         }}
 
@@ -1941,35 +1899,34 @@ class DocumentationGenerator:
             top: 100%;
             left: 0;
             right: 0;
-            background: var(--surface-elevated);
-            border: 2px solid var(--border);
-            border-radius: var(--radius);
+            background: var(--gooey-surface-elevated);
+            border: 1px solid var(--gooey-border);
+            border-radius: var(--gooey-radius);
             margin-top: 8px;
             max-height: 400px;
             overflow-y: auto;
             display: none;
             z-index: 1001;
-            box-shadow: var(--shadow-lg);
-            backdrop-filter: blur(10px);
+            box-shadow: var(--gooey-shadow-lg);
         }}
 
         .search-result-item {{
-            padding: 16px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--gooey-border-light);
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }}
 
         .search-result-item:hover {{
-            background: var(--primary);
+            background: var(--gooey-primary);
             color: white;
         }}
 
         .search-result-item.active {{
-            background: var(--primary);
+            background: var(--gooey-primary);
             color: white;
         }}
 
@@ -1978,7 +1935,7 @@ class DocumentationGenerator:
         }}
 
         .search-result-icon {{
-            width: 20px;
+            width: 18px;
             text-align: center;
             opacity: 0.7;
         }}
@@ -2003,28 +1960,28 @@ class DocumentationGenerator:
         }}
 
         .theme-toggle {{
-            background: var(--primary);
+            background: var(--gooey-primary);
             color: white;
             border: none;
-            border-radius: var(--radius);
-            padding: 10px 16px;
+            border-radius: var(--gooey-radius);
+            padding: 8px 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.3s ease;
         }}
 
         .theme-toggle:hover {{
-            background: var(--primary-dark);
+            background: var(--gooey-primary-dark);
             transform: translateY(-1px);
         }}
 
         .sidebar {{
-            background: var(--surface);
-            border-right: 1px solid var(--border);
+            background: var(--gooey-surface);
+            border-right: 1px solid var(--gooey-border);
             padding: 0;
             position: sticky;
             top: 0;
@@ -2034,21 +1991,21 @@ class DocumentationGenerator:
         }}
 
         .sidebar-header {{
-            padding: 24px;
-            border-bottom: 1px solid var(--border);
-            background: var(--surface-elevated);
+            padding: 20px;
+            border-bottom: 1px solid var(--gooey-border);
+            background: var(--gooey-surface-elevated);
         }}
 
         .sidebar-title {{
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
             margin: 0;
-            color: var(--on-surface);
+            color: var(--gooey-on-surface);
         }}
 
         .sidebar-version {{
-            font-size: 14px;
-            color: var(--text-secondary);
+            font-size: 13px;
+            color: var(--gooey-text-secondary);
             margin: 4px 0 0;
             font-weight: 500;
         }}
@@ -2061,8 +2018,8 @@ class DocumentationGenerator:
 
         .sidebar-tab-buttons {{
             display: flex;
-            background: var(--surface-elevated);
-            border-bottom: 1px solid var(--border);
+            background: var(--gooey-surface-elevated);
+            border-bottom: 1px solid var(--gooey-border);
         }}
 
         .tab-button {{
@@ -2076,20 +2033,20 @@ class DocumentationGenerator:
             gap: 8px;
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: var(--gooey-text-secondary);
             transition: all 0.2s ease;
             border-bottom: 2px solid transparent;
         }}
 
         .tab-button:hover {{
-            background: var(--surface);
-            color: var(--text-primary);
+            background: var(--gooey-surface);
+            color: var(--gooey-text-primary);
         }}
 
         .tab-button.active {{
-            color: var(--primary);
-            border-bottom-color: var(--primary);
-            background: var(--surface);
+            color: var(--gooey-primary);
+            border-bottom-color: var(--gooey-primary);
+            background: var(--gooey-surface);
         }}
 
         .sidebar-tab-content {{
@@ -2123,14 +2080,14 @@ class DocumentationGenerator:
             cursor: pointer;
             user-select: none;
             transition: all 0.2s ease;
-            border-radius: var(--radius-sm);
+            border-radius: var(--gooey-radius-sm);
             font-weight: 500;
             font-size: 13px;
         }}
 
         .outline-file-header:hover {{
-            background: rgba(59, 130, 246, 0.08);
-            color: var(--primary);
+            background: rgba(65, 205, 82, 0.08);
+            color: var(--gooey-primary);
         }}
 
         .outline-file-header.expanded .outline-file-icon {{
@@ -2146,7 +2103,7 @@ class DocumentationGenerator:
         .outline-file-content {{
             display: none;
             margin-left: 16px;
-            border-left: 1px solid var(--border-light);
+            border-left: 1px solid var(--gooey-border-light);
         }}
 
         .outline-file-header.expanded + .outline-file-content {{
@@ -2160,7 +2117,7 @@ class DocumentationGenerator:
         .outline-section-header {{
             font-size: 11px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--gooey-text-secondary);
             padding: 8px 12px 4px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -2179,23 +2136,23 @@ class DocumentationGenerator:
             align-items: center;
             gap: 8px;
             padding: 6px 12px 6px 24px;
-            color: var(--text-primary);
+            color: var(--gooey-text-primary);
             text-decoration: none;
             font-size: 13px;
             transition: all 0.2s;
-            border-radius: var(--radius-sm);
+            border-radius: var(--gooey-radius-sm);
             border-left: 2px solid transparent;
         }}
 
         .outline-link:hover {{
-            background: rgba(59, 130, 246, 0.08);
-            color: var(--primary);
+            background: rgba(65, 205, 82, 0.08);
+            color: var(--gooey-primary);
         }}
 
         .outline-link.active {{
-            background: rgba(59, 130, 246, 0.12);
-            color: var(--primary);
-            border-left-color: var(--primary);
+            background: rgba(65, 205, 82, 0.12);
+            color: var(--gooey-primary);
+            border-left-color: var(--gooey-primary);
         }}
 
         .outline-link i {{
@@ -2208,7 +2165,7 @@ class DocumentationGenerator:
         .empty-state {{
             padding: 40px 20px;
             text-align: center;
-            color: var(--text-tertiary);
+            color: var(--gooey-text-tertiary);
             font-size: 14px;
         }}
 
@@ -2219,7 +2176,7 @@ class DocumentationGenerator:
         .nav-title {{
             font-size: 13px;
             font-weight: 600;
-            color: var(--text-secondary);
+            color: var(--gooey-text-secondary);
             padding: 12px 16px 8px;
             margin: 0;
             text-transform: uppercase;
@@ -2238,7 +2195,7 @@ class DocumentationGenerator:
             align-items: center;
             gap: 8px;
             padding: 8px 16px 8px 24px;
-            color: var(--text-primary);
+            color: var(--gooey-text-primary);
             text-decoration: none;
             font-size: 13px;
             transition: all 0.2s;
@@ -2247,14 +2204,14 @@ class DocumentationGenerator:
         }}
 
         .nav-link:hover {{
-            background: rgba(59, 130, 246, 0.08);
-            color: var(--primary);
+            background: rgba(65, 205, 82, 0.08);
+            color: var(--gooey-primary);
         }}
 
         .nav-link.active {{
-            background: rgba(59, 130, 246, 0.12);
-            color: var(--primary);
-            border-left-color: var(--primary);
+            background: rgba(65, 205, 82, 0.12);
+            color: var(--gooey-primary);
+            border-left-color: var(--gooey-primary);
         }}
 
         .nav-link i {{
@@ -2278,20 +2235,20 @@ class DocumentationGenerator:
             transition: all 0.2s ease;
             border-left: 2px solid transparent;
             text-decoration: none;
-            color: var(--text-primary);
+            color: var(--gooey-text-primary);
             font-size: 13px;
             font-weight: 500;
         }}
 
         .nav-folder:hover, .nav-file-header:hover {{
-            background: rgba(59, 130, 246, 0.08);
-            color: var(--primary);
+            background: rgba(65, 205, 82, 0.08);
+            color: var(--gooey-primary);
         }}
 
         .nav-folder.active, .nav-file-header.active {{
-            background: rgba(59, 130, 246, 0.12);
-            color: var(--primary);
-            border-left-color: var(--primary);
+            background: rgba(65, 205, 82, 0.12);
+            color: var(--gooey-primary);
+            border-left-color: var(--gooey-primary);
         }}
 
         .folder-icon, .file-icon {{
@@ -2332,7 +2289,7 @@ class DocumentationGenerator:
         .nav-folder-content, .nav-file-content {{
             display: none;
             margin-left: 16px;
-            border-left: 1px solid var(--border-light);
+            border-left: 1px solid var(--gooey-border-light);
         }}
 
         .nav-folder.expanded + .nav-folder-content,
@@ -2343,79 +2300,86 @@ class DocumentationGenerator:
         .file-icon-main {{
             width: 14px;
             font-size: 12px;
-            color: var(--accent);
+            color: var(--gooey-accent);
         }}
 
         .content {{
-            padding: 100px 40px 40px 40px;
-            max-width: 2000px;
+            padding: 80px 32px 32px 32px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }}
 
         h1 {{
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
-            margin: 0 0 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--border);
-            color: var(--on-surface);
+            margin: 0 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gooey-border);
+            color: var(--gooey-on-surface);
         }}
 
         h2 {{
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
-            margin: 48px 0 20px;
-            color: var(--on-surface);
+            margin: 40px 0 16px;
+            color: var(--gooey-on-surface);
         }}
 
         h3 {{
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
-            margin: 36px 0 16px;
-            color: var(--on-surface);
+            margin: 32px 0 12px;
+            color: var(--gooey-on-surface);
+        }}
+
+        h4 {{
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 8px;
+            color: var(--gooey-on-surface);
         }}
 
         p, li {{
-            color: var(--text-primary);
-            font-size: 16px;
-            line-height: 1.7;
+            color: var(--gooey-text-primary);
+            font-size: 15px;
+            line-height: 1.6;
         }}
 
         a {{
-            color: var(--primary);
+            color: var(--gooey-primary);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }}
 
         a:hover {{
-            color: var(--primary-dark);
+            color: var(--gooey-primary-dark);
             text-decoration: underline;
         }}
 
         pre {{
-            background: var(--surface-elevated);
-            border-radius: 0 0 var(--radius) var(--radius);
-            padding: 20px;
+            background: var(--gooey-surface-elevated);
+            border-radius: 0 0 var(--gooey-radius) var(--gooey-radius);
+            padding: 16px;
             overflow-x: auto;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
+            font-size: 13px;
             line-height: 1.5;
-            margin: 0 0 20px 0;
-            border: 1px solid var(--border);
+            margin: 0 0 16px 0;
+            border: 1px solid var(--gooey-border);
             border-top: none;
-            box-shadow: var(--shadow);
+            box-shadow: var(--gooey-shadow);
             transition: all 0.3s ease;
         }}
 
         code {{
             font-family: 'JetBrains Mono', monospace;
-            background: var(--surface);
-            padding: 3px 6px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            border: 1px solid var(--border-light);
+            background: var(--gooey-surface);
+            padding: 2px 6px;
+            border-radius: var(--gooey-radius-sm);
+            font-size: 12px;
+            border: 1px solid var(--gooey-border-light);
             transition: all 0.3s ease;
         }}
 
@@ -2427,104 +2391,119 @@ class DocumentationGenerator:
         }}
 
         .header-file-section {{
-            margin-bottom: 60px;
-            padding: 30px;
-            background: var(--surface-elevated);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            margin-bottom: 48px;
+            padding: 24px;
+            background: var(--gooey-surface-elevated);
+            border-radius: var(--gooey-radius);
+            border: 1px solid var(--gooey-border);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .file-description {{
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 24px;
-            padding: 16px;
-            background: var(--surface);
-            border-radius: var(--radius-sm);
-            border-left: 4px solid var(--primary);
+            font-size: 15px;
+            color: var(--gooey-text-secondary);
+            margin-bottom: 20px;
+            padding: 12px;
+            background: var(--gooey-surface);
+            border-radius: var(--gooey-radius-sm);
+            border-left: 4px solid var(--gooey-primary);
         }}
 
         .api-item {{
-            margin-bottom: 40px;
-            padding: 24px;
-            background: var(--surface-elevated);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            margin-bottom: 32px;
+            padding: 20px;
+            background: var(--gooey-surface-elevated);
+            border-radius: var(--gooey-radius);
+            border: 1px solid var(--gooey-border);
+            box-shadow: var(--gooey-shadow);
             transition: all 0.3s ease;
         }}
 
         .api-item:hover {{
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--gooey-shadow-md);
             transform: translateY(-1px);
+        }}
+
+        .api-header {{
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }}
 
         .api-name {{
             font-family: 'JetBrains Mono', monospace;
-            font-size: 20px;
-            color: var(--primary);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            font-size: 18px;
+            color: var(--gooey-primary);
+            margin: 0;
         }}
 
-        .api-type {{
+        .api-badge {{
             display: inline-flex;
-            background: var(--primary);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 4px 8px;
+            border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }}
 
+        .api-badge-type {{
+            background: var(--gooey-secondary);
+            color: white;
+        }}
+
+        .api-badge-function {{
+            background: var(--gooey-primary);
+            color: white;
+        }}
+
         .api-brief {{
-            font-size: 16px;
-            color: var(--text-primary);
+            font-size: 15px;
+            color: var(--gooey-text-primary);
             margin: 12px 0;
             font-weight: 500;
         }}
 
         .api-description {{
-            margin: 16px 0;
-            color: var(--text-secondary);
+            margin: 12px 0;
+            color: var(--gooey-text-secondary);
         }}
 
         .api-params, .api-returns, .api-members {{
-            margin: 20px 0;
+            margin: 16px 0;
         }}
 
         .api-params h4, .api-returns h4, .api-members h4 {{
-            font-size: 16px;
-            margin-bottom: 12px;
-            color: var(--on-surface);
+            font-size: 15px;
+            margin-bottom: 10px;
+            color: var(--gooey-on-surface);
         }}
 
         .param-table, .member-table {{
             width: 100%;
             border-collapse: collapse;
-            margin: 12px 0;
-            border-radius: var(--radius-sm);
+            margin: 10px 0;
+            border-radius: var(--gooey-radius-sm);
             overflow: hidden;
-            box-shadow: var(--shadow);
+            box-shadow: var(--gooey-shadow);
+        }}
+
+        .param-table thead, .member-table thead {{
+            background: var(--gooey-surface);
         }}
 
         .param-table th, .param-table td, .member-table th, .member-table td {{
-            padding: 12px 16px;
+            padding: 10px 14px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--gooey-border);
         }}
 
         .param-table th, .member-table th {{
-            background: var(--surface);
             font-weight: 600;
-            color: var(--on-surface);
-            font-size: 14px;
+            color: var(--gooey-on-surface);
+            font-size: 13px;
         }}
 
         .param-table tr:last-child td, .member-table tr:last-child td {{
@@ -2532,93 +2511,93 @@ class DocumentationGenerator:
         }}
 
         .param-table tr:hover td, .member-table tr:hover td {{
-            background: rgba(59, 130, 246, 0.04);
+            background: rgba(65, 205, 82, 0.04);
         }}
 
         .callout {{
-            padding: 20px;
-            border-radius: var(--radius);
-            margin: 20px 0;
-            background: var(--surface-elevated);
-            border-left: 4px solid var(--primary);
-            box-shadow: var(--shadow);
+            padding: 16px;
+            border-radius: var(--gooey-radius);
+            margin: 16px 0;
+            background: var(--gooey-surface-elevated);
+            border-left: 4px solid var(--gooey-primary);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .callout.warning {{
-            border-left-color: var(--accent);
-            background: rgba(245, 158, 11, 0.08);
+            border-left-color: var(--gooey-accent);
+            background: rgba(255, 152, 0, 0.08);
         }}
 
         .callout.important {{
-            border-left-color: var(--error);
-            background: rgba(239, 68, 68, 0.08);
+            border-left-color: var(--gooey-error);
+            background: rgba(244, 67, 54, 0.08);
         }}
 
         .markdown-content {{
-            line-height: 1.8;
-            color: var(--text-primary);
+            line-height: 1.7;
+            color: var(--gooey-text-primary);
         }}
 
         .markdown-content h1 {{
-            font-size: 2.5em;
-            font-weight: 800;
-            margin: 1.5em 0 0.8em 0;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin: 1.2em 0 0.6em 0;
             padding-bottom: 0.3em;
-            border-bottom: 3px solid var(--primary);
-            color: var(--on-surface);
+            border-bottom: 3px solid var(--gooey-primary);
+            color: var(--gooey-on-surface);
         }}
 
         .markdown-content h2 {{
-            font-size: 2em;
-            font-weight: 700;
-            margin: 1.5em 0 0.8em 0;
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 1.2em 0 0.6em 0;
             padding-bottom: 0.3em;
-            border-bottom: 2px solid var(--border);
-            color: var(--on-surface);
+            border-bottom: 2px solid var(--gooey-border);
+            color: var(--gooey-on-surface);
         }}
 
         .markdown-content h3 {{
-            font-size: 1.5em;
+            font-size: 1.4em;
             font-weight: 600;
-            margin: 1.5em 0 0.8em 0;
-            color: var(--on-surface);
+            margin: 1.2em 0 0.6em 0;
+            color: var(--gooey-on-surface);
         }}
 
         .markdown-content h4 {{
-            font-size: 1.25em;
+            font-size: 1.2em;
             font-weight: 600;
-            margin: 1.5em 0 0.8em 0;
-            color: var(--on-surface);
+            margin: 1.2em 0 0.6em 0;
+            color: var(--gooey-on-surface);
         }}
 
         .markdown-content h5 {{
             font-size: 1.1em;
             font-weight: 600;
-            margin: 1.5em 0 0.8em 0;
-            color: var(--on-surface);
+            margin: 1.2em 0 0.6em 0;
+            color: var(--gooey-on-surface);
         }}
 
         .markdown-content h6 {{
             font-size: 1em;
             font-weight: 600;
-            margin: 1.5em 0 0.8em 0;
-            color: var(--text-secondary);
+            margin: 1.2em 0 0.6em 0;
+            color: var(--gooey-text-secondary);
         }}
 
         .markdown-content p {{
-            margin: 1.2em 0;
-            font-size: 16px;
-            line-height: 1.7;
+            margin: 1em 0;
+            font-size: 15px;
+            line-height: 1.6;
         }}
 
         .markdown-content ul, .markdown-content ol {{
-            margin: 1.2em 0;
-            padding-left: 2em;
+            margin: 1em 0;
+            padding-left: 1.5em;
         }}
 
         .markdown-content li {{
-            margin: 0.5em 0;
-            line-height: 1.6;
+            margin: 0.4em 0;
+            line-height: 1.5;
         }}
 
         .markdown-content ul li {{
@@ -2630,14 +2609,14 @@ class DocumentationGenerator:
         }}
 
         .markdown-content blockquote {{
-            border-left: 4px solid var(--primary);
-            margin: 1.5em 0;
-            padding: 1.2em 1.5em;
-            background: var(--surface);
-            border-radius: 0 var(--radius) var(--radius) 0;
+            border-left: 4px solid var(--gooey-primary);
+            margin: 1.2em 0;
+            padding: 1em 1.2em;
+            background: var(--gooey-surface);
+            border-radius: 0 var(--gooey-radius) var(--gooey-radius) 0;
             font-style: italic;
-            color: var(--text-secondary);
-            box-shadow: var(--shadow);
+            color: var(--gooey-text-secondary);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content blockquote p {{
@@ -2647,85 +2626,85 @@ class DocumentationGenerator:
         .markdown-content table {{
             width: 100%;
             border-collapse: collapse;
-            margin: 1.5em 0;
-            border-radius: var(--radius);
+            margin: 1.2em 0;
+            border-radius: var(--gooey-radius);
             overflow: hidden;
-            box-shadow: var(--shadow);
-            font-size: 14px;
+            box-shadow: var(--gooey-shadow);
+            font-size: 13px;
         }}
 
         .markdown-content th, .markdown-content td {{
-            padding: 12px 16px;
+            padding: 10px 14px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--gooey-border);
         }}
 
         .markdown-content th {{
-            background: var(--surface);
+            background: var(--gooey-surface);
             font-weight: 600;
-            color: var(--on-surface);
-            font-size: 14px;
+            color: var(--gooey-on-surface);
+            font-size: 13px;
         }}
 
         .markdown-content tr:hover td {{
-            background: rgba(59, 130, 246, 0.04);
+            background: rgba(65, 205, 82, 0.04);
         }}
 
         .markdown-content code {{
-            background: var(--surface);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.9em;
+            background: var(--gooey-surface);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.85em;
             font-family: 'JetBrains Mono', monospace;
-            color: var(--primary);
-            border: 1px solid var(--border-light);
+            color: var(--gooey-primary);
+            border: 1px solid var(--gooey-border-light);
         }}
 
         .markdown-content pre {{
-            background: var(--surface-elevated);
+            background: var(--gooey-surface-elevated);
             padding: 0;
-            border-radius: var(--radius);
+            border-radius: var(--gooey-radius);
             overflow-x: auto;
-            margin: 1.5em 0;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
+            margin: 1.2em 0;
+            border: 1px solid var(--gooey-border);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content pre .code-header {{
-            border-radius: var(--radius) var(--radius) 0 0;
+            border-radius: var(--gooey-radius) var(--gooey-radius) 0 0;
         }}
 
         .markdown-content pre code {{
             background: none;
-            padding: 1.5em;
+            padding: 1.2em;
             border: none;
             color: inherit;
-            font-size: 13px;
-            line-height: 1.5;
+            font-size: 12px;
+            line-height: 1.4;
             display: block;
         }}
 
         .markdown-content img {{
             max-width: 100%;
             height: auto;
-            border-radius: var(--radius);
-            margin: 1.5em 0;
-            box-shadow: var(--shadow);
+            border-radius: var(--gooey-radius);
+            margin: 1.2em 0;
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content hr {{
             border: none;
             height: 2px;
-            background: var(--border);
-            margin: 2em 0;
+            background: var(--gooey-border);
+            margin: 1.5em 0;
             border-radius: 1px;
         }}
 
         .markdown-content .highlight {{
-            margin: 1.5em 0;
-            border-radius: var(--radius);
+            margin: 1.2em 0;
+            border-radius: var(--gooey-radius);
             overflow: hidden;
-            box-shadow: var(--shadow);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content .highlight pre {{
@@ -2734,72 +2713,72 @@ class DocumentationGenerator:
         }}
 
         .markdown-content .admonition {{
-            padding: 1.2em 1.5em;
-            margin: 1.5em 0;
-            border-radius: var(--radius);
-            border-left: 4px solid var(--primary);
-            background: var(--surface);
-            box-shadow: var(--shadow);
+            padding: 1em 1.2em;
+            margin: 1.2em 0;
+            border-radius: var(--gooey-radius);
+            border-left: 4px solid var(--gooey-primary);
+            background: var(--gooey-surface);
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content .admonition-title {{
             font-weight: 600;
-            margin-bottom: 0.5em;
-            color: var(--on-surface);
+            margin-bottom: 0.4em;
+            color: var(--gooey-on-surface);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }}
 
         .markdown-content .admonition.note {{
-            border-left-color: var(--primary);
-            background: rgba(59, 130, 246, 0.08);
+            border-left-color: var(--gooey-primary);
+            background: rgba(65, 205, 82, 0.08);
         }}
 
         .markdown-content .admonition.warning {{
-            border-left-color: var(--accent);
-            background: rgba(245, 158, 11, 0.08);
+            border-left-color: var(--gooey-accent);
+            background: rgba(255, 152, 0, 0.08);
         }}
 
         .markdown-content .admonition.danger {{
-            border-left-color: var(--error);
-            background: rgba(239, 68, 68, 0.08);
+            border-left-color: var(--gooey-error);
+            background: rgba(244, 67, 54, 0.08);
         }}
 
         .markdown-content .toc {{
-            background: var(--surface);
-            padding: 1.5em;
-            border-radius: var(--radius);
-            margin: 1.5em 0;
-            box-shadow: var(--shadow);
+            background: var(--gooey-surface);
+            padding: 1.2em;
+            border-radius: var(--gooey-radius);
+            margin: 1.2em 0;
+            box-shadow: var(--gooey-shadow);
         }}
 
         .markdown-content .toc ul {{
             margin: 0;
-            padding-left: 1em;
+            padding-left: 0.8em;
         }}
 
         .markdown-content .toc li {{
-            margin: 0.3em 0;
+            margin: 0.2em 0;
             list-style-type: none;
         }}
 
         .markdown-content .toc a {{
-            color: var(--text-primary);
+            color: var(--gooey-text-primary);
             text-decoration: none;
         }}
 
         .markdown-content .toc a:hover {{
-            color: var(--primary);
+            color: var(--gooey-primary);
             text-decoration: underline;
         }}
 
         .footer {{
-            margin-top: 4em;
-            padding-top: 2em;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: 0.9em;
+            margin-top: 3em;
+            padding-top: 1.5em;
+            border-top: 1px solid var(--gooey-border);
+            color: var(--gooey-text-secondary);
+            font-size: 0.85em;
             text-align: center;
         }}
 
@@ -2816,15 +2795,15 @@ class DocumentationGenerator:
                 position: static;
                 height: auto;
                 border-right: none;
-                border-bottom: 1px solid var(--border);
+                border-bottom: 1px solid var(--gooey-border);
             }}
 
             .content {{
-                padding: 140px 24px 24px 24px;
+                padding: 120px 20px 20px 20px;
             }}
             
             .theme-toggle {{
-                padding: 8px 12px;
+                padding: 6px 10px;
             }}
 
             .top-bar-search {{
@@ -2832,7 +2811,7 @@ class DocumentationGenerator:
             }}
 
             .hero-section h1 {{
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }}
 
             .action-buttons {{
@@ -2842,45 +2821,32 @@ class DocumentationGenerator:
 
             .action-btn {{
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
                 justify-content: center;
             }}
 
-            .features-grid {{
-                grid-template-columns: 1fr;
-            }}
-
-            .links-grid {{
+            .stats-grid {{
                 grid-template-columns: 1fr;
             }}
 
             .steps {{
                 grid-template-columns: 1fr;
             }}
-
-            .step {{
-                flex-direction: column;
-                text-align: center;
-            }}
-
-            .step-number {{
-                align-self: center;
-            }}
         }}
 
         @media (max-width: 768px) {{
             .hero-section {{
-                padding: 80px 0 60px 0;
+                padding: 60px 0 40px 0;
             }}
 
             .hero-section h1 {{
-                font-size: 2rem;
+                font-size: 1.8rem;
             }}
 
             .top-bar {{
                 flex-direction: column;
-                gap: 12px;
-                padding: 12px 20px;
+                gap: 10px;
+                padding: 10px 16px;
             }}
 
             .top-bar-search {{
@@ -2888,19 +2854,19 @@ class DocumentationGenerator:
             }}
 
             .content {{
-                padding: 180px 20px 20px 20px;
+                padding: 140px 16px 16px 16px;
             }}
 
             .markdown-content h1 {{
-                font-size: 2em;
+                font-size: 1.8em;
             }}
 
             .markdown-content h2 {{
-                font-size: 1.75em;
+                font-size: 1.5em;
             }}
 
             .markdown-content h3 {{
-                font-size: 1.5em;
+                font-size: 1.3em;
             }}
         }}
 
@@ -2909,24 +2875,24 @@ class DocumentationGenerator:
         }}
 
         ::-webkit-scrollbar-track {{
-            background: var(--surface);
+            background: var(--gooey-surface);
         }}
 
         ::-webkit-scrollbar-thumb {{
-            background: var(--border);
+            background: var(--gooey-border);
             border-radius: 3px;
         }}
 
         ::-webkit-scrollbar-thumb:hover {{
-            background: var(--text-tertiary);
+            background: var(--gooey-text-tertiary);
         }}
 
         .dark-theme ::-webkit-scrollbar-thumb {{
-            background: var(--surface-elevated);
+            background: var(--gooey-surface-elevated);
         }}
 
         .dark-theme ::-webkit-scrollbar-thumb:hover {{
-            background: var(--text-secondary);
+            background: var(--gooey-text-secondary);
         }}
     </style>
 </head>

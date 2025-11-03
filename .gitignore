@@ -9,3 +9,6 @@ CMakeFiles
 bin
 .cache
 *.cmake
+.idea
+.github
+examples

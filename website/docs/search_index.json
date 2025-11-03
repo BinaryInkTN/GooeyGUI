@@ -129,6 +129,14 @@
       "type": "function"
     },
     {
+      "name": "parser_load_theme_from_file",
+      "brief": "Structure representing a theme for the Gooey UI. The colors in the theme are stored as unsigned long values representing the color codes (typically in hexadecimal format).",
+      "description": "",
+      "file": "gooey_theme.h",
+      "url": "#api-parser_load_theme_from_file",
+      "type": "function"
+    },
+    {
       "name": "GooeySignal_Create",
       "brief": "",
       "description": "GooeySignal_Slot *slots; /**< List of slots (callbacks) associated with the signal",
@@ -158,254 +166,6 @@
       "description": "",
       "file": "gooey_signals.h",
       "url": "#api-gooeysignal_unlinkall",
-      "type": "function"
-    },
-    {
-      "name": "parser_load_theme_from_file",
-      "brief": "Structure representing a theme for the Gooey UI. The colors in the theme are stored as unsigned long values representing the color codes (typically in hexadecimal format).",
-      "description": "",
-      "file": "gooey_theme.h",
-      "url": "#api-parser_load_theme_from_file",
-      "type": "function"
-    },
-    {
-      "name": "GooeyButton_SetHighlight",
-      "brief": "Highlights or unhighlights a button. This function visually indicates whether a button is highlighted, which can be used to show focus or selection.",
-      "description": "",
-      "file": "gooey_button.h",
-      "url": "#api-gooeybutton_sethighlight",
-      "type": "function"
-    },
-    {
-      "name": "GooeyButton_SetText",
-      "brief": "Sets the text of the button. This function updates the label text displayed on the button.",
-      "description": "",
-      "file": "gooey_button.h",
-      "url": "#api-gooeybutton_settext",
-      "type": "function"
-    },
-    {
-      "name": "GooeyCanvas_DrawLine",
-      "brief": "Draws a rectangle onto the user-defined canvas. The rectangle can be either filled with a solid color or outlined.",
-      "description": "",
-      "file": "gooey_canvas.h",
-      "url": "#api-gooeycanvas_drawline",
-      "type": "function"
-    },
-    {
-      "name": "GooeyCanvas_SetForeground",
-      "brief": "Draws an arc onto the user-defined canvas. The arc is drawn within the specified bounding box and between the given angles.",
-      "description": "",
-      "file": "gooey_canvas.h",
-      "url": "#api-gooeycanvas_setforeground",
-      "type": "function"
-    },
-    {
-      "name": "GooeyContainer_AddWidget",
-      "brief": "Adds a widget to a specific container within the window.",
-      "description": "",
-      "file": "gooey_container.h",
-      "url": "#api-gooeycontainer_addwidget",
-      "type": "function"
-    },
-    {
-      "name": "GooeyContainer_Create",
-      "brief": "Creates a new container with the given position and dimensions.",
-      "description": "",
-      "file": "gooey_container.h",
-      "url": "#api-gooeycontainer_create",
-      "type": "function"
-    },
-    {
-      "name": "GooeyContainer_InsertContainer",
-      "brief": "Inserts a sub-container into the given container.",
-      "description": "",
-      "file": "gooey_container.h",
-      "url": "#api-gooeycontainer_insertcontainer",
-      "type": "function"
-    },
-    {
-      "name": "GooeyContainer_SetActiveContainer",
-      "brief": "Sets which container is currently active/visible.",
-      "description": "",
-      "file": "gooey_container.h",
-      "url": "#api-gooeycontainer_setactivecontainer",
-      "type": "function"
-    },
-    {
-      "name": "GooeyDropdown_Update",
-      "brief": "Header file for the GooeyDropdown module. Provides functions to create, handle, and render dropdown menus within a GooeyWindow.",
-      "description": "",
-      "file": "gooey_dropdown.h",
-      "url": "#api-gooeydropdown_update",
-      "type": "function"
-    },
-    {
-      "name": "GooeyDropSurface_Clear",
-      "brief": "Header file for the GooeyDropSurface module.",
-      "description": "",
-      "file": "gooey_drop_surface.h",
-      "url": "#api-gooeydropsurface_clear",
-      "type": "function"
-    },
-    {
-      "name": "GooeyImage_Damage",
-      "brief": "Marks the image as needing redrawing (damaged).",
-      "description": "",
-      "file": "gooey_image.h",
-      "url": "#api-gooeyimage_damage",
-      "type": "function"
-    },
-    {
-      "name": "GooeyImage_SetImage",
-      "brief": "Image handling functions for the Gooey GUI library. This file contains functions for adding and drawing images in a Gooey window.",
-      "description": "",
-      "file": "gooey_image.h",
-      "url": "#api-gooeyimage_setimage",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyLabel_Create",
-      "brief": "Header file for the GooeyLabel module. Provides functions for creating, modifying, and rendering text labels within a GooeyWindow.",
-      "description": "",
-      "file": "gooey_label.h",
-      "url": "#api-*gooeylabel_create",
-      "type": "function"
-    },
-    {
-      "name": "GooeyLabel_SetColor",
-      "brief": "Sets the text color of a label. Changes the text color of a label to the specified color.",
-      "description": "",
-      "file": "gooey_label.h",
-      "url": "#api-gooeylabel_setcolor",
-      "type": "function"
-    },
-    {
-      "name": "GooeyLabel_SetText",
-      "brief": "Sets the text of an existing label. Updates the text displayed by a given GooeyLabel.",
-      "description": "",
-      "file": "gooey_label.h",
-      "url": "#api-gooeylabel_settext",
-      "type": "function"
-    },
-    {
-      "name": "GooeyLayout_AddChild",
-      "brief": "Header file for the GooeyLayout module. Provides functionality for managing and arranging widgets within a structured layout inside a GooeyWindow.",
-      "description": "",
-      "file": "gooey_layout.h",
-      "url": "#api-gooeylayout_addchild",
-      "type": "function"
-    },
-    {
-      "name": "GooeyLayout_Build",
-      "brief": "Finalizes and builds the layout. This function applies the layout rules and arranges all child widgets accordingly.",
-      "description": "",
-      "file": "gooey_layout.h",
-      "url": "#api-gooeylayout_build",
-      "type": "function"
-    },
-    {
-      "name": "GooeyList_AddItem",
-      "brief": "Adds an item to the specified list widget.",
-      "description": "",
-      "file": "gooey_list.h",
-      "url": "#api-gooeylist_additem",
-      "type": "function"
-    },
-    {
-      "name": "GooeyList_ClearItems",
-      "brief": "Clears all items from the specified list widget. Removes all list items from the provided list widget.",
-      "description": "",
-      "file": "gooey_list.h",
-      "url": "#api-gooeylist_clearitems",
-      "type": "function"
-    },
-    {
-      "name": "GooeyList_ShowSeparator",
-      "brief": "Toggles the visibility of the separator in a list widget. Enables or disables the visual separator between list items.",
-      "description": "",
-      "file": "gooey_list.h",
-      "url": "#api-gooeylist_showseparator",
-      "type": "function"
-    },
-    {
-      "name": "GooeyList_UpdateItem",
-      "brief": "Updates the title and description of a specific item in the list.",
-      "description": "",
-      "file": "gooey_list.h",
-      "url": "#api-gooeylist_updateitem",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyMenu_AddChild",
-      "brief": "Adds a child menu item to the window's menu. Creates a submenu or a category inside the main menu.",
-      "description": "",
-      "file": "gooey_menu.h",
-      "url": "#api-*gooeymenu_addchild",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyMenu_Set",
-      "brief": "Header file for the Gooey menu system. Provides functions to create and manage menus and menu items within a Gooey window.",
-      "description": "",
-      "file": "gooey_menu.h",
-      "url": "#api-*gooeymenu_set",
-      "type": "function"
-    },
-    {
-      "name": "GooeyMessageBox_Show",
-      "brief": "Displays the specified message box window. This function makes the message box visible on the screen. The message box must have been created using `GooeyMessageBox_Create`.",
-      "description": "",
-      "file": "gooey_messagebox.h",
-      "url": "#api-gooeymessagebox_show",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyMeter_Create",
-      "brief": "Creates a meter widget. Initializes a new GooeyMeter widget at the specified position and size, with an initial value, a label, and an optional icon.",
-      "description": "",
-      "file": "gooey_meter.h",
-      "url": "#api-*gooeymeter_create",
-      "type": "function"
-    },
-    {
-      "name": "GooeyMeter_Update",
-      "brief": "Updates the value displayed by the meter.",
-      "description": "",
-      "file": "gooey_meter.h",
-      "url": "#api-gooeymeter_update",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyPlot_Create",
-      "brief": "Creates a plot widget. Adds a plot widget of the specified type to the given position and size, using the provided plot data.",
-      "description": "",
-      "file": "gooey_plot.h",
-      "url": "#api-*gooeyplot_create",
-      "type": "function"
-    },
-    {
-      "name": "GooeyPlot_Update",
-      "brief": "Updates an existing plot with new data. Updates the content of the given plot widget while maintaining its configuration and type.",
-      "description": "",
-      "file": "gooey_plot.h",
-      "url": "#api-gooeyplot_update",
-      "type": "function"
-    },
-    {
-      "name": "*GooeyProgressBar_Create",
-      "brief": "Creates a progress bar widget. Initializes a new progress bar at the specified position and size, with an initial value.",
-      "description": "",
-      "file": "gooey_progressbar.h",
-      "url": "#api-*gooeyprogressbar_create",
-      "type": "function"
-    },
-    {
-      "name": "GooeyProgressBar_Update",
-      "brief": "Updates the value of an existing progress bar. Changes the displayed progress to the new value.",
-      "description": "",
-      "file": "gooey_progressbar.h",
-      "url": "#api-gooeyprogressbar_update",
       "type": "function"
     },
     {
@@ -441,19 +201,43 @@
       "type": "function"
     },
     {
-      "name": "GooeySlider_GetValue",
-      "brief": "Retrieves the current value of the slider. Returns the current slider value, guaranteed to be within the configured range.",
+      "name": "*GooeyLabel_Create",
+      "brief": "Header file for the GooeyLabel module. Provides functions for creating, modifying, and rendering text labels within a GooeyWindow.",
       "description": "",
-      "file": "gooey_slider.h",
-      "url": "#api-gooeyslider_getvalue",
+      "file": "gooey_label.h",
+      "url": "#api-*gooeylabel_create",
       "type": "function"
     },
     {
-      "name": "GooeySlider_SetValue",
-      "brief": "Sets the slider's value. Updates the slider's position and value to the specified value within its range.",
+      "name": "GooeyLabel_SetColor",
+      "brief": "Sets the text color of a label. Changes the text color of a label to the specified color.",
       "description": "",
-      "file": "gooey_slider.h",
-      "url": "#api-gooeyslider_setvalue",
+      "file": "gooey_label.h",
+      "url": "#api-gooeylabel_setcolor",
+      "type": "function"
+    },
+    {
+      "name": "GooeyLabel_SetText",
+      "brief": "Sets the text of an existing label. Updates the text displayed by a given GooeyLabel.",
+      "description": "",
+      "file": "gooey_label.h",
+      "url": "#api-gooeylabel_settext",
+      "type": "function"
+    },
+    {
+      "name": "GooeyImage_Damage",
+      "brief": "Marks the image as needing redrawing (damaged).",
+      "description": "",
+      "file": "gooey_image.h",
+      "url": "#api-gooeyimage_damage",
+      "type": "function"
+    },
+    {
+      "name": "GooeyImage_SetImage",
+      "brief": "Image handling functions for the Gooey GUI library. This file contains functions for adding and drawing images in a Gooey window.",
+      "description": "",
+      "file": "gooey_image.h",
+      "url": "#api-gooeyimage_setimage",
       "type": "function"
     },
     {
@@ -470,6 +254,222 @@
       "description": "",
       "file": "gooey_switch.h",
       "url": "#api-gooeyswitch_toggle",
+      "type": "function"
+    },
+    {
+      "name": "*GooeyMenu_AddChild",
+      "brief": "Adds a child menu item to the window's menu. Creates a submenu or a category inside the main menu.",
+      "description": "",
+      "file": "gooey_menu.h",
+      "url": "#api-*gooeymenu_addchild",
+      "type": "function"
+    },
+    {
+      "name": "*GooeyMenu_Set",
+      "brief": "Header file for the Gooey menu system. Provides functions to create and manage menus and menu items within a Gooey window.",
+      "description": "",
+      "file": "gooey_menu.h",
+      "url": "#api-*gooeymenu_set",
+      "type": "function"
+    },
+    {
+      "name": "GooeyCanvas_DrawLine",
+      "brief": "Draws a rectangle onto the user-defined canvas. The rectangle can be either filled with a solid color or outlined.",
+      "description": "",
+      "file": "gooey_canvas.h",
+      "url": "#api-gooeycanvas_drawline",
+      "type": "function"
+    },
+    {
+      "name": "GooeyCanvas_SetForeground",
+      "brief": "Draws an arc onto the user-defined canvas. The arc is drawn within the specified bounding box and between the given angles.",
+      "description": "",
+      "file": "gooey_canvas.h",
+      "url": "#api-gooeycanvas_setforeground",
+      "type": "function"
+    },
+    {
+      "name": "GooeyList_AddItem",
+      "brief": "Adds an item to the specified list widget.",
+      "description": "",
+      "file": "gooey_list.h",
+      "url": "#api-gooeylist_additem",
+      "type": "function"
+    },
+    {
+      "name": "GooeyList_ClearItems",
+      "brief": "Clears all items from the specified list widget. Removes all list items from the provided list widget.",
+      "description": "",
+      "file": "gooey_list.h",
+      "url": "#api-gooeylist_clearitems",
+      "type": "function"
+    },
+    {
+      "name": "GooeyList_ShowSeparator",
+      "brief": "Toggles the visibility of the separator in a list widget. Enables or disables the visual separator between list items.",
+      "description": "",
+      "file": "gooey_list.h",
+      "url": "#api-gooeylist_showseparator",
+      "type": "function"
+    },
+    {
+      "name": "GooeyList_UpdateItem",
+      "brief": "Updates the title and description of a specific item in the list.",
+      "description": "",
+      "file": "gooey_list.h",
+      "url": "#api-gooeylist_updateitem",
+      "type": "function"
+    },
+    {
+      "name": "GooeySlider_GetValue",
+      "brief": "Retrieves the current value of the slider. Returns the current slider value, guaranteed to be within the configured range.",
+      "description": "",
+      "file": "gooey_slider.h",
+      "url": "#api-gooeyslider_getvalue",
+      "type": "function"
+    },
+    {
+      "name": "GooeySlider_SetValue",
+      "brief": "Sets the slider's value. Updates the slider's position and value to the specified value within its range.",
+      "description": "",
+      "file": "gooey_slider.h",
+      "url": "#api-gooeyslider_setvalue",
+      "type": "function"
+    },
+    {
+      "name": "GooeyContainer_AddWidget",
+      "brief": "Adds a widget to a specific container within the window.",
+      "description": "",
+      "file": "gooey_container.h",
+      "url": "#api-gooeycontainer_addwidget",
+      "type": "function"
+    },
+    {
+      "name": "GooeyContainer_Create",
+      "brief": "Creates a new container with the given position and dimensions.",
+      "description": "",
+      "file": "gooey_container.h",
+      "url": "#api-gooeycontainer_create",
+      "type": "function"
+    },
+    {
+      "name": "GooeyContainer_InsertContainer",
+      "brief": "Inserts a sub-container into the given container.",
+      "description": "",
+      "file": "gooey_container.h",
+      "url": "#api-gooeycontainer_insertcontainer",
+      "type": "function"
+    },
+    {
+      "name": "GooeyContainer_SetActiveContainer",
+      "brief": "Sets which container is currently active/visible.",
+      "description": "",
+      "file": "gooey_container.h",
+      "url": "#api-gooeycontainer_setactivecontainer",
+      "type": "function"
+    },
+    {
+      "name": "GooeyMessageBox_Show",
+      "brief": "Displays the specified message box window. This function makes the message box visible on the screen. The message box must have been created using `GooeyMessageBox_Create`.",
+      "description": "",
+      "file": "gooey_messagebox.h",
+      "url": "#api-gooeymessagebox_show",
+      "type": "function"
+    },
+    {
+      "name": "*GooeyTextbox_GetText",
+      "brief": "Gets the current text from the textbox.",
+      "description": "",
+      "file": "gooey_textbox.h",
+      "url": "#api-*gooeytextbox_gettext",
+      "type": "function"
+    },
+    {
+      "name": "GooeyTextbox_Draw",
+      "brief": "Draws the textbox on the specified window. Renders the textbox UI, reflecting its current state and contents.",
+      "description": "",
+      "file": "gooey_textbox.h",
+      "url": "#api-gooeytextbox_draw",
+      "type": "function"
+    },
+    {
+      "name": "GooeyTextbox_HandleClick",
+      "brief": "Handles click events on the textbox. Detects clicks on the textbox area and activates the textbox for input if clicked.",
+      "description": "",
+      "file": "gooey_textbox.h",
+      "url": "#api-gooeytextbox_handleclick",
+      "type": "function"
+    },
+    {
+      "name": "GooeyTextbox_HandleKeyPress",
+      "brief": "Processes key press events for the textbox. Updates the textbox content based on keyboard input.",
+      "description": "",
+      "file": "gooey_textbox.h",
+      "url": "#api-gooeytextbox_handlekeypress",
+      "type": "function"
+    },
+    {
+      "name": "GooeyTextbox_SetText",
+      "brief": "Sets the text content of the textbox.",
+      "description": "",
+      "file": "gooey_textbox.h",
+      "url": "#api-gooeytextbox_settext",
+      "type": "function"
+    },
+    {
+      "name": "*GooeyPlot_Create",
+      "brief": "Creates a plot widget. Adds a plot widget of the specified type to the given position and size, using the provided plot data.",
+      "description": "",
+      "file": "gooey_plot.h",
+      "url": "#api-*gooeyplot_create",
+      "type": "function"
+    },
+    {
+      "name": "GooeyPlot_Update",
+      "brief": "Updates an existing plot with new data. Updates the content of the given plot widget while maintaining its configuration and type.",
+      "description": "",
+      "file": "gooey_plot.h",
+      "url": "#api-gooeyplot_update",
+      "type": "function"
+    },
+    {
+      "name": "GooeyDropdown_Update",
+      "brief": "Header file for the GooeyDropdown module. Provides functions to create, handle, and render dropdown menus within a GooeyWindow.",
+      "description": "",
+      "file": "gooey_dropdown.h",
+      "url": "#api-gooeydropdown_update",
+      "type": "function"
+    },
+    {
+      "name": "GooeyLayout_AddChild",
+      "brief": "Header file for the GooeyLayout module. Provides functionality for managing and arranging widgets within a structured layout inside a GooeyWindow.",
+      "description": "",
+      "file": "gooey_layout.h",
+      "url": "#api-gooeylayout_addchild",
+      "type": "function"
+    },
+    {
+      "name": "GooeyLayout_Build",
+      "brief": "Finalizes and builds the layout. This function applies the layout rules and arranges all child widgets accordingly.",
+      "description": "",
+      "file": "gooey_layout.h",
+      "url": "#api-gooeylayout_build",
+      "type": "function"
+    },
+    {
+      "name": "GooeyButton_SetHighlight",
+      "brief": "Highlights or unhighlights a button. This function visually indicates whether a button is highlighted, which can be used to show focus or selection.",
+      "description": "",
+      "file": "gooey_button.h",
+      "url": "#api-gooeybutton_sethighlight",
+      "type": "function"
+    },
+    {
+      "name": "GooeyButton_SetText",
+      "brief": "Sets the text of the button. This function updates the label text displayed on the button.",
+      "description": "",
+      "file": "gooey_button.h",
+      "url": "#api-gooeybutton_settext",
       "type": "function"
     },
     {
@@ -521,43 +521,43 @@
       "type": "function"
     },
     {
-      "name": "*GooeyTextbox_GetText",
-      "brief": "Gets the current text from the textbox.",
+      "name": "*GooeyProgressBar_Create",
+      "brief": "Creates a progress bar widget. Initializes a new progress bar at the specified position and size, with an initial value.",
       "description": "",
-      "file": "gooey_textbox.h",
-      "url": "#api-*gooeytextbox_gettext",
+      "file": "gooey_progressbar.h",
+      "url": "#api-*gooeyprogressbar_create",
       "type": "function"
     },
     {
-      "name": "GooeyTextbox_Draw",
-      "brief": "Draws the textbox on the specified window. Renders the textbox UI, reflecting its current state and contents.",
+      "name": "GooeyProgressBar_Update",
+      "brief": "Updates the value of an existing progress bar. Changes the displayed progress to the new value.",
       "description": "",
-      "file": "gooey_textbox.h",
-      "url": "#api-gooeytextbox_draw",
+      "file": "gooey_progressbar.h",
+      "url": "#api-gooeyprogressbar_update",
       "type": "function"
     },
     {
-      "name": "GooeyTextbox_HandleClick",
-      "brief": "Handles click events on the textbox. Detects clicks on the textbox area and activates the textbox for input if clicked.",
+      "name": "*GooeyMeter_Create",
+      "brief": "Creates a meter widget. Initializes a new GooeyMeter widget at the specified position and size, with an initial value, a label, and an optional icon.",
       "description": "",
-      "file": "gooey_textbox.h",
-      "url": "#api-gooeytextbox_handleclick",
+      "file": "gooey_meter.h",
+      "url": "#api-*gooeymeter_create",
       "type": "function"
     },
     {
-      "name": "GooeyTextbox_HandleKeyPress",
-      "brief": "Processes key press events for the textbox. Updates the textbox content based on keyboard input.",
+      "name": "GooeyMeter_Update",
+      "brief": "Updates the value displayed by the meter.",
       "description": "",
-      "file": "gooey_textbox.h",
-      "url": "#api-gooeytextbox_handlekeypress",
+      "file": "gooey_meter.h",
+      "url": "#api-gooeymeter_update",
       "type": "function"
     },
     {
-      "name": "GooeyTextbox_SetText",
-      "brief": "Sets the text content of the textbox.",
+      "name": "GooeyDropSurface_Clear",
+      "brief": "Header file for the GooeyDropSurface module.",
       "description": "",
-      "file": "gooey_textbox.h",
-      "url": "#api-gooeytextbox_settext",
+      "file": "gooey_drop_surface.h",
+      "url": "#api-gooeydropsurface_clear",
       "type": "function"
     }
   ],
@@ -569,6 +569,14 @@
       "description": "",
       "file": "gooey_common.h",
       "url": "#type-widget_type"
+    },
+    {
+      "name": "base",
+      "type": "data_type",
+      "brief": "Structure representing a theme for the Gooey UI. The colors in the theme are stored as unsigned long values representing the color codes (typically in hexadecimal format).",
+      "description": "",
+      "file": "gooey_theme.h",
+      "url": "#type-base"
     },
     {
       "name": "GooeySignal",
@@ -593,14 +601,6 @@
       "description": "GooeySignal_CallbackFunction callback; /**< The callback function to be executed",
       "file": "gooey_signals.h",
       "url": "#type-gooeysignal_slot"
-    },
-    {
-      "name": "base",
-      "type": "data_type",
-      "brief": "Structure representing a theme for the Gooey UI. The colors in the theme are stored as unsigned long values representing the color codes (typically in hexadecimal format).",
-      "description": "",
-      "file": "gooey_theme.h",
-      "url": "#type-base"
     }
   ],
   "pages": [
@@ -613,13 +613,6 @@
   ],
   "header_files": [
     {
-      "name": "gooey.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey-h",
-      "type": "header_file"
-    },
-    {
       "name": "user_config.h",
       "brief": "",
       "description": "",
@@ -627,31 +620,10 @@
       "type": "header_file"
     },
     {
-      "name": "gooey_animations.h",
+      "name": "gooey.h",
       "brief": "",
       "description": "",
-      "url": "#file-gooey_animations-h",
-      "type": "header_file"
-    },
-    {
-      "name": "drop_surface_image.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-drop_surface_image-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_common.h",
-      "brief": "Internal definitions for the Gooey GUI library.",
-      "description": "",
-      "url": "#file-gooey_common-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_event.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_event-h",
+      "url": "#file-gooey-h",
       "type": "header_file"
     },
     {
@@ -669,6 +641,13 @@
       "type": "header_file"
     },
     {
+      "name": "gooey_event.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_event-h",
+      "type": "header_file"
+    },
+    {
       "name": "gooey_window.h",
       "brief": "",
       "description": "",
@@ -676,10 +655,17 @@
       "type": "header_file"
     },
     {
-      "name": "gooey_signals.h",
+      "name": "gooey_animations.h",
       "brief": "",
       "description": "",
-      "url": "#file-gooey_signals-h",
+      "url": "#file-gooey_animations-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_common.h",
+      "brief": "Internal definitions for the Gooey GUI library.",
+      "description": "",
+      "url": "#file-gooey_common-h",
       "type": "header_file"
     },
     {
@@ -690,17 +676,59 @@
       "type": "header_file"
     },
     {
-      "name": "gooey_appbar.h",
+      "name": "gooey_signals.h",
       "brief": "",
       "description": "",
-      "url": "#file-gooey_appbar-h",
+      "url": "#file-gooey_signals-h",
       "type": "header_file"
     },
     {
-      "name": "gooey_button.h",
-      "brief": "Button handling functions for the Gooey GUI library.",
+      "name": "drop_surface_image.h",
+      "brief": "",
       "description": "",
-      "url": "#file-gooey_button-h",
+      "url": "#file-drop_surface_image-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_radiobutton.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_radiobutton-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_label.h",
+      "brief": "Header file for the GooeyLabel module. Provides functions for creating, modifying, and rendering text labels within a GooeyWindow.",
+      "description": "",
+      "url": "#file-gooey_label-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_image.h",
+      "brief": "Image handling functions for the Gooey GUI library. This file contains functions for adding and drawing images in a Gooey window.",
+      "description": "",
+      "url": "#file-gooey_image-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_switch.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_switch-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_fdialog.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_fdialog-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_menu.h",
+      "brief": "Header file for the Gooey menu system. Provides functions to create and manage menus and menu items within a Gooey window.",
+      "description": "",
+      "url": "#file-gooey_menu-h",
       "type": "header_file"
     },
     {
@@ -718,115 +746,10 @@
       "type": "header_file"
     },
     {
-      "name": "gooey_container.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_container-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_ctxmenu.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_ctxmenu-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_dropdown.h",
-      "brief": "Header file for the GooeyDropdown module. Provides functions to create, handle, and render dropdown menus within a GooeyWindow.",
-      "description": "",
-      "url": "#file-gooey_dropdown-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_drop_surface.h",
-      "brief": "Header file for the GooeyDropSurface module.",
-      "description": "",
-      "url": "#file-gooey_drop_surface-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_fdialog.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_fdialog-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_image.h",
-      "brief": "Image handling functions for the Gooey GUI library. This file contains functions for adding and drawing images in a Gooey window.",
-      "description": "",
-      "url": "#file-gooey_image-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_label.h",
-      "brief": "Header file for the GooeyLabel module. Provides functions for creating, modifying, and rendering text labels within a GooeyWindow.",
-      "description": "",
-      "url": "#file-gooey_label-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_layout.h",
-      "brief": "Header file for the GooeyLayout module. Provides functionality for managing and arranging widgets within a structured layout inside a GooeyWindow.",
-      "description": "",
-      "url": "#file-gooey_layout-h",
-      "type": "header_file"
-    },
-    {
       "name": "gooey_list.h",
       "brief": "",
       "description": "",
       "url": "#file-gooey_list-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_menu.h",
-      "brief": "Header file for the Gooey menu system. Provides functions to create and manage menus and menu items within a Gooey window.",
-      "description": "",
-      "url": "#file-gooey_menu-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_messagebox.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_messagebox-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_meter.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_meter-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_node_editor.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_node_editor-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_plot.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_plot-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_progressbar.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_progressbar-h",
-      "type": "header_file"
-    },
-    {
-      "name": "gooey_radiobutton.h",
-      "brief": "",
-      "description": "",
-      "url": "#file-gooey_radiobutton-h",
       "type": "header_file"
     },
     {
@@ -837,17 +760,17 @@
       "type": "header_file"
     },
     {
-      "name": "gooey_switch.h",
+      "name": "gooey_container.h",
       "brief": "",
       "description": "",
-      "url": "#file-gooey_switch-h",
+      "url": "#file-gooey_container-h",
       "type": "header_file"
     },
     {
-      "name": "gooey_tabs.h",
+      "name": "gooey_messagebox.h",
       "brief": "",
       "description": "",
-      "url": "#file-gooey_tabs-h",
+      "url": "#file-gooey_messagebox-h",
       "type": "header_file"
     },
     {
@@ -858,10 +781,87 @@
       "type": "header_file"
     },
     {
+      "name": "gooey_plot.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_plot-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_dropdown.h",
+      "brief": "Header file for the GooeyDropdown module. Provides functions to create, handle, and render dropdown menus within a GooeyWindow.",
+      "description": "",
+      "url": "#file-gooey_dropdown-h",
+      "type": "header_file"
+    },
+    {
       "name": "gooey_webview.h",
       "brief": "",
       "description": "",
       "url": "#file-gooey_webview-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_layout.h",
+      "brief": "Header file for the GooeyLayout module. Provides functionality for managing and arranging widgets within a structured layout inside a GooeyWindow.",
+      "description": "",
+      "url": "#file-gooey_layout-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_button.h",
+      "brief": "Button handling functions for the Gooey GUI library.",
+      "description": "",
+      "url": "#file-gooey_button-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_tabs.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_tabs-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_progressbar.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_progressbar-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_appbar.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_appbar-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_node_editor.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_node_editor-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_meter.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_meter-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_ctxmenu.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_ctxmenu-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_drop_surface.h",
+      "brief": "Header file for the GooeyDropSurface module.",
+      "description": "",
+      "url": "#file-gooey_drop_surface-h",
       "type": "header_file"
     }
   ]

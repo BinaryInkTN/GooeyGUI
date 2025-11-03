@@ -276,7 +276,7 @@ typedef struct
 {
     char title[128];
     char *menu_elements[MAX_MENU_CHILDREN];
-    void (*callbacks[MAX_MENU_CHILDREN])();
+    void (*callbacks[MAX_MENU_CHILDREN])(void* user_data);
     void *user_data[MAX_MENU_CHILDREN];
     int menu_elements_count;
     bool is_open;
@@ -491,7 +491,7 @@ typedef struct
     void (*callback)(bool state, void *user_data);
     void *user_data;
 
-       bool is_animating;
+    bool is_animating;
     int animation_step;
     int thumb_position;
     int start_position;
@@ -535,12 +535,14 @@ typedef struct GooeyNode GooeyNode;
 typedef struct GooeyNodeSocket GooeyNodeSocket;
 typedef struct GooeyNodeConnection GooeyNodeConnection;
 
-typedef enum {
+typedef enum
+{
     GOOEY_SOCKET_TYPE_INPUT,
     GOOEY_SOCKET_TYPE_OUTPUT
 } GooeySocketType;
 
-typedef enum {
+typedef enum
+{
     GOOEY_DATA_TYPE_FLOAT,
     GOOEY_DATA_TYPE_INT,
     GOOEY_DATA_TYPE_BOOL,
@@ -548,40 +550,44 @@ typedef enum {
     GOOEY_DATA_TYPE_CUSTOM
 } GooeyDataType;
 
-struct GooeyNodeSocket {
+struct GooeyNodeSocket
+{
     char id[32];
     char name[32];
     GooeySocketType type;
     GooeyDataType data_type;
     int x, y;
     bool is_connected;
-    GooeyNode* parent_node;
+    GooeyNode *parent_node;
 };
 
-struct GooeyNode {
+struct GooeyNode
+{
     char node_id[32];
     char title[32];
     int x, y;
     int width, height;
-    GooeyNodeSocket* sockets;
+    GooeyNodeSocket *sockets;
     int socket_count;
     bool is_selected;
     bool is_dragging;
     int drag_offset_x, drag_offset_y;
-    void* user_data;
+    void *user_data;
 };
 
-struct GooeyNodeConnection {
-    GooeyNodeSocket* from_socket;
-    GooeyNodeSocket* to_socket;
+struct GooeyNodeConnection
+{
+    GooeyNodeSocket *from_socket;
+    GooeyNodeSocket *to_socket;
     bool is_selected;
-    void* user_data;
+    void *user_data;
 };
 
-struct GooeyNodeEditor {
+struct GooeyNodeEditor
+{
     GooeyWidget core;
-    GooeyNode** nodes;
-    GooeyNodeConnection** connections;
+    GooeyNode **nodes;
+    GooeyNodeConnection **connections;
     int node_count;
     int connection_count;
     int grid_size;
@@ -590,8 +596,8 @@ struct GooeyNodeEditor {
     int pan_x, pan_y;
     bool is_panning;
     int pan_start_x, pan_start_y;
-    GooeyNodeSocket* dragging_socket;
-    GooeyNodeConnection* temp_connection;
+    GooeyNodeSocket *dragging_socket;
+    GooeyNodeConnection *temp_connection;
     void (*callback)(void *user_data);
     void *user_data;
 };
@@ -664,7 +670,7 @@ typedef struct
     size_t plot_count;
     size_t progressbar_count;
     size_t widget_count;
-    void* memory_pool;
+    void *memory_pool;
 } GooeyWindow;
 
 #pragma pack(pop)

@@ -1,93 +1,70 @@
 #ifndef GOOEY_SIGNALS_H
 #define GOOEY_SIGNALS_H
 
-/* ============ Signaling system ==============*/
+#include <stddef.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * @brief Callback function type for signal events.
- *
- * This function type is used for the callback that is executed when a signal
- * is emitted. The callback receives a context and data passed from the emitter.
- *
- * @param context The user-defined context passed when linking the callback.
- * @param data The data passed when emitting the signal.
- */
-typedef void (*GooeySignal_CallbackFunction)(void *context, void *data);
+// Creation
+#define GooeySignal_var(type, value) GooeySignal_Create(sizeof(type), &(type){value})
+#define GooeySignal_string(value) GooeySignal_CreateString(value)
 
-/**
- * @brief A slot representing a linked callback in the signal system.
- *
- * A slot contains a callback function, its associated context, and a link
- * to the next slot in a potentially linked list of callbacks.
- */
-typedef struct GooeySignal_Slot
-{
-    GooeySignal_CallbackFunction callback; /**< The callback function to be executed */
-    void *context;                         /**< The user-defined context to be passed to the callback */
-    struct GooeySignal_Slot *next;        /**< Pointer to the next slot in the list */
-} GooeySignal_Slot;
+// Access
+#define GooeySignal_get(s, type) (*(type*)GooeySignal_GetValue(s))
+#define GooeySignal_set(s, value) GooeySignal_SetValue(s, &(typeof(value)){value})
 
-/**
- * @brief A signal that can emit events to all linked slots.
- *
- * A signal contains a list of slots. Each slot corresponds to a callback
- * function that will be executed when the signal is emitted.
- */
-typedef struct
-{
-    GooeySignal_Slot *slots; /**< List of slots (callbacks) associated with the signal */
-} GooeySignal;
+// Reactivity
+#define GooeySignal_watch(s, callback) GooeySignal_Watch(s, (GooeySignal_Callback)callback, NULL)
+#define GooeySignal_unwatch(s, callback) GooeySignal_Unwatch(s, (GooeySignal_Callback)callback, NULL)
 
-/**
- * @brief Creates a new signal object.
- *
- * Signals are used to manage event handling and callbacks. This function initializes
- * a new signal object with no slots.
- *
- * @return GooeySignal The created signal object with no linked callbacks.
- */
-GooeySignal GooeySignal_Create(void);
+// Effects
+#define GooeyReact_effect(fn) GooeyReact_CreateEffect((GooeyReact_EffectFn)fn, NULL)
 
-/**
- * @brief Links a callback function to a signal.
- *
- * This function connects a signal to a specific callback function. When the signal
- * is emitted, the callback function will be executed. The callback is linked
- * to the signal and can be triggered when the signal is emitted.
- *
- * @param signal A pointer to the signal to which the callback is linked.
- * @param callback The callback function to execute when the signal is emitted.
- * @param context A user-defined context pointer passed to the callback.
- */
-void GooeySignal_Link(GooeySignal *signal, GooeySignal_CallbackFunction callback, void *context);
+// Batch updates
+#define GooeySignal_batch(...) do { \
+    GooeySignal_BatchBegin(); \
+    __VA_ARGS__; \
+    GooeySignal_BatchEnd(); \
+} while(0)
 
-/**
- * @brief Emits a signal.
- *
- * This function triggers the signal, invoking all linked callbacks in the order
- * they were added. Each callback receives the specified data.
- *
- * @param signal A pointer to the signal to emit.
- * @param data A void pointer to the data passed to all linked callbacks.
- */
-void GooeySignal_Emit(GooeySignal *signal, void *data);
+// Cleanup
+#define GooeySignal_free(s) GooeySignal_Destroy(s)
 
-/**
- * @brief Unlinks all callbacks from a signal.
- *
- * Removes all callback functions linked to the specified signal, effectively
- * clearing its event listeners.
- *
- * @param signal A pointer to the signal from which callbacks should be unlinked.
- */
-void GooeySignal_UnLinkAll(GooeySignal *signal);
+/* ============ PUBLIC TYPES ============ */
+
+typedef struct GooeySignal GooeySignal;
+typedef struct GooeyReactEffect GooeyReactEffect;
+
+// Callback types
+typedef void (*GooeySignal_Callback)(void* context, void* new_value);
+typedef void (*GooeyReact_EffectFn)(void* context);
+
+/* ============ PUBLIC API ============ */
+
+// Core signal system
+GooeySignal* GooeySignal_Create(size_t size, const void* initial_value);
+GooeySignal* GooeySignal_CreateString(const char* initial_value);
+void* GooeySignal_GetValue(GooeySignal* signal);
+bool GooeySignal_SetValue(GooeySignal* signal, const void* new_value);
+void GooeySignal_Destroy(GooeySignal* signal);
+
+// Watch system
+bool GooeySignal_Watch(GooeySignal* signal, GooeySignal_Callback callback, void* context);
+bool GooeySignal_Unwatch(GooeySignal* signal, GooeySignal_Callback callback, void* context);
+
+// Effects system
+GooeyReactEffect* GooeyReact_CreateEffect(GooeyReact_EffectFn effect_fn, void* context);
+void GooeyReact_DestroyEffect(GooeyReactEffect* effect);
+
+// Batch updates
+void GooeySignal_BatchBegin(void);
+void GooeySignal_BatchEnd(void);
 
 #ifdef __cplusplus
-} // extern "C"
+}
 #endif
 
-#endif /* GOOEY_SIGNALS_H */
+#endif // GOOEY_SIGNALS_H

@@ -3,7 +3,7 @@
 
 #define MAX_NUMBER  20
 void canvClbk(int x ,int y ){
-printf("hello world \n"); 
+printf("hello world \n");
 
 }
 
@@ -21,6 +21,9 @@ void open_fd()
 int main()
 {
     Gooey_Init();
+    GooeyReactive count = GooeyReactive_Create(1024, 0);
+    GooeyReactive* count_ptr = &count;
+
     GooeyWindow* win = GooeyWindow_Create("Raw fill test", 800, 600, true);
     GooeyContainers* container = GooeyContainer_Create(0, 0, 800, 600);
     GooeyWindow_RegisterWidget(win, container);

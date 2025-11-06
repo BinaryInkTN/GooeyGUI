@@ -21,8 +21,8 @@ void open_fd()
 int main()
 {
     Gooey_Init();
-    GooeyReactive count = GooeyReactive_Create(1024, 0);
-    GooeyReactive* count_ptr = &count;
+    //GooeyReactive count = GooeyReactive_Create(1024, 0);
+    //GooeyReactive* count_ptr = &count;
 
     GooeyWindow* win = GooeyWindow_Create("Raw fill test", 800, 600, true);
     GooeyContainers* container = GooeyContainer_Create(0, 0, 800, 600);
@@ -30,9 +30,9 @@ int main()
     GooeyContainer_InsertContainer(container);
 
     GooeyWindow_EnableDebugOverlay(win, true);
-    GooeyCanvas* can = GooeyCanvas_Create(0, 0, 700, 500, canvClbk);
+    GooeyCanvas* can = GooeyCanvas_Create(0, 0, 700, 500, canvClbk, NULL);
     GooeyCanvas_DrawRectangle(can, 10, 10, 50, 50, 0xFF0000, 0, false, true, 1.0f);
-    GooeyButton* btn = GooeyButton_Create( "Click me", 10, 520, 100, 50, open_fd);
+    GooeyButton* btn = GooeyButton_Create( "Click me", 10, 520, 100, 50, open_fd, NULL);
     GooeyContainer_AddWidget(win, container, 0, can);
     GooeyContainer_AddWidget(win, container, 0, btn);
     //LOG_PERFORMANCE(NULL);

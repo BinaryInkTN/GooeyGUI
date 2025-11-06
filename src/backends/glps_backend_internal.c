@@ -31,7 +31,6 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 typedef struct
 {
-    //  glpscursor *cursor;
     GLuint *text_programs;
     GLuint shape_program;
     GLuint text_vbo;
@@ -47,7 +46,7 @@ typedef struct
     char font_path[256];
     size_t active_window_count;
     size_t timer_count;
-    bool inhibit_reset; /**< useful for continuesly happening events like dragging a slider. */
+    bool inhibit_reset;
     unsigned int selected_color;
     bool is_running;
 
@@ -55,9 +54,12 @@ typedef struct
 
 static GooeyBackendContext ctx = {0};
 
+static bool validate_window_id(int window_id) {
+    return (window_id >= 0 && window_id < MAX_WINDOWS);
+}
+
 void glps_setup_shared()
 {
-
     glGenBuffers(1, &ctx.text_vbo);
 
     ctx.text_vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -94,7 +96,6 @@ void glps_setup_shared()
 
 void glps_setup_seperate_vao(int window_id)
 {
-
     ctx.text_programs[window_id] = glCreateProgram();
     glAttachShader(ctx.text_programs[window_id], ctx.text_vertex_shader);
     glAttachShader(ctx.text_programs[window_id], ctx.text_fragment_shader);
@@ -132,6 +133,8 @@ void glps_draw_rectangle(int x, int y, int width, int height,
                          uint32_t color, float thickness,
                          int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
+    if (!validate_window_id(window_id)) return;
+
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
     int win_width, win_height;
@@ -155,13 +158,14 @@ void glps_draw_rectangle(int x, int y, int width, int height,
         {{ndc_x, ndc_y + ndc_height}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {0.0, 1.0}}};
 
     glUseProgram(ctx.shape_program);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), 0); // or 1
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), 0);
     glUniform2f(glGetUniformLocation(ctx.shape_program, "size"), width, height);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "radius"), cornerRadius);
-    glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), 1.0f);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 1); // or 0
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);  // or 0
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0); // 0 = rectangle
+    glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), thickness);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded ? 1 : 0);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
+    
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
@@ -178,6 +182,7 @@ void glps_draw_rectangle(int x, int y, int width, int height,
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
+
 void glps_set_foreground(uint32_t color)
 {
     ctx.selected_color = color;
@@ -185,12 +190,12 @@ void glps_set_foreground(uint32_t color)
 
 void glps_window_dim(int *width, int *height, int window_id)
 {
-
-    get_window_size(ctx.wm, window_id,
-                    width, height);
+    get_window_size(ctx.wm, window_id, width, height);
 }
+
 void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite)
 {
+    if (!validate_window_id(window_id)) return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     float ndc_x1, ndc_y1;
@@ -199,7 +204,6 @@ void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_i
 
     convert_coords_to_ndc(ctx.wm, window_id, &ndc_x1, &ndc_y1, x1, y1);
     convert_coords_to_ndc(ctx.wm, window_id, &ndc_x2, &ndc_y2, x2, y2);
-
     convert_hex_to_rgb(&color_rgb, color);
 
     Vertex vertices[2];
@@ -215,13 +219,14 @@ void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_i
     vertices[0].pos[1] = ndc_y1;
     vertices[1].pos[0] = ndc_x2;
     vertices[1].pos[1] = ndc_y2;
+    
     glUseProgram(ctx.shape_program);
-    glUseProgram(ctx.shape_program);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), 0); // or 1
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), 0);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), 1.0f);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 1); // or 0
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);  // or 0
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 1); // 1 = line
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 0);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 1);
+    
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
@@ -236,16 +241,14 @@ void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_i
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, texCoord));
     glDrawArrays(GL_LINES, 0, 2);
 
-    glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0); // Unbind VAO to prevent interference
+    glBindVertexArray(0);
 }
+
 void glps_fill_arc(int x_center, int y_center, int width, int height,
                    int angle1, int angle2, int window_id, GooeyTFT_Sprite *sprite)
 {
-    if (window_id < 0 || window_id >= MAX_WINDOWS)
-        return;
+    if (!validate_window_id(window_id)) return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     int win_width, win_height;
@@ -290,7 +293,6 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
 
     glUseProgram(ctx.shape_program);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), GL_FALSE);
-
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 2);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), GL_FALSE);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), GL_FALSE);
@@ -315,6 +317,8 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
 
 void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
 {
+    if (!validate_window_id(window_id)) return;
+
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
     float ndc_x, ndc_y, ndc_width, ndc_height;
@@ -322,13 +326,12 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
     convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
 
     Vertex vertices[6] = {
-        {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}, 1.0f},              // Bottom-left
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}, 1.0f},  // Bottom-right
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, 1.0f}, // Top-left
-
-        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}, 1.0f},              // Bottom-right
-        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}, 1.0f}, // Top-right
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}, 1.0f}              // Top-left
+        {{ndc_x, ndc_y}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+        {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+        {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}
     };
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
@@ -378,9 +381,7 @@ void glps_fill_rectangle(int x, int y, int width, int height,
                          uint32_t color, int window_id,
                          bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
-
-    if (window_id < 0 || window_id >= MAX_WINDOWS)
-        return;
+    if (!validate_window_id(window_id)) return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     float ndc_x, ndc_y;
@@ -426,7 +427,7 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glUniform2f(glGetUniformLocation(ctx.shape_program, "size"), width, height);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "radius"), cornerRadius);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), 1.0f);
-    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 1);
+    glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded ? 1 : 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
 
@@ -443,9 +444,9 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
+
 void glps_set_projection(int window_id, int width, int height)
 {
-
     mat4x4 projection;
     mat4x4_ortho(projection, 0.0f, width, height, 0.0f, -1.0f, 1.0f);
     glUseProgram(ctx.text_programs[window_id]);
@@ -457,7 +458,6 @@ void glps_set_projection(int window_id, int width, int height)
 static void keyboard_callback(size_t window_id, bool state, const char *value, unsigned long keycode,
                               void *data)
 {
-
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
 
@@ -511,9 +511,9 @@ static void mouse_move_callback(size_t window_id, double posX, double posY, void
     event->mouse_move.x = posX;
     event->mouse_move.y = posY;
 }
+
 static void window_resize_callback(size_t window_id, int width, int height, void *data)
 {
-
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
@@ -521,12 +521,12 @@ static void window_resize_callback(size_t window_id, int width, int height, void
     win->width = width;
     win->height = height;
 }
+
 static void window_close_callback(size_t window_id, void *data)
 {
     GooeyWindow **windows = (GooeyWindow **)data;
     GooeyEvent *event = (GooeyEvent *)windows[window_id]->current_event;
     GooeyWindow *win = (GooeyWindow *)windows[window_id];
-
     event->type = GOOEY_EVENT_WINDOW_CLOSE;
 }
 
@@ -595,6 +595,7 @@ int glps_init_ft()
     FT_Done_FreeType(ft);
     return 0;
 }
+
 int glps_init(int project_branch)
 {
     NFD_Init();
@@ -606,7 +607,7 @@ int glps_init(int project_branch)
     ctx.shape_vaos = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
     ctx.text_programs = (GLuint *)calloc(MAX_WINDOWS, sizeof(GLuint));
     ctx.wm = glps_wm_init();
-    ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer));
+    ctx.timers = (glps_timer **)calloc(MAX_TIMERS, sizeof(glps_timer *));
     ctx.timer_count = 0;
     ctx.is_running = true;
     return 0;
@@ -619,6 +620,8 @@ int glps_get_current_clicked_window(void)
 
 void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite)
 {
+    if (!validate_window_id(window_id) || !text) return;
+
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     vec3 color_rgb;
     float ndc_x, ndc_y;
@@ -745,7 +748,6 @@ static int is_stb_supported_image_format(const char *path)
 
 unsigned int glps_load_image(const char *image_path)
 {
-
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -760,22 +762,24 @@ unsigned int glps_load_image(const char *image_path)
     if (!is_stb_supported_image_format(image_path))
     {
         // try loading svg
-
         NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
-        // Create rasterizer
-        NSVGrasterizer *rast = nsvgCreateRasterizer();
-        // Rasterize to bitmap
-        img_width = (int)image->width;
-        img_height = (int)image->height;
-        nrChannels = 4;
-        data = malloc(img_width * img_height * 4);
-        nsvgRasterize(rast, image, 0, 0, 1, data, img_width, img_height, img_width * 4);
+        if (image) {
+            // Create rasterizer
+            NSVGrasterizer *rast = nsvgCreateRasterizer();
+            // Rasterize to bitmap
+            img_width = (int)image->width;
+            img_height = (int)image->height;
+            nrChannels = 4;
+            data = malloc(img_width * img_height * 4);
+            nsvgRasterize(rast, image, 0, 0, 1, data, img_width, img_height, img_width * 4);
+            nsvgDeleteRasterizer(rast);
+            nsvgDelete(image);
+        }
     }
     else
     {
         // Load with STB
         stbi_set_flip_vertically_on_load(1);
-
         data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
     }
 
@@ -789,14 +793,18 @@ unsigned int glps_load_image(const char *image_path)
     GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    stbi_image_free(data);
+    
+    if (is_stb_supported_image_format(image_path)) {
+        stbi_image_free(data);
+    } else {
+        free(data);
+    }
 
-    return texture; // textureID
+    return texture;
 }
 
 unsigned int glps_load_image_from_bin(unsigned char *data, long unsigned binary_len)
 {
-
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -813,7 +821,7 @@ unsigned int glps_load_image_from_bin(unsigned char *data, long unsigned binary_
     {
         LOG_ERROR("Failed to load image");
         glDeleteTextures(1, &texture);
-        return -1;
+        return 0;
     }
 
     GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
@@ -821,12 +829,11 @@ unsigned int glps_load_image_from_bin(unsigned char *data, long unsigned binary_
     glGenerateMipmap(GL_TEXTURE_2D);
     stbi_image_free(img_data);
 
-    return texture; // textureID
+    return texture;
 }
+
 GooeyWindow *glps_create_window(const char *title, int width, int height)
-
 {
-
     GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
 
     size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
@@ -838,7 +845,6 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
         glps_setup_shared();
 
     glps_setup_seperate_vao(window->creation_id);
-    // glps_set_projection(window.creation_id, width, height);
     ctx.active_window_count++;
 
     return window;
@@ -859,68 +865,104 @@ void glps_hide_current_child(void)
 
 void glps_destroy_windows()
 {
-
-    /* if (ctx.window)
-    {
-        glpsDestroyWindow(ctx.window);
-        ctx.window = NULL;
-    }
-
-    if (ctx.child_windows)
-    {
-
-        for (int i = 0; i < ctx.active_window_count; ++i)
-        {
-            glpsDestroyWindow(ctx.child_windows[i]);
-            ctx.child_windows[i] = NULL;
-        }
-        free(ctx.child_windows);
-        ctx.child_windows = NULL;
-    }*/
 }
 
 void glps_clear(GooeyWindow *win)
 {
-
     size_t window_id = win->creation_id;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    //    glps_wm_swap_interval(ctx.wm, 1);
     glClear(GL_COLOR_BUFFER_BIT);
     vec3 color;
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // LOG_INFO("%lf", glps_wm_get_fps(ctx.wm, window_id));
 }
 
-void glps_cleanup()
-{
+void glps_cleanup() {
+    ctx.is_running = false;
 
-    if (ctx.text_vaos)
-    {
+    // Cleanup character textures
+    for (int i = 0; i < 128; i++) {
+        if (ctx.characters[i].textureID != 0) {
+            glDeleteTextures(1, &ctx.characters[i].textureID);
+        }
+    }
+
+    // Cleanup VAOs and programs
+    if (ctx.text_vaos) {
+        for (size_t i = 0; i < ctx.active_window_count; i++) {
+            if (ctx.text_vaos[i] != 0) {
+                glDeleteVertexArrays(1, &ctx.text_vaos[i]);
+            }
+        }
         free(ctx.text_vaos);
         ctx.text_vaos = NULL;
     }
 
-    if (ctx.shape_vaos)
-    {
+    if (ctx.shape_vaos) {
+        for (size_t i = 0; i < ctx.active_window_count; i++) {
+            if (ctx.shape_vaos[i] != 0) {
+                glDeleteVertexArrays(1, &ctx.shape_vaos[i]);
+            }
+        }
         free(ctx.shape_vaos);
         ctx.shape_vaos = NULL;
     }
 
-    if (ctx.text_programs)
-    {
+    if (ctx.text_programs) {
+        for (size_t i = 0; i < ctx.active_window_count; i++) {
+            if (ctx.text_programs[i] != 0) {
+                glDeleteProgram(ctx.text_programs[i]);
+            }
+        }
         free(ctx.text_programs);
         ctx.text_programs = NULL;
     }
-    NFD_Quit();
 
-    glDeleteShader(ctx.text_vertex_shader);
-    glDeleteShader(ctx.text_fragment_shader);
-    glps_wm_destroy(ctx.wm);
+    // Cleanup shaders and programs
+    if (ctx.shape_program != 0) {
+        glDeleteProgram(ctx.shape_program);
+        ctx.shape_program = 0;
+    }
+    if (ctx.text_vertex_shader != 0) {
+        glDeleteShader(ctx.text_vertex_shader);
+        ctx.text_vertex_shader = 0;
+    }
+    if (ctx.text_fragment_shader != 0) {
+        glDeleteShader(ctx.text_fragment_shader);
+        ctx.text_fragment_shader = 0;
+    }
+
+    // Cleanup VBOs
+    if (ctx.text_vbo != 0) {
+        glDeleteBuffers(1, &ctx.text_vbo);
+        ctx.text_vbo = 0;
+    }
+    if (ctx.shape_vbo != 0) {
+        glDeleteBuffers(1, &ctx.shape_vbo);
+        ctx.shape_vbo = 0;
+    }
+
+    // Cleanup timers
+    if (ctx.timers) {
+        for (size_t i = 0; i < ctx.timer_count; i++) {
+            if (ctx.timers[i]) {
+                glps_timer_destroy(ctx.timers[i]);
+            }
+        }
+        free(ctx.timers);
+        ctx.timers = NULL;
+    }
+
+    // Cleanup window manager
+    if (ctx.wm) {
+        glps_wm_destroy(ctx.wm);
+        ctx.wm = NULL;
+    }
+
+    NFD_Quit();
 }
 
 void glps_update_background(GooeyWindow *win)
@@ -931,7 +973,6 @@ void glps_update_background(GooeyWindow *win)
     glps_wm_set_window_ctx_curr(ctx.wm, win->creation_id);
     convert_hex_to_rgb(&color, win->active_theme->base);
     glClearColor(color[0], color[1], color[2], 1.0f);
-    // win->current_event->type = -1;
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1135,7 +1176,6 @@ size_t glps_get_total_window_count()
 
 void glps_reset_events(GooeyWindow *win)
 {
-    // Allow only one event at a time, so it doesn't cause redraws.
     GooeyEvent *event = (GooeyEvent *)win->current_event;
     event->type = GOOEY_EVENT_RESET;
 }
@@ -1145,13 +1185,13 @@ void glps_set_viewport(size_t window_id, int width, int height)
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     glps_set_projection(window_id, width, height);
 }
+
 double glps_get_window_framerate(int window_id)
 {
     static struct timespec last_time[MAX_WINDOWS] = {0};
     static double last_fps[MAX_WINDOWS] = {0};
     static struct timespec now;
 
-    // Initialize if first call
     if (last_time[window_id].tv_sec == 0 && last_time[window_id].tv_nsec == 0)
     {
         clock_gettime(CLOCK_MONOTONIC, &last_time[window_id]);
@@ -1196,6 +1236,7 @@ void glps_create_view()
 void glps_destroy_ultralight()
 {
 }
+
 void glps_draw_webview(GooeyWindow *win, void *webview, int x, int y, int width, int height, int window_id)
 {
 }
@@ -1214,7 +1255,6 @@ static nfdwindowhandle_t nfd_get_window_type()
     nfdwindowhandle_t parentWindow = {
         .type = glps_wm_get_platform(),
         .handle = glps_wm_window_get_native_ptr(ctx.wm, 0)};
-    // TODO SUPPORT MULTI WINDOW;
     return parentWindow;
 }
 
@@ -1296,7 +1336,6 @@ GooeyBackend glps_backend = {
     .Init = glps_init,
     .Run = glps_run,
     .Cleanup = glps_cleanup,
-
     .SetupCallbacks = glps_setup_callbacks,
     .RequestRedraw = glps_request_redraw,
     .SetViewport = glps_set_viewport,
@@ -1307,13 +1346,11 @@ GooeyBackend glps_backend = {
     .MakeWindowResizable = glps_set_window_resizable,
     .WindowToggleDecorations = glps_window_toggle_decorations,
     .GetCurrentClickedWindow = glps_get_current_clicked_window,
-
     .DestroyWindows = glps_destroy_windows,
     .DestroyWindowFromId = glps_destroy_window_from_id,
     .HideCurrentChild = glps_hide_current_child,
     .UpdateBackground = glps_update_background,
     .Clear = glps_clear,
-
     .Render = glps_render,
     .SetForeground = glps_set_foreground,
     .DrawText = glps_draw_text,

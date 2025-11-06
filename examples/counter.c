@@ -36,7 +36,6 @@ void update_ui(void *context)
 
 int main()
 {
-    // Init Gooey
     Gooey_Init();
 
     GooeyWindow *window = GooeyWindow_Create("Simple Counter", 400, 300, true);

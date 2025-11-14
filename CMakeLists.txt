@@ -123,6 +123,9 @@ set(SOURCES
     src/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c
     src/backends/glps_backend_internal.c
+      
+    #src/backends/glps_vk_backend_internal.c
+
     src/logger/pico_logger_internal.c
     src/widgets/gooey_meter_internal.c
     src/widgets/gooey_webview.c
@@ -134,6 +137,7 @@ set(SOURCES
     src/widgets/gooey_ctxmenu.c
     src/animations/gooey_animations.c
     src/animations/gooey_animations_internal.c
+    
 )
 
 # ----------------------------

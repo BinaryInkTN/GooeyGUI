@@ -10,7 +10,7 @@
  * 0 = Production mode (optimized, minimal logging)
  * 1 = Debug mode (verbose logging, additional checks)
  */
-#define PROJECT_BRANCH 0
+#define PROJECT_BRANCH 1
 
 /**
  * Enable debug overlay for development

@@ -756,7 +756,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
 
     if (needs_redraw)
     {
-        GooeyWindow_DrawUIElements(window);
+      GooeyWindow_DrawUIElements(window);
         active_backend->ResetEvents(window);
     }
 }

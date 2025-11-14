@@ -92,7 +92,7 @@ void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int wi
  * @param color_hex The foreground color in hexadecimal format.
  */
 void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex);
-
+void GooeyCanvas_Clear(GooeyCanvas *canvas);
 #endif // ENABLE_CANVAS
 
 #ifdef __cplusplus

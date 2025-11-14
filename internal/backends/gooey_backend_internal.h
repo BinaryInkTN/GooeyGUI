@@ -106,7 +106,9 @@ extern "C"
 
 
         // Transparency effects.
-        void (*MakeWindowTransparent)(GooeyWindow *win, int blur_radius, float opacity);                                                                                          /**< Makes the window background transparent. */
+        void (*MakeWindowTransparent)(GooeyWindow *win, int blur_radius, float opacity);   
+        
+        void (*RenderBatch)(int window_id);
     } GooeyBackend;
 
     /**
@@ -120,6 +122,7 @@ extern "C"
      * @brief The GLPS backend for Gooey.
      */
     extern GooeyBackend glps_backend;
+    extern GooeyBackend glps_vk_backend;
 
     /**
      * @brief The TFT backend for Gooey.

@@ -160,8 +160,15 @@ typedef enum
     CANVA_DRAW_RECT,
     CANVA_DRAW_LINE,
     CANVA_DRAW_ARC,
-    CANVA_DRAW_SET_FG
+    CANVA_DRAW_SET_FG,
+    CANVA_CLEAR
+
 } CANVA_DRAW_OP;
+
+typedef struct
+{
+
+} CanvasClearArgs;
 
 typedef struct
 {
@@ -276,8 +283,9 @@ typedef struct
 {
     char title[128];
     char *menu_elements[MAX_MENU_CHILDREN];
-    void (*callbacks[MAX_MENU_CHILDREN])(void* user_data);
-    void *user_data[MAX_MENU_CHILDREN];
+    void (*callbacks[MAX_MENU_CHILDREN])(void *user_data);
+    void *user_data[MAX_MENU_CHILDREN]; // User data per element
+    void *child_user_data; // User data for the child itself
     int menu_elements_count;
     bool is_open;
     char __padding[3];

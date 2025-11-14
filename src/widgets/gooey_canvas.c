@@ -29,7 +29,7 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
 
     if (!canvas)
     {
-        LOG_ERROR("Couldn't allocated memory for canvas");
+        LOG_ERROR("Couldn't allocate memory for canvas");
         return NULL;
     }
 
@@ -53,6 +53,11 @@ GooeyCanvas *GooeyCanvas_Create(int x, int y, int width,
 
 void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int height, unsigned long color_hex, bool is_filled, float thickness, bool is_rounded, float corner_radius)
 {
+    if (!canvas)
+    {
+        LOG_ERROR("Couldn't allocate memory for canvas");
+        return;
+    }
 
     int x_win = x + canvas->core.x;
     int y_win = y + canvas->core.y;
@@ -72,7 +77,11 @@ void GooeyCanvas_DrawRectangle(GooeyCanvas *canvas, int x, int y, int width, int
 
 void GooeyCanvas_DrawLine(GooeyCanvas *canvas, int x1, int y1, int x2, int y2, unsigned long color_hex)
 {
-
+    if (!canvas)
+    {
+        LOG_ERROR("Couldn't allocate memory for canvas");
+        return;
+    }
     int x1_win = x1 + canvas->core.x;
     int y1_win = y1 + canvas->core.y;
 
@@ -94,7 +103,11 @@ void GooeyCanvas_DrawLine(GooeyCanvas *canvas, int x1, int y1, int x2, int y2, u
 
 void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int width, int height, int angle1, int angle2)
 {
-
+    if (!canvas)
+    {
+        LOG_ERROR("Couldn't allocate memory for canvas");
+        return;
+    }
     int x_win = x_center + canvas->core.x;
     int y_win = y_center + canvas->core.y;
 
@@ -111,6 +124,30 @@ void GooeyCanvas_DrawArc(GooeyCanvas *canvas, int x_center, int y_center, int wi
     }
 }
 
+void GooeyCanvas_Clear(GooeyCanvas *canvas)
+{
+    if (!canvas)
+    {
+        LOG_ERROR("Couldn't allocate memory for canvas");
+        return;
+    }
+
+    for (int i = 0; i < canvas->element_count; i++)
+    {
+        if (canvas->elements[i].args)
+        {
+            free(canvas->elements[i].args);
+        }
+    }
+
+    canvas->element_count = 0;
+
+    CanvasClearArgs *args = calloc(1, sizeof(CanvasClearArgs));
+    *args = (CanvasClearArgs){0};
+    canvas->elements[canvas->element_count++] = (CanvaElement){.operation = CANVA_CLEAR, .args = args};
+
+    LOG_INFO("Canvas cleared. All previous elements removed.");
+}
 void GooeyCanvas_SetForeground(GooeyCanvas *canvas, unsigned long color_hex)
 {
     CanvasSetFGArgs *args = calloc(1, sizeof(CanvasSetFGArgs));

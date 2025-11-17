@@ -28,6 +28,7 @@
 #include FT_LCD_FILTER_H 
 #define GLPS_USE_VULKAN
 #include "glps_window_manager.h"
+#include "glps_thread.h"
 #include "glps_timer.h"
 #include "backends/utils/linmath/linmath.h"
 #include <stdio.h>
@@ -146,15 +147,15 @@ static const char *text_vertex_shader_source =
     "}\n";
 static const char *text_fragment_shader_source =
     "#version 400 core\n"
-    "precision mediump float;\n"
     "in vec2 TexCoords;\n"
     "out vec4 color;\n"
     "uniform sampler2D text;\n"
     "uniform vec3 textColor;\n"
     "void main() {\n"
-    "    float alpha = texture(text, TexCoords).r;\n"
-    "    color = vec4(textColor, alpha);\n"
+    "   float alpha = texture(text, TexCoords).r;\n"
+    "   color = vec4(textColor, alpha);\n"
     "}\n";
+
 void check_shader_link(GLuint program);
 void check_shader_compile(GLuint shader);
 void get_window_size(glps_WindowManager *wm, size_t window_id, int *window_width, int *window_height);

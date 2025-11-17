@@ -32,7 +32,7 @@ void GooeyButton_Draw(GooeyWindow *win)
         float text_y = button->core.y + (button->core.height + text_height) / 2;
 
         active_backend->DrawText(text_x,
-                                 text_y, button->label, win->active_theme->neutral, 0.27f, win->creation_id, button->core.sprite);
+                                 text_y, button->label, win->active_theme->neutral, 18.0f, win->creation_id, button->core.sprite);
         active_backend->SetForeground(win->active_theme->neutral);
 
         if (button->is_highlighted)

@@ -1,19 +1,3 @@
-/*
-Copyright (c) 2024 Yassine Ahmed Ali
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <https://www.gnu.org/licenses/>.
-*/
 
 #define STB_IMAGE_IMPLEMENTATION
 #define NANOSVG_IMPLEMENTATION
@@ -24,11 +8,18 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include "backends/utils/backend_utils_internal.h"
 #if (TFT_ESPI_ENABLED == 0)
 #include "backends/utils/stb_image/stb_image.h"
+#include "backends/fonts/roboto.h"
 #include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <time.h>
 #include <nfd.h>
-
+typedef struct
+{
+    GLuint textureID;
+    int width, height;
+    int bearingX, bearingY;
+    int advance;
+} Glyph;
 typedef struct
 {
     GLuint *text_programs;
@@ -49,15 +40,76 @@ typedef struct
     bool inhibit_reset;
     unsigned int selected_color;
     bool is_running;
+    FT_Face face;
+    Glyph glyph_cache[128]; // simple ASCII cache
 
 } GooeyBackendContext;
 
 static GooeyBackendContext ctx = {0};
 
-static bool validate_window_id(int window_id) {
+static bool validate_window_id(int window_id)
+{
     return (window_id >= 0 && window_id < MAX_WINDOWS);
 }
+void glps_generate_glyphs(int pixel_height)
+{
+    FT_Library ft;
+    if (FT_Init_FreeType(&ft))
+    {
+        LOG_ERROR("Could not initialize FreeType\n");
+        return;
+    }
 
+    if (FT_New_Memory_Face(ft, roboto_ttf, roboto_ttf_len, 0, &ctx.face))
+    {
+        LOG_ERROR("Failed to load Roboto font\n");
+        FT_Done_FreeType(ft);
+        return;
+    }
+
+    FT_Set_Pixel_Sizes(ctx.face, 0, pixel_height);
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    for (unsigned char c = 0; c < 128; c++)
+    {
+        if (FT_Load_Char(ctx.face, c, FT_LOAD_RENDER | FT_LOAD_TARGET_NORMAL))
+        {
+            LOG_ERROR("Failed to load glyph '%c'\n", c);
+            continue;
+        }
+
+        FT_Bitmap *bmp = &ctx.face->glyph->bitmap;
+
+        GLuint tex;
+        glGenTextures(1, &tex);
+        glBindTexture(GL_TEXTURE_2D, tex);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_RED);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, GL_RED);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_RED);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bmp->width, bmp->rows, 0, 
+                     GL_RED, GL_UNSIGNED_BYTE, bmp->buffer);
+
+        ctx.glyph_cache[c] = (Glyph){
+            tex,
+            bmp->width,
+            bmp->rows,
+            ctx.face->glyph->bitmap_left,
+            ctx.face->glyph->bitmap_top,
+            (ctx.face->glyph->advance.x >> 6)};
+    }
+
+    FT_Done_Face(ctx.face);
+    FT_Done_FreeType(ft);
+}
 void glps_setup_shared()
 {
     glGenBuffers(1, &ctx.text_vbo);
@@ -133,7 +185,8 @@ void glps_draw_rectangle(int x, int y, int width, int height,
                          uint32_t color, float thickness,
                          int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
-    if (!validate_window_id(window_id)) return;
+    if (!validate_window_id(window_id))
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
@@ -148,7 +201,6 @@ void glps_draw_rectangle(int x, int y, int width, int height,
     convert_dimension_to_ndc(ctx.wm, window_id, &ndc_width, &ndc_height, width, height);
     convert_hex_to_rgb(&color_rgb, color);
 
-    // Create a full rectangle (not just borders)
     Vertex vertices[6] = {
         {{ndc_x, ndc_y}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {0.0, 0.0}},
         {{ndc_x + ndc_width, ndc_y}, {color_rgb[0], color_rgb[1], color_rgb[2]}, {1.0, 0.0}},
@@ -165,7 +217,7 @@ void glps_draw_rectangle(int x, int y, int width, int height,
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), isRounded ? 1 : 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 0);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
@@ -195,7 +247,8 @@ void glps_window_dim(int *width, int *height, int window_id)
 
 void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite)
 {
-    if (!validate_window_id(window_id)) return;
+    if (!validate_window_id(window_id))
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     float ndc_x1, ndc_y1;
@@ -219,14 +272,14 @@ void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_i
     vertices[0].pos[1] = ndc_y1;
     vertices[1].pos[0] = ndc_x2;
     vertices[1].pos[1] = ndc_y2;
-    
+
     glUseProgram(ctx.shape_program);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "useTexture"), 0);
     glUniform1f(glGetUniformLocation(ctx.shape_program, "borderWidth"), 1.0f);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isRounded"), 0);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "isHollow"), 1);
     glUniform1i(glGetUniformLocation(ctx.shape_program, "shapeType"), 1);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
 
@@ -248,7 +301,8 @@ void glps_draw_line(int x1, int y1, int x2, int y2, uint32_t color, int window_i
 void glps_fill_arc(int x_center, int y_center, int width, int height,
                    int angle1, int angle2, int window_id, GooeyTFT_Sprite *sprite)
 {
-    if (!validate_window_id(window_id)) return;
+    if (!validate_window_id(window_id))
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     int win_width, win_height;
@@ -263,7 +317,6 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
 
     Vertex vertices[segments + 2];
 
-    // Center point
     vertices[0].pos[0] = ndc_x_center;
     vertices[0].pos[1] = ndc_y_center;
     vertices[0].col[0] = color_rgb[0];
@@ -317,7 +370,8 @@ void glps_fill_arc(int x_center, int y_center, int width, int height,
 
 void glps_draw_image(unsigned int texture_id, int x, int y, int width, int height, int window_id)
 {
-    if (!validate_window_id(window_id)) return;
+    if (!validate_window_id(window_id))
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
 
@@ -331,8 +385,7 @@ void glps_draw_image(unsigned int texture_id, int x, int y, int width, int heigh
         {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
         {{ndc_x + ndc_width, ndc_y}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
         {{ndc_x + ndc_width, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}
-    };
+        {{ndc_x, ndc_y + ndc_height}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}}};
 
     glBindBuffer(GL_ARRAY_BUFFER, ctx.shape_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
@@ -381,7 +434,8 @@ void glps_fill_rectangle(int x, int y, int width, int height,
                          uint32_t color, int window_id,
                          bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
 {
-    if (!validate_window_id(window_id)) return;
+    if (!validate_window_id(window_id))
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
     float ndc_x, ndc_y;
@@ -520,6 +574,7 @@ static void window_resize_callback(size_t window_id, int width, int height, void
     event->type = GOOEY_EVENT_RESIZE;
     win->width = width;
     win->height = height;
+    glps_set_viewport(window_id, width, height);
 }
 
 static void window_close_callback(size_t window_id, void *data)
@@ -533,69 +588,8 @@ static void window_close_callback(size_t window_id, void *data)
 int glps_init_ft()
 {
     gladLoadGL();
-    FT_Library ft;
-    if (FT_Init_FreeType(&ft))
-    {
-        LOG_ERROR("Could not initialize FreeType library\n");
-        return -1;
-    }
-
-    FT_Face face;
-
-    if (FT_New_Face(ft, "roboto.ttf", 0, &face))
-    {
-        LOG_ERROR("Failed to load font: %s\n", "Roboto");
-        FT_Done_FreeType(ft);
-        return -1;
-    }
-
-    FT_Library_SetLcdFilter(ft, FT_LCD_FILTER_DEFAULT);
-
-    FT_Set_Char_Size(face, 0, 28 * 28, 300, 300);
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    for (unsigned char c = 0; c < 128; c++)
-    {
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-        {
-            LOG_ERROR("Failed to load Glyph for character: '%c'\n", c);
-            continue;
-        }
-
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_R8,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            0,
-            GL_RED,
-            GL_UNSIGNED_BYTE,
-            face->glyph->bitmap.buffer);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        Character character = {
-            texture,
-            face->glyph->bitmap.width,
-            face->glyph->bitmap.rows,
-            face->glyph->bitmap_left,
-            face->glyph->bitmap_top,
-            (int)face->glyph->advance.x};
-        ctx.characters[c] = character;
-    }
-
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
     return 0;
 }
-
 int glps_init(int project_branch)
 {
     NFD_Init();
@@ -616,110 +610,74 @@ int glps_init(int project_branch)
 int glps_get_current_clicked_window(void)
 {
     return -1;
-}
-
-void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite)
+}void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id)
 {
-    if (!validate_window_id(window_id) || !text) return;
+    if (!validate_window_id(window_id) || !text)
+        return;
 
     glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    vec3 color_rgb;
-    float ndc_x, ndc_y;
+
     int window_width, window_height;
-
     glps_window_dim(&window_width, &window_height, window_id);
-    int initial_x = x;
 
-    convert_coords_to_ndc(ctx.wm, window_id, &ndc_x, &ndc_y, x, y);
+    vec3 color_rgb;
     convert_hex_to_rgb(&color_rgb, color);
+
     glUseProgram(ctx.text_programs[window_id]);
-    glUniform3f(glGetUniformLocation(ctx.text_programs[window_id], "textColor"), color_rgb[0], color_rgb[1], color_rgb[2]);
+    glUniform3f(glGetUniformLocation(ctx.text_programs[window_id], "textColor"),
+                color_rgb[0], color_rgb[1], color_rgb[2]);
+
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(ctx.text_vaos[window_id]);
 
-    int line_count = 0;
-    int last_space_pos = -1;
-    int split_pos[128];
-    int line_height = 20;
-    float current_x = x;
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    float cursor_x = (float)x;
+    float cursor_y = (float)y;
+    float scale = font_size / 28.0f;
+    float baseline_y = cursor_y;
 
     for (size_t i = 0; i < strlen(text); i++)
     {
-        Character ch = ctx.characters[(unsigned char)text[i]];
+        char c = text[i];
+        if (c == '\n')
+        {
+            cursor_x = (float)x;
+            baseline_y += font_size * 1.2f; 
+            continue;
+        }
+
+        Glyph ch = ctx.glyph_cache[(unsigned char)c];
         if (ch.textureID == 0)
             continue;
 
-        float xpos = current_x + ch.bearingX * font_size;
-
-        if (text[i] == ' ')
-        {
-            last_space_pos = current_x;
-        }
-
-        if (xpos + ch.width * font_size > window_width)
-        {
-            if (last_space_pos != -1)
-            {
-                split_pos[line_count] = last_space_pos;
-                line_count++;
-            }
-            current_x = initial_x;
-            y += (ch.height + ch.bearingY) * font_size;
-        }
-        else
-        {
-            current_x += (ch.advance >> 6) * font_size;
-        }
-    }
-
-    int current_rendering_line = 0;
-    current_x = initial_x;
-
-    for (size_t i = 0; i < strlen(text); i++)
-    {
-        Character ch = ctx.characters[(unsigned char)text[i]];
-        if (ch.textureID == 0)
-            continue;
-
-        float xpos = current_x + ch.bearingX * font_size;
-        float ypos = y - ch.bearingY * font_size;
-        float w = ch.width * font_size;
-        float h = ch.height * font_size;
-
-        if (current_rendering_line < line_count && xpos >= split_pos[current_rendering_line])
-        {
-            current_x = initial_x;
-            y += (ch.height + ch.bearingY) * font_size + line_height;
-            xpos = current_x + ch.bearingX * font_size;
-            ypos = y - ch.bearingY * font_size;
-            current_rendering_line++;
-        }
-
-        if (y + h > window_height)
-        {
-            break;
-        }
+        float xpos = cursor_x + ch.bearingX * scale;
+        float ypos = baseline_y - ch.bearingY * scale; 
+        
+        float w = ch.width * scale;
+        float h = ch.height * scale;
 
         float vertices[6][4] = {
-            {xpos, ypos + h, 0.0f, 0.0f},
-            {xpos, ypos, 0.0f, 1.0f},
-            {xpos + w, ypos, 1.0f, 1.0f},
-            {xpos, ypos + h, 0.0f, 0.0f},
-            {xpos + w, ypos, 1.0f, 1.0f},
-            {xpos + w, ypos + h, 1.0f, 0.0f}};
+            {xpos,     ypos + h, 0.0f, 0.0f},  
+            {xpos,     ypos,     0.0f, 1.0f},  
+            {xpos + w, ypos,     1.0f, 1.0f},  
+            {xpos,     ypos + h, 0.0f, 0.0f},  
+            {xpos + w, ypos,     1.0f, 1.0f},  
+            {xpos + w, ypos + h, 1.0f, 0.0f}   
+        };
 
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
         glBindBuffer(GL_ARRAY_BUFFER, ctx.text_vbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-        current_x += (ch.advance >> 6) * font_size;
+        cursor_x += ch.advance * scale;
     }
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
-
 void glps_unload_image(unsigned int texture_id)
 {
     glDeleteTextures(1, &texture_id);
@@ -761,12 +719,10 @@ unsigned int glps_load_image(const char *image_path)
 
     if (!is_stb_supported_image_format(image_path))
     {
-        // try loading svg
         NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
-        if (image) {
-            // Create rasterizer
+        if (image)
+        {
             NSVGrasterizer *rast = nsvgCreateRasterizer();
-            // Rasterize to bitmap
             img_width = (int)image->width;
             img_height = (int)image->height;
             nrChannels = 4;
@@ -778,7 +734,6 @@ unsigned int glps_load_image(const char *image_path)
     }
     else
     {
-        // Load with STB
         stbi_set_flip_vertically_on_load(1);
         data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
     }
@@ -793,10 +748,13 @@ unsigned int glps_load_image(const char *image_path)
     GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
     glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
-    
-    if (is_stb_supported_image_format(image_path)) {
+
+    if (is_stb_supported_image_format(image_path))
+    {
         stbi_image_free(data);
-    } else {
+    }
+    else
+    {
         free(data);
     }
 
@@ -840,12 +798,13 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
     window->creation_id = window_id;
 
     glps_init_ft();
-
+    glps_generate_glyphs(28); 
     if (window->creation_id == 0)
         glps_setup_shared();
 
     glps_setup_seperate_vao(window->creation_id);
     ctx.active_window_count++;
+
 
     return window;
 }
@@ -880,20 +839,24 @@ void glps_clear(GooeyWindow *win)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void glps_cleanup() {
+void glps_cleanup()
+{
     ctx.is_running = false;
 
-    // Cleanup character textures
-    for (int i = 0; i < 128; i++) {
-        if (ctx.characters[i].textureID != 0) {
+    for (int i = 0; i < 128; i++)
+    {
+        if (ctx.characters[i].textureID != 0)
+        {
             glDeleteTextures(1, &ctx.characters[i].textureID);
         }
     }
 
-    // Cleanup VAOs and programs
-    if (ctx.text_vaos) {
-        for (size_t i = 0; i < ctx.active_window_count; i++) {
-            if (ctx.text_vaos[i] != 0) {
+    if (ctx.text_vaos)
+    {
+        for (size_t i = 0; i < ctx.active_window_count; i++)
+        {
+            if (ctx.text_vaos[i] != 0)
+            {
                 glDeleteVertexArrays(1, &ctx.text_vaos[i]);
             }
         }
@@ -901,9 +864,12 @@ void glps_cleanup() {
         ctx.text_vaos = NULL;
     }
 
-    if (ctx.shape_vaos) {
-        for (size_t i = 0; i < ctx.active_window_count; i++) {
-            if (ctx.shape_vaos[i] != 0) {
+    if (ctx.shape_vaos)
+    {
+        for (size_t i = 0; i < ctx.active_window_count; i++)
+        {
+            if (ctx.shape_vaos[i] != 0)
+            {
                 glDeleteVertexArrays(1, &ctx.shape_vaos[i]);
             }
         }
@@ -911,9 +877,12 @@ void glps_cleanup() {
         ctx.shape_vaos = NULL;
     }
 
-    if (ctx.text_programs) {
-        for (size_t i = 0; i < ctx.active_window_count; i++) {
-            if (ctx.text_programs[i] != 0) {
+    if (ctx.text_programs)
+    {
+        for (size_t i = 0; i < ctx.active_window_count; i++)
+        {
+            if (ctx.text_programs[i] != 0)
+            {
                 glDeleteProgram(ctx.text_programs[i]);
             }
         }
@@ -921,34 +890,39 @@ void glps_cleanup() {
         ctx.text_programs = NULL;
     }
 
-    // Cleanup shaders and programs
-    if (ctx.shape_program != 0) {
+    if (ctx.shape_program != 0)
+    {
         glDeleteProgram(ctx.shape_program);
         ctx.shape_program = 0;
     }
-    if (ctx.text_vertex_shader != 0) {
+    if (ctx.text_vertex_shader != 0)
+    {
         glDeleteShader(ctx.text_vertex_shader);
         ctx.text_vertex_shader = 0;
     }
-    if (ctx.text_fragment_shader != 0) {
+    if (ctx.text_fragment_shader != 0)
+    {
         glDeleteShader(ctx.text_fragment_shader);
         ctx.text_fragment_shader = 0;
     }
 
-    // Cleanup VBOs
-    if (ctx.text_vbo != 0) {
+    if (ctx.text_vbo != 0)
+    {
         glDeleteBuffers(1, &ctx.text_vbo);
         ctx.text_vbo = 0;
     }
-    if (ctx.shape_vbo != 0) {
+    if (ctx.shape_vbo != 0)
+    {
         glDeleteBuffers(1, &ctx.shape_vbo);
         ctx.shape_vbo = 0;
     }
 
-    // Cleanup timers
-    if (ctx.timers) {
-        for (size_t i = 0; i < ctx.timer_count; i++) {
-            if (ctx.timers[i]) {
+    if (ctx.timers)
+    {
+        for (size_t i = 0; i < ctx.timer_count; i++)
+        {
+            if (ctx.timers[i])
+            {
                 glps_timer_destroy(ctx.timers[i]);
             }
         }
@@ -956,8 +930,8 @@ void glps_cleanup() {
         ctx.timers = NULL;
     }
 
-    // Cleanup window manager
-    if (ctx.wm) {
+    if (ctx.wm)
+    {
         glps_wm_destroy(ctx.wm);
         ctx.wm = NULL;
     }
@@ -982,13 +956,18 @@ void glps_render(GooeyWindow *win)
 {
     glps_wm_swap_buffers(ctx.wm, win->creation_id);
 }
-
 float glps_get_text_width(const char *text, int length)
 {
     float total_width = 0.0f;
+    float scale = 18.0f / 28.0f; 
+    
     for (int i = 0; i < length; ++i)
     {
-        total_width += (ctx.characters[(int)text[i]].advance / 64.0f) * 0.27f;
+        Glyph ch = ctx.glyph_cache[(int)text[i]];
+        if (ch.textureID != 0)
+        {
+            total_width += ch.advance * scale;
+        }
     }
     return total_width;
 }
@@ -996,13 +975,14 @@ float glps_get_text_width(const char *text, int length)
 float glps_get_text_height(const char *text, int length)
 {
     float max_height = 0;
-
+    float scale = 18.0f / 28.0f;
+    
     for (int i = 0; i < length; ++i)
     {
-        float char_height = ctx.characters[(int)text[i]].height * 0.27f;
-        if (char_height > max_height)
+        Glyph ch = ctx.glyph_cache[(int)text[i]];
+        if (ch.textureID != 0 && ch.height > max_height)
         {
-            max_height = char_height;
+            max_height = ch.height * scale;
         }
     }
     return max_height;

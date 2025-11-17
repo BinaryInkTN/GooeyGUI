@@ -134,7 +134,7 @@ static void render_keyboard_buttons(GooeyWindow *win, int y_offset)
             int label_x = draw_x + current_button_width / 2 - active_backend->GetTextWidth(label, 1) / 2;
             int label_y = draw_y + (row_height - 4) / 2 + active_backend->GetTextHeight(label, 1) / 2;
 
-            active_backend->DrawText(label_x, label_y, label, win->active_theme->neutral, 0.27f, win->creation_id, NULL);
+            active_backend->DrawText(label_x, label_y, label, win->active_theme->neutral, 18.0f, win->creation_id, NULL);
 
             x += current_button_width;
         }

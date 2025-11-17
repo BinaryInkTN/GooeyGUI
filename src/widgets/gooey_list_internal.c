@@ -71,7 +71,7 @@ void GooeyList_Draw(GooeyWindow *win)
                 active_backend->DrawText(
                     list->core.x + 10, title_y,
                     item.title, win->active_theme->neutral,
-                    0.27f, win->creation_id, list->core.sprite);
+                    18.0f, win->creation_id, list->core.sprite);
             }
 
             if (description_y < list->core.y + list->core.height && description_y > list->core.y + 5)
@@ -79,7 +79,7 @@ void GooeyList_Draw(GooeyWindow *win)
                 active_backend->DrawText(
                     list->core.x + 10, description_y,
                     item.description, win->active_theme->neutral,
-                    0.27f, win->creation_id, list->core.sprite);
+                    18.0f, win->creation_id, list->core.sprite);
             }
 
             int line_separator_y = current_y_offset + list->item_spacing - 10;

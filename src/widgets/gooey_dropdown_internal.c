@@ -94,7 +94,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
         const char *selected_text = dropdown->options[dropdown->selected_index];
         active_backend->DrawText(dropdown->core.x + 5, dropdown->core.y + 20,
                                  selected_text, win->active_theme->neutral,
-                                 0.27f, win->creation_id, dropdown->core.sprite);
+                                 18.0f, win->creation_id, dropdown->core.sprite);
 
         int arrow_x = dropdown->core.x + dropdown->core.width - 15;
         int arrow_y = dropdown->core.y + dropdown->core.height / 2;
@@ -167,7 +167,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                     active_backend->DrawText(submenu_x + 5, element_y + 18,
                                              dropdown->options[j],
                                              (is_hovered || is_selected) ? win->active_theme->base : win->active_theme->neutral,
-                                             0.27f, win->creation_id, dropdown->core.sprite);
+                                             18.0f, win->creation_id, dropdown->core.sprite);
 
                     if (j < visible_options - 1 && j < dropdown->num_options - 1)
                     {

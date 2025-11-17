@@ -2018,7 +2018,7 @@ float glps_get_text_width(const char *text, int length)
     float total_width = 0.0f;
     for (int i = 0; i < length; ++i)
     {
-        total_width += (ctx.characters[(int)text[i]].advance / 64.0f) * 0.27f;
+        total_width += (ctx.characters[(int)text[i]].advance / 64.0f) * 18.0f;
     }
     return total_width;
 }
@@ -2028,7 +2028,7 @@ float glps_get_text_height(const char *text, int length)
     float max_height = 0;
     for (int i = 0; i < length; ++i)
     {
-        float char_height = ctx.characters[(int)text[i]].height * 0.27f;
+        float char_height = ctx.characters[(int)text[i]].height * 18.0f;
         if (char_height > max_height)
         {
             max_height = char_height;

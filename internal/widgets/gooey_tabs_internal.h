@@ -12,7 +12,7 @@
 
 /* Padding and text scale for tab labels */
 #define TAB_TEXT_PADDING     10
-#define TAB_TEXT_SCALE       0.28f
+#define TAB_TEXT_SCALE       18.0f
 
 /* Alpha transparency for the tab highlight */
 #define TAB_HIGHLIGHT_ALPHA  0.1f

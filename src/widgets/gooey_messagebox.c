@@ -80,7 +80,7 @@ GooeyWindow *GooeyMessageBox_Create(const char *title, const char *message, MSGB
     GooeyWindow_RegisterWidget(window, title_label);
     GooeyLabel_SetColor(title_label, msgbox_title_color);
     GooeyLayout_AddChild(window, layout, title_label);
-    GooeyLabel* message_label = GooeyLabel_Create(message, 0.3f, 0, 0);
+    GooeyLabel* message_label = GooeyLabel_Create(message, 18.0f, 0, 0);
     GooeyWindow_RegisterWidget(window, message_label);
     GooeyLayout_AddChild(window, layout, message_label);
     GooeyLayout_AddChild(window, layout, button_layout);

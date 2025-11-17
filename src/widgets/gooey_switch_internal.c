@@ -187,15 +187,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             gswitch->thumb_position = thumb_x;
         }
 
-        active_backend->SetForeground(0xFFFFFF);
-        active_backend->FillArc(
-            thumb_x,
-            thumb_y,
-            thumb_diameter,
-            thumb_diameter,
-            0,
-            360,
-            win->creation_id, gswitch->core.sprite);
+     
 
         active_backend->SetForeground(0xF0F0F0);
         active_backend->FillArc(
@@ -219,7 +211,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     thumb_y + 5,
                     SWITCH_ON_TEXT,
                     win->active_theme->neutral,
-                    0.26f * on_alpha,
+                    18.0f * on_alpha,
                     win->creation_id, gswitch->core.sprite);
             }
 
@@ -231,7 +223,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     thumb_y + 4,
                     SWITCH_OFF_TEXT,
                     win->active_theme->neutral,
-                    0.26f * off_alpha,
+                     12.0f * off_alpha,
                     win->creation_id, gswitch->core.sprite);
             }
         }
@@ -245,7 +237,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     thumb_y + 4,
                     SWITCH_ON_TEXT,
                     win->active_theme->neutral,
-                    0.26f,
+                    12.0f,
                     win->creation_id, gswitch->core.sprite);
             }
             else
@@ -255,7 +247,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     thumb_y + 4,
                     SWITCH_OFF_TEXT,
                     win->active_theme->neutral,
-                    0.26f,
+                    12.0f,
                     win->creation_id, gswitch->core.sprite);
             }
         }

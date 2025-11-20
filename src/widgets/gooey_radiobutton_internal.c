@@ -20,7 +20,7 @@ void GooeyRadioButtonGroup_Draw(GooeyWindow *win)
 
             int label_x = button->core.x + RADIO_BUTTON_RADIUS * 2;
             int label_y = button->core.y + RADIO_BUTTON_RADIUS / 2;
-            active_backend->DrawText(label_x, label_y, button->label, win->active_theme->neutral, 18.0f, win->creation_id, button->core.sprite);
+            active_backend->DrawGooeyText(label_x, label_y, button->label, win->active_theme->neutral, 18.0f, win->creation_id, button->core.sprite);
             active_backend->SetForeground(win->active_theme->neutral);
             active_backend->FillArc(button->core.x, button->core.y, RADIO_BUTTON_RADIUS * 2, RADIO_BUTTON_RADIUS * 2, 0, 360 * 64, win->creation_id, button->core.sprite);
             if (button->selected)

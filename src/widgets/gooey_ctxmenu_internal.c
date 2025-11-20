@@ -26,7 +26,7 @@ void GooeyCtxMenu_Internal_Draw(GooeyWindow *window)
     for (int i = 0; i < ctx_menu->menu_item_count; ++i)
     {
         int item_y = menu_y + i * item_height;
-        active_backend->DrawText(
+        active_backend->DrawGooeyText(
             menu_x + 10, item_y + 20,
             ctx_menu->menu_items[i].label,
             window->active_theme->neutral, 0.25f, window->creation_id, NULL);

@@ -74,7 +74,7 @@ static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
     int title_x = plot->core.x + ((plot->core.width - text_width) / 2);
     int title_y = plot->core.y + PLOT_MARGIN / 2;
 
-    active_backend->DrawText(
+    active_backend->DrawGooeyText(
         title_x, title_y,
         plot->data->title,
         win->active_theme->primary,
@@ -179,7 +179,7 @@ static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_value
             float label_x = x_pos - (text_width / 2);
             float label_y = plot->core.y + plot->core.height - PLOT_MARGIN + VALUE_TICK_OFFSET + 15;
 
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 label_x, label_y,
                 value_str,
                 win->active_theme->neutral,
@@ -231,7 +231,7 @@ static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_value
             float label_x = plot->core.x + PLOT_MARGIN - VALUE_TICK_OFFSET - text_width - 5;
             float label_y = y_pos - 8;
 
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 label_x, label_y,
                 value_str,
                 win->active_theme->neutral,
@@ -388,7 +388,7 @@ static void draw_bar_plot_fast(GooeyPlot *plot, GooeyWindow *win, float *plot_x_
             float label_x = plot_x_coords[j] - active_backend->GetTextWidth(label, strlen(label)) / 2;
             float label_y = base_y + LABEL_SPACING;
 
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 label_x, label_y,
                 label,
                 win->active_theme->neutral,

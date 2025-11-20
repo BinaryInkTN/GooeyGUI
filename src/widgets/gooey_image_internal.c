@@ -34,14 +34,14 @@ void GooeyImage_Draw(GooeyWindow *win)
         
         if(!image->is_loaded)
         {
-            image->texture_id = active_backend->LoadImage(image->image_path);
+            image->texture_id = active_backend->LoadGooeyImage(image->image_path);
             image->is_loaded = true;
         }
 
         if (image->needs_refresh)
         {
             active_backend->UnloadImage(image->texture_id);
-            active_backend->LoadImage(image->image_path);
+            active_backend->LoadGooeyImage(image->image_path);
             image->needs_refresh = false;
             active_backend->RequestRedraw(win);
         }

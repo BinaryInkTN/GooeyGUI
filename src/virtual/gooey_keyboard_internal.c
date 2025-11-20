@@ -39,7 +39,7 @@ static void render_preview_bar(GooeyWindow *win, int preview_height)
     int text_x = 10;
     int text_y = (preview_height - text_height) / 2;
 
-    active_backend->DrawText(text_x, text_y, vk_preview_buffer, win->active_theme->neutral, text_scale, win->creation_id, NULL);
+    active_backend->DrawGooeyText(text_x, text_y, vk_preview_buffer, win->active_theme->neutral, text_scale, win->creation_id, NULL);
 }
 
 static void append_to_preview(const char *key)
@@ -134,7 +134,7 @@ static void render_keyboard_buttons(GooeyWindow *win, int y_offset)
             int label_x = draw_x + current_button_width / 2 - active_backend->GetTextWidth(label, 1) / 2;
             int label_y = draw_y + (row_height - 4) / 2 + active_backend->GetTextHeight(label, 1) / 2;
 
-            active_backend->DrawText(label_x, label_y, label, win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+            active_backend->DrawGooeyText(label_x, label_y, label, win->active_theme->neutral, 18.0f, win->creation_id, NULL);
 
             x += current_button_width;
         }

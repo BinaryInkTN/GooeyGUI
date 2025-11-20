@@ -503,7 +503,7 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
 
 GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibility)
 {
-    GooeyWindow *win = active_backend->CreateWindow(title, width, height);
+    GooeyWindow *win = active_backend->CreateGooeyWindow(title, width, height);
     if (!win)
     {
         return NULL;

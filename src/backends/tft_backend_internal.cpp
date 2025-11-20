@@ -659,7 +659,7 @@ extern "C"
         .SetViewport = tft_set_viewport,
         .GetActiveWindowCount = tft_get_active_window_count,
         .GetTotalWindowCount = tft_get_total_window_count,
-        .CreateWindow = tft_create_window,
+        .GCreateWindow = tft_create_window,
         .SpawnWindow = NULL,
         .MakeWindowVisible = tft_make_window_visible,
         .MakeWindowResizable = tft_set_window_resizable,

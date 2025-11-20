@@ -323,7 +323,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
             const int text_height = active_backend->GetTextHeight(tab->tab_name, strlen(tab->tab_name));
             const int tab_name_x = tab_x + (tab_width / 2) - text_width / 2;
 
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 tab_name_x,
                 tab_y + (TAB_HEIGHT / 2) + (text_height / 2),
                 tab->tab_name,
@@ -392,7 +392,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
                 if (current_sidebar_width >= TAB_TEXT_PADDING * 2)
                 {
                     const int text_height = active_backend->GetTextHeight(tab->tab_name, strlen(tab->tab_name));
-                    active_backend->DrawText(
+                    active_backend->DrawGooeyText(
                         tabs->core.x + TAB_TEXT_PADDING,
                         tab_y + TAB_ELEMENT_HEIGHT / 2 + text_height / 2,
                         tab->tab_name,

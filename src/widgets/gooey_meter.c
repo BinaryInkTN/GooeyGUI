@@ -26,7 +26,7 @@ GooeyMeter *GooeyMeter_Create(int x, int y, int width, int height, long initial_
         },
         .value = initial_value,
         .label = label,
-        .texture_id = active_backend->LoadImage(icon_path)};
+        .texture_id = active_backend->LoadGooeyImage(icon_path)};
 
     return meter;
 }

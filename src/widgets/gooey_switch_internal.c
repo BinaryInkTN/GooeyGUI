@@ -206,7 +206,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             float on_alpha = gswitch->is_toggled ? progress : (1.0f - progress);
             if (on_alpha > 0.1f)
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     track_x + 8,
                     thumb_y + 5,
                     SWITCH_ON_TEXT,
@@ -218,7 +218,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             float off_alpha = gswitch->is_toggled ? (1.0f - progress) : progress;
             if (off_alpha > 0.1f)
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     track_x + track_width - 32,
                     thumb_y + 4,
                     SWITCH_OFF_TEXT,
@@ -232,7 +232,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
 
             if (gswitch->is_toggled)
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     track_x + 8,
                     thumb_y + 4,
                     SWITCH_ON_TEXT,
@@ -242,7 +242,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             }
             else
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     track_x + track_width - 32,
                     thumb_y + 4,
                     SWITCH_OFF_TEXT,

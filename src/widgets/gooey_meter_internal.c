@@ -109,7 +109,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
             180,
             win->creation_id, meter->core.sprite);
 
-        active_backend->DrawText(
+        active_backend->DrawGooeyText(
             label_text_x,
             label_text_y,
             label_text,
@@ -124,7 +124,7 @@ void GooeyMeter_Draw(GooeyWindow *win)
         const int value_text_x = arc_center_x - value_text_width / 2;
         const int value_text_y = arc_center_y + meter->core.height * VALUE_TEXT_Y_OFFSET;
 
-        active_backend->DrawText(
+        active_backend->DrawGooeyText(
             value_text_x,
             value_text_y,
             value_text,

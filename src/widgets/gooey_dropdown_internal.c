@@ -92,7 +92,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                                       win->active_theme->widget_base, win->creation_id, true, 2.0f, dropdown->core.sprite);
 
         const char *selected_text = dropdown->options[dropdown->selected_index];
-        active_backend->DrawText(dropdown->core.x + 5, dropdown->core.y + 20,
+        active_backend->DrawGooeyText(dropdown->core.x + 5, dropdown->core.y + 20,
                                  selected_text, win->active_theme->neutral,
                                  18.0f, win->creation_id, dropdown->core.sprite);
 
@@ -164,7 +164,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                                                       win->active_theme->primary, win->creation_id, false, 0.0f, dropdown->core.sprite);
                     }
 
-                    active_backend->DrawText(submenu_x + 5, element_y + 18,
+                    active_backend->DrawGooeyText(submenu_x + 5, element_y + 18,
                                              dropdown->options[j],
                                              (is_hovered || is_selected) ? win->active_theme->base : win->active_theme->neutral,
                                              18.0f, win->creation_id, dropdown->core.sprite);

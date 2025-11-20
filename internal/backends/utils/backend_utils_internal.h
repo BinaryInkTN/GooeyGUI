@@ -26,7 +26,6 @@
 #include <freetype/freetype.h>
 #include FT_FREETYPE_H
 #include FT_LCD_FILTER_H 
-#define GLPS_USE_VULKAN
 #include "glps_window_manager.h"
 #include "glps_thread.h"
 #include "glps_timer.h"

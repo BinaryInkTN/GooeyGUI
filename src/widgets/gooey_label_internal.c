@@ -13,7 +13,7 @@ void GooeyLabel_Draw(GooeyWindow *win)
         if (!widget->is_visible)
             continue;
 
-        active_backend->DrawText(
+        active_backend->DrawGooeyText(
             widget->x, 
             widget->y, 
             label->text, 

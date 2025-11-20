@@ -132,7 +132,7 @@ static void draw_menu_item(GooeyWindow *win, GooeyMenuChild *child, int x, int y
     }
 
     // Draw menu title
-    active_backend->DrawText(x, y + 15, child->title,
+    active_backend->DrawGooeyText(x, y + 15, child->title,
                              is_active ? win->active_theme->base : win->active_theme->neutral,
                              18.0f, win->creation_id, NULL);
 }
@@ -171,7 +171,7 @@ static void draw_submenu(GooeyWindow *win, GooeyMenuChild *child, int x, int y,
         }
 
         // Draw element text
-        active_backend->DrawText(x + MENU_ITEM_PADDING, element_y + 18,
+        active_backend->DrawGooeyText(x + MENU_ITEM_PADDING, element_y + 18,
                                  child->menu_elements[j],
                                  is_hovered ? win->active_theme->base : win->active_theme->neutral,
                                  18.0f, win->creation_id, NULL);

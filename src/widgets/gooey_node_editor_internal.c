@@ -469,7 +469,7 @@ static void DrawNode(const GooeyNode* node, const GooeyNodeEditor* editor, const
         node->width, NODE_HEADER_HEIGHT,
         header_color, win->creation_id, true, 8.0f, NULL
     );
-    active_backend->DrawText(
+    active_backend->DrawGooeyText(
         abs_x + 10,
         abs_y + NODE_HEADER_HEIGHT / 2 + 5,
         node->title, text_color, 18.0f, win->creation_id, NULL
@@ -486,25 +486,25 @@ static void DrawNode(const GooeyNode* node, const GooeyNodeEditor* editor, const
             0, 360, win->creation_id, NULL
         );
         if (socket->type == GOOEY_SOCKET_TYPE_INPUT) {
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 socket_x + 10, socket_y + 10,
                 socket->name, text_color, 18.0f, win->creation_id, NULL
             );
             const char* type_str = GetTypeString(socket->data_type);
             int name_width = active_backend->GetTextWidth(socket->name, strlen(socket->name));
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 socket_x + name_width + 15, socket_y + 10,
                 type_str, text_color, 18.0f, win->creation_id, NULL
             );
         } else {
             const char* type_str = GetTypeString(socket->data_type);
             int type_width = active_backend->GetTextWidth(type_str, strlen(type_str));
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 socket_x - type_width - 15, socket_y + 10,
                 type_str, text_color, 18.0f, win->creation_id, NULL
             );
             int name_width = active_backend->GetTextWidth(socket->name, strlen(socket->name));
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 socket_x - name_width - type_width - 25, socket_y + 10,
                 socket->name, text_color, 18.0f, win->creation_id, NULL
             );

@@ -79,7 +79,7 @@ static void DrawProgressPercentage(GooeyProgressBar *progressbar, GooeyWindow *w
     float text_x = progressbar->core.x + (progressbar->core.width / 2) - (text_width / 2);
     float text_y = progressbar->core.y + (progressbar->core.height / 2) + (text_height / 2);
 
-    active_backend->DrawText(
+    active_backend->DrawGooeyText(
         text_x,
         text_y,
         display_percentage,

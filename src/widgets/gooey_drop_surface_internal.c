@@ -107,7 +107,7 @@ void GooeyDropSurface_Draw(GooeyWindow *win)
         int text_x = drop_surface->core.x + (float)(drop_surface->core.width - text_width) / 2;
         int text_y = drop_surface->core.y + (float)(drop_surface->core.height - text_height) / 2 + img_height;
 
-        active_backend->DrawText(text_x, text_y, filename, win->active_theme->neutral, 0.28f, win->creation_id, drop_surface->core.sprite);
+        active_backend->DrawGooeyText(text_x, text_y, filename, win->active_theme->neutral, 0.28f, win->creation_id, drop_surface->core.sprite);
     }
 }
 #endif

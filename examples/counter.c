@@ -77,7 +77,7 @@ te)
   
   //  active_backend->StopTimer(NULL);
    //active_backend->DrawRectangle(100, 100, 100, 100, 0x00FF00, 1.0f, 0, false, 0.0f, NULL);
-  //active_backend->DrawText(10, 10, "test", 0x0000FF, 0.3f, 0, NULL);
+  //active_backend->DrawGooeyText(10, 10, "test", 0x0000FF, 0.3f, 0, NULL);
   active_backend->RenderBatch(0);
   GooeyWindow_Run(1, window);
 

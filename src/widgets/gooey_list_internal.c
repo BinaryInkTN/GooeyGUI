@@ -68,7 +68,7 @@ void GooeyList_Draw(GooeyWindow *win)
 
             if (title_y < list->core.y + list->core.height && title_y > list->core.y + 5)
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     list->core.x + 10, title_y,
                     item.title, win->active_theme->neutral,
                     18.0f, win->creation_id, list->core.sprite);
@@ -76,7 +76,7 @@ void GooeyList_Draw(GooeyWindow *win)
 
             if (description_y < list->core.y + list->core.height && description_y > list->core.y + 5)
             {
-                active_backend->DrawText(
+                active_backend->DrawGooeyText(
                     list->core.x + 10, description_y,
                     item.description, win->active_theme->neutral,
                     18.0f, win->creation_id, list->core.sprite);

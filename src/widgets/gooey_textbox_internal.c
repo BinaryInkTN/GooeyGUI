@@ -50,7 +50,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
       memset(display_text, '*', strlen(display_text));
     }
 
-    active_backend->DrawText(text_x, text_y, display_text,
+    active_backend->DrawGooeyText(text_x, text_y, display_text,
                              win->active_theme->neutral, 18.0f,
                              win->creation_id, textbox->core.sprite);
 
@@ -64,7 +64,7 @@ void GooeyTextbox_Draw(GooeyWindow *win)
     }
     else if (textbox->placeholder[0] != '\0' && strlen(textbox->text) == 0)
     {
-      active_backend->DrawText(text_x, text_y, textbox->placeholder,
+      active_backend->DrawGooeyText(text_x, text_y, textbox->placeholder,
                                win->active_theme->neutral, 18.0f,
                                win->creation_id, textbox->core.sprite);
     }

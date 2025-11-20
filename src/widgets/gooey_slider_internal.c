@@ -38,14 +38,14 @@ void GooeySlider_Draw(GooeyWindow *win)
             int max_value_width = active_backend->GetTextWidth(max_value, strlen(max_value));
             int value_width = active_backend->GetTextWidth(value, strlen(value));
 
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 slider->core.x - min_value_width - 5, slider->core.y + 5,
                 min_value, win->active_theme->neutral, 18.0f, win->creation_id, slider->core.sprite);
-            active_backend->DrawText(
+            active_backend->DrawGooeyText(
                 slider->core.x + slider->core.width + 5, slider->core.y + 5,
                 max_value, win->active_theme->neutral, 18.0f, win->creation_id, slider->core.sprite);
             if (slider->value != 0)
-                active_backend->DrawText(thumb_x - 5,
+                active_backend->DrawGooeyText(thumb_x - 5,
                                          slider->core.y + 25, value, win->active_theme->neutral, 18.0f, win->creation_id,  slider->core.sprite);
         }
         active_backend->SetForeground(win->active_theme->neutral);

@@ -128,6 +128,8 @@ set(SOURCES
 
     src/logger/pico_logger_internal.c
     src/widgets/gooey_meter_internal.c
+    src/widgets/gooey_notifications_internal.c
+    src/widgets/gooey_notifications.c
     src/widgets/gooey_webview.c
     src/widgets/gooey_webview_internal.c
     src/widgets/gooey_fdialog.c

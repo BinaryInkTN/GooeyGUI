@@ -11,14 +11,13 @@
 #ifndef GOOEY_WIDGETS_INTERNAL_H
 #define GOOEY_WIDGETS_INTERNAL_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <string.h>
 #include <math.h>
 #include "../user_config.h"
 #include "theme/gooey_theme.h"
-
-#pragma pack(push, 1)
 
 typedef enum
 {
@@ -42,6 +41,7 @@ typedef enum
     WIDGET_WEBVIEW,
     WIDGET_CTXMENU,
     WIDGET_NODE_EDITOR,
+    WIDGET_NOTIFICATIONS,
     WIDGET_TABS
 } WIDGET_TYPE;
 
@@ -112,6 +112,47 @@ typedef struct
     int click_timer;
 } GooeyButton;
 
+typedef enum {
+    NOTIFICATION_ANIMATION_IN,
+    NOTIFICATION_ANIMATION_OUT
+} GooeyNotificationAnimationType;
+
+typedef enum {
+    NOTIFICATION_INFO,
+    NOTIFICATION_SUCCESS,
+    NOTIFICATION_WARNING,
+    NOTIFICATION_ERROR
+} GooeyNotificationType;
+
+typedef enum {
+    NOTIFICATION_POSITION_TOP_RIGHT,
+    NOTIFICATION_POSITION_TOP_LEFT,
+    NOTIFICATION_POSITION_BOTTOM_RIGHT,
+    NOTIFICATION_POSITION_BOTTOM_LEFT,
+    NOTIFICATION_BOTTOM_LEFT,
+    NOTIFICATION_POSITION_CENTER
+} GooeyNotificationPosition;
+
+typedef struct {
+    const char *message;
+    GooeyNotificationType type;
+    GooeyNotificationPosition position;
+    
+    bool is_animating;
+    GooeyNotificationAnimationType animation_type;
+    int animation_step;
+    GooeyTimer *animation_timer;
+    
+
+    bool auto_dismiss;
+    bool should_remove;
+    uint32_t display_time;  
+} GooeyNotification;
+
+typedef struct {
+    GooeyNotification **notifications;
+    size_t notification_count;
+} GooeyNotificationManager;
 typedef struct
 {
     GooeyWidget core;
@@ -285,7 +326,7 @@ typedef struct
     char *menu_elements[MAX_MENU_CHILDREN];
     void (*callbacks[MAX_MENU_CHILDREN])(void *user_data);
     void *user_data[MAX_MENU_CHILDREN]; // User data per element
-    void *child_user_data; // User data for the child itself
+    void *child_user_data;              // User data for the child itself
     int menu_elements_count;
     bool is_open;
     char __padding[3];
@@ -629,6 +670,7 @@ typedef struct
     GooeyCtxMenu *ctx_menu;
     GooeyAppbar *appbar;
     GooeyVK *vk;
+    GooeyNotificationManager *notification_manager;
     GooeyButton **buttons;
     GooeyLabel **labels;
     GooeyCheckbox **checkboxes;
@@ -655,6 +697,7 @@ typedef struct
     GooeySwitch **switches;
     GooeyWebview **webviews;
     GooeyNodeEditor **node_editors;
+    size_t notification_count;
     size_t node_editor_count;
     size_t webview_count;
     size_t container_count;
@@ -680,7 +723,5 @@ typedef struct
     size_t widget_count;
     void *memory_pool;
 } GooeyWindow;
-
-#pragma pack(pop)
 
 #endif

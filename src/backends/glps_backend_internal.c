@@ -180,7 +180,20 @@ void glps_setup_seperate_vao(int window_id)
     glVertexAttribPointer(col_attrib, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, col));
     ctx.shape_vaos[window_id] = shape_vao;
 }
-
+void glps_set_projection(int window_id, int width, int height)
+{
+    mat4x4 projection;
+    mat4x4_ortho(projection, 0.0f, width, height, 0.0f, -1.0f, 1.0f);
+    glUseProgram(ctx.text_programs[window_id]);
+    glUniformMatrix4fv(glGetUniformLocation(ctx.text_programs[window_id], "projection"), 1, GL_FALSE, (const GLfloat *)projection);
+    glBindVertexArray(ctx.text_vaos[window_id]);
+    glViewport(0, 0, width, height);
+}
+void glps_set_viewport(size_t window_id, int width, int height)
+{
+    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
+    glps_set_projection(window_id, width, height);
+}
 void glps_draw_rectangle(int x, int y, int width, int height,
                          uint32_t color, float thickness,
                          int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite)
@@ -499,15 +512,7 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glBindVertexArray(0);
 }
 
-void glps_set_projection(int window_id, int width, int height)
-{
-    mat4x4 projection;
-    mat4x4_ortho(projection, 0.0f, width, height, 0.0f, -1.0f, 1.0f);
-    glUseProgram(ctx.text_programs[window_id]);
-    glUniformMatrix4fv(glGetUniformLocation(ctx.text_programs[window_id], "projection"), 1, GL_FALSE, (const GLfloat *)projection);
-    glBindVertexArray(ctx.text_vaos[window_id]);
-    glViewport(0, 0, width, height);
-}
+
 
 static void keyboard_callback(size_t window_id, bool state, const char *value, unsigned long keycode,
                               void *data)
@@ -1160,11 +1165,7 @@ void glps_reset_events(GooeyWindow *win)
     event->type = GOOEY_EVENT_RESET;
 }
 
-void glps_set_viewport(size_t window_id, int width, int height)
-{
-    glps_wm_set_window_ctx_curr(ctx.wm, window_id);
-    glps_set_projection(window_id, width, height);
-}
+
 
 double glps_get_window_framerate(int window_id)
 {

@@ -56,6 +56,12 @@
 /** Maximum number of context menus */
 #define GOOEY_CTXMENU_MAX_ITEMS 20
 
+#define MAX_NOTIFICATIONS 10
+#define NOTIFICATION_WIDTH 300
+#define NOTIFICATION_HEIGHT 60
+#define NOTIFICATION_PADDING 10
+#define NOTIFICATION_SPACING 5
+
 /*******************************************************************************
  *                          WIDGET FEATURE TOGGLES                             *
  *
@@ -135,6 +141,9 @@
 /** Node Editor widget - An Interactive node editor widget */
 #define ENABLE_NODE_EDITOR 1
 
+/** Notifications Widget - A Built-In animated alerts system */
+#define ENABLE_NOTIFICATIONS 1
+
 /*******************************************************************************
  *                                WIDGET ANIMATION                             *
  *
@@ -151,13 +160,16 @@
 #define DROPDOWN_ANIMATION_STEPS 20
 
 #define SWITCH_ANIMATION_STEPS 10
-#define SWITCH_ANIMATION_SPEED 16 
+#define SWITCH_ANIMATION_SPEED 16
 
 #define METER_ANIMATION_STEPS 1
-#define METER_ANIMATION_SPEED 100 
+#define METER_ANIMATION_SPEED 100
 
 #define MENU_ANIMATION_STEPS 10
-#define MENU_ANIMATION_SPEED 16
+
+#define NOTIFICATION_ANIMATION_STEPS 20
+#define NOTIFICATION_ANIMATION_SPEED 16     
+#define NOTIFICATION_ANIMATION_DURATION 5000 // ms before auto-dismiss
 
 /*******************************************************************************
  *                           ESP32 SPECIFIC CONFIGURATION                      *

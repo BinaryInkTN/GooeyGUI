@@ -13,7 +13,8 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
 
     GooeyWidget *core = (GooeyWidget *)widget;
     WIDGET_TYPE type = core->type;
-    if(win->appbar) core->y += APPBAR_HEIGHT; 
+    if (win->appbar)
+        core->y += APPBAR_HEIGHT;
     switch (type)
     {
     case WIDGET_LABEL:
@@ -26,10 +27,10 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->sliders[win->slider_count++] = (GooeySlider *)widget;
         break;
     }
-    case WIDGET_SWITCH: 
+    case WIDGET_SWITCH:
     {
-        win->switches[win->switch_count++] = (GooeySwitch*) widget ; 
-        break ;
+        win->switches[win->switch_count++] = (GooeySwitch *)widget;
+        break;
     }
     case WIDGET_RADIOBUTTON:
     {
@@ -78,9 +79,10 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         break;
     }
 
-            case WIDGET_NODE_EDITOR: {
-            win->node_editors[win->node_editor_count++] = (GooeyNodeEditor *)widget;
-            break;
+    case WIDGET_NODE_EDITOR:
+    {
+        win->node_editors[win->node_editor_count++] = (GooeyNodeEditor *)widget;
+        break;
     }
     case WIDGET_DROP_SURFACE:
     {
@@ -112,6 +114,10 @@ void GooeyWindow_Internal_RegisterWidget(GooeyWindow *win, void *widget)
         win->containers[win->container_count++] = (GooeyContainers *)widget;
         break;
     }
+    case WIDGET_NOTIFICATIONS:
+        //win->notifications[win->notification_count++] = (GooeyNotifications *)widget;
+        break;
+
     case WIDGET_TABS:
     {
         win->tabs[win->tab_count++] = (GooeyTabs *)widget;

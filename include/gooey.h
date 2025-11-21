@@ -47,6 +47,7 @@
 #include "widgets/gooey_fdialog.h"
 #include "widgets/gooey_ctxmenu.h"
 #include "widgets/gooey_node_editor.h"
+#include "widgets/gooey_notifications.h"
 // Threads
 #if (TFT_ESPI_ENABLED==0)
 #include "glps_thread.h"

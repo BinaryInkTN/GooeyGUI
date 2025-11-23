@@ -1,4 +1,3 @@
-#include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include "signals/gooey_signals.h"
 #include "widgets/gooey_appbar_internal.h"

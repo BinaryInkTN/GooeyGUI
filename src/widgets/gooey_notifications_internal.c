@@ -32,16 +32,14 @@ static float ease_out_quad(float t)
 static void notification_animation_callback(void *user_data)
 {
     GooeyNotification *notification = (GooeyNotification *)user_data;
-    if (!notification)
-        return;
-
-    if (!notification->is_animating)
+    if (!notification || !notification->is_animating)
         return;
 
     notification->animation_step++;
 
     if (notification->animation_step >= NOTIFICATION_ANIMATION_STEPS)
     {
+        // Animation complete
         notification->is_animating = false;
         
         if (notification->animation_type == NOTIFICATION_ANIMATION_OUT)
@@ -49,24 +47,27 @@ static void notification_animation_callback(void *user_data)
             notification->should_remove = true;
         }
         
+        // Stop the timer - don't re-register
         if (notification->animation_timer)
         {
             GooeyTimer_Stop_Internal(notification->animation_timer);
         }
         return;
     }
-
-    if (notification->animation_timer && notification->is_animating)
-    {
-        GooeyTimer_SetCallback_Internal(NOTIFICATION_ANIMATION_SPEED, notification->animation_timer, 
-                                       notification_animation_callback, notification);
-    }
+    
+    // Timer will continue to fire periodically - no need to re-register
 }
 
 static void start_notification_animation(GooeyNotification *notification, GooeyNotificationAnimationType animation_type)
 {
     if (!notification)
         return;
+
+    // Stop any existing animation
+    if (notification->animation_timer && notification->is_animating)
+    {
+        GooeyTimer_Stop_Internal(notification->animation_timer);
+    }
 
     notification->animation_type = animation_type;
     notification->animation_step = 0;
@@ -86,6 +87,7 @@ static void start_notification_animation(GooeyNotification *notification, GooeyN
         }
     }
 
+    // Start the periodic timer
     GooeyTimer_SetCallback_Internal(NOTIFICATION_ANIMATION_SPEED, notification->animation_timer, 
                                    notification_animation_callback, notification);
 }
@@ -317,15 +319,12 @@ bool GooeyNotification_Internal_HandleClick(GooeyWindow *window, int mouse_x, in
         int base_x, base_y;
         get_notification_position(notification->position, window_width, window_height, i, &base_x, &base_y);
 
-
         int final_x = base_x;
         int final_y = base_y;
 
-  
         if (mouse_x >= final_x && mouse_x <= final_x + notification_width &&
             mouse_y >= final_y && mouse_y <= final_y + NOTIFICATION_HEIGHT)
         {
-
             int close_button_size = 10;
             int close_x = final_x + notification_width - close_button_size - NOTIFICATION_PADDING;
             int close_y = final_y + NOTIFICATION_PADDING;
@@ -333,7 +332,6 @@ bool GooeyNotification_Internal_HandleClick(GooeyWindow *window, int mouse_x, in
             if (mouse_x >= close_x && mouse_x <= close_x + close_button_size &&
                 mouse_y >= close_y && mouse_y <= close_y + close_button_size)
             {
-
                 start_notification_animation(notification, NOTIFICATION_ANIMATION_OUT);
                 active_backend->RequestRedraw(window);
                 return true;

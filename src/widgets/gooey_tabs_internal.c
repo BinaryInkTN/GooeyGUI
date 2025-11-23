@@ -37,7 +37,6 @@ static void update_sidebar_widget_visibility(GooeyTabs *tabs)
         }
     }
 }
-
 static void sidebar_animation_callback(void *user_data)
 {
     GooeyTabs *tabs = (GooeyTabs *)user_data;
@@ -51,12 +50,12 @@ static void sidebar_animation_callback(void *user_data)
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
         tabs->is_open = (tabs->target_offset == TAB_WIDTH);
-
+        
         if (tabs->animation_timer)
         {
             GooeyTimer_Stop_Internal(tabs->animation_timer);
         }
-
+        
         update_sidebar_widget_visibility(tabs);
         return;
     }
@@ -68,50 +67,36 @@ static void sidebar_animation_callback(void *user_data)
     tabs->sidebar_offset = start_offset + (int)(distance * eased_progress);
 
     update_sidebar_widget_visibility(tabs);
-
-    if (tabs->animation_timer && tabs->is_animating)
-    {
-        GooeyTimer_SetCallback_Internal(SIDEBAR_ANIMATION_SPEED, tabs->animation_timer, sidebar_animation_callback, tabs);
-    }
-}
-
-static void tab_line_animation_callback(void *user_data)
+    
+}static void tab_line_animation_callback(void *user_data)
 {
     GooeyTabs *tabs = (GooeyTabs *)user_data;
-    if (!tabs)
+    if (!tabs || !tabs->is_animating)
         return;
 
-    if (!tabs->is_sidebar && tabs->is_animating)
+    tabs->current_step++;
+
+    if (tabs->current_step >= TABLINE_ANIMATION_STEPS)
     {
-        tabs->current_step++;
-
-        if (tabs->current_step >= TABLINE_ANIMATION_STEPS)
+        tabs->sidebar_offset = tabs->target_offset;
+        tabs->is_animating = false;
+        
+        if (tabs->animation_timer)
         {
-            tabs->sidebar_offset = tabs->target_offset;
-            tabs->is_animating = false;
-
-            if (tabs->animation_timer)
-            {
-                GooeyTimer_Stop_Internal(tabs->animation_timer);
-            }
-            return;
+            GooeyTimer_Stop_Internal(tabs->animation_timer);
         }
-
-        float progress = (float)tabs->current_step / (float)TABLINE_ANIMATION_STEPS;
-        float eased_progress = ease_in_out_quad(progress);
-
-        int start_x = tabs->is_open ? tabs->sidebar_offset : tabs->target_offset;
-        int target_x = tabs->target_offset;
-        int x_distance = target_x - start_x;
-        tabs->sidebar_offset = start_x + (int)(x_distance * eased_progress);
-
-        if (tabs->animation_timer && tabs->is_animating)
-        {
-            GooeyTimer_SetCallback_Internal(TABLINE_ANIMATION_SPEED, tabs->animation_timer, tab_line_animation_callback, tabs);
-        }
+        return;
     }
-}
 
+    float progress = (float)tabs->current_step / (float)TABLINE_ANIMATION_STEPS;
+    float eased_progress = ease_in_out_quad(progress);
+
+    int start_x = tabs->is_open ? tabs->sidebar_offset : tabs->target_offset;
+    int target_x = tabs->target_offset;
+    int x_distance = target_x - start_x;
+    tabs->sidebar_offset = start_x + (int)(x_distance * eased_progress);
+    
+}
 static void start_tab_line_animation(GooeyTabs *tabs, int target_tab_index)
 {
     if (!tabs || tabs->is_sidebar)
@@ -181,6 +166,8 @@ void GooeyTabs_Cleanup(GooeyTabs *tabs)
     }
 
     tabs->is_animating = false;
+    tabs->current_step = 0;
+    tabs->sidebar_offset = 0;
 }
 
 bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)

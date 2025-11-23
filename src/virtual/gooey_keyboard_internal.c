@@ -1,6 +1,5 @@
 #include "virtual/gooey_keyboard_internal.h"
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <string.h>
 

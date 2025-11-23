@@ -26,7 +26,7 @@ int main()
     GooeyWindow *win = GooeyWindow_Create("Advanced Container Example", 800, 600, true);
     GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
     GooeyWindow_SetTheme(win, dark_mode);
-    GooeyButton* bt = GooeyButton_Create("bt",5, 5, 8, 8,bt_clbk);
+    GooeyButton* bt = GooeyButton_Create("bt",5, 5, 8, 8,bt_clbk, NULL);
     GooeyWindow_RegisterWidget(win,bt);
     // Create main tabs container
     mainContainer =GooeyContainer_Create(10, 10, 780, 580);
@@ -35,9 +35,9 @@ int main()
     GooeyContainer_InsertContainer(mainContainer);
 
     // Widgets for Controls tab
-    GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 30, 100, 30, button_callback);
-    GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80,  "Enable Feature", NULL);
-    GooeySlider *slider = GooeySlider_Create(30, 130, 200, 0, 100, true, NULL);
+    GooeyButton *btn1 = GooeyButton_Create("Click Me", 30, 30, 100, 30, button_callback, NULL);
+    GooeyCheckbox *checkbox = GooeyCheckbox_Create(30, 80,  "Enable Feature", NULL, NULL);
+    GooeySlider *slider = GooeySlider_Create(30, 130, 200, 0, 100, true, NULL, NULL);
 
     // Tab 2: Dropdowns and Options
     GooeyContainer_InsertContainer(mainContainer);
@@ -48,9 +48,9 @@ int main()
 
     // Widgets for Options tab
     GooeyDropdown *qualityDropdown = GooeyDropdown_Create(30, 30, 150, 30,
-                                                          quality_options, 4, dropdown_callback);
+                                                          quality_options, 4, dropdown_callback, NULL);
     GooeyDropdown *colorDropdown = GooeyDropdown_Create(30, 80, 150, 30,
-                                                        color_options, 6, dropdown_callback);
+                                                        color_options, 6, dropdown_callback, NULL);
     GooeyLabel *dropdownLabel = GooeyLabel_Create("Select Quality:", 0.28f, 30, 10);
     GooeyLabel *colorLabel = GooeyLabel_Create("Select Color:", 0.28f, 30, 60);
 
@@ -64,7 +64,7 @@ int main()
     GooeyLabel *emailLabel = GooeyLabel_Create("Email:", 0.28f, 30, 70);
     // GooeyTextbox *emailTextbox = GooeyTextBox_Create(100, 70, 200, 25,"Email:", NULL);
 
-    GooeyButton *submitBtn = GooeyButton_Create("Submit", 150, 120, 100, 30, button_callback);
+    GooeyButton *submitBtn = GooeyButton_Create("Submit", 150, 120, 100, 30, button_callback, NULL);
 
     // Add widgets to their respective tabs
     // Tab 0: Controls
@@ -73,7 +73,7 @@ int main()
     GooeyContainer_AddWidget(win, mainContainer, 0, slider);
     
 
-    GooeyButton* button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL);
+    GooeyButton* button_test = GooeyButton_Create("test", 30, 130, 40, 20, NULL, NULL);
 
     // Tab 1: Options
     GooeyContainer_AddWidget(win, mainContainer, 1, dropdownLabel);

@@ -15,6 +15,8 @@
 #include "common/gooey_common.h"
 #include <stdint.h>
 
+typedef struct GooeyEvent GooeyEvent;
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -68,7 +70,8 @@ extern "C"
         void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id, GooeyTFT_Sprite *sprite);                                                    /**< Fills an arc on a window. */
         const char *(*GetKeyFromCode)(void *gooey_event);                                                                                                                        /**< Converts a key code to a string representation. */
         void *(*HandleEvents)(void);                                                                                                                                             /**< Handles input events. */
-        void (*ResetEvents)(GooeyWindow *win);                                                                                                                                   /**< Resets the event state for a window. */
+        void (*ResetEvents)(GooeyWindow *win);                           
+        GooeyEvent* (*GetEvents)(GooeyWindow* win);                                                                                                        /**< Resets the event state for a window. */
         void (*GetWinDim)(int *width, int *height, int window_id);                                                                                                               /**< Retrieves the dimensions of a window. */
         double (*GetWinFramerate)(int window_id);                                                                                                                                /**< Gets FPS for window. */
         void (*DrawLine)(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite);                                                                /**< Draws a line on a window. */

@@ -19,6 +19,79 @@
 #include "../user_config.h"
 #include "theme/gooey_theme.h"
 
+typedef struct GooeyWindow GooeyWindow;
+
+typedef struct GooeyEvent GooeyEvent;
+
+/**
+ * @brief Enumeration of event types.
+ */
+typedef enum
+{
+    GOOEY_EVENT_CLICK_PRESS,
+    GOOEY_EVENT_CLICK_RELEASE,
+    GOOEY_EVENT_MOUSE_MOVE,
+    GOOEY_EVENT_MOUSE_SCROLL,
+    GOOEY_EVENT_KEY_PRESS,
+    GOOEY_EVENT_KEY_RELEASE,
+    GOOEY_EVENT_WINDOW_CLOSE,
+    GOOEY_EVENT_EXPOSE,
+    GOOEY_EVENT_RESIZE,
+    GOOEY_EVENT_REDRAWREQ,
+    GOOEY_EVENT_DROP,
+    GOOEY_EVENT_VK_ENTER,
+    GOOEY_EVENT_RESET
+} GooeyEventType;
+
+/**
+ * @brief Mouse event data.
+ */
+typedef struct
+{
+    int x;
+    int y;
+} GooeyMouseData;
+
+/**
+ * @brief Keyboard key press event data.
+ */
+typedef struct
+{
+    unsigned int state;
+    char value[20];
+    unsigned long keycode;
+} GooeyKeyPressData;
+
+/**
+ * @brief File drop event data.
+ */
+typedef struct
+{
+    unsigned int state;
+    char mime[20];
+    char file_path[1024];
+    int drop_x;
+    int drop_y;
+} GooeyDropData;
+
+/**
+ * @brief General event structure.
+ */
+
+struct GooeyEvent
+{
+    GooeyEventType type;
+
+    union
+    {
+        GooeyMouseData click;
+        GooeyMouseData mouse_move;
+        GooeyMouseData mouse_scroll;
+        GooeyKeyPressData key_press;
+        GooeyDropData drop_data;
+    };
+};
+
 typedef enum
 {
     WIDGET_LABEL,
@@ -112,19 +185,22 @@ typedef struct
     int click_timer;
 } GooeyButton;
 
-typedef enum {
+typedef enum
+{
     NOTIFICATION_ANIMATION_IN,
     NOTIFICATION_ANIMATION_OUT
 } GooeyNotificationAnimationType;
 
-typedef enum {
+typedef enum
+{
     NOTIFICATION_INFO,
     NOTIFICATION_SUCCESS,
     NOTIFICATION_WARNING,
     NOTIFICATION_ERROR
 } GooeyNotificationType;
 
-typedef enum {
+typedef enum
+{
     NOTIFICATION_POSITION_TOP_RIGHT,
     NOTIFICATION_POSITION_TOP_LEFT,
     NOTIFICATION_POSITION_BOTTOM_RIGHT,
@@ -133,23 +209,24 @@ typedef enum {
     NOTIFICATION_POSITION_CENTER
 } GooeyNotificationPosition;
 
-typedef struct {
+typedef struct
+{
     const char *message;
     GooeyNotificationType type;
     GooeyNotificationPosition position;
-    
+
     bool is_animating;
     GooeyNotificationAnimationType animation_type;
     int animation_step;
     GooeyTimer *animation_timer;
-    
 
     bool auto_dismiss;
     bool should_remove;
-    uint32_t display_time;  
+    uint32_t display_time;
 } GooeyNotification;
 
-typedef struct {
+typedef struct
+{
     GooeyNotification **notifications;
     size_t notification_count;
 } GooeyNotificationManager;
@@ -657,7 +734,7 @@ typedef enum
     WINDOW_MSGBOX
 } WINDOW_TYPE;
 
-typedef struct
+struct GooeyWindow
 {
     WINDOW_TYPE type;
     int creation_id;
@@ -722,6 +799,6 @@ typedef struct
     size_t progressbar_count;
     size_t widget_count;
     void *memory_pool;
-} GooeyWindow;
+};
 
 #endif

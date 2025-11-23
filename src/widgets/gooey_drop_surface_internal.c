@@ -1,7 +1,6 @@
 #include "widgets/gooey_drop_surface_internal.h"
 #if(ENABLE_DROP_SURFACE)
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 
 static void __get_filename_from_path(char *file_path, char *filename, size_t filename_size)
 {

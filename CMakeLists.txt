@@ -123,7 +123,7 @@ set(SOURCES
     src/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c
     src/backends/glps_backend_internal.c
-      
+    src/core/gooey_event.c
     #src/backends/glps_vk_backend_internal.c
 
     src/logger/pico_logger_internal.c

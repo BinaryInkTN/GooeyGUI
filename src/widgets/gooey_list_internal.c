@@ -1,7 +1,6 @@
 #include "widgets/gooey_list_internal.h"
 #if(ENABLE_LIST)
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <string.h>
 

@@ -17,7 +17,6 @@
 #include "widgets/gooey_debug_overlay_internal.h"
 #if (ENABLE_DEBUG_OVERLAY)
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 #include "common/gooey_common.h"
 #include "logger/pico_logger_internal.h"
 #include <time.h>

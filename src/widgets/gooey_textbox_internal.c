@@ -2,7 +2,6 @@
 #if (ENABLE_TEXTBOX)
 #include "backends/gooey_backend_internal.h"
 #include "virtual/gooey_keyboard_internal.h"
-#include "event/gooey_event_internal.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdbool.h>

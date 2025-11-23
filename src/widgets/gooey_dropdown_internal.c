@@ -17,19 +17,18 @@ static float ease_in_out_quad(float t)
 static void dropdown_animation_callback(void *user_data)
 {
     GooeyDropdown *dropdown = (GooeyDropdown *)user_data;
-    if (!dropdown)
-        return;
-
-    if (!dropdown->is_animating)
+    if (!dropdown || !dropdown->is_animating)
         return;
 
     dropdown->animation_step++;
 
     if (dropdown->animation_step >= DROPDOWN_ANIMATION_STEPS)
     {
+        // Animation complete
         dropdown->animation_height = dropdown->target_height;
         dropdown->is_animating = false;
-
+        
+        // Stop the timer - don't re-register
         if (dropdown->animation_timer)
         {
             GooeyTimer_Stop_Internal(dropdown->animation_timer);
@@ -44,17 +43,20 @@ static void dropdown_animation_callback(void *user_data)
     int target_height = dropdown->target_height;
     int height_distance = target_height - start_height;
     dropdown->animation_height = start_height + (int)(height_distance * eased_progress);
-
-    if (dropdown->animation_timer && dropdown->is_animating)
-    {
-        GooeyTimer_SetCallback_Internal(DROPDOWN_ANIMATION_SPEED, dropdown->animation_timer, dropdown_animation_callback, dropdown);
-    }
+    
+    // Timer will continue to fire periodically - no need to re-register
 }
 
 static void start_dropdown_animation(GooeyDropdown *dropdown, bool open)
 {
     if (!dropdown)
         return;
+
+    // Stop any existing animation
+    if (dropdown->animation_timer && dropdown->is_animating)
+    {
+        GooeyTimer_Stop_Internal(dropdown->animation_timer);
+    }
 
     dropdown->target_height = open ? (25 * dropdown->num_options) : 0;
     dropdown->start_height = dropdown->animation_height;
@@ -66,13 +68,14 @@ static void start_dropdown_animation(GooeyDropdown *dropdown, bool open)
         dropdown->animation_timer = GooeyTimer_Create_Internal();
         if (!dropdown->animation_timer)
         {
-
+            // Fallback: set position immediately
             dropdown->animation_height = dropdown->target_height;
             dropdown->is_animating = false;
             return;
         }
     }
 
+    // Start the periodic timer
     GooeyTimer_SetCallback_Internal(DROPDOWN_ANIMATION_SPEED, dropdown->animation_timer, dropdown_animation_callback, dropdown);
 }
 
@@ -87,15 +90,18 @@ void GooeyDropdown_Draw(GooeyWindow *win)
         if (!dropdown || !dropdown->core.is_visible)
             continue;
 
+        // Draw dropdown background
         active_backend->FillRectangle(dropdown->core.x, dropdown->core.y,
                                       dropdown->core.width, dropdown->core.height,
                                       win->active_theme->widget_base, win->creation_id, true, 2.0f, dropdown->core.sprite);
 
+        // Draw selected text
         const char *selected_text = dropdown->options[dropdown->selected_index];
         active_backend->DrawGooeyText(dropdown->core.x + 5, dropdown->core.y + 20,
                                  selected_text, win->active_theme->neutral,
                                  18.0f, win->creation_id, dropdown->core.sprite);
 
+        // Draw arrow with animation
         int arrow_x = dropdown->core.x + dropdown->core.width - 15;
         int arrow_y = dropdown->core.y + dropdown->core.height / 2;
 
@@ -115,7 +121,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
 
         if (arrow_progress > 0.5f)
         {
-
+            // Arrow pointing up
             active_backend->DrawLine(arrow_x - 3, arrow_y + 2 - arrow_offset, arrow_x, arrow_y - 3 + arrow_offset,
                                      win->active_theme->neutral, win->creation_id, dropdown->core.sprite);
             active_backend->DrawLine(arrow_x, arrow_y - 3 + arrow_offset, arrow_x + 3, arrow_y + 2 - arrow_offset,
@@ -123,13 +129,14 @@ void GooeyDropdown_Draw(GooeyWindow *win)
         }
         else
         {
-
+            // Arrow pointing down
             active_backend->DrawLine(arrow_x - 3, arrow_y - 2 + arrow_offset, arrow_x, arrow_y + 3 - arrow_offset,
                                      win->active_theme->neutral, win->creation_id, dropdown->core.sprite);
             active_backend->DrawLine(arrow_x, arrow_y + 3 - arrow_offset, arrow_x + 3, arrow_y - 2 + arrow_offset,
                                      win->active_theme->neutral, win->creation_id, dropdown->core.sprite);
         }
 
+        // Draw dropdown options if open or animating
         if (dropdown->is_animating || dropdown->is_open)
         {
             const int submenu_x = dropdown->core.x;
@@ -139,7 +146,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
 
             if (current_height > 0)
             {
-
+                // Draw options background
                 active_backend->FillRectangle(submenu_x, submenu_y,
                                               submenu_width, current_height,
                                               win->active_theme->widget_base, win->creation_id, true, 2.0f, dropdown->core.sprite);
@@ -157,6 +164,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                     const bool is_hovered = (dropdown->element_hovered_over == j);
                     const bool is_selected = (j == dropdown->selected_index);
 
+                    // Highlight hovered or selected option
                     if (is_hovered || is_selected)
                     {
                         active_backend->FillRectangle(submenu_x, element_y,
@@ -164,11 +172,13 @@ void GooeyDropdown_Draw(GooeyWindow *win)
                                                       win->active_theme->primary, win->creation_id, false, 0.0f, dropdown->core.sprite);
                     }
 
+                    // Draw option text
                     active_backend->DrawGooeyText(submenu_x + 5, element_y + 18,
                                              dropdown->options[j],
                                              (is_hovered || is_selected) ? win->active_theme->base : win->active_theme->neutral,
                                              18.0f, win->creation_id, dropdown->core.sprite);
 
+                    // Draw separator (except for last option)
                     if (j < visible_options - 1 && j < dropdown->num_options - 1)
                     {
                         active_backend->DrawLine(submenu_x, element_y + 24,
@@ -179,6 +189,7 @@ void GooeyDropdown_Draw(GooeyWindow *win)
             }
         }
 
+        // Reset sprite redraw flag if needed
         if (dropdown->core.sprite && dropdown->core.sprite->needs_redraw)
             active_backend->ResetRedrawSprite(dropdown->core.sprite);
     }
@@ -197,6 +208,7 @@ bool GooeyDropdown_HandleHover(GooeyWindow *win, int x, int y)
         if (!dropdown || !dropdown->core.is_visible || dropdown->core.disable_input)
             continue;
 
+        // Check if hovering over main dropdown
         if (x >= dropdown->core.x && x <= dropdown->core.x + dropdown->core.width &&
             y >= dropdown->core.y && y <= dropdown->core.y + dropdown->core.height)
         {
@@ -204,6 +216,7 @@ bool GooeyDropdown_HandleHover(GooeyWindow *win, int x, int y)
             continue;
         }
 
+        // Check if hovering over dropdown options
         if (dropdown->is_open || dropdown->is_animating)
         {
             const int submenu_x = dropdown->core.x;
@@ -246,6 +259,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
         if (!dropdown || !dropdown->core.is_visible || dropdown->core.disable_input)
             continue;
 
+        // Check click on main dropdown
         if (x >= dropdown->core.x && x <= dropdown->core.x + dropdown->core.width &&
             y >= dropdown->core.y && y <= dropdown->core.y + dropdown->core.height)
         {
@@ -259,6 +273,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
             continue;
         }
 
+        // Check click on dropdown options
         if (dropdown->is_open || dropdown->is_animating)
         {
             const int submenu_x = dropdown->core.x;
@@ -269,6 +284,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
             if (x >= submenu_x && x <= submenu_x + submenu_width &&
                 y >= submenu_y && y <= submenu_y + current_height)
             {
+                // Click on an option
                 int option_index = (y - submenu_y) / 25;
                 if (option_index < dropdown->num_options)
                 {
@@ -288,7 +304,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
             }
             else
             {
-
+                // Click outside open dropdown - close it
                 if (dropdown->is_open && !dropdown->is_animating)
                 {
                     active_backend->RedrawSprite(dropdown->core.sprite);
@@ -315,6 +331,9 @@ void GooeyDropdown_Cleanup(GooeyDropdown *dropdown)
         dropdown->animation_timer = NULL;
     }
 
+    // Reset all animation state
     dropdown->is_animating = false;
+    dropdown->animation_step = 0;
+    dropdown->animation_height = 0;
 }
 #endif

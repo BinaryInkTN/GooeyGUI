@@ -10,7 +10,7 @@
  * 0 = Production mode (optimized, minimal logging)
  * 1 = Debug mode (verbose logging, additional checks)
  */
-#define PROJECT_BRANCH 1
+#define PROJECT_BRANCH 0
 
 /**
  * Enable debug overlay for development
@@ -151,7 +151,7 @@
  ******************************************************************************/
 
 #define TABLINE_ANIMATION_SPEED 1
-#define TABLINE_ANIMATION_STEPS 100
+#define TABLINE_ANIMATION_STEPS 1000
 
 #define SIDEBAR_ANIMATION_SPEED 1
 #define SIDEBAR_ANIMATION_STEPS 10
@@ -169,7 +169,7 @@
 
 #define NOTIFICATION_ANIMATION_STEPS 20
 #define NOTIFICATION_ANIMATION_SPEED 16     
-#define NOTIFICATION_ANIMATION_DURATION 5000 // ms before auto-dismiss
+#define NOTIFICATION_ANIMATION_DURATION 3000 // ms before auto-dismiss
 
 /*******************************************************************************
  *                           ESP32 SPECIFIC CONFIGURATION                      *

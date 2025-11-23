@@ -9,7 +9,6 @@
 #if (TFT_ESPI_ENABLED == 0)
 #include "backends/utils/stb_image/stb_image.h"
 #include "backends/fonts/roboto.h"
-#include "event/gooey_event_internal.h"
 #include "logger/pico_logger_internal.h"
 #include <time.h>
 #include <nfd.h>
@@ -68,7 +67,7 @@ void glps_generate_glyphs(int pixel_height)
     }
 
     FT_Set_Pixel_Sizes(ctx.face, 0, pixel_height);
-    
+
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
     for (unsigned char c = 0; c < 128; c++)
@@ -95,7 +94,7 @@ void glps_generate_glyphs(int pixel_height)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bmp->width, bmp->rows, 0, 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, bmp->width, bmp->rows, 0,
                      GL_RED, GL_UNSIGNED_BYTE, bmp->buffer);
 
         ctx.glyph_cache[c] = (Glyph){
@@ -512,8 +511,6 @@ void glps_fill_rectangle(int x, int y, int width, int height,
     glBindVertexArray(0);
 }
 
-
-
 static void keyboard_callback(size_t window_id, bool state, const char *value, unsigned long keycode,
                               void *data)
 {
@@ -615,7 +612,8 @@ int glps_init(int project_branch)
 int glps_get_current_clicked_window(void)
 {
     return -1;
-}void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id)
+}
+void glps_draw_text(int x, int y, const char *text, uint32_t color, float font_size, int window_id)
 {
     if (!validate_window_id(window_id) || !text)
         return;
@@ -649,7 +647,7 @@ int glps_get_current_clicked_window(void)
         if (c == '\n')
         {
             cursor_x = (float)x;
-            baseline_y += font_size * 1.2f; 
+            baseline_y += font_size * 1.2f;
             continue;
         }
 
@@ -658,19 +656,18 @@ int glps_get_current_clicked_window(void)
             continue;
 
         float xpos = cursor_x + ch.bearingX * scale;
-        float ypos = baseline_y - ch.bearingY * scale; 
-        
+        float ypos = baseline_y - ch.bearingY * scale;
+
         float w = ch.width * scale;
         float h = ch.height * scale;
 
         float vertices[6][4] = {
-            {xpos,     ypos + h, 0.0f, 0.0f},  
-            {xpos,     ypos,     0.0f, 1.0f},  
-            {xpos + w, ypos,     1.0f, 1.0f},  
-            {xpos,     ypos + h, 0.0f, 0.0f},  
-            {xpos + w, ypos,     1.0f, 1.0f},  
-            {xpos + w, ypos + h, 1.0f, 0.0f}   
-        };
+            {xpos, ypos + h, 0.0f, 0.0f},
+            {xpos, ypos, 0.0f, 1.0f},
+            {xpos + w, ypos, 1.0f, 1.0f},
+            {xpos, ypos + h, 0.0f, 0.0f},
+            {xpos + w, ypos, 1.0f, 1.0f},
+            {xpos + w, ypos + h, 1.0f, 0.0f}};
 
         glBindTexture(GL_TEXTURE_2D, ch.textureID);
         glBindBuffer(GL_ARRAY_BUFFER, ctx.text_vbo);
@@ -803,13 +800,12 @@ GooeyWindow *glps_create_window(const char *title, int width, int height)
     window->creation_id = window_id;
 
     glps_init_ft();
-    glps_generate_glyphs(28); 
+    glps_generate_glyphs(28);
     if (window->creation_id == 0)
         glps_setup_shared();
 
     glps_setup_seperate_vao(window->creation_id);
     ctx.active_window_count++;
-
 
     return window;
 }
@@ -964,8 +960,8 @@ void glps_render(GooeyWindow *win)
 float glps_get_text_width(const char *text, int length)
 {
     float total_width = 0.0f;
-    float scale = 18.0f / 28.0f; 
-    
+    float scale = 18.0f / 28.0f;
+
     for (int i = 0; i < length; ++i)
     {
         Glyph ch = ctx.glyph_cache[(int)text[i]];
@@ -981,7 +977,7 @@ float glps_get_text_height(const char *text, int length)
 {
     float max_height = 0;
     float scale = 18.0f / 28.0f;
-    
+
     for (int i = 0; i < length; ++i)
     {
         Glyph ch = ctx.glyph_cache[(int)text[i]];
@@ -1165,8 +1161,6 @@ void glps_reset_events(GooeyWindow *win)
     event->type = GOOEY_EVENT_RESET;
 }
 
-
-
 double glps_get_window_framerate(int window_id)
 {
     static struct timespec last_time[MAX_WINDOWS] = {0};
@@ -1212,6 +1206,11 @@ void glps_clear_old_widget(GooeyTFT_Sprite *sprite)
 
 void glps_create_view()
 {
+}
+
+GooeyEvent *glps_get_events(GooeyWindow *window)
+{
+    return window->current_event;
 }
 
 void glps_destroy_ultralight()
@@ -1343,6 +1342,7 @@ GooeyBackend glps_backend = {
     .FillArc = glps_fill_arc,
     .GetKeyFromCode = glps_get_key_from_code,
     .ResetEvents = glps_reset_events,
+    .GetEvents = glps_get_events,
     .GetWinDim = glps_window_dim,
     .GetWinFramerate = glps_get_window_framerate,
     .DrawLine = glps_draw_line,

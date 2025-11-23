@@ -1,7 +1,6 @@
 #include "widgets/gooey_switch_internal.h"
 #if (ENABLE_SWITCH)
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 #include "core/gooey_timers_internal.h"
 #include "animations/gooey_animations_internal.h"
 
@@ -23,19 +22,18 @@ static float ease_in_out_quad(float t)
 static void switch_animation_callback(void *user_data)
 {
     GooeySwitch *gswitch = (GooeySwitch *)user_data;
-    if (!gswitch)
-        return;
-
-    if (!gswitch->is_animating)
+    if (!gswitch || !gswitch->is_animating)
         return;
 
     gswitch->animation_step++;
 
     if (gswitch->animation_step >= SWITCH_ANIMATION_STEPS)
     {
+        // Animation complete
         gswitch->thumb_position = gswitch->target_position;
         gswitch->is_animating = false;
-
+        
+        // Stop the timer - don't re-register
         if (gswitch->animation_timer)
         {
             GooeyTimer_Stop_Internal(gswitch->animation_timer);
@@ -43,6 +41,7 @@ static void switch_animation_callback(void *user_data)
         return;
     }
 
+    // Update animation progress
     float progress = (float)gswitch->animation_step / (float)SWITCH_ANIMATION_STEPS;
     float eased_progress = ease_out_quad(progress);
 
@@ -50,17 +49,20 @@ static void switch_animation_callback(void *user_data)
     int target_pos = gswitch->target_position;
     int position_distance = target_pos - start_pos;
     gswitch->thumb_position = start_pos + (int)(position_distance * eased_progress);
-
-    if (gswitch->animation_timer && gswitch->is_animating)
-    {
-        GooeyTimer_SetCallback_Internal(SWITCH_ANIMATION_SPEED, gswitch->animation_timer, switch_animation_callback, gswitch);
-    }
+    
+    // Timer will continue to fire periodically - no need to re-register
 }
 
 static void start_switch_animation(GooeySwitch *gswitch, bool toggled)
 {
     if (!gswitch)
         return;
+
+    // Stop any existing animation
+    if (gswitch->animation_timer && gswitch->is_animating)
+    {
+        GooeyTimer_Stop_Internal(gswitch->animation_timer);
+    }
 
     const int thumb_padding = 20;
     const int track_x = gswitch->core.x;
@@ -79,13 +81,14 @@ static void start_switch_animation(GooeySwitch *gswitch, bool toggled)
         gswitch->animation_timer = GooeyTimer_Create_Internal();
         if (!gswitch->animation_timer)
         {
-
+            // Fallback: set position immediately
             gswitch->thumb_position = gswitch->target_position;
             gswitch->is_animating = false;
             return;
         }
     }
 
+    // Start the periodic timer
     GooeyTimer_SetCallback_Internal(SWITCH_ANIMATION_SPEED, gswitch->animation_timer, switch_animation_callback, gswitch);
 }
 
@@ -160,6 +163,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             }
         }
 
+        // Draw track
         active_backend->FillRectangle(
             track_x,
             track_y,
@@ -168,9 +172,9 @@ void GooeySwitch_Draw(GooeyWindow *win)
             current_track_color,
             win->creation_id,
             true,
-            GOOEY_SWITCH_DEFAULT_RADIUS, gswitch->core.sprite);
+            GOOEY_SWITCH_DEFAULT_RADIUS, 
+            gswitch->core.sprite);
         
-
         const int thumb_y = (track_y + track_height) - track_height / 2;
 
         int thumb_x;
@@ -187,8 +191,7 @@ void GooeySwitch_Draw(GooeyWindow *win)
             gswitch->thumb_position = thumb_x;
         }
 
-     
-
+        // Draw thumb
         active_backend->SetForeground(0xF0F0F0);
         active_backend->FillArc(
             thumb_x,
@@ -197,8 +200,10 @@ void GooeySwitch_Draw(GooeyWindow *win)
             thumb_diameter - 4,
             0,
             360,
-            win->creation_id, gswitch->core.sprite);
+            win->creation_id, 
+            gswitch->core.sprite);
 
+        // Draw text labels with animation
         if (gswitch->is_animating)
         {
             float progress = (float)gswitch->animation_step / (float)SWITCH_ANIMATION_STEPS;
@@ -212,7 +217,8 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     SWITCH_ON_TEXT,
                     win->active_theme->neutral,
                     18.0f * on_alpha,
-                    win->creation_id, gswitch->core.sprite);
+                    win->creation_id, 
+                    gswitch->core.sprite);
             }
 
             float off_alpha = gswitch->is_toggled ? (1.0f - progress) : progress;
@@ -223,13 +229,14 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     thumb_y + 4,
                     SWITCH_OFF_TEXT,
                     win->active_theme->neutral,
-                     12.0f * off_alpha,
-                    win->creation_id, gswitch->core.sprite);
+                    12.0f * off_alpha,
+                    win->creation_id, 
+                    gswitch->core.sprite);
             }
         }
         else
         {
-
+            // Draw static text labels
             if (gswitch->is_toggled)
             {
                 active_backend->DrawGooeyText(
@@ -238,7 +245,8 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     SWITCH_ON_TEXT,
                     win->active_theme->neutral,
                     12.0f,
-                    win->creation_id, gswitch->core.sprite);
+                    win->creation_id, 
+                    gswitch->core.sprite);
             }
             else
             {
@@ -248,7 +256,8 @@ void GooeySwitch_Draw(GooeyWindow *win)
                     SWITCH_OFF_TEXT,
                     win->active_theme->neutral,
                     12.0f,
-                    win->creation_id, gswitch->core.sprite);
+                    win->creation_id, 
+                    gswitch->core.sprite);
             }
         }
     }
@@ -267,6 +276,7 @@ void GooeySwitch_Cleanup(GooeySwitch *gswitch)
     }
 
     gswitch->is_animating = false;
+    gswitch->animation_step = 0;
 }
 
 #endif

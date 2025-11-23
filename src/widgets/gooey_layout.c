@@ -86,7 +86,7 @@ void GooeyLayout_AddChild(GooeyWindow* window, GooeyLayout *layout, void *widget
     layout->widgets[layout->widget_count++] = widget_core;
 
     // Register widget to window implicitly
-    GooeyWindow_Internal_RegisterWidget(window, widget);
+   // GooeyWindow_Internal_RegisterWidget(window, widget);
 }
 
 void GooeyLayout_SetColumns(GooeyLayout *layout, int cols)

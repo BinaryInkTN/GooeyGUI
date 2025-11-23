@@ -2,7 +2,9 @@
 #ifndef GOOEY_EVENT_H
 #define GOOEY_EVENT_H
 
-#include "event/gooey_event_internal.h"
+typedef struct GooeyEvent GooeyEvent;
+typedef struct GooeyWindow GooeyWindow;
 
+GooeyEvent* GooeyEvents_GetEvents(GooeyWindow* window);
 
 #endif

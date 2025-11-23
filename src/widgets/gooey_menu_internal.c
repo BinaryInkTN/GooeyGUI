@@ -18,7 +18,6 @@
 #include "widgets/gooey_menu_internal.h"
 #if(ENABLE_MENU)
 #include "backends/gooey_backend_internal.h"
-#include "event/gooey_event_internal.h"
 #include "core/gooey_timers_internal.h"
 #include "animations/gooey_animations_internal.h"
 
@@ -51,6 +50,7 @@ static void menu_animation_callback(void *user_data)
         child->animation_height = child->target_height;
         child->is_animating = false;
         
+        // Stop the timer - don't re-register
         if (child->animation_timer)
         {
             GooeyTimer_Stop_Internal(child->animation_timer);
@@ -63,18 +63,19 @@ static void menu_animation_callback(void *user_data)
     float eased_progress = ease_out_quad(progress);
     int height_distance = child->target_height - child->start_height;
     child->animation_height = child->start_height + (int)(height_distance * eased_progress);
-
-    // Continue animation if still active
-    if (child->is_animating && child->animation_timer)
-    {
-        GooeyTimer_SetCallback_Internal(MENU_ANIMATION_SPEED, child->animation_timer, 
-                                       menu_animation_callback, child);
-    }
+    
+    // Timer will continue to fire periodically - no need to re-register
 }
 
 static void start_menu_animation(GooeyMenuChild *child, bool open)
 {
     if (!child) return;
+
+    // Stop any existing animation
+    if (child->animation_timer && child->is_animating)
+    {
+        GooeyTimer_Stop_Internal(child->animation_timer);
+    }
 
     child->target_height = open ? (SUBMENU_ITEM_HEIGHT * child->menu_elements_count) : 0;
     child->start_height = child->animation_height;
@@ -94,6 +95,7 @@ static void start_menu_animation(GooeyMenuChild *child, bool open)
         }
     }
 
+    // Start the periodic timer
     GooeyTimer_SetCallback_Internal(MENU_ANIMATION_SPEED, child->animation_timer, 
                                    menu_animation_callback, child);
 }
@@ -385,7 +387,10 @@ static void cleanup_menu_child(GooeyMenuChild *child)
         child->animation_timer = NULL;
     }
 
+    // Reset all animation state
     child->is_animating = false;
+    child->animation_step = 0;
+    child->animation_height = 0;
 }
 
 void GooeyMenu_Cleanup(GooeyMenu *menu)

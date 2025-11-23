@@ -34,18 +34,46 @@ void GooeyImage_Draw(GooeyWindow *win)
         
         if(!image->is_loaded)
         {
-            image->texture_id = active_backend->LoadGooeyImage(image->image_path);
-            image->is_loaded = true;
+            if (image->image_path)
+            {
+                LOG_INFO("Loading image: %s", image->image_path);
+                image->texture_id = active_backend->LoadGooeyImage(image->image_path);
+                if (image->texture_id == 0)
+                {
+                    LOG_ERROR("Failed to load image: %s", image->image_path);
+                    // You could set a fallback texture here
+                }
+                image->is_loaded = true;
+            }
+            else
+            {
+                LOG_ERROR("Image path is NULL for image widget");
+            }
         }
 
-        if (image->needs_refresh)
+        if (image->needs_refresh && image->is_loaded)
         {
+            LOG_INFO("Refreshing image: %s", image->image_path);
             active_backend->UnloadImage(image->texture_id);
-            active_backend->LoadGooeyImage(image->image_path);
+            if (image->image_path)
+            {
+                image->texture_id = active_backend->LoadGooeyImage(image->image_path);
+            }
             image->needs_refresh = false;
             active_backend->RequestRedraw(win);
         }
-        active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
+        
+        // Only draw if we have a valid texture
+        if (image->texture_id != 0)
+        {
+            active_backend->DrawImage(image->texture_id, image->core.x, image->core.y, image->core.width, image->core.height, win->creation_id);
+        }
+        else if (image->is_loaded)
+        {
+            // Draw a placeholder rectangle if image failed to load
+            active_backend->FillRectangle(image->core.x, image->core.y, image->core.width, image->core.height, 
+                                        0xFF0000, win->creation_id, false, 0.0f, image->core.sprite);
+        }
     }
 }
 #endif

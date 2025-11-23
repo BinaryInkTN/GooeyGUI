@@ -705,9 +705,17 @@ static int is_stb_supported_image_format(const char *path)
 
     return 0;
 }
-
 unsigned int glps_load_image(const char *image_path)
 {
+    // First check if file exists and is accessible
+    FILE *file = fopen(image_path, "rb");
+    if (!file)
+    {
+        LOG_ERROR("Image file not found or inaccessible: %s", image_path);
+        return 0;
+    }
+    fclose(file);
+
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -716,41 +724,127 @@ unsigned int glps_load_image(const char *image_path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    unsigned char *data = NULL;
-    int img_width, img_height, nrChannels;
 
-    if (!is_stb_supported_image_format(image_path))
+    unsigned char *data = NULL;
+    int img_width = 0, img_height = 0, nrChannels = 0;
+    int success = 0;
+
+    // Check file extension first
+    if (is_stb_supported_image_format(image_path))
     {
-        NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
-        if (image)
+        // Use stb_image for common formats (PNG, JPG, BMP, etc.)
+        stbi_set_flip_vertically_on_load(1);
+        data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
+        if (data)
         {
-            NSVGrasterizer *rast = nsvgCreateRasterizer();
-            img_width = (int)image->width;
-            img_height = (int)image->height;
-            nrChannels = 4;
-            data = malloc(img_width * img_height * 4);
-            nsvgRasterize(rast, image, 0, 0, 1, data, img_width, img_height, img_width * 4);
-            nsvgDeleteRasterizer(rast);
-            nsvgDelete(image);
+            success = 1;
+            LOG_INFO("Loaded image with stb: %s (%dx%d, %d channels)",
+                     image_path, img_width, img_height, nrChannels);
         }
     }
     else
     {
-        stbi_set_flip_vertically_on_load(1);
-        data = stbi_load(image_path, &img_width, &img_height, &nrChannels, 0);
+        // Try NanoSVG for SVG files
+        const char *ext = strrchr(image_path, '.');
+        if (ext && (strcasecmp(ext, ".svg") == 0))
+        {
+            NSVGimage *image = nsvgParseFromFile(image_path, "px", 96);
+            if (image)
+            {
+                NSVGrasterizer *rast = nsvgCreateRasterizer();
+                img_width = (int)image->width;
+                img_height = (int)image->height;
+                nrChannels = 4;
+
+                // Allocate memory for RGBA data
+                size_t data_size = img_width * img_height * 4;
+                data = malloc(data_size);
+                if (data)
+                {
+                    memset(data, 0, data_size); // Initialize to transparent
+                    nsvgRasterize(rast, image, 0, 0, 1, data, img_width, img_height, img_width * 4);
+                    success = 1;
+                    LOG_INFO("Loaded SVG with NanoSVG: %s (%dx%d)",
+                             image_path, img_width, img_height);
+                }
+                else
+                {
+                    LOG_ERROR("Failed to allocate memory for SVG rasterization: %s", image_path);
+                }
+
+                nsvgDeleteRasterizer(rast);
+                nsvgDelete(image);
+            }
+            else
+            {
+                LOG_ERROR("NanoSVG failed to parse SVG file: %s", image_path);
+            }
+        }
+        else
+        {
+            LOG_ERROR("Unsupported image format: %s", image_path);
+        }
     }
 
-    if (!data)
+    if (!success || !data)
     {
-        LOG_ERROR("Failed to load image: %s", image_path);
+        LOG_ERROR("Failed to load image data: %s", image_path);
         glDeleteTextures(1, &texture);
+
+        // Clean up allocated data if any
+        if (data && !is_stb_supported_image_format(image_path))
+        {
+            free(data);
+        }
         return 0;
     }
 
-    GLenum format = (nrChannels == 4) ? GL_RGBA : GL_RGB;
+    // Validate image dimensions
+    if (img_width <= 0 || img_height <= 0)
+    {
+        LOG_ERROR("Invalid image dimensions: %s (%dx%d)", image_path, img_width, img_height);
+        glDeleteTextures(1, &texture);
+        if (is_stb_supported_image_format(image_path))
+        {
+            stbi_image_free(data);
+        }
+        else
+        {
+            free(data);
+        }
+        return 0;
+    }
+
+    // Determine OpenGL format
+    GLenum format;
+    if (nrChannels == 1)
+        format = GL_RED;
+    else if (nrChannels == 2)
+        format = GL_RG;
+    else if (nrChannels == 3)
+        format = GL_RGB;
+    else if (nrChannels == 4)
+        format = GL_RGBA;
+    else
+    {
+        LOG_ERROR("Unsupported number of channels: %d for %s", nrChannels, image_path);
+        glDeleteTextures(1, &texture);
+        if (is_stb_supported_image_format(image_path))
+        {
+            stbi_image_free(data);
+        }
+        else
+        {
+            free(data);
+        }
+        return 0;
+    }
+
+    // Upload to GPU
     glTexImage2D(GL_TEXTURE_2D, 0, format, img_width, img_height, 0, format, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
 
+    // Clean up
     if (is_stb_supported_image_format(image_path))
     {
         stbi_image_free(data);
@@ -760,6 +854,7 @@ unsigned int glps_load_image(const char *image_path)
         free(data);
     }
 
+    LOG_INFO("Successfully loaded texture: %s (ID: %u)", image_path, texture);
     return texture;
 }
 

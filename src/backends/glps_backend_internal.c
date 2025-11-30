@@ -887,11 +887,11 @@ unsigned int glps_load_image_from_bin(unsigned char *data, long unsigned binary_
     return texture;
 }
 
-GooeyWindow *glps_create_window(const char *title, int width, int height)
+GooeyWindow *glps_create_window(const char *title, int x, int y, int width, int height)
 {
     GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
 
-    size_t window_id = glps_wm_window_create(ctx.wm, title, width, height);
+    size_t window_id = glps_wm_window_create(ctx.wm, x, y, title, width, height);
     window->creation_id = window_id;
 
     glps_init_ft();

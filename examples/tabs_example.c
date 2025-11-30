@@ -16,10 +16,10 @@ void button_callback(void *user_data)
 int main()
 {
     Gooey_Init();
-    GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 800, 600, true);
+    GooeyWindow *win = GooeyWindow_Create("Advanced Tabs Example", 0, 0, 800, 600, true);
     GooeyWindow_EnableDebugOverlay(win, 1);
     GooeyTheme *dark_mode = GooeyTheme_LoadFromFile("dark.json");
-   // GooeyWindow_SetTheme(win, dark_mode);
+    // GooeyWindow_SetTheme(win, dark_mode);
     win->vk = NULL;
     // Create main tabs container
     mainTabs = GooeyTabs_Create(0, 0, 780, 580, true);
@@ -63,7 +63,7 @@ int main()
 
     // Add widgets to their respective tabs
     // Tab 0: Controls
-        GooeyTabs_AddWidget(win, mainTabs, 0, label1);
+    GooeyTabs_AddWidget(win, mainTabs, 0, label1);
 
     GooeyTabs_AddWidget(win, mainTabs, 0, btn1);
     GooeyTabs_AddWidget(win, mainTabs, 0, checkbox);

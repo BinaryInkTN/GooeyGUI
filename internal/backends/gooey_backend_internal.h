@@ -39,15 +39,15 @@ extern "C"
      */
     typedef struct GooeyBackend
     {
-        int (*Init)(int project_branch);                                                                                                                                                           /**< Initializes the backend. */
-        void (*Run)();                                                                                                                                                           /**< Starts the main loop of the backend. */
-        void (*Cleanup)();                                                                                                                                                       /**< Cleans up resources used by the backend. */
-        void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data);                                                                                      /**< Sets up event callbacks. */
-        void (*RequestRedraw)(GooeyWindow *win);                                                                                                                                 /**< Requests a redraw of the specified window. */
-        void (*SetViewport)(size_t window_id, int width, int height);                                                                                                            /**< Sets the viewport for the specified window. */
-        size_t (*GetActiveWindowCount)(void);                                                                                                                                    /**< Returns the number of active windows. */
-        size_t (*GetTotalWindowCount)(void);                                                                                                                                     /**< Returns the total number of windows. */
-        GooeyWindow *(*CreateGooeyWindow)(const char *title, int width, int height);                                                                                                  /**< Creates a new window. */
+        int (*Init)(int project_branch);                                                    /**< Initializes the backend. */
+        void (*Run)();                                                                      /**< Starts the main loop of the backend. */
+        void (*Cleanup)();                                                                  /**< Cleans up resources used by the backend. */
+        void (*SetupCallbacks)(void (*callback)(size_t window_id, void *data), void *data); /**< Sets up event callbacks. */
+        void (*RequestRedraw)(GooeyWindow *win);                                            /**< Requests a redraw of the specified window. */
+        void (*SetViewport)(size_t window_id, int width, int height);                       /**< Sets the viewport for the specified window. */
+        size_t (*GetActiveWindowCount)(void);                                               /**< Returns the number of active windows. */
+        size_t (*GetTotalWindowCount)(void);                                                /**< Returns the total number of windows. */
+        GooeyWindow *(*CreateGooeyWindow)(const char *title, int x, int y, int width, int height);        /**< Creates a new window. */
         GooeyWindow (*SpawnWindow)(const char *title, int width, int height, bool visibility);                                                                                   /**< Spawns a new window with visibility control. */
         void (*MakeWindowVisible)(int window_id, bool visibility);                                                                                                               /**< Sets the visibility of a window. */
         void (*MakeWindowResizable)(bool value, int window_id);                                                                                                                  /**< Makes a window resizable or non-resizable. */
@@ -61,8 +61,8 @@ extern "C"
         void (*Clear)(GooeyWindow *win);                                                                                                                                         /**< Clears the contents of a window. */
         void (*Render)(GooeyWindow *win);                                                                                                                                        /**< Renders the contents of a window. */
         void (*SetForeground)(uint32_t color);                                                                                                                                   /**< Sets the foreground color for rendering. */
-        void (*DrawGooeyText)(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite);                                               /**< Draws text on a window. */
-        unsigned int (*LoadGooeyImage)(const char *image_path);                                                                                                                       /**< Loads an image from a file. */
+        void (*DrawGooeyText)(int x, int y, const char *text, uint32_t color, float font_size, int window_id, GooeyTFT_Sprite *sprite);                                          /**< Draws text on a window. */
+        unsigned int (*LoadGooeyImage)(const char *image_path);                                                                                                                  /**< Loads an image from a file. */
         unsigned int (*LoadImageFromBin)(unsigned char *data, size_t binary_len);                                                                                                /**< Loads an image from binary data. */
         void (*DrawImage)(unsigned int texture_id, int x, int y, int width, int height, int window_id);                                                                          /**< Draws an image on a window. */
         void (*FillRectangle)(int x, int y, int width, int height, uint32_t color, int window_id, bool isRounded, float cornerRadius, GooeyTFT_Sprite *sprite);                  /**< Fills a rectangle on a window. */
@@ -70,21 +70,21 @@ extern "C"
         void (*FillArc)(int x, int y, int width, int height, int angle1, int angle2, int window_id, GooeyTFT_Sprite *sprite);                                                    /**< Fills an arc on a window. */
         const char *(*GetKeyFromCode)(void *gooey_event);                                                                                                                        /**< Converts a key code to a string representation. */
         void *(*HandleEvents)(void);                                                                                                                                             /**< Handles input events. */
-        void (*ResetEvents)(GooeyWindow *win);                           
-        GooeyEvent* (*GetEvents)(GooeyWindow* win);                                                                                                        /**< Resets the event state for a window. */
-        void (*GetWinDim)(int *width, int *height, int window_id);                                                                                                               /**< Retrieves the dimensions of a window. */
-        double (*GetWinFramerate)(int window_id);                                                                                                                                /**< Gets FPS for window. */
-        void (*DrawLine)(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite);                                                                /**< Draws a line on a window. */
-        float (*GetTextWidth)(const char *text, int length);                                                                                                                     /**< Calculates the width of a text string. */
-        float (*GetTextHeight)(const char *text, int length);                                                                                                                    /**< Calculates the height of a text string. */
-        void (*SetCursor)(GOOEY_CURSOR cursor);                                                                                                                                  /**< Sets the cursor type for the window. */
-        void (*UnloadImage)(unsigned int texture_id);                                                                                                                            /**< Unloads an image texture. */
-        GooeyTimer *(*CreateTimer)(void);                                                                                                                                        /**< Creates a new timer. */
-        void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data);                                                          /**< Sets a timer callback. */
-        void (*StopTimer)(GooeyTimer *timer);                                                                                                                                    /**< Stops a timer. */
-        void (*DestroyTimer)(GooeyTimer *timer);                                                                                                                                 /**< Destroys a timer. */
-        void (*CursorChange)(GOOEY_CURSOR cursor);                                                                                                                               /**< Changes the cursor. */
-        void (*StopCursorReset)(bool state);                                                                                                                                     /**< Stops cursor reset. */
+        void (*ResetEvents)(GooeyWindow *win);
+        GooeyEvent *(*GetEvents)(GooeyWindow *win);                                                                     /**< Resets the event state for a window. */
+        void (*GetWinDim)(int *width, int *height, int window_id);                                                      /**< Retrieves the dimensions of a window. */
+        double (*GetWinFramerate)(int window_id);                                                                       /**< Gets FPS for window. */
+        void (*DrawLine)(int x1, int y1, int x2, int y2, uint32_t color, int window_id, GooeyTFT_Sprite *sprite);       /**< Draws a line on a window. */
+        float (*GetTextWidth)(const char *text, int length);                                                            /**< Calculates the width of a text string. */
+        float (*GetTextHeight)(const char *text, int length);                                                           /**< Calculates the height of a text string. */
+        void (*SetCursor)(GOOEY_CURSOR cursor);                                                                         /**< Sets the cursor type for the window. */
+        void (*UnloadImage)(unsigned int texture_id);                                                                   /**< Unloads an image texture. */
+        GooeyTimer *(*CreateTimer)(void);                                                                               /**< Creates a new timer. */
+        void (*SetTimerCallback)(uint64_t time, GooeyTimer *timer, void (*callback)(void *user_data), void *user_data); /**< Sets a timer callback. */
+        void (*StopTimer)(GooeyTimer *timer);                                                                           /**< Stops a timer. */
+        void (*DestroyTimer)(GooeyTimer *timer);                                                                        /**< Destroys a timer. */
+        void (*CursorChange)(GOOEY_CURSOR cursor);                                                                      /**< Changes the cursor. */
+        void (*StopCursorReset)(bool state);                                                                            /**< Stops cursor reset. */
         void (*ForceCallRedraw)(void);
         void (*RequestClose)(size_t window_id);
 
@@ -94,23 +94,21 @@ extern "C"
         void (*ResetRedrawSprite)(GooeyTFT_Sprite *sprite);
         void (*ClearArea)(int x, int y, int width, int height);
         void (*ClearOldWidget)(GooeyTFT_Sprite *sprite);
-        
 
         // Webview specific
         void (*CreateView)(void);
         void (*DestroyUltralight)(void);
         void (*DrawWebview)(int x, int y, int width, int height, int window_id, GooeyTFT_Sprite *sprite);
-        
+
         // Native File dialog
         void (*OpenFileDialog)(const char *start_path, void *filters, size_t filter_count, void (*on_file_selected)(const char *file_path));
-        
+
         // Performance & Debug
         void (*GetPlatformName)(char *platform, size_t max_length);
 
-
         // Transparency effects.
-        void (*MakeWindowTransparent)(GooeyWindow *win, int blur_radius, float opacity);   
-        
+        void (*MakeWindowTransparent)(GooeyWindow *win, int blur_radius, float opacity);
+
         void (*RenderBatch)(int window_id);
     } GooeyBackend;
 

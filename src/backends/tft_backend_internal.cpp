@@ -391,7 +391,7 @@ unsigned int tft_load_image_from_bin(unsigned char *data, size_t binary_len)
     return 0;
 }
 
-GooeyWindow *tft_create_window(const char *title, int width, int height)
+GooeyWindow *tft_create_window(const char *title, int x, int y, int width, int height)
 {
     GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
     if (window)

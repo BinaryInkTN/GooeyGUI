@@ -60,7 +60,7 @@ void GooeyWindow_SetTheme(GooeyWindow *win, GooeyTheme *theme);
  * @param visibility The initial visibility of the window (visible or hidden).
  * @return A pointer to the newly created `GooeyWindow` object.
  */
-GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibility);
+GooeyWindow *GooeyWindow_Create(const char *title, int x, int y, int width, int height, bool visibility);
 
 void GooeyWindow_EnableDebugOverlay(GooeyWindow *win, bool is_enabled);
 
@@ -142,6 +142,7 @@ void GooeyWindow_UnRegisterWidget(GooeyWindow *win, void* widget);
 
 void GooeyWindow_MakeTransparent(GooeyWindow* win, int blur_radius, float opacity);
 
+void GooeyWindow_MoveTo(GooeyWindow* win, int x, int y);
 #ifdef __cplusplus
 }
 #endif

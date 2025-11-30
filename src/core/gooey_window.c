@@ -278,7 +278,7 @@ bool GooeyWindow_AllocateResources(GooeyWindow *win)
             return false;
         }
         win->notification_manager->notification_count = 0;
-        
+
         // Initialize notification system
         GooeyNotification_Init(win);
     }
@@ -574,9 +574,9 @@ void GooeyWindow_FreeResources(GooeyWindow *win)
     win->notification_count = 0;
 }
 
-GooeyWindow *GooeyWindow_Create(const char *title, int width, int height, bool visibility)
+GooeyWindow *GooeyWindow_Create(const char *title, int x, int y, int width, int height, bool visibility)
 {
-    GooeyWindow *win = active_backend->CreateGooeyWindow(title, width, height);
+    GooeyWindow *win = active_backend->CreateGooeyWindow(title, x, y, width, height);
     if (!win)
     {
         return NULL;

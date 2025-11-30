@@ -891,7 +891,7 @@ GooeyWindow *glps_create_window(const char *title, int x, int y, int width, int 
 {
     GooeyWindow *window = (GooeyWindow *)malloc(sizeof(GooeyWindow));
 
-    size_t window_id = glps_wm_window_create(ctx.wm, x, y, title, width, height);
+    size_t window_id = glps_wm_window_create(ctx.wm, title, x, y, width, height);
     window->creation_id = window_id;
 
     glps_init_ft();

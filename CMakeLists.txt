@@ -5,7 +5,6 @@ set(PROJECT_VERSION_MAJOR 1)
 set(PROJECT_VERSION_MINOR 0)
 set(PROJECT_VERSION_PATCH 2)
 
-
 include(FetchContent)
 include(CMakePackageConfigHelpers)
 
@@ -47,9 +46,46 @@ endif()
 # ----------------------------
 # Dependencies: cJSON, GLPS, FreeType
 # ----------------------------
+option(USE_BUNDLED_FREETYPE "Use bundled Freetype instead of system package" ON)
+
+# Freetype handling - FIXED
+if(USE_BUNDLED_FREETYPE)
+    message(STATUS "Using bundled Freetype (forced)")
+    add_subdirectory(third_party/freetype)
+    # Create consistent target name for bundled version
+    if(NOT TARGET Freetype::Freetype AND TARGET freetype)
+        add_library(Freetype::Freetype ALIAS freetype)
+    endif()
+    set(FREETYPE_TARGET Freetype::Freetype)
+    set(FREETYPE_INCLUDE_DIRS 
+        ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+        ${CMAKE_CURRENT_BINARY_DIR}/third_party/freetype/include
+    )
+else()
+    # Try to find system Freetype first
+    find_package(Freetype QUIET)
+    
+    if(Freetype_FOUND)
+        message(STATUS "Using system Freetype")
+        set(FREETYPE_TARGET Freetype::Freetype)
+        set(FREETYPE_INCLUDE_DIRS ${Freetype_INCLUDE_DIRS})
+    else()
+        message(STATUS "System Freetype not found, using bundled version")
+        add_subdirectory(third_party/freetype)
+        # Create consistent target name for bundled version
+        if(NOT TARGET Freetype::Freetype AND TARGET freetype)
+            add_library(Freetype::Freetype ALIAS freetype)
+        endif()
+        set(FREETYPE_TARGET Freetype::Freetype)
+        set(FREETYPE_INCLUDE_DIRS 
+            ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+            ${CMAKE_CURRENT_BINARY_DIR}/third_party/freetype/include
+        )
+    endif()
+endif()
+
 add_subdirectory(third_party/cjson)
 add_subdirectory(third_party/glps)
-add_subdirectory(third_party/freetype)
 add_subdirectory(third_party/native_fdialog)
 
 # Apply ASan flags to dependencies if enabled
@@ -58,8 +94,10 @@ if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_C_COMPILER_ID MAT
     target_link_options(cjson PRIVATE -fsanitize=address)
     target_compile_options(GLPS PRIVATE -fsanitize=address -fno-omit-frame-pointer)
     target_link_options(GLPS PRIVATE -fsanitize=address)
-    target_compile_options(freetype PRIVATE -fsanitize=address -fno-omit-frame-pointer)
-    target_link_options(freetype PRIVATE -fsanitize=address)
+    if(TARGET freetype)
+        target_compile_options(freetype PRIVATE -fsanitize=address -fno-omit-frame-pointer)
+        target_link_options(freetype PRIVATE -fsanitize=address)
+    endif()
     target_compile_options(nfd PRIVATE -fsanitize=address -fno-omit-frame-pointer -DNFD_PORTAL=1)
     target_link_options(nfd PRIVATE -fsanitize=address)
 endif()
@@ -181,18 +219,18 @@ target_include_directories(GooeyGUI PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cjson
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/include
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/glps/internal
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/freetype/include
+    ${FREETYPE_INCLUDE_DIRS}  # Use the variable we set above
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/native_fdialog/src/
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party/native_fdialog/src/include
 )
 
 # ----------------------------
-# Link dependencies
+# Link dependencies - FIXED: Use consistent target
 # ----------------------------
 target_link_libraries(GooeyGUI PRIVATE
     cjson
     GLPS
-    freetype
+    ${FREETYPE_TARGET}  # Use the target variable instead of hardcoded 'freetype'
     nfd
 )
 
@@ -213,7 +251,10 @@ endfunction()
 
 copy_shared_library(GooeyGUI nfd)
 copy_shared_library(GooeyGUI cjson)
-copy_shared_library(GooeyGUI freetype)
+# Only copy freetype if we're using the bundled version
+if(NOT Freetype_FOUND OR USE_BUNDLED_FREETYPE)
+    copy_shared_library(GooeyGUI freetype)
+endif()
 copy_shared_library(GooeyGUI GLPS)
 
 # ----------------------------
@@ -232,21 +273,36 @@ endif()
 # ----------------------------
 set_target_properties(cjson PROPERTIES EXPORT_NAME cjson)
 set_target_properties(GLPS PROPERTIES EXPORT_NAME GLPS)
-set_target_properties(freetype PROPERTIES EXPORT_NAME freetype)
+# Only set properties for freetype if we built it
+if(NOT Freetype_FOUND OR USE_BUNDLED_FREETYPE)
+    set_target_properties(freetype PROPERTIES EXPORT_NAME freetype)
+endif()
 set_target_properties(nfd PROPERTIES EXPORT_NAME native_fdialog)
 
 # ----------------------------
-# Install rules
+# Install rules - FIXED: Only install bundled dependencies
 # ----------------------------
 include(GNUInstallDirs)
 
-install(TARGETS GooeyGUI cjson GLPS freetype nfd
+# Always install our main library and dependencies we built
+install(TARGETS GooeyGUI cjson GLPS nfd
     EXPORT GooeyGUITargets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
+
+# Only install bundled freetype if we built it
+if(NOT Freetype_FOUND OR USE_BUNDLED_FREETYPE)
+    install(TARGETS freetype
+        EXPORT GooeyGUITargets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    )
+endif()
 
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/Gooey)
 

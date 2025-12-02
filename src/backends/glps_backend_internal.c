@@ -589,7 +589,9 @@ static void window_close_callback(size_t window_id, void *data)
 
 int glps_init_ft()
 {
+#if !GLES_ON
     gladLoadGL();
+#endif
     return 0;
 }
 int glps_init(int project_branch)

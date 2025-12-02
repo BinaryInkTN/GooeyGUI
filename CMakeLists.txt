@@ -21,6 +21,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
+# Preprocessor compilation FLAGS: 
+option(GLES_ON "Enable GLES3" OFF)
 
 option(ENABLE_ASAN "Enable AddressSanitizer for Debug builds" OFF)
 
@@ -157,13 +159,11 @@ set(SOURCES
     src/widgets/gooey_progressbar_internal.c
     src/widgets/gooey_debug_overlay_internal.c
     src/virtual/gooey_keyboard_internal.c
-    internal/backends/utils/glad/glad.c
     src/widgets/gooey_window_internal.c
     internal/backends/utils/backend_utils_internal.c
     src/backends/glps_backend_internal.c
     src/core/gooey_event.c
     #src/backends/glps_vk_backend_internal.c
-
     src/logger/pico_logger_internal.c
     src/widgets/gooey_meter_internal.c
     src/widgets/gooey_notifications_internal.c
@@ -179,7 +179,11 @@ set(SOURCES
     src/animations/gooey_animations_internal.c
     
 )
-
+if (NOT GLES_ON)
+set(SOURCES ${SOURCES}
+    internal/backends/utils/glad/glad.c
+)
+endif()
 # ----------------------------
 # Main library
 # ----------------------------
@@ -225,12 +229,18 @@ target_include_directories(GooeyGUI PRIVATE
 )
 
 # ----------------------------
-# Link dependencies - FIXED: Use consistent target
+# Preprocessor flags 
+# ----------------------------
+target_compile_definitions(GooeyGUI PRIVATE GLES_ON=$<BOOL:${GLES_ON}>)
+
+
+# ----------------------------
+# Link dependencies 
 # ----------------------------
 target_link_libraries(GooeyGUI PRIVATE
     cjson
     GLPS
-    ${FREETYPE_TARGET}  # Use the target variable instead of hardcoded 'freetype'
+    ${FREETYPE_TARGET}  
     nfd
 )
 
@@ -280,7 +290,7 @@ endif()
 set_target_properties(nfd PROPERTIES EXPORT_NAME native_fdialog)
 
 # ----------------------------
-# Install rules - FIXED: Only install bundled dependencies
+# Install rules 
 # ----------------------------
 include(GNUInstallDirs)
 

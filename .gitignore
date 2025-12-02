@@ -1,4 +1,4 @@
-third_party
+third_party/*
 build
 .vscode
 test_app

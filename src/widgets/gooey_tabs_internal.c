@@ -6,6 +6,9 @@
 #include "logger/pico_logger_internal.h"
 #include "animations/gooey_animations_internal.h"
 
+#define TAB_MIN_WIDTH 100
+#define TAB_MAX_WIDTH 300
+
 static float ease_out_quad(float t)
 {
     return 1.0f - (1.0f - t) * (1.0f - t);
@@ -16,12 +19,41 @@ static float ease_in_out_quad(float t)
     return t < 0.5f ? 2.0f * t * t : 1.0f - (-2.0f * t + 2.0f) * (-2.0f * t + 2.0f) / 2.0f;
 }
 
+static int calculate_sidebar_width(GooeyTabs *tabs)
+{
+    if (!tabs || !tabs->is_sidebar)
+        return TAB_WIDTH;
+    
+    int max_text_width = 0;
+    
+    for (size_t i = 0; i < tabs->tab_count; ++i)
+    {
+        GooeyTab *tab = &tabs->tabs[i];
+        int text_width = active_backend->GetTextWidth(tab->tab_name, strlen(tab->tab_name));
+        text_width = (int)(text_width * TAB_TEXT_SCALE);
+        if (text_width > max_text_width)
+        {
+            max_text_width = text_width;
+        }
+    }
+    
+    int calculated_width = max_text_width + (TAB_TEXT_PADDING * 2);
+    
+    if (calculated_width < TAB_MIN_WIDTH)
+        return TAB_MIN_WIDTH;
+    if (TAB_MAX_WIDTH > 0 && calculated_width > TAB_MAX_WIDTH)
+        return TAB_MAX_WIDTH;
+    
+    return calculated_width;
+}
+
 static void update_sidebar_widget_visibility(GooeyTabs *tabs)
 {
     if (!tabs || !tabs->is_sidebar)
         return;
 
-    int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
+    int sidebar_width = calculate_sidebar_width(tabs);
+    int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? sidebar_width : 0);
 
     for (size_t j = 0; j < tabs->tab_count; ++j)
     {
@@ -45,11 +77,13 @@ static void sidebar_animation_callback(void *user_data)
 
     tabs->current_step++;
 
+    int sidebar_width = calculate_sidebar_width(tabs);
+    
     if (tabs->current_step >= SIDEBAR_ANIMATION_STEPS)
     {
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
-        tabs->is_open = (tabs->target_offset == TAB_WIDTH);
+        tabs->is_open = (tabs->target_offset == sidebar_width);
         
         if (tabs->animation_timer)
         {
@@ -62,7 +96,7 @@ static void sidebar_animation_callback(void *user_data)
 
     float progress = (float)tabs->current_step / (float)SIDEBAR_ANIMATION_STEPS;
     float eased_progress = ease_in_out_quad(progress);
-    int start_offset = tabs->target_offset == TAB_WIDTH ? 0 : TAB_WIDTH;
+    int start_offset = tabs->target_offset == sidebar_width ? 0 : sidebar_width;
     int distance = tabs->target_offset - start_offset;
     tabs->sidebar_offset = start_offset + (int)(distance * eased_progress);
 
@@ -134,10 +168,12 @@ void GooeyTabs_ToggleSidebar(GooeyTabs *tabs)
     if (!tabs || !tabs->is_sidebar)
         return;
 
-    if (tabs->is_animating && tabs->target_offset == (tabs->is_open ? 0 : TAB_WIDTH))
+    int sidebar_width = calculate_sidebar_width(tabs);
+
+    if (tabs->is_animating && tabs->target_offset == (tabs->is_open ? 0 : sidebar_width))
         return;
 
-    tabs->target_offset = tabs->is_open ? 0 : TAB_WIDTH;
+    tabs->target_offset = tabs->is_open ? 0 : sidebar_width;
     tabs->current_step = 0;
 
     if (!tabs->animation_timer)
@@ -181,8 +217,9 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
         if (!tabs || !tabs->is_sidebar)
             continue;
 
+        int sidebar_width = calculate_sidebar_width(tabs);
         int toggle_width = 15;
-        int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
+        int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? sidebar_width : 0);
         if (mouse_x >= tabs->core.x &&
             mouse_x < tabs->core.x + current_sidebar_width + toggle_width &&
             mouse_y >= tabs->core.y &&
@@ -340,7 +377,8 @@ void GooeyTabs_Draw(GooeyWindow *win)
             continue;
         update_sidebar_widget_visibility(tabs);
 
-        int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? TAB_WIDTH : 0);
+        int sidebar_width = calculate_sidebar_width(tabs);
+        int current_sidebar_width = tabs->is_animating ? tabs->sidebar_offset : (tabs->is_open ? sidebar_width : 0);
 
         if (current_sidebar_width > 0)
         {
@@ -390,7 +428,7 @@ void GooeyTabs_Draw(GooeyWindow *win)
             }
         }
 
-        if (current_sidebar_width < TAB_WIDTH)
+        if (current_sidebar_width < sidebar_width)
         {
             active_backend->FillRectangle(
                 tabs->core.x + current_sidebar_width,

@@ -44,8 +44,8 @@ void GooeyWidget_MoveTo_Internal(void* widget, int x, int y)
     
 
     GooeyWidget *core = (GooeyWidget *) widget;
-    core->x = x < 0 ? core->x : x;
-    core->y = y < 0 ? core->y : y;
+    core->x = x;
+    core->y = y;
 }
 
 

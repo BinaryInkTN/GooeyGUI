@@ -23,7 +23,11 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 # Preprocessor compilation FLAGS: 
 option(GLES_ON "Enable GLES3" OFF)
-
+if(GLES_ON)
+    add_definitions(-DGLES_ON=1)
+else()
+    add_definitions(-DGLES_ON=0)
+endif()
 option(ENABLE_ASAN "Enable AddressSanitizer for Debug builds" OFF)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")

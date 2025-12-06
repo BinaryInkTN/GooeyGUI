@@ -54,8 +54,6 @@ static void get_memory_footprint(size_t *total_kb)
 }
 #endif
 
-
-
 static size_t get_window_widget_count(GooeyWindow *win)
 {
     if (!win)
@@ -101,28 +99,28 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     int current_y = y_pos + padding;
 
     active_backend->DrawGooeyText(x_pos + padding, current_y, "DEBUG [GOOEY v1.0]",
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
 
     char fps_text[64];
     snprintf(fps_text, sizeof(fps_text), "FPS: %.1f",
              active_backend->GetWinFramerate(win->creation_id));
     active_backend->DrawGooeyText(x_pos + padding, current_y, fps_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
 
     char win_text[64];
     snprintf(win_text, sizeof(win_text), "Window: %dx%d",
              window_width, window_height);
     active_backend->DrawGooeyText(x_pos + padding, current_y, win_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
 
     char mouse_text[64];
     snprintf(mouse_text, sizeof(mouse_text), "Mouse: %d,%d",
              event->mouse_move.x, event->mouse_move.y);
     active_backend->DrawGooeyText(x_pos + padding, current_y, mouse_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
 
     size_t mem_kb = 0;
@@ -131,22 +129,28 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     snprintf(mem_text, sizeof(mem_text), "Memory: %.2f MB",
              (float)mem_kb / 1024.0f);
     active_backend->DrawGooeyText(x_pos + padding, current_y, mem_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
 
     char widget_text[64];
     snprintf(widget_text, sizeof(widget_text), "Widgets: %zu",
              get_window_widget_count(win));
     active_backend->DrawGooeyText(x_pos + padding, current_y, widget_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
+#if GLES_ON
+    active_backend->DrawGooeyText(x_pos + padding, current_y, "Renderer: OpenGL ES 3.0 [GLPS]",
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+#else
+    active_backend->DrawGooeyText(x_pos + padding, current_y, "Renderer: OpenGL 4.0 [GLPS]",
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+#endif
 
-    active_backend->DrawGooeyText(x_pos + padding, current_y, "Renderer: OpenGL [GLPS]",
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
     current_y += line_height;
     static char platform_name[1024] = {0};
     static int platform_name_initialized = 0;
-    if (!platform_name_initialized) {
+    if (!platform_name_initialized)
+    {
         active_backend->GetPlatformName(platform_name, sizeof(platform_name));
         platform_name_initialized = 1;
     }
@@ -154,7 +158,7 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     char platform_text[1050];
     snprintf(platform_text, sizeof(platform_text), "Platform: %s", platform_name);
     active_backend->DrawGooeyText(x_pos + padding, current_y, platform_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
 
     current_y += line_height;
 
@@ -162,6 +166,6 @@ void GooeyDebugOverlay_Draw(GooeyWindow *win)
     char time_text[64];
     strftime(time_text, sizeof(time_text), "%H:%M:%S", localtime(&now));
     active_backend->DrawGooeyText(x_pos + padding, current_y, time_text,
-                             win->active_theme->neutral, 18.0f, win->creation_id, NULL);
+                                  win->active_theme->neutral, 18.0f, win->creation_id, NULL);
 }
 #endif

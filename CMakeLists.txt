@@ -22,7 +22,7 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 # Preprocessor compilation FLAGS: 
-option(GLES_ON "Enable GLES3" OFF)
+option(GLES_ON "Enable GLES3" ON)
 if(GLES_ON)
     add_definitions(-DGLES_ON=1)
 else()

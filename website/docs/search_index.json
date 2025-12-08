@@ -547,12 +547,52 @@
   ],
   "data_types": [
     {
-      "name": "WIDGET_TYPE",
+      "name": "GooeyEvent",
+      "type": "data_type",
+      "brief": "General event structure.",
+      "description": "",
+      "file": "gooey_common.h",
+      "url": "#type-gooeyevent"
+    },
+    {
+      "name": "GooeyEventType",
+      "type": "data_type",
+      "brief": "Enumeration of event types.",
+      "description": "",
+      "file": "gooey_common.h",
+      "url": "#type-gooeyeventtype"
+    },
+    {
+      "name": "GooeyWindow",
       "type": "data_type",
       "brief": "Internal definitions for the Gooey GUI library.",
       "description": "",
       "file": "gooey_common.h",
-      "url": "#type-widget_type"
+      "url": "#type-gooeywindow"
+    },
+    {
+      "name": "state",
+      "type": "data_type",
+      "brief": "Keyboard key press event data.",
+      "description": "",
+      "file": "gooey_common.h",
+      "url": "#type-state"
+    },
+    {
+      "name": "state",
+      "type": "data_type",
+      "brief": "File drop event data.",
+      "description": "",
+      "file": "gooey_common.h",
+      "url": "#type-state"
+    },
+    {
+      "name": "x",
+      "type": "data_type",
+      "brief": "Mouse event data.",
+      "description": "",
+      "file": "gooey_common.h",
+      "url": "#type-x"
     },
     {
       "name": "base",
@@ -787,6 +827,13 @@
       "brief": "Header file for the GooeyCheckbox module.",
       "description": "",
       "url": "#file-gooey_checkbox-h",
+      "type": "header_file"
+    },
+    {
+      "name": "gooey_notifications.h",
+      "brief": "",
+      "description": "",
+      "url": "#file-gooey_notifications-h",
       "type": "header_file"
     },
     {

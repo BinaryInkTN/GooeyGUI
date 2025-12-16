@@ -1914,7 +1914,7 @@
             }
 
             const copyButton = document.getElementById('copyButton');
-            const installCommand = 'curl -fsSL https://raw.githubusercontent.com/GooeyUI/GooeyGUI/main/scripts/install.sh | bash';
+            const installCommand = 'curl -fsSL https://raw.githubusercontent.com/BinaryInkTN/GooeyGUI/main/installer.py | python3';
             
             copyButton.addEventListener('click', function() {
                 navigator.clipboard.writeText(installCommand).then(() => {

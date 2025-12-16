@@ -46,7 +46,6 @@
 
             --transition: all 0.2s cubic-bezier(0.3, 0, 0.5, 1);
             
-            /* Advanced UI variables */
             --sidebar-width: 280px;
             --header-height: 64px;
             --animation-duration: 0.3s;
@@ -130,7 +129,6 @@
             box-sizing: border-box;
         }
 
-        /* Advanced App Bar with blur effect */
         .app-bar {
             position: fixed;
             top: 0;
@@ -250,7 +248,6 @@
             color: var(--google-yellow);
         }
 
-        /* Advanced Sidebar */
         .sidebar {
             position: fixed;
             top: var(--header-height);
@@ -324,7 +321,6 @@
             color: var(--text-primary);
         }
 
-        /* Hero Section - Google Style with SVG Background */
         .hero {
             padding: 160px 0 100px;
             text-align: center;
@@ -374,7 +370,6 @@
             margin-top: 32px;
         }
 
-        /* Button Styles - Google Style */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -424,7 +419,6 @@
             font-size: 16px;
         }
 
-        /* Advanced Button with Ripple Effect */
         .btn--ripple {
             position: relative;
             overflow: hidden;
@@ -448,7 +442,74 @@
             height: 300px;
         }
 
-        /* TFT Demo Section */
+        .install-section {
+            margin: 60px auto 40px;
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        .install-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+        
+        .install-code {
+            background-color: var(--code-background);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: 1px solid var(--border);
+            text-align: left;
+            position: relative;
+            margin: 0 auto;
+            overflow: hidden;
+            box-shadow: var(--elevation-1);
+        }
+        
+        .install-code pre {
+            margin: 0;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--code-text);
+            padding-right: 100px;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background-color: var(--primary);
+            color: var(--text-on-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .copy-button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .copy-button.copied {
+            background-color: var(--google-green);
+        }
+        
+        .install-note {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 12px;
+            text-align: center;
+        }
+
         .tft-demo {
             display: flex;
             align-items: center;
@@ -557,7 +618,6 @@
             margin-bottom: 20px;
         }
 
-        /* Features Section */
         .section {
             padding: 100px 0;
         }
@@ -625,7 +685,6 @@
             font-size: 16px;
         }
 
-        /* Code Preview Section */
         .code-window {
             background-color: var(--code-background);
             border-radius: var(--radius-md);
@@ -703,7 +762,6 @@
             color: var(--google-yellow);
         }
 
-        /* Screenshot */
         .screenshot {
             width: 100%;
             transition: var(--transition);
@@ -713,7 +771,6 @@
             transform: translateY(-4px);
         }
 
-        /* Contributors Section */
         .contributors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -767,7 +824,7 @@
             position: relative;
             width: 100%;
             height: 0;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            padding-bottom: 56.25%;
             margin: 40px 0;
             border-radius: var(--radius-lg);
             overflow: hidden;
@@ -790,22 +847,6 @@
             font-style: italic;
         }
 
-        /* Responsive adjustments for video */
-        @media (max-width: 768px) {
-            .video-section {
-                margin: 60px auto;
-            }
-            
-            .video-container {
-                margin: 30px 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .video-section {
-                margin: 40px auto;
-            }
-        }
         .contributor-stats {
             display: flex;
             justify-content: center;
@@ -821,7 +862,6 @@
             color: var(--text-secondary);
         }
 
-        /* Footer */
         .footer {
             padding: 80px 0 40px;
             background-color: var(--surface);
@@ -904,7 +944,6 @@
             text-decoration: none;
         }
 
-        /* Platform Logos */
         .platforms {
             display: flex;
             justify-content: center;
@@ -940,13 +979,11 @@
             color: var(--text-secondary);
         }
 
-        /* Hero Python Section */
         .hero_python {
             padding-top: 100px;
             text-align: center;
         }
 
-        /* Loading Spinner */
         .loading-spinner {
             display: none;
             width: 40px;
@@ -962,7 +999,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Advanced Downloads Section */
         .downloads-section {
             padding: 100px 0;
         }
@@ -1081,7 +1117,6 @@
             background-color: var(--surface-dark);
         }
 
-        /* Advanced Visibility Controls */
         .visibility-controls {
             position: fixed;
             bottom: 24px;
@@ -1192,7 +1227,6 @@
             transform: translateX(20px);
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -1209,7 +1243,6 @@
         .delay-4 { animation-delay: 0.4s; }
         .delay-5 { animation-delay: 0.5s; }
 
-        /* Utility Classes */
         .text-center {
             text-align: center;
         }
@@ -1226,7 +1259,6 @@
         .mb-4 { margin-bottom: 32px; }
         .mb-5 { margin-bottom: 40px; }
 
-        /* Responsive Adjustments */
         @media (max-width: 960px) {
             h1 {
                 font-size: 40px;
@@ -1320,7 +1352,6 @@
     </style>
 </head>
 <body>
-    <!-- App Bar -->
     <header class="app-bar">
         <button class="sidebar-toggle" id="sidebarToggle">
             <i class="fas fa-bars"></i>
@@ -1350,7 +1381,6 @@
         </div>
     </header>
 
-    <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar__section">
             <h3 class="sidebar__title">Navigation</h3>
@@ -1379,13 +1409,25 @@
         </div>
     </aside>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero__title fade-in">A Reactive C GUI Framework</h1>
                 <p class="hero__subtitle fade-in delay-1">Create native-feeling applications for Linux, and Windows with a single codebase.</p>
-                <div class="hero__buttons fade-in delay-2">
+                
+                <div class="install-section fade-in delay-2">
+                    <h3 class="install-title">One-Liner Installation</h3>
+                    <div class="install-code">
+                        <pre>curl -fsSL https://raw.githubusercontent.com/BinaryInkTN/GooeyGUI/main/installer.py | python3</pre>
+                        <button class="copy-button" id="copyButton">
+                            <i class="fas fa-copy"></i>
+                            <span>Copy</span>
+                        </button>
+                    </div>
+                    <p class="install-note">Works on Linux, macOS, and Windows with WSL. Installs Gooey with all dependencies.</p>
+                </div>
+                
+                <div class="hero__buttons fade-in delay-3">
                     <a href="docs/index.html#guides" class="btn btn--primary btn--ripple">Get Started</a>
                     <a href="builder.html" class="btn btn--secondary btn--ripple">
                         <i class="fas fa-sliders-h"></i>
@@ -1393,7 +1435,7 @@
                     </a>
                 </div>
 
-                 <div class="video-section fade-in delay-3">
+                 <div class="video-section fade-in delay-4">
                     <h3 style="margin-bottom: 20px; color: var(--text-primary);">Watch the Introduction</h3>
                     <div class="video-container">
                     <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/YsHqZX5r-oU?si=aRGLB9sm6Dkw_HjK&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -1408,7 +1450,7 @@
     </section>
 
     <div class="container">
-        <div class="platforms fade-in delay-3">
+        <div class="platforms fade-in delay-4">
             <div class="platform">
                 <img class="platform-logo" src="wl_logo.png" style="filter: brightness(0) saturate(100%) invert(27%) sepia(51%) saturate(2878%) hue-rotate(186deg) brightness(104%) contrast(97%);" />
                 <span class="platform-name">Wayland</span>
@@ -1424,7 +1466,6 @@
         </div>
     </div>
 
-    <!-- TFT Demo Section -->
     <section class="section" id="tft-demo">
         <div class="container">
             <h2 class="section-title fade-in">Gooey on Embedded Systems</h2>
@@ -1462,7 +1503,6 @@
         </div>
     </section>
 
-    <!-- Features Section -->
     <section class="section" id="features">
         <div class="container">
             <h2 class="section-title fade-in">Designed for Developers</h2>
@@ -1520,7 +1560,6 @@
         </div>
     </section>
 
-    <!-- Code Preview Section -->
     <section class="section section--alt" id="examples">
         <div class="container">
             <h2 class="section-title fade-in">Secure IoT MQTT Dashboard</h2>
@@ -1537,7 +1576,6 @@
         </div>
     </section>
 
-    <!-- Apps Made With Section -->
     <section class="section" id="apps-made-with">
         <div class="container">
             <h2 class="section-title fade-in">Apps made with Gooey</h2>
@@ -1589,7 +1627,6 @@
         </div>
     </section>
 
-    <!-- Downloads Section -->
     <section class="section section--alt" id="downloads">
         <div class="container">
             <h2 class="section-title fade-in">Download Gooey</h2>
@@ -1605,7 +1642,6 @@
 
             <div id="releases-loading" class="loading-spinner"></div>
             <div id="releases-container" class="downloads-grid fade-in delay-3">
-                <!-- Releases will be loaded here dynamically -->
             </div>
             <div id="releases-error" class="error-message" style="display: none;"></div>
 
@@ -1619,7 +1655,6 @@
         </div>
     </section>
 
-    <!-- Contributors Section -->
     <section class="section" id="contributors">
         <div class="container">
             <h2 class="section-title fade-in">Our Contributors</h2>
@@ -1627,7 +1662,6 @@
 
             <div id="contributors-loading" class="loading-spinner"></div>
             <div id="contributors-container" class="contributors-grid fade-in delay-2">
-                <!-- Contributors will be loaded here dynamically -->
             </div>
             <div id="contributors-error" class="error-message" style="display: none;"></div>
 
@@ -1641,7 +1675,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -1682,7 +1715,6 @@
         </div>
     </footer>
 
-    <!-- Advanced Visibility Controls -->
     <div class="visibility-controls">
         <button class="visibility-btn" id="visibilityToggle">
             <i class="fas fa-eye"></i>
@@ -1721,9 +1753,7 @@
     </div>
 
     <script>
-        // Initialize Material Components
         document.addEventListener('DOMContentLoaded', function() {
-            // Theme toggle functionality
             const themeToggle = document.getElementById('themeToggle');
             const themeIcon = document.getElementById('themeIcon');
             const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
@@ -1749,7 +1779,6 @@
                 }
             });
 
-            // Sidebar toggle functionality
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
 
@@ -1757,14 +1786,12 @@
                 sidebar.classList.toggle('sidebar--open');
             });
 
-            // Close sidebar when clicking outside
             document.addEventListener('click', function(event) {
                 if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target) && sidebar.classList.contains('sidebar--open')) {
                     sidebar.classList.remove('sidebar--open');
                 }
             });
 
-            // App bar scroll effect
             const appBar = document.querySelector('.app-bar');
             window.addEventListener('scroll', function() {
                 if (window.scrollY > 50) {
@@ -1774,7 +1801,6 @@
                 }
             });
 
-            // Animation on scroll
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -1787,7 +1813,6 @@
                 observer.observe(el);
             });
 
-            // TFT Demo Animation
             const tftButtons = document.querySelectorAll('.tft-button');
             tftButtons.forEach(button => {
                 button.addEventListener('click', function() {
@@ -1798,7 +1823,6 @@
                 });
             });
 
-            // Button ripple effect
             const buttons = document.querySelectorAll('.btn--ripple');
             buttons.forEach(button => {
                 button.addEventListener('click', function(e) {
@@ -1818,7 +1842,6 @@
                 });
             });
 
-            // Visibility controls
             const visibilityToggle = document.getElementById('visibilityToggle');
             const visibilityPanel = document.getElementById('visibilityPanel');
             const toggleImages = document.getElementById('toggleImages');
@@ -1830,14 +1853,12 @@
                 visibilityPanel.classList.toggle('visibility-panel--open');
             });
 
-            // Close visibility panel when clicking outside
             document.addEventListener('click', function(event) {
                 if (!visibilityPanel.contains(event.target) && !visibilityToggle.contains(event.target) && visibilityPanel.classList.contains('visibility-panel--open')) {
                     visibilityPanel.classList.remove('visibility-panel--open');
                 }
             });
 
-            // Toggle images
             toggleImages.addEventListener('change', function() {
                 const images = document.querySelectorAll('img');
                 images.forEach(img => {
@@ -1845,7 +1866,6 @@
                 });
             });
 
-            // Toggle animations
             toggleAnimations.addEventListener('change', function() {
                 document.body.style.animationPlayState = this.checked ? 'running' : 'paused';
                 const animatedElements = document.querySelectorAll('*');
@@ -1856,23 +1876,18 @@
                 });
             });
 
-            // Toggle high contrast
             toggleContrast.addEventListener('change', function() {
                 document.body.classList.toggle('high-contrast', this.checked);
             });
 
-            // Toggle reduced motion
             toggleMotion.addEventListener('change', function() {
                 document.body.classList.toggle('reduce-motion', this.checked);
             });
 
-            // Downloads filtering
             const filterButtons = document.querySelectorAll('.filter-btn');
             filterButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    // Remove active class from all buttons
                     filterButtons.forEach(btn => btn.classList.remove('filter-btn--active'));
-                    // Add active class to clicked button
                     this.classList.add('filter-btn--active');
                     
                     const filter = this.getAttribute('data-filter');
@@ -1897,7 +1912,28 @@
                 });
             }
 
-            // Load stargazers count
+            const copyButton = document.getElementById('copyButton');
+            const installCommand = 'curl -fsSL https://raw.githubusercontent.com/GooeyUI/GooeyGUI/main/scripts/install.sh | bash';
+            
+            copyButton.addEventListener('click', function() {
+                navigator.clipboard.writeText(installCommand).then(() => {
+                    const originalText = copyButton.querySelector('span').textContent;
+                    const originalIcon = copyButton.querySelector('i').className;
+                    
+                    copyButton.classList.add('copied');
+                    copyButton.querySelector('span').textContent = 'Copied!';
+                    copyButton.querySelector('i').className = 'fas fa-check';
+                    
+                    setTimeout(() => {
+                        copyButton.classList.remove('copied');
+                        copyButton.querySelector('span').textContent = originalText;
+                        copyButton.querySelector('i').className = originalIcon;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+
             async function loadStargazers() {
                 try {
                     let stars_page = 1;
@@ -1926,7 +1962,6 @@
                 }
             }
 
-            // Load contributors
             async function loadContributors() {
                 const loadingElement = document.getElementById('contributors-loading');
                 const containerElement = document.getElementById('contributors-container');
@@ -1956,7 +1991,6 @@
                         return;
                     }
 
-                    // Display top 6 contributors
                     contributors.slice(0, 6).forEach(contributor => {
                         const contributorHTML = `
                             <div class="contributor-card">
@@ -2001,7 +2035,6 @@
                 }
             }
 
-            // Load releases
             async function loadReleases() {
                 const loadingElement = document.getElementById('releases-loading');
                 const containerElement = document.getElementById('releases-container');
@@ -2031,7 +2064,6 @@
                         return;
                     }
 
-                    // Display latest 6 releases with platform categorization
                     releases.slice(0, 6).forEach(release => {
                         const releaseDate = new Date(release.published_at).toLocaleDateString('en-US', {
                             year: 'numeric',
@@ -2039,7 +2071,6 @@
                             day: 'numeric'
                         });
 
-                        // Categorize releases by platform
                         let platform = 'source';
                         if (release.name && release.name.toLowerCase().includes('windows')) {
                             platform = 'windows';
@@ -2102,7 +2133,6 @@
                 }
             }
 
-            // Load all data
             loadStargazers();
             loadContributors();
             loadReleases();

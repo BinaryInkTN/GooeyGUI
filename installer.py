@@ -533,10 +533,7 @@ class GooeyTUIInstaller:
     def configure_build(self):
         build = self.source_dir / "build"
         build.mkdir(exist_ok=True)
-        return self.run_cmd(["cmake", "..",
-                             "-DCMAKE_BUILD_TYPE=Release",
-                             "-DBUILD_SHARED_LIBS=ON",
-                             "-DBUILD_EXAMPLES=ON"],
+        return self.run_cmd(["cmake", ".."],
                              build)
 
     def find_user_config(self):

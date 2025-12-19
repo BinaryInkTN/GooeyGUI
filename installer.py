@@ -89,6 +89,7 @@ class MenuConfig:
             curses.init_pair(5, curses.COLOR_BLACK, curses.COLOR_WHITE)
             curses.init_pair(6, curses.COLOR_CYAN, curses.COLOR_BLACK)
             curses.init_pair(7, curses.COLOR_BLACK, curses.COLOR_BLUE)
+            
     
     def add_option(self, option):
         self.options.append(option)

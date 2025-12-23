@@ -78,7 +78,7 @@ static void draw_plot_title(GooeyPlot *plot, GooeyWindow *win)
         title_x, title_y,
         plot->data->title,
         win->active_theme->primary,
-        0.28f,
+        18.0f,
         win->creation_id, plot->core.sprite);
 }
 
@@ -183,7 +183,7 @@ static void draw_x_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_value
                 label_x, label_y,
                 value_str,
                 win->active_theme->neutral,
-                0.28f,
+               18.0f,
                 win->creation_id, plot->core.sprite);
         }
 
@@ -235,7 +235,7 @@ static void draw_y_axis_ticks(GooeyPlot *plot, GooeyWindow *win, float min_value
                 label_x, label_y,
                 value_str,
                 win->active_theme->neutral,
-                0.28f,
+                18.0f,
                 win->creation_id, plot->core.sprite);
         }
 
@@ -392,7 +392,7 @@ static void draw_bar_plot_fast(GooeyPlot *plot, GooeyWindow *win, float *plot_x_
                 label_x, label_y,
                 label,
                 win->active_theme->neutral,
-                0.28f,
+                18.0f,
                 win->creation_id, plot->core.sprite);
         }
     }

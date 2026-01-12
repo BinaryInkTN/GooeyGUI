@@ -65,7 +65,7 @@ const char *GooeyTextbox_GetText(GooeyTextbox *textbox)
     return (const char *)textbox->text;
 }
 
-void GooeyTextbox_setText(GooeyTextbox *textbox, const char *text)
+void GooeyTextbox_SetText(GooeyTextbox *textbox, const char *text)
 {
     if (!textbox)
     {

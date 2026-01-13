@@ -730,20 +730,22 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
         if (feature)                                        \
         {                                                   \
             handler(__VA_ARGS__);                           \
-            needs_redraw = true;                            \
+            needs_redraw = false;                            \
         }                                                   \
     } while (0)
 
 #define HANDLE_HOVER_IF_ENABLED(feature, handler, ...) \
     do                                                 \
     {                                                  \
-        if (feature)                                   \
-            handler(__VA_ARGS__);                      \
+        if (feature)                                    \
+        {                                               \
+            needs_redraw |= handler(__VA_ARGS__);       \
+        }                                               \
     } while (0)
 
 void GooeyWindow_Redraw(size_t window_id, void *data)
 {
-    bool needs_redraw = true;
+    bool needs_redraw = false;
 
     if (!data || !active_backend)
     {
@@ -802,7 +804,6 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         int mouse_click_x = event->click.x, mouse_click_y = event->click.y;
 
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_NOTIFICATIONS, GooeyNotification_Internal_HandleClick, window, mouse_click_x, mouse_click_y);
-
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_BUTTON, GooeyButton_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_SWITCH, GooeySwitch_HandleClick, window, mouse_click_x, mouse_click_y);
         HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_DROPDOWN, GooeyDropdown_HandleClick, window, mouse_click_x, mouse_click_y);

@@ -233,7 +233,7 @@ void GooeyTextbox_Internal_HandleVK(GooeyWindow *win)
   }
 }
 
-void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y)
+bool GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y)
 {
   static bool was_hovered_over = false;
   bool is_hovered_over = false;
@@ -257,6 +257,8 @@ void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y)
     active_backend->CursorChange(is_hovered_over ? GOOEY_CURSOR_TEXT : GOOEY_CURSOR_ARROW);
     was_hovered_over = is_hovered_over;
   }
+
+  return is_hovered_over;
 }
 
 #endif

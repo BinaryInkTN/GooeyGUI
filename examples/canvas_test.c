@@ -24,7 +24,7 @@ int main()
     //GooeyReactive count = GooeyReactive_Create(1024, 0);
     //GooeyReactive* count_ptr = &count;
 
-    GooeyWindow* win = GooeyWindow_Create("Raw fill test", 800, 600, true);
+    GooeyWindow* win = GooeyWindow_Create("Raw fill test", 0, 0, 800, 600, true);
     GooeyContainers* container = GooeyContainer_Create(0, 0, 800, 600);
     GooeyWindow_RegisterWidget(win, container);
     GooeyContainer_InsertContainer(container);

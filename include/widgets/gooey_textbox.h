@@ -80,7 +80,6 @@ extern "C"
      * @param text The new text to set.
      */
     void GooeyTextbox_SetText(GooeyTextbox *textbox, const char *text);
-
 #endif // ENABLE_TEXTBOX
 
 #ifdef __cplusplus

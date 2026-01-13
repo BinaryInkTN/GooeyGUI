@@ -18,12 +18,12 @@ void GooeyButton_Draw(GooeyWindow *win)
         {
             button_color = ((button_color & 0x7E7E7E) >> 1) | (button_color & 0x808080) >> 1; // A little darker
         }
-        active_backend->FillRectangle(button->core.x,
-                                      button->core.y, button->core.width, button->core.height, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
 
-        if (button->clicked)
-            active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, 4.0f, button->core.sprite);
+        active_backend->FillRectangle(button->core.x,
+                                      button->core.y, button->core.width, button->core.height, (button->is_highlighted || button->clicked) ? win->active_theme->primary : win->active_theme->neutral, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS + 2, button->core.sprite);
+        active_backend->FillRectangle(button->core.x+1,
+                                      button->core.y+1, button->core.width-2, button->core.height-2, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
+
 
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));
         float text_height = active_backend->GetTextHeight(button->label, strlen(button->label));
@@ -35,22 +35,18 @@ void GooeyButton_Draw(GooeyWindow *win)
                                  text_y, button->label, win->active_theme->neutral, 18.0f, win->creation_id, button->core.sprite);
         active_backend->SetForeground(win->active_theme->neutral);
 
-        if (button->is_highlighted)
-        {
 
-            active_backend->DrawRectangle(button->core.x,
-                                          button->core.y, button->core.width, button->core.height, win->active_theme->primary, 1.0f, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
-        }
+
         if (button->core.sprite && button->core.sprite->needs_redraw)
             active_backend->ResetRedrawSprite(button->core.sprite);
     }
 }
+
 bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
 {
-    
     static bool was_hovered = false;
     bool hover_over_button = false;
-
+    bool forced_redraw = false;
     for (size_t i = 0; i < win->button_count; ++i)
     {
         GooeyButton *button = win->buttons[i];
@@ -65,16 +61,17 @@ bool GooeyButton_HandleHover(GooeyWindow *win, int x, int y)
         {
             hover_over_button = true;
             break;
+        } else {
+            button->hover = false;
+            forced_redraw = was_hovered;
         }
     }
-
     if (hover_over_button != was_hovered)
     {
         active_backend->CursorChange(hover_over_button ? GOOEY_CURSOR_HAND : GOOEY_CURSOR_ARROW);
         was_hovered = hover_over_button;
     }
-
-    return hover_over_button;
+    return hover_over_button || forced_redraw;
 }
 
 bool GooeyButton_HandleClick(GooeyWindow *win, int x, int y)

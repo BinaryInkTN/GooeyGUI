@@ -25,7 +25,7 @@ void GooeyTextbox_Internal_HandleVK(GooeyWindow *win);
  * @param win The window containing the textbox.
  * @param x The x-coordinate of the click event.
  * @param y The y-coordinate of the click event.
- * 
+ *
  * @return True if the textbox was clicked, false otherwise.
  */
 bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
@@ -48,7 +48,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
  * @param x The x-coordinate of the mouse cursor.
  * @param y The y-coordinate of the mouse cursor.
  */
-void GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y);
+ bool GooeyTextbox_HandleHover(GooeyWindow *win, int x, int y);
 
 #endif // ENABLE_TEXTBOX
 

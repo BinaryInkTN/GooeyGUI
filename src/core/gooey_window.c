@@ -730,7 +730,7 @@ void GooeyWindow_DrawUIElements(GooeyWindow *win)
         if (feature)                                        \
         {                                                   \
             handler(__VA_ARGS__);                           \
-            needs_redraw = false;                            \
+            needs_redraw |= false;                            \
         }                                                   \
     } while (0)
 
@@ -796,7 +796,7 @@ void GooeyWindow_Redraw(size_t window_id, void *data)
         break;
 
     case GOOEY_EVENT_KEY_PRESS:
-        HANDLE_EVENT_IF_ENABLED_VOID(ENABLE_TEXTBOX, GooeyTextbox_HandleKeyPress, window, event);
+        HANDLE_EVENT_IF_ENABLED_BOOL(ENABLE_TEXTBOX, GooeyTextbox_HandleKeyPress, window, event);
         break;
 
     case GOOEY_EVENT_CLICK_PRESS:

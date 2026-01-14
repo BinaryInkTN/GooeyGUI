@@ -4,6 +4,10 @@
 #include "core/gooey_timers_internal.h"
 #include "animations/gooey_animations_internal.h"
 
+struct user_data {
+    GooeyWindow *window;
+    GooeyDropdown *dropdown;
+};
 static float ease_out_quad(float t)
 {
     return 1.0f - (1.0f - t) * (1.0f - t);
@@ -16,22 +20,31 @@ static float ease_in_out_quad(float t)
 
 static void dropdown_animation_callback(void *user_data)
 {
-    GooeyDropdown *dropdown = (GooeyDropdown *)user_data;
+    struct user_data *data = (struct user_data *)user_data;
+    GooeyWindow *win = data->window;
+
+    GooeyDropdown *dropdown = data->dropdown;
     if (!dropdown || !dropdown->is_animating)
         return;
 
     dropdown->animation_step++;
-
+    active_backend->RequestRedraw(win);
     if (dropdown->animation_step >= DROPDOWN_ANIMATION_STEPS)
     {
         // Animation complete
         dropdown->animation_height = dropdown->target_height;
         dropdown->is_animating = false;
-        
-        // Stop the timer - don't re-register
+
+        // Stop the timer
         if (dropdown->animation_timer)
         {
             GooeyTimer_Stop_Internal(dropdown->animation_timer);
+        }
+
+        if(data)
+        {
+            free(data);
+            data = NULL;
         }
         return;
     }
@@ -43,11 +56,10 @@ static void dropdown_animation_callback(void *user_data)
     int target_height = dropdown->target_height;
     int height_distance = target_height - start_height;
     dropdown->animation_height = start_height + (int)(height_distance * eased_progress);
-    
-    // Timer will continue to fire periodically - no need to re-register
+
 }
 
-static void start_dropdown_animation(GooeyDropdown *dropdown, bool open)
+static void start_dropdown_animation(GooeyWindow *win, GooeyDropdown *dropdown, bool open)
 {
     if (!dropdown)
         return;
@@ -75,8 +87,14 @@ static void start_dropdown_animation(GooeyDropdown *dropdown, bool open)
         }
     }
 
-    // Start the periodic timer
-    GooeyTimer_SetCallback_Internal(DROPDOWN_ANIMATION_SPEED, dropdown->animation_timer, dropdown_animation_callback, dropdown);
+    struct user_data* data = malloc(sizeof(struct user_data));
+    if (!data)
+        return;
+
+    data->window = win;
+    data->dropdown = dropdown;
+
+    GooeyTimer_SetCallback_Internal(DROPDOWN_ANIMATION_SPEED, dropdown->animation_timer, dropdown_animation_callback, data);
 }
 
 void GooeyDropdown_Draw(GooeyWindow *win)
@@ -267,7 +285,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
 
             bool new_open_state = !dropdown->is_open;
             dropdown->is_open = new_open_state;
-            start_dropdown_animation(dropdown, new_open_state);
+            start_dropdown_animation(win, dropdown, new_open_state);
 
             click_handled = true;
             continue;
@@ -297,7 +315,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
                     }
 
                     dropdown->is_open = false;
-                    start_dropdown_animation(dropdown, false);
+                    start_dropdown_animation(win, dropdown, false);
 
                     click_handled = true;
                 }
@@ -309,7 +327,7 @@ bool GooeyDropdown_HandleClick(GooeyWindow *win, int x, int y)
                 {
                     active_backend->RedrawSprite(dropdown->core.sprite);
                     dropdown->is_open = false;
-                    start_dropdown_animation(dropdown, false);
+                    start_dropdown_animation(win, dropdown, false);
                     click_handled = true;
                 }
             }

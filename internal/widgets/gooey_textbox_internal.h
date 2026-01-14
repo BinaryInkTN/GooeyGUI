@@ -39,7 +39,7 @@ bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
  * @param win The window containing the textbox.
  * @param event The key event to handle.
  */
-void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
+bool GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
 
 /**
  * @brief Handles hover events over the textbox.

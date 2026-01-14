@@ -19,10 +19,7 @@ void GooeyButton_Draw(GooeyWindow *win)
             button_color = ((button_color & 0x7E7E7E) >> 1) | (button_color & 0x808080) >> 1; // A little darker
         }
 
-        active_backend->FillRectangle(button->core.x,
-                                      button->core.y, button->core.width, button->core.height, (button->is_highlighted || button->clicked) ? win->active_theme->primary : win->active_theme->neutral, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS + 2, button->core.sprite);
-        active_backend->FillRectangle(button->core.x+1,
-                                      button->core.y+1, button->core.width-2, button->core.height-2, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
+         active_backend->FillRectangle(button->core.x+1, button->core.y+1, button->core.width-2, button->core.height-2, button_color, win->creation_id, true, GOOEY_BUTTON_DEFAULT_RADIUS, button->core.sprite);
 
 
         float text_width = active_backend->GetTextWidth(button->label, strlen(button->label));

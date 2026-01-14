@@ -157,7 +157,7 @@
 #define SIDEBAR_ANIMATION_STEPS 10
 
 #define DROPDOWN_ANIMATION_SPEED 1
-#define DROPDOWN_ANIMATION_STEPS 20
+#define DROPDOWN_ANIMATION_STEPS 200
 
 #define SWITCH_ANIMATION_STEPS 10
 #define SWITCH_ANIMATION_SPEED 16
@@ -184,7 +184,7 @@
 #define TFT_SCREEN_ROTATION 3
 
 /** Enable virtual keyboard for touch input (ESP32 only) */
-#define ENABLE_VIRTUAL_KEYBOARD 1
+#define ENABLE_VIRTUAL_KEYBOARD 0
 
 /*******************************************************************************
  *                            PERFORMANCE NOTES                                *

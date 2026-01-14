@@ -70,10 +70,10 @@ void GooeyTextbox_Draw(GooeyWindow *win)
   }
 }
 
-void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
+bool GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
 {
   if (!win || !key_event)
-    return;
+    return false;
 
   GooeyEvent *event = (GooeyEvent *)key_event;
   static bool is_capslock_on = false;
@@ -179,6 +179,7 @@ void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *key_event)
       break;
     }
   }
+  return true;
 }
 
 bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y)

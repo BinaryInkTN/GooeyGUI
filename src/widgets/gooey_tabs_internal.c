@@ -9,6 +9,12 @@
 #define TAB_MIN_WIDTH 100
 #define TAB_MAX_WIDTH 300
 
+struct user_data
+{
+    GooeyWindow *window;
+    GooeyTabs *tabs;
+};
+
 static float ease_out_quad(float t)
 {
     return 1.0f - (1.0f - t) * (1.0f - t);
@@ -23,9 +29,9 @@ static int calculate_sidebar_width(GooeyTabs *tabs)
 {
     if (!tabs || !tabs->is_sidebar)
         return TAB_WIDTH;
-    
+
     int max_text_width = 0;
-    
+
     for (size_t i = 0; i < tabs->tab_count; ++i)
     {
         GooeyTab *tab = &tabs->tabs[i];
@@ -36,14 +42,14 @@ static int calculate_sidebar_width(GooeyTabs *tabs)
             max_text_width = text_width;
         }
     }
-    
+
     int calculated_width = max_text_width + (TAB_TEXT_PADDING * 2);
-    
+
     if (calculated_width < TAB_MIN_WIDTH)
         return TAB_MIN_WIDTH;
     if (TAB_MAX_WIDTH > 0 && calculated_width > TAB_MAX_WIDTH)
         return TAB_MAX_WIDTH;
-    
+
     return calculated_width;
 }
 
@@ -78,18 +84,18 @@ static void sidebar_animation_callback(void *user_data)
     tabs->current_step++;
 
     int sidebar_width = calculate_sidebar_width(tabs);
-    
+
     if (tabs->current_step >= SIDEBAR_ANIMATION_STEPS)
     {
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
         tabs->is_open = (tabs->target_offset == sidebar_width);
-        
+
         if (tabs->animation_timer)
         {
             GooeyTimer_Stop_Internal(tabs->animation_timer);
         }
-        
+
         update_sidebar_widget_visibility(tabs);
         return;
     }
@@ -101,24 +107,33 @@ static void sidebar_animation_callback(void *user_data)
     tabs->sidebar_offset = start_offset + (int)(distance * eased_progress);
 
     update_sidebar_widget_visibility(tabs);
-    
+
 }static void tab_line_animation_callback(void *user_data)
 {
-    GooeyTabs *tabs = (GooeyTabs *)user_data;
+    struct user_data *data = (struct user_data *)user_data;
+    GooeyTabs *tabs = data->tabs;
+    GooeyWindow *win = data->window;
     if (!tabs || !tabs->is_animating)
         return;
 
     tabs->current_step++;
-
+    active_backend->RequestRedraw(win);
     if (tabs->current_step >= TABLINE_ANIMATION_STEPS)
     {
         tabs->sidebar_offset = tabs->target_offset;
         tabs->is_animating = false;
-        
+
         if (tabs->animation_timer)
         {
             GooeyTimer_Stop_Internal(tabs->animation_timer);
         }
+
+        if(data)
+        {
+            free(data);
+            data = NULL;
+        }
+
         return;
     }
 
@@ -129,9 +144,9 @@ static void sidebar_animation_callback(void *user_data)
     int target_x = tabs->target_offset;
     int x_distance = target_x - start_x;
     tabs->sidebar_offset = start_x + (int)(x_distance * eased_progress);
-    
+
 }
-static void start_tab_line_animation(GooeyTabs *tabs, int target_tab_index)
+static void start_tab_line_animation(GooeyWindow* win, GooeyTabs *tabs, int target_tab_index)
 {
     if (!tabs || tabs->is_sidebar)
         return;
@@ -160,7 +175,11 @@ static void start_tab_line_animation(GooeyTabs *tabs, int target_tab_index)
         }
     }
 
-    GooeyTimer_SetCallback_Internal(TABLINE_ANIMATION_SPEED, tabs->animation_timer, tab_line_animation_callback, tabs);
+    struct user_data *data = malloc(sizeof(struct user_data));
+    data->window = win;
+    data->tabs = tabs;
+
+    GooeyTimer_SetCallback_Internal(TABLINE_ANIMATION_SPEED, tabs->animation_timer, tab_line_animation_callback, data);
 }
 
 void GooeyTabs_ToggleSidebar(GooeyTabs *tabs)
@@ -272,7 +291,7 @@ bool GooeyTabs_HandleClick(GooeyWindow *win, int mouse_x, int mouse_y)
                 mouse_y >= tab_y && mouse_y < tab_y + tab_height)
             {
                 tabs->active_tab_id = tabs->tabs[j].tab_id;
-                start_tab_line_animation(tabs, (int)j);
+                start_tab_line_animation(win, tabs, (int)j);
                 return true;
             }
         }

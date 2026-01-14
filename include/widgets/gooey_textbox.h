@@ -32,37 +32,6 @@ extern "C"
                                       char *placeholder, bool is_password,
                                       void (*onTextChanged)(char *text, void *user_data), void *user_data);
 
-    /**
-     * @brief Draws the textbox on the specified window.
-     *
-     * Renders the textbox UI, reflecting its current state and contents.
-     *
-     * @param win The window to draw the textbox on.
-     */
-    void GooeyTextbox_Draw(GooeyWindow *win);
-
-    /**
-     * @brief Handles click events on the textbox.
-     *
-     * Detects clicks on the textbox area and activates the textbox for input if clicked.
-     *
-     * @param win The window containing the textbox.
-     * @param x The x-coordinate of the click.
-     * @param y The y-coordinate of the click.
-     *
-     * @return True if the textbox was clicked and activated, false otherwise.
-     */
-    bool GooeyTextbox_HandleClick(GooeyWindow *win, int x, int y);
-
-    /**
-     * @brief Processes key press events for the textbox.
-     *
-     * Updates the textbox content based on keyboard input.
-     *
-     * @param win The window containing the textbox.
-     * @param event Pointer to the key event to handle.
-     */
-    void GooeyTextbox_HandleKeyPress(GooeyWindow *win, void *event);
 
     /**
      * @brief Gets the current text from the textbox.

@@ -83,14 +83,14 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *drag_event)
 
         if (within_bounds && event->type == GOOEY_EVENT_CLICK_PRESS)
         {
-
             active_slider = slider;
+            break;
         }
     }
 
     if (active_slider)
     {
-        active_backend->RedrawSprite(active_slider->core.sprite);
+
         active_slider->value =
             active_slider->min_value +
             ((mouse_x - active_slider->core.x) * (active_slider->max_value - active_slider->min_value)) /
@@ -100,7 +100,7 @@ bool GooeySlider_HandleDrag(GooeyWindow *win, void *drag_event)
             active_slider->value = active_slider->min_value;
         if (active_slider->value > active_slider->max_value)
             active_slider->value = active_slider->max_value;
-
+        active_backend->RedrawSprite(active_slider->core.sprite);
         return true;
     }
 

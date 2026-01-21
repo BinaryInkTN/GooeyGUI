@@ -1,3 +1,7 @@
+# Announcement!
+<a href="https://github.com/BinaryInkTN/AromaUI"> AromaUI </a> is the successor to GooeyGUI. For now all development efforts for Gooey are paused.  
+
+
 
 # Gooey - Cross-Platform GUI Library
 

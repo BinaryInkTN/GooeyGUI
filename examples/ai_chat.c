@@ -158,7 +158,7 @@ void send_button_callback()
         GooeyList_AddItem(list, "You", user_input);
         
         // Your Gemini API key - store this securely in production!
-        const char *api_key = "AIzaSyA9x3AdIBEEq7Gymy-JF03w6zrErkzOo1k";
+        const char *api_key = "";
         
         // Call Gemini API
         char *response = call_gemini_api(api_key, user_input);
